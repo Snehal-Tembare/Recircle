@@ -1,4 +1,14 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+
+buildscript{
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+    }
+}
 
 android {
     compileSdkVersion 25
@@ -27,4 +37,21 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.1'
     testCompile 'junit:junit:4.12'
+
+    //Third party Libraries
+
+    //Retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.2.0'
+    compile 'com.google.code.gson:gson:2.6.2'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+
+    //Butternife dependency
+    compile 'com.jakewharton:butterknife:8.2.1'
+
+    //Butterknife Compiler
+    apt 'com.jakewharton:butterknife-compiler:8.2.1'
+
+    //Lombok for getter setter
+    compile 'org.projectlombok:lombok:1.16.12'
+    compile 'javax.annotation:jsr250-api:1.0'
 }

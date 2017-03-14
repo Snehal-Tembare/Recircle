@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ReCircle_Android</string>
+    <string name="search_text">Search for an item to rent</string>
+    <string name="search">Search</string>
 </resources>
