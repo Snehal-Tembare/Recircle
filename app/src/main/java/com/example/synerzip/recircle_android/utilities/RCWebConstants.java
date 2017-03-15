@@ -24,4 +24,6 @@ public class RCWebConstants {
 
     public static final String RC_SEARCH_PRODUCT="/api/products/searchProd?manufacturerId";
 
+    public static final String RC_SEARCH_PRODUCT_TEXT="/api/products/searchProd?searchText";
+
 }

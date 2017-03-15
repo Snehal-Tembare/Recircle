@@ -2,12 +2,11 @@ package com.example.synerzip.recircle_android.ui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.AutoCompleteTextView;
 
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.All_Product_Info;
@@ -34,17 +33,10 @@ import retrofit2.Response;
  */
 
 public class MainActivity extends AppCompatActivity {
-
     private static final String TAG = "MainActivity";
 
-    @BindView(R.id.search_view)
-    public SearchView mSearchView;
-
-    @BindView(R.id.list_items)
-    public ListView mList;
-
     public String query;
-    public ArrayList<String> itemList;
+    public ArrayList<String> productItemList;
 
     public ArrayAdapter<String> adapter;
 
@@ -53,15 +45,22 @@ public class MainActivity extends AppCompatActivity {
     private static String ID;
     private List<ProductDetails> productDetails;
 
+    @BindView(R.id.txtAutocomplete)
+    public AutoCompleteTextView productAutoComplete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        itemList = new ArrayList<>();
+    }
 
-        query = mSearchView.getQuery().toString();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        productItemList = new ArrayList<>();
+
+        query=productAutoComplete.getText().toString();
 
         service = ApiClient.getClient().create(RCAPInterface.class);
 
@@ -74,11 +73,11 @@ public class MainActivity extends AppCompatActivity {
                     productDetails = response.body().getProductDetails();
                     Log.v("Output", "" + productDetails.size());
                     for (ProductDetails productDetails1 : productDetails) {
-                        itemList.add(productDetails1.getProduct_info().getProduct_title());
+                        productItemList.add(productDetails1.getProduct_info().getProduct_title());
                         Log.v("Popular products", "" + productDetails1.getProduct_info().getProduct_title());
                     }
                 } else {
-                    RCLog.showToast(getApplicationContext(), "Bad gateway");
+                    RCLog.showToast(getApplicationContext(), "Product Not Found");
                 }
             }
 
@@ -87,37 +86,17 @@ public class MainActivity extends AppCompatActivity {
                 Log.v(TAG, t.toString());
             }
         });
+       adapter = new ArrayAdapter<>
+                (this,android.R.layout.simple_list_item_1,productItemList);
+        productAutoComplete.setAdapter(adapter);
 
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, itemList);
-        mList.setAdapter(adapter);
-
-        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        productAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                mSearchView.setQuery(mList.getSelectedItem().toString(), true);
                 ProductDetails pd = productDetails.get(position);
-                ID=pd.getProduct_info().getProduct_manufacturer_id();
+                ID = pd.getProduct_info().getProduct_manufacturer_id();
             }
         });
-
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                adapter.getFilter().filter(newText);
-                return false;
-            }
-        });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
     }
 
     @OnClick(R.id.btn_click)
@@ -126,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<SearchProduct>() {
             @Override
             public void onResponse(Call<SearchProduct> call, Response<SearchProduct> response) {
-                if (null != response && null!=response.body()) {
+                if (null != response && null != response.body()) {
                     ArrayList<Products> productsArrayList = response.body().getProducts();
                     for (Products products : productsArrayList) {
                         Log.v("Product from list", products.getProduct_info().getProduct_manufacturer_name());
@@ -135,14 +114,14 @@ public class MainActivity extends AppCompatActivity {
                     RCLog.showToast(getApplicationContext(), "Bad gateway");
                 }
             }
-
             @Override
             public void onFailure(Call<SearchProduct> call, Throwable t) {
 
             }
         });
-
-
     }
-
 }
+
+
+
+
