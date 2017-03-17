@@ -1,6 +1,7 @@
 package com.example.synerzip.recircle_android.network;
 
 import com.example.synerzip.recircle_android.models.All_Product_Info;
+import com.example.synerzip.recircle_android.models.RootObject;
 import com.example.synerzip.recircle_android.models.SearchProduct;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
 
@@ -30,5 +31,8 @@ public interface RCAPInterface {
 
     @GET(RCWebConstants.RC_SEARCH_PRODUCT)
     Call<SearchProduct> searchProduct(@Query("manufacturerId") String manufacturerId);
+
+    @GET(RCWebConstants.RC_PRODUCT_NAMES)
+    Call<RootObject> productNames();
 
 }
