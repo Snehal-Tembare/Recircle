@@ -24,13 +24,16 @@ public interface RCAPInterface {
     @GET(RCWebConstants.RC_GET_PRODUCT_DETAILS)
     Call<All_Product_Info> getProductDetails();
 
-    /**
-     * Search product
-     * @param manufacturerId
-     */
 
     @GET(RCWebConstants.RC_SEARCH_PRODUCT)
-    Call<SearchProduct> searchProduct(@Query("manufacturerId") String manufacturerId);
+    Call<SearchProduct> searchProduct(@Query("productId") String productId);
+
+    @GET(RCWebConstants.RC_SEARCH_PRODUCT)
+    Call<SearchProduct> searchProductByManufactId(@Query("manufacturerId") String manufacturerId);
+
+
+    @GET(RCWebConstants.RC_SEARCH_PRODUCT)
+    Call<SearchProduct> searchProductByText(@Query("searchText") String searchText);
 
     @GET(RCWebConstants.RC_PRODUCT_NAMES)
     Call<RootObject> productNames();

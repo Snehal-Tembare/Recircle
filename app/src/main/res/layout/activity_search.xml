@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorHomeBackground"
     android:orientation="vertical"
-    tools:context=".ui.MainActivity">
+    tools:context=".ui.SearchActivity">
 
     <include layout="@layout/app_bar_launching" />
 
-    <android.support.v4.widget.DrawerLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/drawer_layout"
@@ -90,6 +88,7 @@
                         android:background="@drawable/edittxt_square"
                         android:drawableLeft="@drawable/ic_location"
                         android:drawablePadding="@dimen/dimen_10dp"
+                        android:editable="false"
                         android:hint="Austin, Texas"
                         android:padding="@dimen/dimen_20dp" />
 
@@ -99,7 +98,11 @@
                         android:orientation="horizontal"
                         android:padding="@dimen/dimen_10dp">
 
+
                         <EditText
+                            android:onClick="btnStartDate"
+                            android:focusable="false"
+                            android:id="@+id/editTxt_start_date"
                             android:layout_width="@dimen/dimen_0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
@@ -110,7 +113,9 @@
                             android:padding="@dimen/dimen_20dp" />
 
                         <EditText
-                            android:id="@+id/editText"
+                            android:onClick="btnEndDate"
+                            android:focusable="false"
+                            android:id="@+id/editTxt_end_date"
                             android:layout_width="@dimen/dimen_0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
@@ -128,6 +133,7 @@
                         android:layout_gravity="center"
                         android:layout_marginTop="@dimen/dimen_10dp"
                         android:background="@drawable/round_button"
+                        android:onClick="callSearchApi"
                         android:text="@string/search"
                         android:textAllCaps="false"
                         android:textColor="@color/colorWhite"
@@ -144,32 +150,27 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="30dp"
+                        android:layout_margin="@dimen/dimen_30dp"
                         android:layout_marginTop="@dimen/dimen_10dp"
                         android:gravity="center"
                         android:text="@string/why_use_recircle"
                         android:textAllCaps="true"
                         android:textColor="@color/colortext"
                         android:textSize="@dimen/dimen_30sp" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <ExpandableListView
-                            android:id="@+id/expListView"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_margin="@dimen/dimen_10dp" />
-
-                    </LinearLayout>
-
                 </LinearLayout>
+
+                    <ExpandableListView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:groupIndicator="@drawable/exp_group_indicator"
+                        android:transcriptMode="alwaysScroll"
+                        android:id="@+id/expListView"
+                        android:layout_margin="@dimen/dimen_10dp"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="30dp"
+                    android:layout_margin="@dimen/dimen_30dp"
                     android:layout_marginTop="@dimen/dimen_10dp"
                     android:gravity="center"
                     android:text="@string/recent_items"
@@ -178,16 +179,15 @@
                     android:textSize="@dimen/dimen_30sp" />
 
                 <android.support.v7.widget.RecyclerView
-                    android:id="@+id/card_recycler_view"
+                    android:id="@+id/card_recycler_view_recent"
                     android:layout_width="match_parent"
-
                     android:layout_height="match_parent"
                     android:scrollbars="vertical" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="30dp"
+                    android:layout_margin="@dimen/dimen_30dp"
                     android:layout_marginTop="@dimen/dimen_10dp"
                     android:gravity="center"
                     android:text="@string/popular_items"
@@ -196,9 +196,8 @@
                     android:textSize="@dimen/dimen_30sp" />
 
                 <android.support.v7.widget.RecyclerView
-                    android:id="@+id/card_recycler_view_pop_items"
+                    android:id="@+id/card_recycler_view_popular"
                     android:layout_width="match_parent"
-
                     android:layout_height="match_parent"
                     android:scrollbars="vertical" />
 
