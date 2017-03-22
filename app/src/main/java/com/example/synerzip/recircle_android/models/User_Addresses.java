@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 
-public class User_addresses {
+public class User_Addresses {
     private String street2;
 
     private String zip;

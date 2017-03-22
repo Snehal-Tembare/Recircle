@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="65dp"
+    android:orientation="horizontal"
+    android:weightSum="1"
+    android:paddingTop="7dp"
+    android:paddingBottom="7dp"
+    android:background="@android:color/darker_gray">
+
+    <TextView
+        android:id="@+id/edt_name"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.25"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/edt_place"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.25"
+        android:text="Place"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/edt_start_date"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.25"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/edt_end_date"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.25"
+        android:gravity="center"/>
+
+</LinearLayout>

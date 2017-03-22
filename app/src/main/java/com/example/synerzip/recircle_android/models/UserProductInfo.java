@@ -24,7 +24,7 @@ public class UserProductInfo {
 
     private String created_at;
 
-    private ArrayList<User_prod_images> user_prod_images;
+    private ArrayList<User_Prod_Images> user_prod_images;
 
     private String user_prod_desc;
 

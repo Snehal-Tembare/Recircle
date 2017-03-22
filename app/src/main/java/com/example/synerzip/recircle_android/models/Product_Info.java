@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 
-public class Product_info {
+public class Product_Info {
     private String product_manufacturer_name;
 
     private String product_manufacturer_id;

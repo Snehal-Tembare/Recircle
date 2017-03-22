@@ -20,7 +20,7 @@ public class User_info {
 
     private String email;
 
-    private ArrayList<User_addresses> user_addresses;
+    private ArrayList<User_Addresses> user_addresses;
 
     private String last_name;
     

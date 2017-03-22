@@ -14,7 +14,7 @@ import lombok.Setter;
 public class PopularProducts {
     private User_info user_info;
 
-    private Product_info product_info;
+    private Product_Info product_info;
 
-    private User_product_info user_product_info;
+    private User_Product_Info user_product_info;
 }

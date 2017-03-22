@@ -1,5 +1,6 @@
 package com.example.synerzip.recircle_android.ui;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
@@ -122,11 +123,11 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_click)
     public void callSearchApi() {
-        Call<SearchProduct> call = service.searchProduct(ID);
+       /* Call<SearchProduct> call = service.searchProduct(ID);
         call.enqueue(new Callback<SearchProduct>() {
             @Override
             public void onResponse(Call<SearchProduct> call, Response<SearchProduct> response) {
-                if (null != response && null!=response.body()) {
+                if (null != response && response.body()!=null) {
                     ArrayList<Products> productsArrayList = response.body().getProducts();
                     for (Products products : productsArrayList) {
                         Log.v("Product from list", products.getProduct_info().getProduct_manufacturer_name());
@@ -140,7 +141,9 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call<SearchProduct> call, Throwable t) {
 
             }
-        });
+        });*/
+
+       startActivity(new Intent(this,ResultActivity.class));
 
 
     }

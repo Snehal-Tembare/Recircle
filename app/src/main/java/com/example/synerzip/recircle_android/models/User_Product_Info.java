@@ -13,7 +13,7 @@ import lombok.Setter;
 @Getter
 @Setter
 
-public class User_product_info {
+public class User_Product_Info {
     private String product_id;
 
     private String avai_to_date;
@@ -24,7 +24,7 @@ public class User_product_info {
 
     private String created_at;
 
-    private ArrayList<User_prod_images> user_prod_images;
+    private ArrayList<User_Prod_Images> user_prod_images;
 
     private String user_prod_desc;
 

@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 
-public class User_prod_images {
+public class User_Prod_Images {
     private String user_prod_image_url;
 
     private String created_at;
