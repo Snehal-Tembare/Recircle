@@ -45,8 +45,8 @@ public class AutocompleteAdapter extends ArrayAdapter<Product> {
 
 
         if (product != null) {
-           // ImageView img = (ImageView) view.findViewById(R.id.img);
-            TextView lblName = (TextView) view.findViewById(R.id.product_name);
+           // ImageView imgProductList = (ImageView) view.findViewById(R.id.imgProductList);
+            TextView lblName = (TextView) view.findViewById(R.id.txtProductName);
             if (lblName != null)
                 lblName.setText(product.getProduct_manufacturer_title());
         }

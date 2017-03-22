@@ -68,10 +68,10 @@ public class RecentItemsAdapter extends RecyclerView.Adapter<RecentItemsAdapter.
             super(view);
             mRatingBar = (RatingBar) view.findViewById(R.id.ratingBar);
             mImageView = (ImageView) view.findViewById(R.id.img_recent_product);
-            mTxtProductTitle = (TextView) view.findViewById(R.id.txt_product_title);
-            mTxtProductPrice = (TextView) view.findViewById(R.id.txt_product_price);
-            mTxtProductRating = (TextView) view.findViewById(R.id.txt_rating);
-            mTxtRenterName = (TextView) view.findViewById(R.id.txt_renter_name);
+            mTxtProductTitle = (TextView) view.findViewById(R.id.txtProductTitle);
+            mTxtProductPrice = (TextView) view.findViewById(R.id.txtProductPrice);
+            mTxtProductRating = (TextView) view.findViewById(R.id.txtRating);
+            mTxtRenterName = (TextView) view.findViewById(R.id.txtRenterName);
         }
     }
 }

@@ -100,7 +100,7 @@
 
 
                         <EditText
-                            android:id="@+id/editTxt_start_date"
+                            android:id="@+id/editTxtStartDate"
                             android:layout_width="@dimen/dimen_0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
@@ -113,7 +113,7 @@
                             android:padding="@dimen/dimen_20dp" />
 
                         <EditText
-                            android:id="@+id/editTxt_end_date"
+                            android:id="@+id/editTxtEndDate"
                             android:layout_width="@dimen/dimen_0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
@@ -127,7 +127,7 @@
                     </LinearLayout>
 
                     <Button
-                        android:id="@+id/btn_click"
+                        android:id="@+id/btnSearch"
                         android:layout_width="@dimen/dimen_200dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -140,12 +140,10 @@
                         android:textSize="@dimen/dimen_14sp" />
                 </LinearLayout>
 
-                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:tools="http://schemas.android.com/tools"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    tools:mContext="com.synerzip.recircle.ui.MainActivity">
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -157,15 +155,14 @@
                         android:textAllCaps="true"
                         android:textColor="@color/colortext"
                         android:textSize="@dimen/dimen_30sp" />
+
+                    <ExpandableListView
+                        android:id="@+id/expListView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/dimen_10dp" />
                 </LinearLayout>
 
-                <ExpandableListView
-                    android:id="@+id/expListView"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:layout_margin="@dimen/dimen_10dp"
-                    android:groupIndicator="@drawable/exp_group_indicator"
-                    android:transcriptMode="alwaysScroll" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -179,7 +176,7 @@
                     android:textSize="@dimen/dimen_30sp" />
 
                 <android.support.v7.widget.RecyclerView
-                    android:id="@+id/card_recycler_view_recent"
+                    android:id="@+id/cardRecyclerViewRecent"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scrollbars="vertical" />

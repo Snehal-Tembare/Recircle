@@ -59,7 +59,7 @@ import retrofit2.Response;
 public class SearchActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    ExpandableListAdapter listAdapter;
+    RecircleExpListAdapter listAdapter;
 
     ExpandableListView expListView;
 
@@ -109,7 +109,7 @@ public class SearchActivity extends AppCompatActivity
 
     private RecentItemsAdapter mRecentItemsAdapter;
 
-    @BindView(R.id.card_recycler_view_recent)
+    @BindView(R.id.cardRecyclerViewRecent)
     public RecyclerView mRecyclerViewRecent;
 
     @BindView(R.id.card_recycler_view_popular)
@@ -117,10 +117,10 @@ public class SearchActivity extends AppCompatActivity
 
     private ArrayList<PopularProducts> popularProducts;
 
-    @BindView(R.id.editTxt_start_date)
+    @BindView(R.id.editTxtStartDate)
     public EditText mEditTxtStartDate;
 
-    @BindView(R.id.editTxt_end_date)
+    @BindView(R.id.editTxtEndDate)
     public EditText mEditTxtEndDate;
 
     public Calendar calendar;
@@ -135,9 +135,9 @@ public class SearchActivity extends AppCompatActivity
 
         if (NetworkUtility.isNetworkAvailable(this)) {
             setSupportActionBar(toolbar);
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-            getSupportActionBar().setTitle(null);
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
+            //getSupportActionBar().setHomeAsUpIndicator();
 
             //navigation drawer layout
             ActionBarDrawerToggle toggle =
@@ -162,38 +162,8 @@ public class SearchActivity extends AppCompatActivity
             expListView = (ExpandableListView) findViewById(R.id.expListView);
             prepareListData();
 
-            listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
+            listAdapter = new RecircleExpListAdapter(this, listDataHeader, listDataChild);
             expListView.setAdapter(listAdapter);
-            expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-
-                @Override
-                public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                    return false;
-                }
-            });
-            expListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-
-                @Override
-                public void onGroupExpand(int groupPosition) {
-
-                }
-            });
-            expListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
-
-                @Override
-                public void onGroupCollapse(int groupPosition) {
-
-                }
-            });
-            expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-
-                @Override
-                public boolean onChildClick(ExpandableListView parent, View v,
-                                            int groupPosition, int childPosition, long id) {
-
-                    return false;
-                }
-            });
 
             getAllProductDetails();
         } else {
@@ -228,14 +198,14 @@ public class SearchActivity extends AppCompatActivity
 
     }//end onCreate()
 
-    @OnClick(R.id.editTxt_start_date)
+    @OnClick(R.id.editTxtStartDate)
     public void btnStartDate(View v) {
         new DatePickerDialog(SearchActivity.this, startDate, calendar
                 .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
-    @OnClick(R.id.editTxt_end_date)
+    @OnClick(R.id.editTxtEndDate)
     public void btnEndDate(View v) {
         new DatePickerDialog(SearchActivity.this, endDate, calendar
                 .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
@@ -339,7 +309,7 @@ public class SearchActivity extends AppCompatActivity
                     }
 
                     autocompleteAdapter = new AutocompleteAdapter
-                            (SearchActivity.this, R.layout.activity_search, R.id.product_name, productsCustomList);
+                            (SearchActivity.this, R.layout.activity_search, R.id.txtProductName, productsCustomList);
                     productAutoComplete.setAdapter(autocompleteAdapter);
 
                 } else {
@@ -373,16 +343,14 @@ public class SearchActivity extends AppCompatActivity
 
     }//end onResume()
 
-    @OnClick(R.id.btn_click)
+    @OnClick(R.id.btnSearch)
     public void callSearchApi() {
-
         //TODO functionality yet to be completed
-
+        productId="";
+        manufacturerId = "";
+        query = "";
         if (productId != null && !productId.isEmpty() && manufacturerId != null && !manufacturerId.isEmpty()
                 && !query.isEmpty() && query != null) {
-            productId = "";
-            manufacturerId = "";
-            query = "";
             Call<SearchProduct> call = service.searchProduct(productId, manufacturerId, query);
             call.enqueue(new Callback<SearchProduct>() {
                 @Override
@@ -390,6 +358,8 @@ public class SearchActivity extends AppCompatActivity
                     if (null != response && null != response.body()) {
                         ArrayList<Products> productsArrayList = response.body().getProducts();
                         for (Products products : productsArrayList) {
+                            Log.v("response",products.getProduct_info().getProduct_title());
+                            RCLog.showToast(SearchActivity.this,products.getUser_product_info().getPrice_per_day()+"price per day");
                             RCLog.showToast(getApplicationContext(), products.getUser_product_info().getPrice_per_day());
                         }
                     } else {
@@ -455,7 +425,7 @@ public class SearchActivity extends AppCompatActivity
         expHeader1.add(getResources().getString(R.string.exp_list_content));
 
         List<String> expHeader2 = new ArrayList<>();
-        expHeader1.add(getResources().getString(R.string.exp_list_content));
+        expHeader2.add(getResources().getString(R.string.exp_list_content));
 
         List<String> expHeader3 = new ArrayList<>();
         expHeader3.add(getResources().getString(R.string.exp_list_content));

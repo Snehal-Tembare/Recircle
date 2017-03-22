@@ -9,4 +9,5 @@
     <color name="colorTextBlue">#1A84C1</color>
     <color name="colorRatingBar">#1A84C1</color>
     <color name="colorRoundBtn">#337ab7</color>
+    <color name="colorCardView">#B1BCBE</color>
 </resources>

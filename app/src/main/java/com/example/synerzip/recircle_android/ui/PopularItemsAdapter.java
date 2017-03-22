@@ -66,11 +66,11 @@ public class PopularItemsAdapter extends RecyclerView.Adapter<PopularItemsAdapte
         public ViewHolder(View view) {
             super(view);
             mRatingBar=(RatingBar)view.findViewById(R.id.ratingBarPopular) ;
-            mImageView = (ImageView) view.findViewById(R.id.img_product);
-            mTxtProductTitle = (TextView) view.findViewById(R.id.txt_product_title);
-            mTxtProductPrice = (TextView) view.findViewById(R.id.txt_product_price);
-            mTxtProductRating = (TextView) view.findViewById(R.id.txt_rating);
-            mTxtRenterName = (TextView) view.findViewById(R.id.txt_renter_name);
+            mImageView = (ImageView) view.findViewById(R.id.imgPopularProduct);
+            mTxtProductTitle = (TextView) view.findViewById(R.id.txtProductTitle);
+            mTxtProductPrice = (TextView) view.findViewById(R.id.txtProductPrice);
+            mTxtProductRating = (TextView) view.findViewById(R.id.txtRating);
+            mTxtRenterName = (TextView) view.findViewById(R.id.txtRenterName);
         }
     }
 }

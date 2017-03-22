@@ -5,14 +5,14 @@
     android:orientation="horizontal">
 
     <ImageView
-        android:id="@+id/img"
+        android:id="@+id/imgProductList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dimen_10dp"
         android:src="@mipmap/ic_item" />
 
     <TextView
-        android:id="@+id/product_name"
+        android:id="@+id/txtProductName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dimen_10dp" />

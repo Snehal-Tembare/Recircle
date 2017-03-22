@@ -2,10 +2,12 @@ package com.example.synerzip.recircle_android.ui;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.support.annotation.DrawableRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
@@ -17,14 +19,14 @@ import java.util.List;
  * Created by Prajakta Patil on 10/3/17.
  * Copyright © 2016 Synerzip. All rights reserved
  */
-public class ExpandableListAdapter extends BaseExpandableListAdapter {
+public class RecircleExpListAdapter extends BaseExpandableListAdapter {
 
     private Context mContext;
     private List<String> headerTitleList;
     private HashMap<String, List<String>> headerDataList;
 
-    public ExpandableListAdapter(Context mContext, List<String> headerTitleList,
-                                 HashMap<String, List<String>> listChildData) {
+    public RecircleExpListAdapter(Context mContext, List<String> headerTitleList,
+                                  HashMap<String, List<String>> listChildData) {
         this.mContext = mContext;
         this.headerTitleList = headerTitleList;
         this.headerDataList = listChildData;
@@ -97,6 +99,11 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 .findViewById(R.id.txtListHeader);
         mTxtHeader.setTypeface(null, Typeface.BOLD);
         mTxtHeader.setText(headerTitle);
+
+       // ImageView imageView=(ImageView)convertView.findViewById(R.id.imgHeader);
+       // int imageId = this.groupImages.get(groupPosition);
+      //  imageView.setImageBitmap();
+
         return convertView;
     }
 
