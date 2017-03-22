@@ -22,7 +22,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
-import android.widget.Toast;
 
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.All_Product_Info;
@@ -74,7 +73,7 @@ public class SearchActivity extends AppCompatActivity
     public Toolbar toolbar;
 
     @BindView(R.id.drawer_layout)
-    public DrawerLayout drawer;
+    public DrawerLayout mDrawerLayout;
 
     @BindView(R.id.nav_view)
     public NavigationView navigationView;
@@ -82,18 +81,20 @@ public class SearchActivity extends AppCompatActivity
     private static final String TAG = "SearchActivity";
 
     public String query;
+
     public ArrayList<String> productItemList;
 
     AutocompleteAdapter autocompleteAdapter;
 
     private RCAPInterface service;
 
-    private static String manufactID;
+    private String manufacturerId;
 
-    private static String productID;
+    private String productId;
 
     @BindView(R.id.txtAutocomplete)
     public AutoCompleteTextView productAutoComplete;
+
     public ArrayList<ProductsData> productsDataList;
 
     public List<Product> productsCustomList;
@@ -104,9 +105,9 @@ public class SearchActivity extends AppCompatActivity
 
     public ArrayList<String> popularProdList;
 
-    private CardPopItemsAdapter mCardPopItemsAdapter;
+    private PopularItemsAdapter mPopularItemsAdapter;
 
-    private CardRecentItemAdapter mCardRecentItemAdapter;
+    private RecentItemsAdapter mRecentItemsAdapter;
 
     @BindView(R.id.card_recycler_view_recent)
     public RecyclerView mRecyclerViewRecent;
@@ -122,7 +123,7 @@ public class SearchActivity extends AppCompatActivity
     @BindView(R.id.editTxt_end_date)
     public EditText mEditTxtEndDate;
 
-    public Calendar myCalendar;
+    public Calendar calendar;
 
     DatePickerDialog.OnDateSetListener startDate, endDate;
 
@@ -131,24 +132,28 @@ public class SearchActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
+
         if (NetworkUtility.isNetworkAvailable(this)) {
             setSupportActionBar(toolbar);
-
-           //  getSupportActionBar().setLogo(R.drawable.ic_logo);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setTitle(null);
             getSupportActionBar().setHomeButtonEnabled(true);
-            ActionBarDrawerToggle toggle =
-                    new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
-            drawer.setDrawerListener(toggle);
+            //navigation drawer layout
+            ActionBarDrawerToggle toggle =
+                    new ActionBarDrawerToggle(this, mDrawerLayout, toolbar,
+                            R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+
+            mDrawerLayout.setDrawerListener(toggle);
             toggle.syncState();
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
-                    if (drawer.isDrawerOpen(Gravity.RIGHT)) {
-                        drawer.closeDrawer(Gravity.RIGHT);
+                    if (mDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
+                        mDrawerLayout.closeDrawer(Gravity.RIGHT);
                     } else {
-                        drawer.openDrawer(Gravity.RIGHT);
+                        mDrawerLayout.openDrawer(Gravity.RIGHT);
                     }
                 }
             });
@@ -185,44 +190,37 @@ public class SearchActivity extends AppCompatActivity
                 @Override
                 public boolean onChildClick(ExpandableListView parent, View v,
                                             int groupPosition, int childPosition, long id) {
-                    // TODO Auto-generated method stub
-                    Toast.makeText(
-                            getApplicationContext(),
-                            listDataHeader.get(groupPosition)
-                                    + " : "
-                                    + listDataChild.get(
-                                    listDataHeader.get(groupPosition)).get(
-                                    childPosition), Toast.LENGTH_SHORT)
-                            .show();
+
                     return false;
                 }
             });
 
             getAllProductDetails();
         } else {
-            RCLog.showToast(this, "Network not available. Please try again");
+            RCLog.showToast(this, getString(R.string.err_network_available));
         }
-        //startDate picker
-        myCalendar = Calendar.getInstance();
+        //start date picker
+        calendar = Calendar.getInstance();
         startDate = new DatePickerDialog.OnDateSetListener() {
 
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, monthOfYear);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 updateStartDate();
             }
 
         };
-        myCalendar = Calendar.getInstance();
+        //end date picker
+        calendar = Calendar.getInstance();
         endDate = new DatePickerDialog.OnDateSetListener() {
 
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, monthOfYear);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 updateEndDate();
             }
 
@@ -232,30 +230,30 @@ public class SearchActivity extends AppCompatActivity
 
     @OnClick(R.id.editTxt_start_date)
     public void btnStartDate(View v) {
-        new DatePickerDialog(SearchActivity.this, startDate, myCalendar
-                .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+        new DatePickerDialog(SearchActivity.this, startDate, calendar
+                .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
     @OnClick(R.id.editTxt_end_date)
     public void btnEndDate(View v) {
-        new DatePickerDialog(SearchActivity.this, endDate, myCalendar
-                .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+        new DatePickerDialog(SearchActivity.this, endDate, calendar
+                .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
     private void updateStartDate() {
         String myFormat = "dd/MM/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
-        mEditTxtStartDate.setText(sdf.format(myCalendar.getTime()));
+        mEditTxtStartDate.setText(sdf.format(calendar.getTime()));
     }
 
     private void updateEndDate() {
         String myFormat = "dd/MM/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
-        mEditTxtEndDate.setText(sdf.format(myCalendar.getTime()));
+        mEditTxtEndDate.setText(sdf.format(calendar.getTime()));
     }
 
     public void getAllProductDetails() {
@@ -273,25 +271,21 @@ public class SearchActivity extends AppCompatActivity
                 if (null != response) {
                     productDetails = response.body().getProductDetails();
                     popularProducts = response.body().getPopularProducts();
-                    Log.v("All Product Info", "" + productDetails.size());
                     for (ProductDetails productDetails1 : productDetails) {
                         popularProdList.add(productDetails1.getProduct_info().getProduct_title());
-
                         allItemsList.add(productDetails1.getProduct_info().getProduct_title());
-
-                        Log.v("Popular products", "" + allItemsList.size());
                     }
                 } else {
-                    RCLog.showToast(getApplicationContext(), "Bad gateway");
+                    RCLog.showToast(getApplicationContext(), getString(R.string.product_details_not_found));
                 }
 
-                mCardRecentItemAdapter = new CardRecentItemAdapter(SearchActivity.this, (ArrayList<ProductDetails>) productDetails);
+                mRecentItemsAdapter = new RecentItemsAdapter(SearchActivity.this, productDetails);
                 mRecyclerViewRecent.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                mRecyclerViewRecent.setAdapter(mCardRecentItemAdapter);
+                mRecyclerViewRecent.setAdapter(mRecentItemsAdapter);
 
-                mCardPopItemsAdapter = new CardPopItemsAdapter(SearchActivity.this, (ArrayList<PopularProducts>) popularProducts);
+                mPopularItemsAdapter = new PopularItemsAdapter(SearchActivity.this, popularProducts);
                 mRecyclerViewPopular.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                mRecyclerViewPopular.setAdapter(mCardPopItemsAdapter);
+                mRecyclerViewPopular.setAdapter(mPopularItemsAdapter);
             }
 
             @Override
@@ -301,6 +295,7 @@ public class SearchActivity extends AppCompatActivity
         });
 
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -321,12 +316,8 @@ public class SearchActivity extends AppCompatActivity
 
                     productsDataList = response.body().getProductsData();
 
-                    Log.v("Output", "" + productsDataList.size());
-
                     for (int i = 0; i < productsDataList.size(); i++) {
-
                         productItemList.add(productsDataList.get(i).getProduct_manufacturer_name());
-
                         Product pd = new Product();
                         pd.setProduct_manufacturer_id(productsDataList.get(i).getProduct_manufacturer_id());
                         pd.setProduct_manufacturer_name(productsDataList.get(i).getProduct_manufacturer_name());
@@ -336,8 +327,7 @@ public class SearchActivity extends AppCompatActivity
                         ArrayList<Product> productsList = productsDataList.get(i).getProducts();
 
                         for (int j = 0; j < productsList.size(); j++) {
-                            productItemList
-                                    .add(productsDataList
+                            productItemList.add(productsDataList
                                             .get(i).getProduct_manufacturer_name()
                                             + " " + productsList.get(j).getProduct_title());
 
@@ -345,10 +335,7 @@ public class SearchActivity extends AppCompatActivity
                                     .get(i).getProduct_manufacturer_name()
                                     + " " + productsList.get(j).getProduct_title());
                             productsCustomList.add(productsList.get(j));
-                            Log.v("customList", productsCustomList.toString());
                         }
-
-                        Log.v("Products Names", "" + productsCustomList.get(i).getProduct_manufacturer_name());
                     }
 
                     autocompleteAdapter = new AutocompleteAdapter
@@ -356,7 +343,7 @@ public class SearchActivity extends AppCompatActivity
                     productAutoComplete.setAdapter(autocompleteAdapter);
 
                 } else {
-                    RCLog.showToast(getApplicationContext(), "Product Not Found");
+                    RCLog.showToast(getApplicationContext(), getString(R.string.product_details_not_found));
                 }
             }
 
@@ -369,20 +356,15 @@ public class SearchActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                //TODO functionality yet to be completed
+
                 Product pd = (Product) parent.getAdapter().getItem(position);
-
-                Log.v("position list", productAutoComplete.getListSelection() + "");
-
-                Log.v("position", pd.getProduct_manufacturer_title());
                 if (pd.getProduct_manufacturer_id() != null && !pd.getProduct_manufacturer_id().isEmpty()) {
-                    manufactID = pd.getProduct_manufacturer_id();
-                    Log.v("manfctr_ID", manufactID);
+                    manufacturerId = pd.getProduct_manufacturer_id();
                 }
                 if (pd.getProduct_id() != null && !pd.getProduct_id().isEmpty()) {
-                    productID = pd.getProduct_id();
-                    Log.v("product_ID", productID);
+                    productId = pd.getProduct_id();
                 }
-
                 //hide keyboard after item click
                 InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 in.hideSoftInputFromWindow(parent.getApplicationWindowToken(), 0);
@@ -393,42 +375,25 @@ public class SearchActivity extends AppCompatActivity
 
     @OnClick(R.id.btn_click)
     public void callSearchApi() {
-        /////////IN PROGRESS/////////
-        if (productID != null && !productID.isEmpty()) {
-            Call<SearchProduct> call = service.searchProduct(productID);
+
+        //TODO functionality yet to be completed
+
+        if (productId != null && !productId.isEmpty() && manufacturerId != null && !manufacturerId.isEmpty()
+                && !query.isEmpty() && query != null) {
+            productId = "";
+            manufacturerId = "";
+            query = "";
+            Call<SearchProduct> call = service.searchProduct(productId, manufacturerId, query);
             call.enqueue(new Callback<SearchProduct>() {
                 @Override
                 public void onResponse(Call<SearchProduct> call, Response<SearchProduct> response) {
                     if (null != response && null != response.body()) {
                         ArrayList<Products> productsArrayList = response.body().getProducts();
                         for (Products products : productsArrayList) {
-                            Log.v("Product from list", products.getProduct_info().getProduct_title());
                             RCLog.showToast(getApplicationContext(), products.getUser_product_info().getPrice_per_day());
                         }
                     } else {
-                        RCLog.showToast(getApplicationContext(), "Bad gateway");
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<SearchProduct> call, Throwable t) {
-
-                }
-            });
-        } else {
-
-            Call<SearchProduct> call = service.searchProductByManufactId(manufactID);
-            call.enqueue(new Callback<SearchProduct>() {
-                @Override
-                public void onResponse(Call<SearchProduct> call, Response<SearchProduct> response) {
-                    if (null != response && null != response.body()) {
-                        ArrayList<Products> productsArrayList = response.body().getProducts();
-                        for (Products products : productsArrayList) {
-                            Log.v("Product Manufacturer ID", products.getProduct_info().getProduct_price());
-                            RCLog.showToast(getApplicationContext(), products.getProduct_info().getProduct_manufacturer_name());
-                        }
-                    } else {
-                        RCLog.showToast(getApplicationContext(), "Bad gateway");
+                        RCLog.showToast(getApplicationContext(), getString(R.string.product_details_not_found));
                     }
                 }
 
@@ -438,36 +403,41 @@ public class SearchActivity extends AppCompatActivity
                 }
             });
         }
-
-      /*  if(productID == null && productID.isEmpty() && manufactID == null && manufactID.isEmpty()){
-        String input=productAutoComplete.getText().toString();
-            Call<SearchProduct> call = service.searchProductByText(input);
-            call.enqueue(new Callback<SearchProduct>() {
-                @Override
-                public void onResponse(Call<SearchProduct> call, Response<SearchProduct> response) {
-                    if (null != response && null != response.body()) {
-                        ArrayList<Products> productsArrayList = response.body().getProducts();
-                        for (Products products : productsArrayList) {
-                            Log.v("Product Search", products.getProduct_info().getProduct_category_name());
-                            RCLog.showToast(getApplicationContext(), products.getProduct_info().getProduct_manufacturer_name());
-                        }
-                    } else {
-                        RCLog.showToast(getApplicationContext(), "Search Text Not Found");
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<SearchProduct> call, Throwable t) {
-
-                }
-            });
-        }*/
     }//end callSearchApi()
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.launching, menu);
+        return true;
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    public boolean onNavigationItemSelected(MenuItem item) {
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item != null && item.getItemId() == android.R.id.home) {
+            if (mDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
+                mDrawerLayout.closeDrawer(Gravity.RIGHT);
+            } else {
+                mDrawerLayout.openDrawer(Gravity.RIGHT);
+            }
+
+        }
+        return false;
+    }
+
     /*
-* Preparing the list data
-*/
+    * Preparing the list data
+    */
     private void prepareListData() {
+        //TODO functionality yet to be completed
         listDataHeader = new ArrayList<>();
         listDataChild = new HashMap<>();
         groupImages = new ArrayList<>();
@@ -504,21 +474,6 @@ public class SearchActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.launching, menu);
-        return true;
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    public boolean onNavigationItemSelected(MenuItem item) {
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
 }
 
 

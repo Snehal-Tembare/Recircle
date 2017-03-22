@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorHomeBackground"
     android:orientation="vertical"
-    tools:context=".ui.SearchActivity">
+    tools:mContext=".ui.SearchActivity">
 
     <include layout="@layout/app_bar_launching" />
 
@@ -15,13 +15,13 @@
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:openDrawer="right">
+        tools:openDrawer="end">
 
         <android.support.design.widget.NavigationView
             android:id="@+id/nav_view"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="end"
+            android:layout_gravity="right"
             android:fitsSystemWindows="true"
             app:menu="@menu/activity_launching_drawer" />
 
@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            tools:context="com.synerzip.recircle.ui.MainActivity">
+            tools:mContext="com.synerzip.recircle.ui.MainActivity">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -100,8 +100,6 @@
 
 
                         <EditText
-                            android:onClick="btnStartDate"
-                            android:focusable="false"
                             android:id="@+id/editTxt_start_date"
                             android:layout_width="@dimen/dimen_0dp"
                             android:layout_height="wrap_content"
@@ -109,12 +107,12 @@
                             android:background="@drawable/edittxt_square"
                             android:drawableLeft="@drawable/ic_calendar"
                             android:drawablePadding="@dimen/dimen_10dp"
+                            android:focusable="false"
                             android:hint="@string/start_date"
+                            android:onClick="btnStartDate"
                             android:padding="@dimen/dimen_20dp" />
 
                         <EditText
-                            android:onClick="btnEndDate"
-                            android:focusable="false"
                             android:id="@+id/editTxt_end_date"
                             android:layout_width="@dimen/dimen_0dp"
                             android:layout_height="wrap_content"
@@ -122,7 +120,9 @@
                             android:background="@drawable/edittxt_square"
                             android:drawableLeft="@drawable/ic_calendar"
                             android:drawablePadding="@dimen/dimen_10dp"
+                            android:focusable="false"
                             android:hint="@string/end_date"
+                            android:onClick="btnEndDate"
                             android:padding="@dimen/dimen_20dp" />
                     </LinearLayout>
 
@@ -145,7 +145,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    tools:context="com.synerzip.recircle.ui.MainActivity">
+                    tools:mContext="com.synerzip.recircle.ui.MainActivity">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -159,13 +159,13 @@
                         android:textSize="@dimen/dimen_30sp" />
                 </LinearLayout>
 
-                    <ExpandableListView
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:groupIndicator="@drawable/exp_group_indicator"
-                        android:transcriptMode="alwaysScroll"
-                        android:id="@+id/expListView"
-                        android:layout_margin="@dimen/dimen_10dp"/>
+                <ExpandableListView
+                    android:id="@+id/expListView"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_margin="@dimen/dimen_10dp"
+                    android:groupIndicator="@drawable/exp_group_indicator"
+                    android:transcriptMode="alwaysScroll" />
 
                 <TextView
                     android:layout_width="match_parent"

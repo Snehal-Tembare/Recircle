@@ -17,11 +17,11 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/imgLogo"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="35dp"
+        android:layout_marginBottom="@dimen/dimen_35dp"
         android:gravity="center"
-        android:text="Recircle"
+        android:text="@string/recircle"
         android:textAllCaps="true"
-        android:textColor="#ffffff"
-        android:textSize="30sp"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/dimen_30sp"
         android:textStyle="italic" />
 </RelativeLayout>

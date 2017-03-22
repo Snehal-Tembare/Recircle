@@ -19,23 +19,23 @@ import java.util.ArrayList;
  * Created by Prajakta Patil on 10/3/17.
  * Copyright © 2016 Synerzip. All rights reserved
  */
-public class CardRecentItemAdapter extends RecyclerView.Adapter<CardRecentItemAdapter.ViewHolder> {
+public class RecentItemsAdapter extends RecyclerView.Adapter<RecentItemsAdapter.ViewHolder> {
     private ArrayList<ProductDetails> productDetailsList;
     private Context mContext;
 
-    public CardRecentItemAdapter(Context mContext, ArrayList<ProductDetails> productDetailsList) {
+    public RecentItemsAdapter(Context mContext, ArrayList<ProductDetails> productDetailsList) {
         this.mContext = mContext;
         this.productDetailsList = productDetailsList;
     }
 
     @Override
-    public CardRecentItemAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public RecentItemsAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recent_prod_row_layout, viewGroup, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(CardRecentItemAdapter.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(RecentItemsAdapter.ViewHolder viewHolder, int position) {
 
         ProductDetails productDetails = productDetailsList.get(position);
 

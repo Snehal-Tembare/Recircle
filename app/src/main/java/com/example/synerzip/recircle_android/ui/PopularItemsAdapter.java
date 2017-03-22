@@ -19,23 +19,23 @@ import java.util.ArrayList;
  * Created by Prajakta Patil on 10/3/17.
  * Copyright © 2016 Synerzip. All rights reserved
  */
-public class CardPopItemsAdapter extends RecyclerView.Adapter<CardPopItemsAdapter.ViewHolder> {
+public class PopularItemsAdapter extends RecyclerView.Adapter<PopularItemsAdapter.ViewHolder> {
     private ArrayList<PopularProducts> popularProductsList;
     private Context mContext;
 
-    public CardPopItemsAdapter(Context mContext, ArrayList<PopularProducts> popularProductsList) {
+    public PopularItemsAdapter(Context mContext, ArrayList<PopularProducts> popularProductsList) {
         this.mContext = mContext;
         this.popularProductsList = popularProductsList;
     }
 
     @Override
-    public CardPopItemsAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public PopularItemsAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.popular_prod_row_layout, viewGroup, false);
-        return new CardPopItemsAdapter.ViewHolder(view);
+        return new PopularItemsAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(CardPopItemsAdapter.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(PopularItemsAdapter.ViewHolder viewHolder, int position) {
 
         PopularProducts popularProducts = popularProductsList.get(position);
         Picasso.with(mContext)

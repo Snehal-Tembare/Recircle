@@ -8,4 +8,5 @@
     <color name="colortext">#282828</color>
     <color name="colorTextBlue">#1A84C1</color>
     <color name="colorRatingBar">#1A84C1</color>
+    <color name="colorRoundBtn">#337ab7</color>
 </resources>
