@@ -15,7 +15,7 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.example.synerzip.recircle_android"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -41,31 +41,6 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    /*  testCompile 'junit:junit:4.12'
-
-    compile 'com.android.support:appcompat-v7:25.3.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.1'
-    compile 'com.android.support:design:25.3.0'*/
-
-    //Third party Libraries
-
-    //Retrofit
-    
-
-    //Butternife dependency
-    
-    //Butterknife Compiler
-    
-    //Lombok for getter setter
-    
-    //recyclerview
-    //cardview
-    
-    
-    //picasso library
-    
-    //awesome validation library
-    
 compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.android.support:design:25.2.0'
     compile 'com.squareup.retrofit2:retrofit:2.2.0'

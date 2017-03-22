@@ -2,6 +2,7 @@ package com.example.synerzip.recircle_android.ui;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.media.Image;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -22,6 +23,9 @@ import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.All_Product_Info;
@@ -58,16 +62,6 @@ import retrofit2.Response;
 
 public class SearchActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
-    RecircleExpListAdapter listAdapter;
-
-    ExpandableListView expListView;
-
-    List<String> listDataHeader;
-
-    HashMap<String, List<String>> listDataChild;
-
-    public List<Integer> groupImages;
 
     @BindView(R.id.toolbar)
     public Toolbar toolbar;
@@ -127,6 +121,33 @@ public class SearchActivity extends AppCompatActivity
 
     DatePickerDialog.OnDateSetListener startDate, endDate;
 
+    @BindView(R.id.txtHeaderOneContent)
+    public TextView mTxtHeaderOne;
+
+    @BindView(R.id.txtHeaderTwoContent)
+    public TextView mTxtHeaderTwo;
+
+    @BindView(R.id.txtHeaderThreeContent)
+    public TextView mTxtHeaderThree;
+
+    @BindView(R.id.imgDownArrowOne)
+    public ImageView imgDownArrowOne;
+
+    @BindView(R.id.imgDownArrowTwo)
+    public ImageView imgDownArrowTwo;
+
+    @BindView(R.id.imgDownArrowThree)
+    public ImageView imgDownArrowThree;
+
+    @BindView(R.id.imgUpArrowOne)
+    public ImageView imgUpArrowOne;
+
+    @BindView(R.id.imgUpArrowTwo)
+    public ImageView imgUpArrowTwo;
+
+    @BindView(R.id.imgUpArrowThree)
+    public ImageView imgUpArrowThree;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,13 +180,7 @@ public class SearchActivity extends AppCompatActivity
             });
             navigationView.setNavigationItemSelectedListener(this);
 
-            expListView = (ExpandableListView) findViewById(R.id.expListView);
-            prepareListData();
-
-            listAdapter = new RecircleExpListAdapter(this, listDataHeader, listDataChild);
-            expListView.setAdapter(listAdapter);
-
-            getAllProductDetails();
+       getAllProductDetails();
         } else {
             RCLog.showToast(this, getString(R.string.err_network_available));
         }
@@ -198,6 +213,43 @@ public class SearchActivity extends AppCompatActivity
 
     }//end onCreate()
 
+    @OnClick(R.id.linearLayoutOne)
+    public void headerOne(View view){
+        if(mTxtHeaderOne.getVisibility()==View.VISIBLE) {
+            mTxtHeaderOne.setVisibility(View.GONE);
+            imgUpArrowOne.setVisibility(View.GONE);
+            imgDownArrowOne.setVisibility(View.VISIBLE);
+        }else {
+            mTxtHeaderOne.setVisibility(View.VISIBLE);
+            imgUpArrowOne.setVisibility(View.VISIBLE);
+            imgDownArrowOne.setVisibility(View.GONE);
+        }
+    }
+    @OnClick(R.id.linearLayoutTwo)
+    public void headerTwo(View view){
+        if(mTxtHeaderTwo.getVisibility()==View.VISIBLE) {
+            mTxtHeaderTwo.setVisibility(View.GONE);
+            imgUpArrowTwo.setVisibility(View.GONE);
+            imgDownArrowTwo.setVisibility(View.VISIBLE);
+        }else {
+            mTxtHeaderTwo.setVisibility(View.VISIBLE);
+            imgUpArrowTwo.setVisibility(View.VISIBLE);
+            imgDownArrowTwo.setVisibility(View.GONE);
+        }
+    }
+    @OnClick(R.id.linearLayoutThree)
+    public void headerThree(View view){
+        if(mTxtHeaderThree.getVisibility()==View.VISIBLE) {
+            mTxtHeaderThree.setVisibility(View.GONE);
+            imgUpArrowThree.setVisibility(View.GONE);
+            imgDownArrowThree.setVisibility(View.VISIBLE);
+
+        }else {
+            mTxtHeaderThree.setVisibility(View.VISIBLE);
+            imgUpArrowThree.setVisibility(View.VISIBLE);
+            imgDownArrowThree.setVisibility(View.GONE);
+        }
+    }
     @OnClick(R.id.editTxtStartDate)
     public void btnStartDate(View v) {
         new DatePickerDialog(SearchActivity.this, startDate, calendar
@@ -215,14 +267,12 @@ public class SearchActivity extends AppCompatActivity
     private void updateStartDate() {
         String myFormat = "dd/MM/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-
         mEditTxtStartDate.setText(sdf.format(calendar.getTime()));
     }
 
     private void updateEndDate() {
         String myFormat = "dd/MM/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-
         mEditTxtEndDate.setText(sdf.format(calendar.getTime()));
     }
 
@@ -401,38 +451,6 @@ public class SearchActivity extends AppCompatActivity
 
         }
         return false;
-    }
-
-    /*
-    * Preparing the list data
-    */
-    private void prepareListData() {
-        //TODO functionality yet to be completed
-        listDataHeader = new ArrayList<>();
-        listDataChild = new HashMap<>();
-        groupImages = new ArrayList<>();
-
-        groupImages.add(R.drawable.ic_shield);
-        groupImages.add(R.drawable.ic_creditcard);
-        groupImages.add(R.drawable.ic_store);
-
-        // Adding child data
-        listDataHeader.add("We offer protection");
-        listDataHeader.add("Pick-up / drop-off at the Recircle Store");
-        listDataHeader.add("We handle payments.");
-
-        List<String> expHeader1 = new ArrayList<>();
-        expHeader1.add(getResources().getString(R.string.exp_list_content));
-
-        List<String> expHeader2 = new ArrayList<>();
-        expHeader2.add(getResources().getString(R.string.exp_list_content));
-
-        List<String> expHeader3 = new ArrayList<>();
-        expHeader3.add(getResources().getString(R.string.exp_list_content));
-
-        listDataChild.put(listDataHeader.get(0), expHeader1);
-        listDataChild.put(listDataHeader.get(1), expHeader2);
-        listDataChild.put(listDataHeader.get(2), expHeader3);
     }
 
     @Override
