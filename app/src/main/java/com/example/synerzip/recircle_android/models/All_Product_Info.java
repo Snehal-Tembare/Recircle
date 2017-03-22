@@ -1,6 +1,7 @@
 package com.example.synerzip.recircle_android.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
@@ -14,7 +15,7 @@ import lombok.Setter;
 @Setter
 
 public class All_Product_Info implements Serializable {
-    private List<PopularProducts> popularProducts;
+    private ArrayList<PopularProducts> popularProducts;
 
-    private List<ProductDetails> productDetails;
+    private ArrayList<ProductDetails> productDetails;
 }

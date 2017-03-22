@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorHomeBackground"
+    android:orientation="vertical"
+    tools:mContext=".ui.SearchActivity">
+
+    <include layout="@layout/app_bar_launching" />
+
+    <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:openDrawer="end">
+
+        <android.support.design.widget.NavigationView
+            android:id="@+id/nav_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:fitsSystemWindows="true"
+            app:menu="@menu/activity_launching_drawer" />
+
+        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:mContext="com.synerzip.recircle.ui.MainActivity">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_450dp"
+                    android:alpha="0.8"
+                    android:background="@drawable/ic_back"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/dimen_10dp"
+                        android:drawablePadding="@dimen/dimen_10dp"
+                        android:gravity="center"
+                        android:text="People renting from people"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/dimen_30sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/dimen_10dp"
+                        android:drawablePadding="@dimen/dimen_10dp"
+                        android:gravity="center"
+                        android:text="@string/subtitle"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/dimen_20sp"
+                        android:textStyle="bold" />
+
+                    <AutoCompleteTextView
+                        android:id="@+id/txtAutocomplete"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/dimen_10dp"
+                        android:background="@drawable/edittxt_square"
+                        android:drawableLeft="@drawable/ic_search"
+                        android:drawablePadding="@dimen/dimen_10dp"
+                        android:hint="@string/hintForSearchItem"
+                        android:padding="@dimen/dimen_20dp" />
+
+                    <ListView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/dimen_10dp"
+                        android:background="@drawable/edittxt_square"
+                        android:drawableLeft="@drawable/ic_location"
+                        android:drawablePadding="@dimen/dimen_10dp"
+                        android:editable="false"
+                        android:hint="Austin, Texas"
+                        android:padding="@dimen/dimen_20dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/dimen_10dp">
+
+
+                        <EditText
+                            android:id="@+id/editTxtStartDate"
+                            android:layout_width="@dimen/dimen_0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            android:background="@drawable/edittxt_square"
+                            android:drawableLeft="@drawable/ic_calendar"
+                            android:drawablePadding="@dimen/dimen_10dp"
+                            android:focusable="false"
+                            android:hint="@string/start_date"
+                            android:onClick="btnStartDate"
+                            android:padding="@dimen/dimen_20dp" />
+
+                        <EditText
+                            android:id="@+id/editTxtEndDate"
+                            android:layout_width="@dimen/dimen_0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            android:background="@drawable/edittxt_square"
+                            android:drawableLeft="@drawable/ic_calendar"
+                            android:drawablePadding="@dimen/dimen_10dp"
+                            android:focusable="false"
+                            android:hint="@string/end_date"
+                            android:onClick="btnEndDate"
+                            android:padding="@dimen/dimen_20dp" />
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/btnSearch"
+                        android:layout_width="@dimen/dimen_200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dimen_10dp"
+                        android:background="@drawable/round_button"
+                        android:onClick="callSearchApi"
+                        android:text="@string/search"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/dimen_14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/dimen_30dp"
+                        android:layout_marginTop="@dimen/dimen_10dp"
+                        android:gravity="center"
+                        android:text="@string/why_use_recircle"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colortext"
+                        android:textSize="@dimen/dimen_30sp" />
+
+                    <ExpandableListView
+                        android:id="@+id/expListView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/dimen_10dp" />
+                </LinearLayout>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dimen_30dp"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:gravity="center"
+                    android:text="@string/recent_items"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colortext"
+                    android:textSize="@dimen/dimen_30sp" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/cardRecyclerViewRecent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="vertical" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dimen_30dp"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:gravity="center"
+                    android:text="@string/popular_items"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colortext"
+                    android:textSize="@dimen/dimen_30sp" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/card_recycler_view_popular"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="vertical" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </android.support.v4.widget.DrawerLayout>
+</LinearLayout>
+

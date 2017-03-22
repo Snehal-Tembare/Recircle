@@ -6,8 +6,6 @@ package com.example.synerzip.recircle_android.utilities;
  */
 public class RCWebConstants {
 
-//    public static final String RC_END_POINT = "http://5f0f2b95.ngrok.io";
-
     public static final int RC_ERROR_CODE_BAD_REQUEST = 400;
 
     public static final int RC_ERROR_CODE_FORBIDDEN = 403;
@@ -20,8 +18,9 @@ public class RCWebConstants {
 
     public static final int RC_ERROR_CODE_SERVICE_UNAVAILABLE = 503;
 
-    public static final String RC_GET_PRODUCT_DETAILS="/api/products";
+    public static final String RC_GET_PRODUCT_DETAILS = "/api/products";
 
-    public static final String RC_SEARCH_PRODUCT="/api/products/searchProd?manufacturerId";
+    public static final String RC_SEARCH_PRODUCT = "/api/products/searchProd?city=austin";
 
+    public static final String RC_PRODUCT_NAMES = "/api/products/prodNames";
 }
