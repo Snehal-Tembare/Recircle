@@ -13,14 +13,14 @@ import lombok.Setter;
 @Getter
 @Setter
 
-public class User_info {
+public class UserInfo {
     private String first_name;
 
     private String user_image_url;
 
     private String email;
 
-    private ArrayList<User_Addresses> user_addresses;
+    private ArrayList<UserAddresses> user_addresses;
 
     private String last_name;
     

@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -32,7 +30,7 @@ import android.widget.TextView;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.example.synerzip.recircle_android.R;
-import com.example.synerzip.recircle_android.models.All_Product_Info;
+import com.example.synerzip.recircle_android.models.AllProductInfo;
 import com.example.synerzip.recircle_android.models.PopularProducts;
 import com.example.synerzip.recircle_android.models.Product;
 import com.example.synerzip.recircle_android.models.ProductDetails;
@@ -49,7 +47,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -300,11 +297,11 @@ public class SearchActivity extends AppCompatActivity
 
         service = ApiClient.getClient().create(RCAPInterface.class);
 
-        Call<All_Product_Info> call = service.getProductDetails();
+        Call<AllProductInfo> call = service.getProductDetails();
 
-        call.enqueue(new Callback<All_Product_Info>() {
+        call.enqueue(new Callback<AllProductInfo>() {
             @Override
-            public void onResponse(Call<All_Product_Info> call, Response<All_Product_Info> response) {
+            public void onResponse(Call<AllProductInfo> call, Response<AllProductInfo> response) {
                 if (null != response) {
                     productDetails = response.body().getProductDetails();
                     popularProducts = response.body().getPopularProducts();
@@ -326,7 +323,7 @@ public class SearchActivity extends AppCompatActivity
             }
 
             @Override
-            public void onFailure(Call<All_Product_Info> call, Throwable t) {
+            public void onFailure(Call<AllProductInfo> call, Throwable t) {
                 Log.v(TAG, t.toString());
             }
         });

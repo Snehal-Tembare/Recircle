@@ -14,7 +14,7 @@ import lombok.Setter;
 @Getter
 @Setter
 
-public class All_Product_Info implements Serializable {
+public class AllProductInfo implements Serializable {
     private ArrayList<PopularProducts> popularProducts;
 
     private ArrayList<ProductDetails> productDetails;

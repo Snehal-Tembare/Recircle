@@ -12,9 +12,9 @@ import lombok.Setter;
 @Setter
 
 public class PopularProducts {
-    private User_info user_info;
+    private UserInfo user_info;
 
-    private Product_Info product_info;
+    private ProductInfo product_info;
 
-    private User_Product_Info user_product_info;
+    private UserProductInfo user_product_info;
 }
