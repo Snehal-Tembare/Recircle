@@ -18,8 +18,9 @@ public class RCWebConstants {
 
     public static final int RC_ERROR_CODE_SERVICE_UNAVAILABLE = 503;
 
-    public static final String RC_GET_PRODUCT_DETAILS="/api/products";
+    public static final String RC_GET_PRODUCT_DETAILS = "/api/products";
 
-    public static final String RC_SEARCH_PRODUCT="/api/products/searchProd?manufacturerId";
+    public static final String RC_SEARCH_PRODUCT = "/api/products/searchProd?city=austin";
 
+    public static final String RC_PRODUCT_NAMES = "/api/products/prodNames";
 }

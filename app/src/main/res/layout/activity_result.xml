@@ -4,34 +4,33 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/app_bar" />
+    <include layout="@layout/partial_toolbar" />
 
     <LinearLayout
         android:id="@+id/layout_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1"
+        android:animateLayoutChanges="true"
+        android:background="@android:color/darker_gray"
         android:clickable="true"
-        android:animateLayoutChanges="true">
+        android:orientation="horizontal"
+        android:weightSum="1">
 
         <TextView
             android:id="@+id/txt_name"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="0.25"
-            android:background="@android:color/darker_gray"
             android:clickable="false"
+            android:drawableLeft="@drawable/ic_search"
             android:gravity="center"
-            android:text="Name"
-            />
+            android:text="Name" />
 
         <TextView
             android:id="@+id/txt_place"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="0.25"
-            android:background="@android:color/darker_gray"
             android:clickable="false"
             android:gravity="center"
             android:text="Place" />
@@ -41,7 +40,6 @@
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="0.25"
-            android:background="@android:color/darker_gray"
             android:clickable="false"
             android:gravity="center"
             android:text="Startdate" />
@@ -51,68 +49,22 @@
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="0.25"
-            android:background="@android:color/darker_gray"
             android:clickable="false"
             android:gravity="center"
             android:text="Enddate" />
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/layout_expanded"
+    <include
+        layout="@layout/partial_search_layout"
+        android:visibility="gone" />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/lv_searched_items"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:weightSum="1"
-        android:visibility="gone"
-        >
-
-        <EditText
-            android:id="@+id/edt_name"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.1"
-            android:hint="Name" />
-
-        <EditText
-            android:id="@+id/edt_place"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.1"
-            android:hint="Place" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="1">
-
-            <EditText
-                android:id="@+id/edt_start_date"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:hint="Start Date"
-                android:inputType="date" />
-
-            <EditText
-                android:id="@+id/edt_end_date"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:hint="End Date"
-                android:inputType="date" />
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/btn_search"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_gravity="center"
-            android:layout_weight="0.1"
-            android:text="@string/search" />
-
-    </LinearLayout>
+        android:layout_margin="@dimen/common_dimens_10" />
 
 
 </LinearLayout>
