@@ -5,10 +5,11 @@
             >
             <solid android:color="@color/colorWhite"/>
             <stroke
-                android:color="@color/colorCardView"
+
+                android:color="@color/colorWhite"
                 android:width="@dimen/dimen_1dp"
                 />
-            <corners android:radius="@dimen/dimen_0dp"/>
+            <corners android:radius="5dp"/>
         </shape>
     </item>
-    </selector>
+</selector>

@@ -100,10 +100,6 @@ public class RecircleExpListAdapter extends BaseExpandableListAdapter {
         mTxtHeader.setTypeface(null, Typeface.BOLD);
         mTxtHeader.setText(headerTitle);
 
-       // ImageView imageView=(ImageView)convertView.findViewById(R.id.imgHeader);
-       // int imageId = this.groupImages.get(groupPosition);
-      //  imageView.setImageBitmap();
-
         return convertView;
     }
 

@@ -12,8 +12,14 @@
     <string name="why_use_recircle">Why use Recircle ?</string>
     <string name="recent_items">Recently Uploaded items</string>
     <string name="popular_items">Popular items</string>
-    <string name="exp_list_content">As a renter, you have the option to add a protection plan to your rentals. This protection plan price will drop as you build a damage-free rental history. Without the protection plan, damages will be covered by your deposit.\" +                 \" With the protection plan, damages will be covered by us. Protection plans do not cover lost or stolen items.</string>
+    <string name="exp_list_content">As a renter,
+        you have the option to add a protection plan to your rentals.
+        This protection plan price will drop as you build a damage-free rental history.
+        Without the protection plan, damages will be covered by your deposit.
+        With the protection plan, damages will be covered by us.
+        Protection plans do not cover lost or stolen items.</string>
     <string name="recircle">Recircle</string>
     <string name="err_network_available">Network not available. Please try again</string>
     <string name="product_details_not_found">Product Not Found</string>
+    <string name="err_Field_empty">Enter Product Name</string>
 </resources>
