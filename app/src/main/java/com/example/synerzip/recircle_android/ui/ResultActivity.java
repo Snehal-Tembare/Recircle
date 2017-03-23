@@ -51,13 +51,6 @@ public class ResultActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
 
-
-
-//        Picasso.with(this)
-//                .load("https://s3.ap-south-1.amazonaws.com/recircleimages/1398934894000_IMG_388284.jpg")
-//                .into(mImgView);
-
-
     }
 
     @OnClick(R.id.layout_header)
@@ -70,6 +63,9 @@ public class ResultActivity extends AppCompatActivity {
     public void collapse() {
         mExpandLayout.setVisibility(View.GONE);
         mHeaderLayout.setVisibility(View.VISIBLE);
+
+        //TODO code yet to complete
+
     }
 
     @Override
