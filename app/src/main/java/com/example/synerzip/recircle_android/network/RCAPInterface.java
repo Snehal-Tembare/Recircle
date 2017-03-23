@@ -1,11 +1,10 @@
 package com.example.synerzip.recircle_android.network;
 
-import com.example.synerzip.recircle_android.models.All_Product_Info;
+import com.example.synerzip.recircle_android.models.AllProductInfo;
 import com.example.synerzip.recircle_android.models.RootObject;
 import com.example.synerzip.recircle_android.models.SearchProduct;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
 
-import lombok.Getter;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -21,7 +20,7 @@ public interface RCAPInterface {
      * @return
      */
     @GET(RCWebConstants.RC_GET_PRODUCT_DETAILS)
-    Call<All_Product_Info> getProductDetails();
+    Call<AllProductInfo> getProductDetails();
 
     /**
      * Search product

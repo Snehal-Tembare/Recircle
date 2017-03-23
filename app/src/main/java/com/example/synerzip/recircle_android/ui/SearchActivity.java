@@ -2,6 +2,7 @@ package com.example.synerzip.recircle_android.ui;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
@@ -29,7 +30,7 @@ import android.widget.TextView;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.example.synerzip.recircle_android.R;
-import com.example.synerzip.recircle_android.models.All_Product_Info;
+import com.example.synerzip.recircle_android.models.AllProductInfo;
 import com.example.synerzip.recircle_android.models.PopularProducts;
 import com.example.synerzip.recircle_android.models.Product;
 import com.example.synerzip.recircle_android.models.ProductDetails;
@@ -46,7 +47,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -80,7 +80,7 @@ public class SearchActivity extends AppCompatActivity
 
     private RCAPInterface service;
 
-    @BindView(R.id.txtAutocomplete)
+    @BindView(R.id.auto_txt_search_item_name)
     public AutoCompleteTextView productAutoComplete;
 
     public ArrayList<ProductsData> productsDataList;
@@ -105,10 +105,10 @@ public class SearchActivity extends AppCompatActivity
 
     private ArrayList<PopularProducts> popularProducts;
 
-    @BindView(R.id.editTxtStartDate)
+    @BindView(R.id.edt_start_date)
     public EditText mEditTxtStartDate;
 
-    @BindView(R.id.editTxtEndDate)
+    @BindView(R.id.edt_end_date)
     public EditText mEditTxtEndDate;
 
     @BindView(R.id.txtHeaderOneContent)
@@ -156,7 +156,7 @@ public class SearchActivity extends AppCompatActivity
 
     private String mToDate = "";
 
-    private static final String DESCRIPTION_EXPRESSION = "^[A-Za-z]+([\\w\\s]+)$";
+    private static final String DESCRIPTION_EXPRESSION = "^[A-Za-z]+([\\-\\w\\s\\d]+)$";
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -175,7 +175,7 @@ public class SearchActivity extends AppCompatActivity
                     new ActionBarDrawerToggle(this, mDrawerLayout, toolbar,
                             R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
-            mDrawerLayout.setDrawerListener(toggle);
+            mDrawerLayout.addDrawerListener(toggle);
             toggle.syncState();
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 
@@ -189,6 +189,7 @@ public class SearchActivity extends AppCompatActivity
                 }
             });
             navigationView.setNavigationItemSelectedListener(this);
+
 
             getAllProductDetails();
         } else {
@@ -234,7 +235,7 @@ public class SearchActivity extends AppCompatActivity
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
 
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
-        awesomeValidation.addValidation(this, R.id.txtAutocomplete, DESCRIPTION_EXPRESSION, R.string.err_Field_empty);
+        awesomeValidation.addValidation(this, R.id.auto_txt_search_item_name, DESCRIPTION_EXPRESSION, R.string.err_Field_empty);
 
     }//end onCreate()
 
@@ -278,12 +279,12 @@ public class SearchActivity extends AppCompatActivity
         }
     }
 
-    @OnClick(R.id.editTxtStartDate)
+    @OnClick(R.id.edt_start_date)
     public void btnStartDate(View v) {
         mFromDatePickerDialog.show();
     }
 
-    @OnClick(R.id.editTxtEndDate)
+    @OnClick(R.id.edt_end_date)
     public void btnEndDate(View v) {
         mToDatePickerDialog.show();
     }
@@ -296,11 +297,11 @@ public class SearchActivity extends AppCompatActivity
 
         service = ApiClient.getClient().create(RCAPInterface.class);
 
-        Call<All_Product_Info> call = service.getProductDetails();
+        Call<AllProductInfo> call = service.getProductDetails();
 
-        call.enqueue(new Callback<All_Product_Info>() {
+        call.enqueue(new Callback<AllProductInfo>() {
             @Override
-            public void onResponse(Call<All_Product_Info> call, Response<All_Product_Info> response) {
+            public void onResponse(Call<AllProductInfo> call, Response<AllProductInfo> response) {
                 if (null != response) {
                     productDetails = response.body().getProductDetails();
                     popularProducts = response.body().getPopularProducts();
@@ -322,7 +323,7 @@ public class SearchActivity extends AppCompatActivity
             }
 
             @Override
-            public void onFailure(Call<All_Product_Info> call, Throwable t) {
+            public void onFailure(Call<AllProductInfo> call, Throwable t) {
                 Log.v(TAG, t.toString());
             }
         });
@@ -406,7 +407,7 @@ public class SearchActivity extends AppCompatActivity
 
     }//end onResume()
 
-    @OnClick(R.id.btnSearch)
+    @OnClick(R.id.btn_search)
     public void callSearchApi() {
 
         if (awesomeValidation.validate()) {
@@ -437,6 +438,7 @@ public class SearchActivity extends AppCompatActivity
                     }
                 });
             }
+            startActivity(new Intent(this,ResultActivity.class));
         }
     }//end callSearchApi()
 

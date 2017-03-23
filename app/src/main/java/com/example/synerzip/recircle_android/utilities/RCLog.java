@@ -14,6 +14,7 @@ public class RCLog {
 
     /**
      * Method for showing toast
+     *
      * @param context
      * @param toastMessage
      */
