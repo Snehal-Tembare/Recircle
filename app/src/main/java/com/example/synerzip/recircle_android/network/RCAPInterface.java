@@ -34,7 +34,9 @@ public interface RCAPInterface {
     @GET(RCWebConstants.RC_SEARCH_PRODUCT)
     Call<SearchProduct> searchProduct(@Query("productId") String productId,
                                       @Query("manufacturerId") String manufacturerId,
-                                      @Query("searchText") String searchText);
+                                      @Query("searchText") String searchText,
+                                      @Query("searchFromDate") String fromDate,
+                                      @Query("searchToDate") String toDate);
 
     /**
      * Get all product names

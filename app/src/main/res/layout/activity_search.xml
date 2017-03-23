@@ -325,6 +325,7 @@
                     android:textSize="@dimen/dimen_30sp" />
 
                 <android.support.v7.widget.RecyclerView
+                    android:nestedScrollingEnabled="false"
                     android:id="@+id/cardRecyclerViewRecent"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -342,6 +343,7 @@
                     android:textSize="@dimen/dimen_30sp" />
 
                 <android.support.v7.widget.RecyclerView
+                    android:nestedScrollingEnabled="false"
                     android:id="@+id/card_recycler_view_popular"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

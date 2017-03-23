@@ -21,4 +21,5 @@
     <string name="recircle">Recircle</string>
     <string name="err_network_available">Network not available. Please try again</string>
     <string name="product_details_not_found">Product Not Found</string>
+    <string name="err_Field_empty">Enter Product Name</string>
 </resources>
