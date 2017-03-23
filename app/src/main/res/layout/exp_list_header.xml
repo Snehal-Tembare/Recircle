@@ -22,12 +22,11 @@
         android:gravity="center"
         android:textColor="@color/colortext"
         android:textSize="@dimen/dimen_17sp" />
-<!--
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/dimen_15dp"
         android:layout_marginTop="@dimen/dimen_15dp"
-        android:src="@drawable/ic_down_arrow" />-->
+        android:src="@drawable/ic_down_arrow" />
 </LinearLayout>
