@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:id="@+id/layout_expanded">
+    android:id="@+id/layout_expanded"
+    android:layout_marginBottom="@dimen/common_dimens_10">
 
 
     <AutoCompleteTextView
@@ -15,9 +16,12 @@
         android:drawableLeft="@drawable/ic_search"
         android:drawablePadding="@dimen/dimen_10dp"
         android:hint="@string/hintForSearchItem"
-        android:padding="@dimen/common_dimens_20" />
+        android:padding="@dimen/common_dimens_10"
+        android:maxLines="1"
+        android:lines="1" />
 
     <EditText
+        android:id="@+id/edt_place"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/common_dimens_10"
@@ -26,7 +30,7 @@
         android:drawablePadding="@dimen/common_dimens_10"
         android:focusable="false"
         android:hint="@string/city_name"
-        android:padding="@dimen/common_dimens_20" />
+        android:padding="@dimen/common_dimens_10" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -46,7 +50,7 @@
             android:focusable="false"
             android:hint="@string/start_date"
             android:onClick="btnStartDate"
-            android:padding="@dimen/dimen_20dp" />
+            android:padding="@dimen/common_dimens_10" />
 
         <EditText
             android:id="@+id/edt_end_date"
@@ -59,22 +63,21 @@
             android:focusable="false"
             android:hint="@string/end_date"
             android:onClick="btnEndDate"
-            android:padding="@dimen/dimen_20dp" />
+            android:padding="@dimen/common_dimens_10" />
     </LinearLayout>
 
 
     <Button
         android:id="@+id/btn_search"
-        android:layout_width="@dimen/common_dimens_200"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/common_dimens_150"
+        android:layout_height="40dp"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/common_dimens_10"
         android:background="@drawable/round_button"
         android:onClick="callSearchApi"
         android:text="@string/search"
-        android:textAllCaps="false"
         android:textColor="@color/common_white"
-        android:textSize="@dimen/text_size_14" />
+        android:textSize="@dimen/text_size_16" />
 
 
 </LinearLayout>
