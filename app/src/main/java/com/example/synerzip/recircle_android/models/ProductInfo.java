@@ -1,5 +1,8 @@
 package com.example.synerzip.recircle_android.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +14,7 @@ import lombok.Setter;
 @Getter
 @Setter
 
-public class ProductInfo {
+public class ProductInfo implements Parcelable {
     private String product_manufacturer_name;
 
     private String product_manufacturer_id;
@@ -31,4 +34,48 @@ public class ProductInfo {
     private String product_category_id;
 
     private String product_description;
+
+    protected ProductInfo(Parcel in) {
+        product_manufacturer_name = in.readString();
+        product_manufacturer_id = in.readString();
+        product_image_url = in.readString();
+        product_model_id = in.readString();
+        product_title = in.readString();
+        product_category_name = in.readString();
+        product_price = in.readString();
+        product_category_description = in.readString();
+        product_category_id = in.readString();
+        product_description = in.readString();
+    }
+
+    public static final Creator<ProductInfo> CREATOR = new Creator<ProductInfo>() {
+        @Override
+        public ProductInfo createFromParcel(Parcel in) {
+            return new ProductInfo(in);
+        }
+
+        @Override
+        public ProductInfo[] newArray(int size) {
+            return new ProductInfo[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(product_manufacturer_name);
+        dest.writeString(product_manufacturer_id);
+        dest.writeString(product_image_url);
+        dest.writeString(product_model_id);
+        dest.writeString(product_title);
+        dest.writeString(product_category_name);
+        dest.writeString(product_price);
+        dest.writeString(product_category_description);
+        dest.writeString(product_category_id);
+        dest.writeString(product_description);
+    }
 }

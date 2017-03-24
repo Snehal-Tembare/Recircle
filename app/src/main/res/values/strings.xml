@@ -24,4 +24,6 @@
     <string name="search_result">Search Result</string>
     <string name="city_name">Austin, Texas</string>
     <string name="err_Field_empty">Enter Product Name</string>
+    <string name="we_offer_protection">We offer protection</string>
+    <string name="pick_msg">Pick-up / drop-off at the Recircle Store</string>
 </resources>

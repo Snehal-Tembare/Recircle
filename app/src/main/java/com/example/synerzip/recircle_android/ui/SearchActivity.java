@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -62,6 +63,8 @@ import retrofit2.Response;
 
 public class SearchActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private static final String DESCRIPTION_EXPRESSION = "^[A-Za-z]+([\\-\\w\\s\\d]+)$";
 
     @BindView(R.id.toolbar)
     public Toolbar toolbar;
@@ -138,6 +141,9 @@ public class SearchActivity extends AppCompatActivity
     @BindView(R.id.imgUpArrowThree)
     public ImageView imgUpArrowThree;
 
+    @BindView(R.id.edt_place)
+    public EditText mEdtPlace;
+
     private AwesomeValidation awesomeValidation;
 
     private DatePickerDialog mFromDatePickerDialog;
@@ -156,7 +162,11 @@ public class SearchActivity extends AppCompatActivity
 
     private String mToDate = "";
 
-    private static final String DESCRIPTION_EXPRESSION = "^[A-Za-z]+([\\-\\w\\s\\d]+)$";
+    private String mPlace;
+
+    private Intent mIntent;
+
+    private String mName;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -165,6 +175,7 @@ public class SearchActivity extends AppCompatActivity
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
 
+        toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
         if (NetworkUtility.isNetworkAvailable(this)) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayShowTitleEnabled(true);
@@ -337,8 +348,6 @@ public class SearchActivity extends AppCompatActivity
 
         productItemList = new ArrayList<>();
 
-        query = productAutoComplete.getText().toString();
-
         service = ApiClient.getClient().create(RCAPInterface.class);
 
         Call<RootObject> call = service.productNames();
@@ -409,6 +418,7 @@ public class SearchActivity extends AppCompatActivity
 
     @OnClick(R.id.btn_search)
     public void callSearchApi() {
+        mName = productAutoComplete.getText().toString();
 
         if (awesomeValidation.validate()) {
 
@@ -423,7 +433,21 @@ public class SearchActivity extends AppCompatActivity
                     public void onResponse(Call<SearchProduct> call, Response<SearchProduct> response) {
                         if (null != response && null != response.body()) {
                             Log.v(TAG, response.body() + "");
+                            SearchProduct sd = response.body();
+                            mIntent = new Intent(SearchActivity.this, ResultActivity.class);
+                            mIntent.putExtra("searchProduct", sd);
+                            mIntent.putExtra("name", mName);
+                            mIntent.putExtra("place", getString(R.string.city_name));
+
+                            if (!mEditTxtStartDate.getText().toString().equalsIgnoreCase("") &&
+                                    !mEditTxtEndDate.getText().toString().equalsIgnoreCase("")) {
+                                mIntent.putExtra("startDate", mEditTxtStartDate.getText().toString());
+                                mIntent.putExtra("endDate", mEditTxtEndDate.getText().toString());
+                            }
+                            startActivity(mIntent);
+
                             ArrayList<Products> productsArrayList = response.body().getProducts();
+
                             for (Products products : productsArrayList) {
                                 RCLog.showToast(SearchActivity.this, products.getUser_product_info().getPrice_per_day() + "price per day");
                             }
@@ -438,7 +462,6 @@ public class SearchActivity extends AppCompatActivity
                     }
                 });
             }
-            startActivity(new Intent(this,ResultActivity.class));
         }
     }//end callSearchApi()
 

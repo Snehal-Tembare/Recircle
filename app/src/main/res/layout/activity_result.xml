@@ -14,32 +14,39 @@
         android:background="@android:color/darker_gray"
         android:clickable="true"
         android:orientation="horizontal"
+        android:paddingLeft="@dimen/common_dimens_5"
+        android:paddingRight="@dimen/common_dimens_5"
         android:weightSum="1">
 
         <TextView
             android:id="@+id/txt_name"
             android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="0.25"
+            android:layout_height="@dimen/common_dimens_50"
+            android:layout_weight="0.4"
             android:clickable="false"
             android:drawableLeft="@drawable/ic_search"
-            android:gravity="center"
-            android:text="Name" />
+            android:drawablePadding="@dimen/common_dimens_10"
+            android:gravity="center_vertical"
+            android:text="Name"
+            android:ellipsize="end"
+            android:maxLines="1"/>
 
         <TextView
             android:id="@+id/txt_place"
             android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="0.25"
+            android:layout_height="@dimen/common_dimens_50"
+            android:layout_weight="0.2"
             android:clickable="false"
             android:gravity="center"
-            android:text="Place" />
+            android:text="Place"
+            android:ellipsize="end"
+            android:maxLines="1"/>
 
         <TextView
             android:id="@+id/txt_start_date"
             android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="0.25"
+            android:layout_height="@dimen/common_dimens_50"
+            android:layout_weight="0.2"
             android:clickable="false"
             android:gravity="center"
             android:text="Startdate" />
@@ -47,8 +54,8 @@
         <TextView
             android:id="@+id/txt_end_date"
             android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="0.25"
+            android:layout_height="@dimen/common_dimens_50"
+            android:layout_weight="0.2"
             android:clickable="false"
             android:gravity="center"
             android:text="Enddate" />
@@ -59,12 +66,10 @@
         layout="@layout/partial_search_layout"
         android:visibility="gone" />
 
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/lv_searched_items"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="@dimen/common_dimens_10" />
+        android:layout_height="match_parent" />
 
 
 </LinearLayout>

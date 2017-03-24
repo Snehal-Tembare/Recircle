@@ -37,4 +37,8 @@
     <dimen name="dimen_1dp">1dp</dimen>
     <dimen name="dimen_0dip">0dip</dimen>
     <dimen name="common_dimens_200">200dp</dimen>
+    <dimen name="text_size_16">16sp</dimen>
+    <dimen name="common_dimens_100">100dp</dimen>
+    <dimen name="common_dimens_150">150dp</dimen>
+    <dimen name="common_dimens_50">50dp</dimen>
 </resources>
