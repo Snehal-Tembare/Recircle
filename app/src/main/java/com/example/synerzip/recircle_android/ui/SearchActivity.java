@@ -1,7 +1,7 @@
 package com.example.synerzip.recircle_android.ui;
 
-import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
@@ -21,7 +21,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -41,12 +40,15 @@ import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.utilities.NetworkUtility;
 import com.example.synerzip.recircle_android.utilities.RCLog;
+import com.roger.catloadinglibrary.CatLoadingView;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -106,10 +108,7 @@ public class SearchActivity extends AppCompatActivity
     private ArrayList<PopularProducts> popularProducts;
 
     @BindView(R.id.editTxtStartDate)
-    public EditText mEditTxtStartDate;
-
-    @BindView(R.id.editTxtEndDate)
-    public EditText mEditTxtEndDate;
+    public EditText mEditTxtDate;
 
     @BindView(R.id.txtHeaderOneContent)
     public TextView mTxtHeaderOne;
@@ -140,12 +139,6 @@ public class SearchActivity extends AppCompatActivity
 
     private AwesomeValidation awesomeValidation;
 
-    private DatePickerDialog mFromDatePickerDialog;
-
-    private DatePickerDialog mToDatePickerDialog;
-
-    SimpleDateFormat mDateFormatter;
-
     private String manufacturerId = "";
 
     private String productId = "";
@@ -158,14 +151,19 @@ public class SearchActivity extends AppCompatActivity
 
     private static final String DESCRIPTION_EXPRESSION = "^[A-Za-z]+([\\w\\s]+)$";
 
+    CatLoadingView mView;
+
+    Date fromDate, toDate;
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
-
+        mView = new CatLoadingView();
         if (NetworkUtility.isNetworkAvailable(this)) {
+
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayShowTitleEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
@@ -188,6 +186,7 @@ public class SearchActivity extends AppCompatActivity
                     }
                 }
             });
+
             navigationView.setNavigationItemSelectedListener(this);
 
             getAllProductDetails();
@@ -195,48 +194,45 @@ public class SearchActivity extends AppCompatActivity
             RCLog.showToast(this, getString(R.string.err_network_available));
         }
         // date picker
-        mDateFormatter = new SimpleDateFormat("dd-MM-yyyy");
-        Calendar newCalendar = Calendar.getInstance();
-        mFromDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-
-
-            public void onDateSet(DatePicker view, int selectedYear,
-                                  int selectedMonth, int selectedDay) {
-                Calendar newDate = Calendar.getInstance();
-                newDate.set(selectedYear, selectedMonth, selectedDay);
-
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-
-                mFromDate = simpleDateFormat.format(newDate.getTime());
-
-                RCLog.showToast(SearchActivity.this, mFromDate);
-                mEditTxtStartDate.setText(mDateFormatter.format(newDate.getTime()));
-
-            }
-
-        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-
-        mToDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-
-            public void onDateSet(DatePicker view, int selectedYear,
-                                  int selectedMonth, int selectedDay) {
-                Calendar newDate = Calendar.getInstance();
-
-                newDate.set(selectedYear, selectedMonth, selectedDay);
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-
-                mToDate = simpleDateFormat.format(newDate.getTime());
-                RCLog.showToast(SearchActivity.this, mToDate);
-                Log.v("enddate", mToDate + "");
-                mEditTxtEndDate.setText(mDateFormatter.format(newDate.getTime()));
-            }
-
-        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
         awesomeValidation.addValidation(this, R.id.txtAutocomplete, DESCRIPTION_EXPRESSION, R.string.err_Field_empty);
 
-    }//end onCreate()
+    }//txtToDate onCreate()
+
+    @OnClick(R.id.editTxtStartDate)
+    public void btnEnterDates(View view) {
+        Intent intent = new Intent(SearchActivity.this, CalendarActivity.class);
+        startActivityForResult(intent, 1);
+
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                String from = data.getStringExtra("fromDate");
+                String to = data.getStringExtra("toDate");
+                DateFormat formatter = new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy");
+                try {
+                    fromDate = formatter.parse(from.toString());
+                    toDate = formatter.parse(to.toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                Calendar calFromDate = Calendar.getInstance();
+                Calendar calToDate = Calendar.getInstance();
+                calFromDate.setTime(fromDate);
+                calToDate.setTime(toDate);
+                CharSequence monthFromDate = android.text.format.DateFormat.format("MMM", fromDate);
+                CharSequence monthToDate = android.text.format.DateFormat.format("MMM", toDate);
+                String formatedFromDate = calFromDate.get(Calendar.DATE) + " " + monthFromDate + " " + calFromDate.get(Calendar.YEAR);
+                String formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + " " + calToDate.get(Calendar.YEAR);
+                mEditTxtDate.setText(formatedFromDate + " - " + formatedToDate);
+
+            }
+        }
+    }
 
     @OnClick(R.id.linearLayoutOne)
     public void headerOne(View view) {
@@ -280,16 +276,21 @@ public class SearchActivity extends AppCompatActivity
 
     @OnClick(R.id.editTxtStartDate)
     public void btnStartDate(View v) {
+    }
+ /*   @OnClick(R.id.editTxtStartDate)
+    public void btnStartDate(View v) {
         mFromDatePickerDialog.show();
-    }
+    }*/
 
-    @OnClick(R.id.editTxtEndDate)
-    public void btnEndDate(View v) {
-        mToDatePickerDialog.show();
-    }
-
+    /*  @OnClick(R.id.editTxtEndDate)
+      public void btnEndDate(View v) {
+          mToDatePickerDialog.show();
+      }
+  */
     //get all product details
     public void getAllProductDetails() {
+
+
         popularProdList = new ArrayList<>();
 
         allItemsList = new ArrayList<>();
@@ -404,7 +405,7 @@ public class SearchActivity extends AppCompatActivity
             }
         });
 
-    }//end onResume()
+    }//txtToDate onResume()
 
     @OnClick(R.id.btnSearch)
     public void callSearchApi() {
@@ -438,7 +439,7 @@ public class SearchActivity extends AppCompatActivity
                 });
             }
         }
-    }//end callSearchApi()
+    }//txtToDate callSearchApi()
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

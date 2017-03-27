@@ -10,4 +10,6 @@
     <color name="colorRatingBar">#1A84C1</color>
     <color name="colorRoundBtn">#337ab7</color>
     <color name="colorCardView">#B1BCBE</color>
+    <color name="colorRed">#f00</color>
+    <color name="colorSaveBack">#6b6e79</color>
 </resources>

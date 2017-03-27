@@ -7,6 +7,7 @@
     <string name="subtitle">Own less. Access more.</string>
     <string name="hintForSearchItem">Search for an item to rent</string>
     <string name="start_date">Start Date</string>
+    <string name="enter_date">Please Select Dates</string>
     <string name="end_date">End Date</string>
     <string name="search">Search</string>
     <string name="why_use_recircle">Why use Recircle ?</string>
@@ -22,4 +23,13 @@
     <string name="err_network_available">Network not available. Please try again</string>
     <string name="product_details_not_found">Product Not Found</string>
     <string name="err_Field_empty">Enter Product Name</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="cancel">Cancel</string>
+    <string name="reset">Reset</string>
+    <string name="enter_start_date">Start Date</string>
+    <string name="enter_end_date">End Date</string>
+    <string name="enter_dates">Enter start date and end date</string>
 </resources>
