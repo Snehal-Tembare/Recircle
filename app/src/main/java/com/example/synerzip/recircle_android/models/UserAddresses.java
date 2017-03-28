@@ -11,8 +11,16 @@ import lombok.Setter;
 @Getter
 @Setter
 
-public class User_prod_images {
-    private String user_prod_image_url;
+public class UserAddresses {
+    private String street2;
 
-    private String created_at;
+    private String zip;
+
+    private String street1;
+
+    private String state;
+
+    private String country;
+
+    private String city;
 }

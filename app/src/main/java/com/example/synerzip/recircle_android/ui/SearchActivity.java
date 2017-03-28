@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -28,7 +29,7 @@ import android.widget.TextView;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.example.synerzip.recircle_android.R;
-import com.example.synerzip.recircle_android.models.All_Product_Info;
+import com.example.synerzip.recircle_android.models.AllProductInfo;
 import com.example.synerzip.recircle_android.models.PopularProducts;
 import com.example.synerzip.recircle_android.models.Product;
 import com.example.synerzip.recircle_android.models.ProductDetails;
@@ -40,7 +41,6 @@ import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.utilities.NetworkUtility;
 import com.example.synerzip.recircle_android.utilities.RCLog;
-import com.roger.catloadinglibrary.CatLoadingView;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -65,6 +65,8 @@ import retrofit2.Response;
 public class SearchActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final String DESCRIPTION_EXPRESSION = "^[A-Za-z]+([\\-\\w\\s\\d]+)$";
+
     @BindView(R.id.toolbar)
     public Toolbar toolbar;
 
@@ -82,7 +84,7 @@ public class SearchActivity extends AppCompatActivity
 
     private RCAPInterface service;
 
-    @BindView(R.id.txtAutocomplete)
+    @BindView(R.id.auto_txt_search_item_name)
     public AutoCompleteTextView productAutoComplete;
 
     public ArrayList<ProductsData> productsDataList;
@@ -107,8 +109,11 @@ public class SearchActivity extends AppCompatActivity
 
     private ArrayList<PopularProducts> popularProducts;
 
-    @BindView(R.id.editTxtStartDate)
-    public EditText mEditTxtDate;
+    @BindView(R.id.edt_start_date)
+    public EditText mEditTxtStartDate;
+
+    @BindView(R.id.edt_end_date)
+    public EditText mEditTxtEndDate;
 
     @BindView(R.id.txtHeaderOneContent)
     public TextView mTxtHeaderOne;
@@ -137,6 +142,9 @@ public class SearchActivity extends AppCompatActivity
     @BindView(R.id.imgUpArrowThree)
     public ImageView imgUpArrowThree;
 
+    @BindView(R.id.edt_place)
+    public EditText mEdtPlace;
+
     private AwesomeValidation awesomeValidation;
 
     private String manufacturerId = "";
@@ -149,11 +157,16 @@ public class SearchActivity extends AppCompatActivity
 
     private String mToDate = "";
 
-    private static final String DESCRIPTION_EXPRESSION = "^[A-Za-z]+([\\w\\s]+)$";
+    private String mPlace;
 
-    CatLoadingView mView;
+    private Intent mIntent;
+
+    private String mName;
 
     Date fromDate, toDate;
+
+    @BindView(R.id.editTxtStartDate)
+    public EditText mEditTxtDate;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -161,9 +174,9 @@ public class SearchActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
-        mView = new CatLoadingView();
-        if (NetworkUtility.isNetworkAvailable(this)) {
 
+        toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
+        if (NetworkUtility.isNetworkAvailable(this)) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayShowTitleEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
@@ -173,7 +186,7 @@ public class SearchActivity extends AppCompatActivity
                     new ActionBarDrawerToggle(this, mDrawerLayout, toolbar,
                             R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
-            mDrawerLayout.setDrawerListener(toggle);
+            mDrawerLayout.addDrawerListener(toggle);
             toggle.syncState();
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 
@@ -186,8 +199,8 @@ public class SearchActivity extends AppCompatActivity
                     }
                 }
             });
-
             navigationView.setNavigationItemSelectedListener(this);
+
 
             getAllProductDetails();
         } else {
@@ -195,7 +208,7 @@ public class SearchActivity extends AppCompatActivity
         }
         // date picker
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
-        awesomeValidation.addValidation(this, R.id.txtAutocomplete, DESCRIPTION_EXPRESSION, R.string.err_Field_empty);
+        awesomeValidation.addValidation(this, R.id.auto_txt_search_item_name, DESCRIPTION_EXPRESSION, R.string.err_Field_empty);
 
     }//txtToDate onCreate()
 
@@ -274,34 +287,19 @@ public class SearchActivity extends AppCompatActivity
         }
     }
 
-    @OnClick(R.id.editTxtStartDate)
-    public void btnStartDate(View v) {
-    }
- /*   @OnClick(R.id.editTxtStartDate)
-    public void btnStartDate(View v) {
-        mFromDatePickerDialog.show();
-    }*/
-
-    /*  @OnClick(R.id.editTxtEndDate)
-      public void btnEndDate(View v) {
-          mToDatePickerDialog.show();
-      }
-  */
     //get all product details
     public void getAllProductDetails() {
-
-
         popularProdList = new ArrayList<>();
 
         allItemsList = new ArrayList<>();
 
         service = ApiClient.getClient().create(RCAPInterface.class);
 
-        Call<All_Product_Info> call = service.getProductDetails();
+        Call<AllProductInfo> call = service.getProductDetails();
 
-        call.enqueue(new Callback<All_Product_Info>() {
+        call.enqueue(new Callback<AllProductInfo>() {
             @Override
-            public void onResponse(Call<All_Product_Info> call, Response<All_Product_Info> response) {
+            public void onResponse(Call<AllProductInfo> call, Response<AllProductInfo> response) {
                 if (null != response) {
                     productDetails = response.body().getProductDetails();
                     popularProducts = response.body().getPopularProducts();
@@ -323,7 +321,7 @@ public class SearchActivity extends AppCompatActivity
             }
 
             @Override
-            public void onFailure(Call<All_Product_Info> call, Throwable t) {
+            public void onFailure(Call<AllProductInfo> call, Throwable t) {
                 Log.v(TAG, t.toString());
             }
         });
@@ -336,8 +334,6 @@ public class SearchActivity extends AppCompatActivity
         productsCustomList = new ArrayList<>();
 
         productItemList = new ArrayList<>();
-
-        query = productAutoComplete.getText().toString();
 
         service = ApiClient.getClient().create(RCAPInterface.class);
 
@@ -407,8 +403,9 @@ public class SearchActivity extends AppCompatActivity
 
     }//txtToDate onResume()
 
-    @OnClick(R.id.btnSearch)
+    @OnClick(R.id.btn_search)
     public void callSearchApi() {
+        mName = productAutoComplete.getText().toString();
 
         if (awesomeValidation.validate()) {
 
@@ -423,7 +420,21 @@ public class SearchActivity extends AppCompatActivity
                     public void onResponse(Call<SearchProduct> call, Response<SearchProduct> response) {
                         if (null != response && null != response.body()) {
                             Log.v(TAG, response.body() + "");
+                            SearchProduct sd = response.body();
+                            mIntent = new Intent(SearchActivity.this, ResultActivity.class);
+                            mIntent.putExtra("searchProduct", sd);
+                            mIntent.putExtra("name", mName);
+                            mIntent.putExtra("place", getString(R.string.city_name));
+
+                            if (!mEditTxtStartDate.getText().toString().equalsIgnoreCase("") &&
+                                    !mEditTxtEndDate.getText().toString().equalsIgnoreCase("")) {
+                                mIntent.putExtra("startDate", mEditTxtStartDate.getText().toString());
+                                mIntent.putExtra("endDate", mEditTxtEndDate.getText().toString());
+                            }
+                            startActivity(mIntent);
+
                             ArrayList<Products> productsArrayList = response.body().getProducts();
+
                             for (Products products : productsArrayList) {
                                 RCLog.showToast(SearchActivity.this, products.getUser_product_info().getPrice_per_day() + "price per day");
                             }

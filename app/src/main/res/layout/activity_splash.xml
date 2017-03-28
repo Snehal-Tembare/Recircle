@@ -21,7 +21,7 @@
         android:gravity="center"
         android:text="@string/recircle"
         android:textAllCaps="true"
-        android:textColor="@color/colorWhite"
-        android:textSize="@dimen/dimen_30sp"
+        android:textColor="@color/common_white"
+        android:textSize="@dimen/text_size_30"
         android:textStyle="italic" />
 </RelativeLayout>

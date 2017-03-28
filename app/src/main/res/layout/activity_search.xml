@@ -8,7 +8,7 @@
     android:orientation="vertical"
     tools:mContext=".ui.SearchActivity">
 
-    <include layout="@layout/app_bar_launching" />
+    <include layout="@layout/partial_toolbar" />
 
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer_layout"
@@ -39,10 +39,11 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimen_450dp"
+                    android:layout_height="wrap_content"
                     android:alpha="0.8"
-                    android:background="@drawable/ic_back"
-                    android:orientation="vertical">
+                    android:background="@android:color/background_dark"
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/common_dimens_10">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -51,8 +52,8 @@
                         android:drawablePadding="@dimen/dimen_10dp"
                         android:gravity="center"
                         android:text="People renting from people"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="@dimen/dimen_30sp"
+                        android:textColor="@color/common_white"
+                        android:textSize="@dimen/text_size_30"
                         android:textStyle="bold" />
 
                     <TextView
@@ -62,93 +63,18 @@
                         android:drawablePadding="@dimen/dimen_10dp"
                         android:gravity="center"
                         android:text="@string/subtitle"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="@dimen/dimen_20sp"
+                        android:textColor="@color/common_white"
+                        android:textSize="@dimen/text_size_20"
                         android:textStyle="bold" />
 
-                    <AutoCompleteTextView
-                        android:singleLine="true"
-                        android:id="@+id/txtAutocomplete"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/dimen_10dp"
-                        android:background="@drawable/edittxt_square"
-                        android:drawableLeft="@drawable/ic_search"
-                        android:drawablePadding="@dimen/dimen_10dp"
-                        android:hint="@string/hintForSearchItem"
-                        android:padding="@dimen/dimen_20dp" />
+                    <include layout="@layout/partial_search_layout" />
 
-                    <ListView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                    <EditText
-                        android:singleLine="true"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/dimen_10dp"
-                        android:background="@drawable/edittxt_square"
-                        android:drawableLeft="@drawable/ic_location"
-                        android:drawablePadding="@dimen/dimen_10dp"
-                        android:editable="false"
-                        android:hint="Austin, Texas"
-                        android:padding="@dimen/dimen_20dp" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="@dimen/dimen_10dp">
-
-
-                        <EditText
-                            android:singleLine="true"
-                            android:id="@+id/editTxtStartDate"
-                            android:layout_width="@dimen/dimen_0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.5"
-                            android:background="@drawable/edittxt_square"
-                            android:drawableLeft="@drawable/ic_calendar"
-                            android:drawablePadding="@dimen/dimen_10dp"
-                            android:focusable="false"
-                            android:hint="@string/enter_dates"
-                            android:onClick="btnEnterDates"
-                            android:padding="@dimen/dimen_20dp" />
-
-                        <EditText
-                            android:visibility="gone"
-                            android:singleLine="true"
-                            android:id="@+id/editTxtEndDate"
-                            android:layout_width="@dimen/dimen_0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.5"
-                            android:background="@drawable/edittxt_square"
-                            android:drawableLeft="@drawable/ic_calendar"
-                            android:drawablePadding="@dimen/dimen_10dp"
-                            android:focusable="false"
-                            android:hint="@string/end_date"
-                            android:onClick="btnEndDate"
-                            android:padding="@dimen/dimen_20dp" />
-                    </LinearLayout>
-
-                    <Button
-                        android:id="@+id/btnSearch"
-                        android:layout_width="@dimen/dimen_200dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/dimen_10dp"
-                        android:background="@drawable/round_button"
-                        android:onClick="callSearchApi"
-                        android:text="@string/search"
-                        android:textAllCaps="false"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="@dimen/dimen_14sp" />
                 </LinearLayout>
 
                 <LinearLayout
 
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <TextView
@@ -160,7 +86,7 @@
                         android:text="@string/why_use_recircle"
                         android:textAllCaps="true"
                         android:textColor="@color/colortext"
-                        android:textSize="@dimen/dimen_30sp" />
+                        android:textSize="@dimen/text_size_30" />
 
                     <LinearLayout
                         android:background="@drawable/border_header_title"
@@ -185,7 +111,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/dimen_20dp"
                             android:gravity="center"
-                            android:text="We offer protection"
+                            android:text="@string/we_offer_protection"
                             android:textColor="@color/colortext"
                             android:textSize="@dimen/dimen_17sp" />
 
@@ -235,7 +161,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/dimen_20dp"
                             android:gravity="center"
-                            android:text="Pick-up / drop-off at the Recircle Store"
+                            android:text="@string/pick_msg"
                             android:textColor="@color/colortext"
                             android:textSize="@dimen/dimen_17sp" />
 
@@ -327,7 +253,7 @@
                     android:text="@string/recent_items"
                     android:textAllCaps="true"
                     android:textColor="@color/colortext"
-                    android:textSize="@dimen/dimen_30sp" />
+                    android:textSize="@dimen/text_size_30" />
 
                 <android.support.v7.widget.RecyclerView
                     android:nestedScrollingEnabled="false"
@@ -345,7 +271,7 @@
                     android:text="@string/popular_items"
                     android:textAllCaps="true"
                     android:textColor="@color/colortext"
-                    android:textSize="@dimen/dimen_30sp" />
+                    android:textSize="@dimen/text_size_30" />
 
                 <android.support.v7.widget.RecyclerView
                     android:nestedScrollingEnabled="false"

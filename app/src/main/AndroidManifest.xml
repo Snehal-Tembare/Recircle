@@ -21,10 +21,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.SearchActivity" />
-        <activity
-            android:name=".ui.MainActivity"
-            android:label="@string/title_activity_main" />
-        <activity android:name=".ui.CalendarActivity"></activity>
+        <activity android:name=".ui.ResultActivity" />
+        <activity android:name=".ui.CalendarActivity"/>
     </application>
 
 </manifest>
