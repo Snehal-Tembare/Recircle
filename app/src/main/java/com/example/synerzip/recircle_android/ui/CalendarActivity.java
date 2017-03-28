@@ -7,10 +7,9 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
-
 import com.example.synerzip.recircle_android.R;
+import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.squareup.timessquare.CalendarPickerView;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,6 +18,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.squareup.timessquare.CalendarPickerView.SelectionMode.RANGE;
@@ -32,8 +32,10 @@ public class CalendarActivity extends AppCompatActivity {
 
     Date selectFromDate, selectToDate;
 
+    @BindView(R.id.txt_from_date)
     public TextView txtFromDate;
 
+    @BindView(R.id.txt_to_date)
     public TextView txtToDate;
 
     @Override
@@ -43,10 +45,7 @@ public class CalendarActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_calendar);
-
-        pickerView = (CalendarPickerView) findViewById(R.id.calendar_view);
-        txtFromDate = (TextView) findViewById(R.id.txt_from_date);
-        txtToDate = (TextView) findViewById(R.id.txt_to_date);
+        ButterKnife.bind(this);
 
         Calendar nextYear = Calendar.getInstance();
         nextYear.add(Calendar.YEAR, 1);
@@ -98,18 +97,21 @@ public class CalendarActivity extends AppCompatActivity {
 
     @OnClick(R.id.txt_cancel)
     public void txtCancel(View view) {
-
         Intent intent = new Intent(CalendarActivity.this, SearchActivity.class);
         startActivity(intent);
     }
 
     @OnClick(R.id.btn_save)
     public void btnSave(View view) {
-        Intent intent = new Intent(CalendarActivity.this, SearchActivity.class);
-        intent.putExtra("fromDate", fromDate.toString());
-        intent.putExtra("toDate", toDate.toString());
-        setResult(RESULT_OK, intent);
-        finish();
+        if (!fromDate.equals(null) && !toDate.equals(null)) {
+            Intent intent = new Intent(CalendarActivity.this, SearchActivity.class);
+            intent.putExtra("fromDate", fromDate.toString());
+            intent.putExtra("toDate", toDate.toString());
+            setResult(RESULT_OK, intent);
+            finish();
+        } else {
+            RCLog.showToast(CalendarActivity.this, "Enter dates to be saved(");
+        }
     }
 
     @OnClick(R.id.txt_reset)
@@ -117,5 +119,4 @@ public class CalendarActivity extends AppCompatActivity {
         txtFromDate.setText(getString(R.string.enter_start_date));
         txtToDate.setText(R.string.enter_end_date);
     }
-
 }
