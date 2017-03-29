@@ -7,6 +7,7 @@
     <string name="subtitle">Own less. Access more.</string>
     <string name="hintForSearchItem">Search for an item to rent</string>
     <string name="start_date">Start Date</string>
+    <string name="enter_date">Please Select Dates</string>
     <string name="end_date">End Date</string>
     <string name="search">Search</string>
     <string name="why_use_recircle">Why use Recircle ?</string>
@@ -24,6 +25,21 @@
     <string name="search_result">Search Result</string>
     <string name="city_name">Austin, Texas</string>
     <string name="err_Field_empty">Enter Product Name</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="cancel">Cancel</string>
+    <string name="reset">Reset</string>
+    <string name="enter_start_date">Start Date</string>
+    <string name="enter_end_date">End Date</string>
+    <string name="enter_dates">Enter start date and end date</string>
     <string name="we_offer_protection">We offer protection</string>
     <string name="pick_msg">Pick-up / drop-off at the Recircle Store</string>
+    <string name="from_date">fromDate</string>
+    <string name="to_date">toDate</string>
+    <string name="date_format">E MMM dd HH:mm:ss Z yyyy</string>
+    <string name="month_format">MMM</string>
+    <string name="day_format">EEE</string>
+    <string name="error_dates">Enter dates to be saved</string>
 </resources>
