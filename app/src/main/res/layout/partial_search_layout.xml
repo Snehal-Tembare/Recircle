@@ -39,7 +39,7 @@
         android:padding="@dimen/common_dimens_10">
 
         <EditText
-            android:id="@+id/editTxtStartDate"
+            android:id="@+id/edt_enter_dates"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_calendar"
@@ -50,33 +50,6 @@
             android:hint="@string/enter_dates"
             android:onClick="btnEnterDates"/>
 
-        <EditText
-            android:id="@+id/edt_start_date"
-            android:layout_width="@dimen/dimen_0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:background="@drawable/edittxt_square"
-            android:drawableLeft="@drawable/ic_calendar"
-            android:drawablePadding="@dimen/dimen_10dp"
-            android:focusable="false"
-            android:hint="@string/start_date"
-            android:onClick="btnStartDate"
-            android:padding="@dimen/common_dimens_10"
-            android:visibility="gone" />
-
-        <EditText
-            android:id="@+id/edt_end_date"
-            android:layout_width="@dimen/dimen_0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:background="@drawable/edittxt_square"
-            android:drawableLeft="@drawable/ic_calendar"
-            android:drawablePadding="@dimen/dimen_10dp"
-            android:focusable="false"
-            android:hint="@string/end_date"
-            android:onClick="btnEndDate"
-            android:padding="@dimen/common_dimens_10"
-            android:visibility="gone" />
     </LinearLayout>
 
 

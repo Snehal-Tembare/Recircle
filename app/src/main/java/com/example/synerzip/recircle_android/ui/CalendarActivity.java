@@ -7,9 +7,11 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
+
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.squareup.timessquare.CalendarPickerView;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,20 +25,24 @@ import butterknife.OnClick;
 
 import static com.squareup.timessquare.CalendarPickerView.SelectionMode.RANGE;
 
+/**
+ * Created by Prajakta Patil on 24/3/17.
+ * Copyright © 2016 Synerzip. All rights reserved
+ */
 public class CalendarActivity extends AppCompatActivity {
 
     @BindView(R.id.calendar_view)
-    public CalendarPickerView pickerView;
+    public CalendarPickerView mPickerView;
 
     Date fromDate, toDate;
 
     Date selectFromDate, selectToDate;
 
     @BindView(R.id.txt_from_date)
-    public TextView txtFromDate;
+    public TextView mTxtFromDate;
 
     @BindView(R.id.txt_to_date)
-    public TextView txtToDate;
+    public TextView mTxtToDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,19 +56,19 @@ public class CalendarActivity extends AppCompatActivity {
         Calendar nextYear = Calendar.getInstance();
         nextYear.add(Calendar.YEAR, 1);
         Date today = new Date();
-        pickerView.init(today, nextYear.getTime()).withSelectedDate(today).inMode(RANGE);
-        pickerView.init(today, nextYear.getTime()).inMode(RANGE);
+        mPickerView.init(today, nextYear.getTime()).withSelectedDate(today).inMode(RANGE);
+        mPickerView.init(today, nextYear.getTime()).inMode(RANGE);
 
         //on date selected listener
-        pickerView.setOnDateSelectedListener(new CalendarPickerView.OnDateSelectedListener() {
+        mPickerView.setOnDateSelectedListener(new CalendarPickerView.OnDateSelectedListener() {
 
             @Override
             public void onDateSelected(Date date) {
-                ArrayList<Date> selectedDates = (ArrayList<Date>) pickerView.getSelectedDates();
+                ArrayList<Date> selectedDates = (ArrayList<Date>) mPickerView.getSelectedDates();
                 selectFromDate = selectedDates.get(0);
                 selectToDate = selectedDates.get(selectedDates.size() - 1);
 
-                DateFormat formatter = new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy");
+                DateFormat formatter = new SimpleDateFormat(getString(R.string.date_format));
                 try {
                     fromDate = formatter.parse(selectFromDate.toString());
                     toDate = formatter.parse(selectToDate.toString());
@@ -75,18 +81,24 @@ public class CalendarActivity extends AppCompatActivity {
                 calFromDate.setTime(fromDate);
                 calToDate.setTime(toDate);
 
-                CharSequence weekdayFromDate = android.text.format.DateFormat.format("EEE", fromDate);
-                CharSequence weekdayToDate = android.text.format.DateFormat.format("EEE", toDate);
-                CharSequence monthFromDate = android.text.format.DateFormat.format("MMM", fromDate);
-                CharSequence monthToDate = android.text.format.DateFormat.format("MMM", toDate);
+                CharSequence weekdayFromDate =
+                        android.text.format.DateFormat.format(getString(R.string.day_format), fromDate);
+                CharSequence weekdayToDate =
+                        android.text.format.DateFormat.format(getString(R.string.day_format), toDate);
+                CharSequence monthFromDate =
+                        android.text.format.DateFormat.format(getString(R.string.month_format), fromDate);
+                CharSequence monthToDate =
+                        android.text.format.DateFormat.format(getString(R.string.month_format), toDate);
 
-                String formatedFromDate = weekdayFromDate + " , " + calFromDate.get(Calendar.DATE) + " " + monthFromDate
+                String formatedFromDate =
+                        weekdayFromDate + " , " + calFromDate.get(Calendar.DATE) + " " + monthFromDate
                         + " " + calFromDate.get(Calendar.YEAR);
-                String formatedToDate = weekdayToDate + " , " + calToDate.get(Calendar.DATE) + " " + monthToDate
+                String formatedToDate =
+                        weekdayToDate + " , " + calToDate.get(Calendar.DATE) + " " + monthToDate
                         + " " + calToDate.get(Calendar.YEAR);
 
-                txtFromDate.setText(formatedFromDate);
-                txtToDate.setText(formatedToDate);
+                mTxtFromDate.setText(formatedFromDate);
+                mTxtToDate.setText(formatedToDate);
             }
 
             @Override
@@ -105,18 +117,18 @@ public class CalendarActivity extends AppCompatActivity {
     public void btnSave(View view) {
         if (!fromDate.equals(null) && !toDate.equals(null)) {
             Intent intent = new Intent(CalendarActivity.this, SearchActivity.class);
-            intent.putExtra("fromDate", fromDate.toString());
-            intent.putExtra("toDate", toDate.toString());
+            intent.putExtra(getString(R.string.from_date), fromDate.toString());
+            intent.putExtra(getString(R.string.to_date), toDate.toString());
             setResult(RESULT_OK, intent);
             finish();
         } else {
-            RCLog.showToast(CalendarActivity.this, "Enter dates to be saved(");
+            RCLog.showToast(CalendarActivity.this, getString(R.string.error_dates));
         }
     }
 
     @OnClick(R.id.txt_reset)
     public void txtReset(View view) {
-        txtFromDate.setText(getString(R.string.enter_start_date));
-        txtToDate.setText(R.string.enter_end_date);
+        mTxtFromDate.setText(getString(R.string.enter_start_date));
+        mTxtToDate.setText(R.string.enter_end_date);
     }
 }

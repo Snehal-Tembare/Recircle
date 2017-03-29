@@ -68,24 +68,24 @@ public class SearchActivity extends AppCompatActivity
     private static final String DESCRIPTION_EXPRESSION = "^[A-Za-z]+([\\-\\w\\s\\d]+)$";
 
     @BindView(R.id.toolbar)
-    public Toolbar toolbar;
+    public Toolbar mToolbar;
 
     @BindView(R.id.drawer_layout)
     public DrawerLayout mDrawerLayout;
 
     @BindView(R.id.nav_view)
-    public NavigationView navigationView;
+    public NavigationView mNavigationView;
 
     private static final String TAG = "SearchActivity";
 
     public ArrayList<String> productItemList;
 
-    AutocompleteAdapter autocompleteAdapter;
+    AutocompleteAdapter mAutocompleteAdapter;
 
     private RCAPInterface service;
 
     @BindView(R.id.auto_txt_search_item_name)
-    public AutoCompleteTextView productAutoComplete;
+    public AutoCompleteTextView mProductAutoComplete;
 
     public ArrayList<ProductsData> productsDataList;
 
@@ -108,12 +108,6 @@ public class SearchActivity extends AppCompatActivity
     public RecyclerView mRecyclerViewPopular;
 
     private ArrayList<PopularProducts> popularProducts;
-
-    @BindView(R.id.edt_start_date)
-    public EditText mEditTxtStartDate;
-
-    @BindView(R.id.edt_end_date)
-    public EditText mEditTxtEndDate;
 
     @BindView(R.id.txtHeaderOneContent)
     public TextView mTxtHeaderOne;
@@ -165,8 +159,10 @@ public class SearchActivity extends AppCompatActivity
 
     Date fromDate, toDate;
 
-    @BindView(R.id.editTxtStartDate)
+    @BindView(R.id.edt_enter_dates)
     public EditText mEditTxtDate;
+
+    String formatedFromDate, formatedToDate;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -175,20 +171,20 @@ public class SearchActivity extends AppCompatActivity
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
 
-        toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
+        mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
         if (NetworkUtility.isNetworkAvailable(this)) {
-            setSupportActionBar(toolbar);
+            setSupportActionBar(mToolbar);
             getSupportActionBar().setDisplayShowTitleEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
 
             //navigation drawer layout
             ActionBarDrawerToggle toggle =
-                    new ActionBarDrawerToggle(this, mDrawerLayout, toolbar,
+                    new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar,
                             R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
             mDrawerLayout.addDrawerListener(toggle);
             toggle.syncState();
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
@@ -199,33 +195,38 @@ public class SearchActivity extends AppCompatActivity
                     }
                 }
             });
-            navigationView.setNavigationItemSelectedListener(this);
+            mNavigationView.setNavigationItemSelectedListener(this);
 
 
             getAllProductDetails();
         } else {
             RCLog.showToast(this, getString(R.string.err_network_available));
         }
-        // date picker
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
         awesomeValidation.addValidation(this, R.id.auto_txt_search_item_name, DESCRIPTION_EXPRESSION, R.string.err_Field_empty);
 
-    }//txtToDate onCreate()
+    }//mTxtToDate onCreate()
 
-    @OnClick(R.id.editTxtStartDate)
+    @OnClick(R.id.edt_enter_dates)
     public void btnEnterDates(View view) {
         Intent intent = new Intent(SearchActivity.this, CalendarActivity.class);
         startActivityForResult(intent, 1);
 
     }
 
+    /**
+     * get dates from CalendarActivity
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
-                String from = data.getStringExtra("fromDate");
-                String to = data.getStringExtra("toDate");
-                DateFormat formatter = new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy");
+                String from = data.getStringExtra(getString(R.string.from_date));
+                String to = data.getStringExtra(getString(R.string.to_date));
+                DateFormat formatter = new SimpleDateFormat(getString(R.string.date_format));
                 try {
                     fromDate = formatter.parse(from.toString());
                     toDate = formatter.parse(to.toString());
@@ -237,10 +238,12 @@ public class SearchActivity extends AppCompatActivity
                 Calendar calToDate = Calendar.getInstance();
                 calFromDate.setTime(fromDate);
                 calToDate.setTime(toDate);
-                CharSequence monthFromDate = android.text.format.DateFormat.format("MMM", fromDate);
-                CharSequence monthToDate = android.text.format.DateFormat.format("MMM", toDate);
-                String formatedFromDate = calFromDate.get(Calendar.DATE) + " " + monthFromDate + " " + calFromDate.get(Calendar.YEAR);
-                String formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + " " + calToDate.get(Calendar.YEAR);
+                CharSequence monthFromDate = android.text.format.DateFormat
+                        .format(getString(R.string.month_format), fromDate);
+                CharSequence monthToDate = android.text.format.DateFormat
+                        .format(getString(R.string.month_format),toDate);
+                formatedFromDate = calFromDate.get(Calendar.DATE) + " " + monthFromDate + ", " + calFromDate.get(Calendar.YEAR);
+                formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
                 mEditTxtDate.setText(formatedFromDate + " - " + formatedToDate);
 
             }
@@ -368,9 +371,9 @@ public class SearchActivity extends AppCompatActivity
                         }
                     }
 
-                    autocompleteAdapter = new AutocompleteAdapter
+                    mAutocompleteAdapter = new AutocompleteAdapter
                             (SearchActivity.this, R.layout.activity_search, R.id.txtProductName, productsCustomList);
-                    productAutoComplete.setAdapter(autocompleteAdapter);
+                    mProductAutoComplete.setAdapter(mAutocompleteAdapter);
 
                 } else {
                     RCLog.showToast(getApplicationContext(), getString(R.string.product_details_not_found));
@@ -382,18 +385,16 @@ public class SearchActivity extends AppCompatActivity
             }
         });
 
-        productAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mProductAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                //TODO functionality yet to be completed
-
-                Product pd = (Product) parent.getAdapter().getItem(position);
-                if (pd.getProduct_manufacturer_id() != null && !pd.getProduct_manufacturer_id().isEmpty()) {
-                    manufacturerId = pd.getProduct_manufacturer_id();
+                Product product = (Product) parent.getAdapter().getItem(position);
+                if (product.getProduct_manufacturer_id() != null && !product.getProduct_manufacturer_id().isEmpty()) {
+                    manufacturerId = product.getProduct_manufacturer_id();
                 }
-                if (pd.getProduct_id() != null && !pd.getProduct_id().isEmpty()) {
-                    productId = pd.getProduct_id();
+                if (product.getProduct_id() != null && !product.getProduct_id().isEmpty()) {
+                    productId = product.getProduct_id();
                 }
                 //hide keyboard after item click
                 InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -401,16 +402,16 @@ public class SearchActivity extends AppCompatActivity
             }
         });
 
-    }//txtToDate onResume()
+    }//mTxtToDate onResume()
 
     @OnClick(R.id.btn_search)
     public void callSearchApi() {
-        mName = productAutoComplete.getText().toString();
+        mName = mProductAutoComplete.getText().toString();
 
         if (awesomeValidation.validate()) {
 
             if (productId.equalsIgnoreCase("") && manufacturerId.equalsIgnoreCase("")) {
-                query = productAutoComplete.getText().toString();
+                query = mProductAutoComplete.getText().toString();
             }
             if (!productId.equalsIgnoreCase("") || !manufacturerId.equalsIgnoreCase("") || !query.equalsIgnoreCase("")) {
 
@@ -426,10 +427,10 @@ public class SearchActivity extends AppCompatActivity
                             mIntent.putExtra("name", mName);
                             mIntent.putExtra("place", getString(R.string.city_name));
 
-                            if (!mEditTxtStartDate.getText().toString().equalsIgnoreCase("") &&
-                                    !mEditTxtEndDate.getText().toString().equalsIgnoreCase("")) {
-                                mIntent.putExtra("startDate", mEditTxtStartDate.getText().toString());
-                                mIntent.putExtra("endDate", mEditTxtEndDate.getText().toString());
+                            if (!formatedFromDate.equalsIgnoreCase("") &&
+                                    !formatedToDate.equalsIgnoreCase("")) {
+                                mIntent.putExtra("startDate", formatedFromDate);
+                                mIntent.putExtra("endDate", formatedToDate);
                             }
                             startActivity(mIntent);
 
@@ -450,7 +451,7 @@ public class SearchActivity extends AppCompatActivity
                 });
             }
         }
-    }//txtToDate callSearchApi()
+    }//mTxtToDate callSearchApi()
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -474,7 +475,6 @@ public class SearchActivity extends AppCompatActivity
             } else {
                 mDrawerLayout.openDrawer(Gravity.RIGHT);
             }
-
         }
         return false;
     }
