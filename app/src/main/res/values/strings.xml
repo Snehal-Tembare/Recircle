@@ -26,4 +26,8 @@
     <string name="err_Field_empty">Enter Product Name</string>
     <string name="we_offer_protection">We offer protection</string>
     <string name="pick_msg">Pick-up / drop-off at the Recircle Store</string>
+    <string name="search_product">searchProduct</string>
+    <string name="name">name</string>
+    <string name="place">place</string>
+    <string name="loading">Loading...</string>
 </resources>

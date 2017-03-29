@@ -1,6 +1,7 @@
 package com.example.synerzip.recircle_android.ui;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -43,6 +44,7 @@ import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.utilities.NetworkUtility;
 import com.example.synerzip.recircle_android.utilities.RCLog;
+import com.example.synerzip.recircle_android.utilities.SearchUtility;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -168,12 +170,23 @@ public class SearchActivity extends AppCompatActivity
 
     private String mName;
 
+    SearchUtility utility;
+
+    private ProgressDialog mDialog;
+
+    private SearchProduct searchProduct;
+
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
+
+        utility = new SearchUtility();
+        mDialog = new ProgressDialog(this);
+        mDialog.setMessage(getString(R.string.loading));
 
         toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
         if (NetworkUtility.isNetworkAvailable(this)) {
@@ -350,14 +363,36 @@ public class SearchActivity extends AppCompatActivity
 
         service = ApiClient.getClient().create(RCAPInterface.class);
 
-        Call<RootObject> call = service.productNames();
+        utility.populateAutoCompleteData();
 
-        call.enqueue(new Callback<RootObject>() {
+        ReadyCallbak readyCallbak = new ReadyCallbak() {
             @Override
-            public void onResponse(Call<RootObject> call, Response<RootObject> response) {
-                if (null != response && null != response.body()) {
+            public void searchProductResult(SearchProduct sd) {
+                searchProduct = sd;
+                if (null != searchProduct) {
+                    mIntent = new Intent(SearchActivity.this, ResultActivity.class);
+                    mIntent.putExtra(getString(R.string.search_product), searchProduct);
+                    mIntent.putExtra(getString(R.string.name), mName);
+                    mIntent.putExtra(getString(R.string.place), getString(R.string.city_name));
 
-                    productsDataList = response.body().getProductsData();
+                    if (!mEditTxtStartDate.getText().toString().equalsIgnoreCase("") &&
+                            !mEditTxtEndDate.getText().toString().equalsIgnoreCase("")) {
+                        mIntent.putExtra(getString(R.string.start_date), mEditTxtStartDate.getText().toString());
+                        mIntent.putExtra(getString(R.string.end_date), mEditTxtEndDate.getText().toString());
+                    }
+                    mDialog.cancel();
+                    startActivity(mIntent);
+                } else {
+                    mDialog.cancel();
+                    RCLog.showToast(getApplicationContext(), getString(R.string.product_details_not_found));
+                }
+
+            }
+
+            @Override
+            public void allItemsResult(ArrayList<ProductsData> mProductsDataList) {
+                productsDataList = mProductsDataList;
+                if (null != productsDataList && 0 != productsDataList.size()) {
 
                     for (int i = 0; i < productsDataList.size(); i++) {
                         productItemList.add(productsDataList.get(i).getProduct_manufacturer_name());
@@ -389,11 +424,9 @@ public class SearchActivity extends AppCompatActivity
                     RCLog.showToast(getApplicationContext(), getString(R.string.product_details_not_found));
                 }
             }
+        };
 
-            @Override
-            public void onFailure(Call<RootObject> call, Throwable t) {
-            }
-        });
+        utility.setCallback(readyCallbak);
 
         productAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -425,43 +458,8 @@ public class SearchActivity extends AppCompatActivity
             if (productId.equalsIgnoreCase("") && manufacturerId.equalsIgnoreCase("")) {
                 query = productAutoComplete.getText().toString();
             }
-            if (!productId.equalsIgnoreCase("") || !manufacturerId.equalsIgnoreCase("") || !query.equalsIgnoreCase("")) {
-
-                Call<SearchProduct> call = service.searchProduct(productId, manufacturerId, query, mFromDate, mToDate);
-                call.enqueue(new Callback<SearchProduct>() {
-                    @Override
-                    public void onResponse(Call<SearchProduct> call, Response<SearchProduct> response) {
-                        if (null != response && null != response.body()) {
-                            Log.v(TAG, response.body() + "");
-                            SearchProduct sd = response.body();
-                            mIntent = new Intent(SearchActivity.this, ResultActivity.class);
-                            mIntent.putExtra("searchProduct", sd);
-                            mIntent.putExtra("name", mName);
-                            mIntent.putExtra("place", getString(R.string.city_name));
-
-                            if (!mEditTxtStartDate.getText().toString().equalsIgnoreCase("") &&
-                                    !mEditTxtEndDate.getText().toString().equalsIgnoreCase("")) {
-                                mIntent.putExtra("startDate", mEditTxtStartDate.getText().toString());
-                                mIntent.putExtra("endDate", mEditTxtEndDate.getText().toString());
-                            }
-                            startActivity(mIntent);
-
-                            ArrayList<Products> productsArrayList = response.body().getProducts();
-
-                            for (Products products : productsArrayList) {
-                                RCLog.showToast(SearchActivity.this, products.getUser_product_info().getPrice_per_day() + "price per day");
-                            }
-                        } else {
-                            RCLog.showToast(getApplicationContext(), getString(R.string.product_details_not_found));
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<SearchProduct> call, Throwable t) {
-
-                    }
-                });
-            }
+            mDialog.show();
+            utility.search(productId, manufacturerId, query, mFromDate, mToDate);
         }
     }//end callSearchApi()
 

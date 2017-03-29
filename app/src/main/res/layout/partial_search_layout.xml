@@ -17,6 +17,7 @@
         android:drawablePadding="@dimen/dimen_10dp"
         android:hint="@string/hintForSearchItem"
         android:padding="@dimen/common_dimens_10"
+
         android:maxLines="1"
         android:lines="1" />
 

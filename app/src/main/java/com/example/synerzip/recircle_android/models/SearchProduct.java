@@ -37,9 +37,11 @@ public class SearchProduct implements Parcelable {
         }
     };
 
-    public SearchProduct(Products products,ArrayList<Products> productsArrayList) {
+    public SearchProduct(ArrayList<Products> productsArrayList) {
         this.products = productsArrayList;
     }
+
+    public SearchProduct(){}
 
     @Override
     public int describeContents() {
