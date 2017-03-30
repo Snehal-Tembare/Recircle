@@ -52,7 +52,6 @@ public class SearchUtility {
                         Log.v(TAG, response.body() + "");
                         sd = response.body();
                         callback.searchProductResult(sd);
-
                     } else {
                         callback.searchProductResult(new SearchProduct());
                     }

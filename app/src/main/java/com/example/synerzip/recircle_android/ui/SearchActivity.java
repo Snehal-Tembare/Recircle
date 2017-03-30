@@ -232,6 +232,7 @@ public class SearchActivity extends AppCompatActivity
 
     /**
      * get dates from CalendarActivity
+     *
      * @param requestCode
      * @param resultCode
      * @param data
@@ -254,12 +255,26 @@ public class SearchActivity extends AppCompatActivity
                 Calendar calToDate = Calendar.getInstance();
                 calFromDate.setTime(fromDate);
                 calToDate.setTime(toDate);
+
                 CharSequence monthFromDate = android.text.format.DateFormat
                         .format(getString(R.string.month_format), fromDate);
                 CharSequence monthToDate = android.text.format.DateFormat
-                        .format(getString(R.string.month_format),toDate);
+                        .format(getString(R.string.month_format), toDate);
+
                 formatedFromDate = calFromDate.get(Calendar.DATE) + " " + monthFromDate + ", " + calFromDate.get(Calendar.YEAR);
                 formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
+
+                if (monthFromDate.equals(monthToDate)){
+                    formatedFromDate = calFromDate.get(Calendar.DATE)+"";
+                    formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
+                }else if (!monthFromDate.equals(monthToDate) && !(calFromDate.get(Calendar.YEAR)==calToDate.get(Calendar.YEAR))){
+                    formatedFromDate = calFromDate.get(Calendar.DATE) + " " + monthFromDate + ", " + calFromDate.get(Calendar.YEAR);
+                    formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
+                }else if (!monthFromDate.equals(monthToDate)){
+                    formatedFromDate = calFromDate.get(Calendar.DATE) + " " + monthFromDate;
+                    formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
+                }
+
                 mEditTxtDate.setText(formatedFromDate + " - " + formatedToDate);
 
             }
@@ -361,7 +376,8 @@ public class SearchActivity extends AppCompatActivity
             @Override
             public void searchProductResult(SearchProduct sd) {
                 searchProduct = sd;
-                if (null != searchProduct) {
+                resetAll();
+                if (null != searchProduct && !(searchProduct.getProducts().size() == 0)) {
                     mIntent = new Intent(SearchActivity.this, ResultActivity.class);
                     mIntent.putExtra(getString(R.string.search_product), searchProduct);
                     mIntent.putExtra(getString(R.string.name), mName);
@@ -439,6 +455,14 @@ public class SearchActivity extends AppCompatActivity
         });
 
     }//mTxtToDate onResume()
+
+    private void resetAll() {
+        query="";
+        productId="";
+        manufacturerId="";
+        mFromDate="";
+        mToDate="";
+    }
 
     @OnClick(R.id.btn_search)
     public void callSearchApi() {
