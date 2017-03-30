@@ -7,6 +7,7 @@ import com.example.synerzip.recircle_android.utilities.RCWebConstants;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 /**
@@ -45,4 +46,10 @@ public interface RCAPInterface {
     @GET(RCWebConstants.RC_PRODUCT_NAMES)
     Call<RootObject> productNames();
 
+  /*  @POST(RCWebConstants.RC_USER_SIGN_UP)
+    Call<> userSignUp();
+
+    @POST(RCWebConstants.RC_USER_LOG_IN)
+    Call<> userLogIn();
+*/
 }

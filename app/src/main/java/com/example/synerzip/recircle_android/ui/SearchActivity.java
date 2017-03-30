@@ -1,7 +1,9 @@
 package com.example.synerzip.recircle_android.ui;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
@@ -19,11 +21,15 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
@@ -53,6 +59,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -162,7 +169,11 @@ public class SearchActivity extends AppCompatActivity
     @BindView(R.id.edt_enter_dates)
     public EditText mEditTxtDate;
 
-    String formatedFromDate, formatedToDate;
+    private String formatedFromDate, formatedToDate ="";
+
+    @BindView(R.id.progress_bar)
+    public RelativeLayout mProgressBar;
+
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -172,10 +183,11 @@ public class SearchActivity extends AppCompatActivity
         ButterKnife.bind(this);
 
         mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
-        if (NetworkUtility.isNetworkAvailable(this)) {
+
             setSupportActionBar(mToolbar);
             getSupportActionBar().setDisplayShowTitleEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
+
 
             //navigation drawer layout
             ActionBarDrawerToggle toggle =
@@ -197,6 +209,7 @@ public class SearchActivity extends AppCompatActivity
             });
             mNavigationView.setNavigationItemSelectedListener(this);
 
+        if (NetworkUtility.isNetworkAvailable(this)) {
 
             getAllProductDetails();
         } else {
@@ -204,6 +217,7 @@ public class SearchActivity extends AppCompatActivity
         }
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
         awesomeValidation.addValidation(this, R.id.auto_txt_search_item_name, DESCRIPTION_EXPRESSION, R.string.err_Field_empty);
+
 
     }//mTxtToDate onCreate()
 
@@ -216,6 +230,7 @@ public class SearchActivity extends AppCompatActivity
 
     /**
      * get dates from CalendarActivity
+     *
      * @param requestCode
      * @param resultCode
      * @param data
@@ -241,7 +256,7 @@ public class SearchActivity extends AppCompatActivity
                 CharSequence monthFromDate = android.text.format.DateFormat
                         .format(getString(R.string.month_format), fromDate);
                 CharSequence monthToDate = android.text.format.DateFormat
-                        .format(getString(R.string.month_format),toDate);
+                        .format(getString(R.string.month_format), toDate);
                 formatedFromDate = calFromDate.get(Calendar.DATE) + " " + monthFromDate + ", " + calFromDate.get(Calendar.YEAR);
                 formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
                 mEditTxtDate.setText(formatedFromDate + " - " + formatedToDate);
@@ -292,6 +307,7 @@ public class SearchActivity extends AppCompatActivity
 
     //get all product details
     public void getAllProductDetails() {
+
         popularProdList = new ArrayList<>();
 
         allItemsList = new ArrayList<>();
@@ -303,6 +319,7 @@ public class SearchActivity extends AppCompatActivity
         call.enqueue(new Callback<AllProductInfo>() {
             @Override
             public void onResponse(Call<AllProductInfo> call, Response<AllProductInfo> response) {
+
                 if (null != response) {
                     productDetails = response.body().getProductDetails();
                     popularProducts = response.body().getPopularProducts();
@@ -406,6 +423,8 @@ public class SearchActivity extends AppCompatActivity
 
     @OnClick(R.id.btn_search)
     public void callSearchApi() {
+        mProgressBar.setVisibility(View.VISIBLE);
+        mDrawerLayout.setAlpha((float) 0.6);
         mName = mProductAutoComplete.getText().toString();
 
         if (awesomeValidation.validate()) {
@@ -419,6 +438,10 @@ public class SearchActivity extends AppCompatActivity
                 call.enqueue(new Callback<SearchProduct>() {
                     @Override
                     public void onResponse(Call<SearchProduct> call, Response<SearchProduct> response) {
+
+                        mProgressBar.setVisibility(View.GONE);
+                            mDrawerLayout.setAlpha((float) 1.0);
+
                         if (null != response && null != response.body()) {
                             Log.v(TAG, response.body() + "");
                             SearchProduct sd = response.body();
@@ -464,11 +487,11 @@ public class SearchActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         if (item != null && item.getItemId() == android.R.id.home) {
             if (mDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
                 mDrawerLayout.closeDrawer(Gravity.RIGHT);
@@ -476,6 +499,7 @@ public class SearchActivity extends AppCompatActivity
                 mDrawerLayout.openDrawer(Gravity.RIGHT);
             }
         }
+
         return false;
     }
 
