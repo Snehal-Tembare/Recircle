@@ -1,5 +1,7 @@
 package com.example.synerzip.recircle_android.ui;
 
+import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -41,6 +43,7 @@ import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.utilities.NetworkUtility;
 import com.example.synerzip.recircle_android.utilities.RCLog;
+import com.example.synerzip.recircle_android.utilities.SearchUtility;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -157,6 +160,13 @@ public class SearchActivity extends AppCompatActivity
 
     private String mName;
 
+    private SearchUtility utility;
+
+    private ProgressDialog mDialog;
+
+    private SearchProduct searchProduct;
+
+
     Date fromDate, toDate;
 
     @BindView(R.id.edt_enter_dates)
@@ -170,6 +180,13 @@ public class SearchActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
+
+        mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
+        utility = new SearchUtility();
+        mDialog = new ProgressDialog(this);
+        mDialog.setMessage(getString(R.string.loading));
+        mProductAutoComplete.setSingleLine();
+
 
         mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
         if (NetworkUtility.isNetworkAvailable(this)) {
@@ -211,11 +228,11 @@ public class SearchActivity extends AppCompatActivity
     public void btnEnterDates(View view) {
         Intent intent = new Intent(SearchActivity.this, CalendarActivity.class);
         startActivityForResult(intent, 1);
-
     }
 
     /**
      * get dates from CalendarActivity
+     *
      * @param requestCode
      * @param resultCode
      * @param data
@@ -238,12 +255,26 @@ public class SearchActivity extends AppCompatActivity
                 Calendar calToDate = Calendar.getInstance();
                 calFromDate.setTime(fromDate);
                 calToDate.setTime(toDate);
+
                 CharSequence monthFromDate = android.text.format.DateFormat
                         .format(getString(R.string.month_format), fromDate);
                 CharSequence monthToDate = android.text.format.DateFormat
-                        .format(getString(R.string.month_format),toDate);
+                        .format(getString(R.string.month_format), toDate);
+
                 formatedFromDate = calFromDate.get(Calendar.DATE) + " " + monthFromDate + ", " + calFromDate.get(Calendar.YEAR);
                 formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
+
+                if (monthFromDate.equals(monthToDate)) {
+                    formatedFromDate = calFromDate.get(Calendar.DATE) + "";
+                    formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
+                } else if (!monthFromDate.equals(monthToDate) && !(calFromDate.get(Calendar.YEAR) == calToDate.get(Calendar.YEAR))) {
+                    formatedFromDate = calFromDate.get(Calendar.DATE) + " " + monthFromDate + ", " + calFromDate.get(Calendar.YEAR);
+                    formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
+                } else if (!monthFromDate.equals(monthToDate)) {
+                    formatedFromDate = calFromDate.get(Calendar.DATE) + " " + monthFromDate;
+                    formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
+                }
+
                 mEditTxtDate.setText(formatedFromDate + " - " + formatedToDate);
 
             }
@@ -328,7 +359,6 @@ public class SearchActivity extends AppCompatActivity
                 Log.v(TAG, t.toString());
             }
         });
-
     }
 
     @Override
@@ -340,14 +370,38 @@ public class SearchActivity extends AppCompatActivity
 
         service = ApiClient.getClient().create(RCAPInterface.class);
 
-        Call<RootObject> call = service.productNames();
+        utility.populateAutoCompleteData();
 
-        call.enqueue(new Callback<RootObject>() {
+        ReadyCallbak readyCallbak = new ReadyCallbak() {
             @Override
-            public void onResponse(Call<RootObject> call, Response<RootObject> response) {
-                if (null != response && null != response.body()) {
+            public void searchProductResult(SearchProduct sd) {
+                searchProduct = sd;
+                resetAll();
+                if (null != searchProduct && !(searchProduct.getProducts().size() == 0)) {
+                    mIntent = new Intent(SearchActivity.this, ResultActivity.class);
+                    mIntent.putExtra(getString(R.string.search_product), searchProduct);
+                    mIntent.putExtra(getString(R.string.name), mName);
+                    mIntent.putExtra(getString(R.string.place), getString(R.string.city_name));
 
-                    productsDataList = response.body().getProductsData();
+                    if (!mEditTxtDate.getText().toString().equalsIgnoreCase("")) {
+                        mIntent.putExtra(getString(R.string.start_date), formatedFromDate);
+                        mIntent.putExtra(getString(R.string.end_date), formatedToDate);
+                    }
+                    mDialog.cancel();
+                    startActivity(mIntent);
+                    mProductAutoComplete.setText("");
+                    mEditTxtDate.setText("");
+                } else {
+                    mDialog.cancel();
+                    RCLog.showToast(getApplicationContext(), getString(R.string.product_details_not_found));
+                }
+
+            }
+
+            @Override
+            public void allItemsResult(ArrayList<ProductsData> mProductsDataList) {
+                productsDataList = mProductsDataList;
+                if (null != productsDataList && 0 != productsDataList.size()) {
 
                     for (int i = 0; i < productsDataList.size(); i++) {
                         productItemList.add(productsDataList.get(i).getProduct_manufacturer_name());
@@ -379,11 +433,9 @@ public class SearchActivity extends AppCompatActivity
                     RCLog.showToast(getApplicationContext(), getString(R.string.product_details_not_found));
                 }
             }
+        };
 
-            @Override
-            public void onFailure(Call<RootObject> call, Throwable t) {
-            }
-        });
+        utility.setCallback(readyCallbak);
 
         mProductAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -404,6 +456,17 @@ public class SearchActivity extends AppCompatActivity
 
     }//mTxtToDate onResume()
 
+    /**
+     * Clear all fields
+     */
+    private void resetAll() {
+        query = "";
+        productId = "";
+        manufacturerId = "";
+        mFromDate = "";
+        mToDate = "";
+    }
+
     @OnClick(R.id.btn_search)
     public void callSearchApi() {
         mName = mProductAutoComplete.getText().toString();
@@ -413,45 +476,12 @@ public class SearchActivity extends AppCompatActivity
             if (productId.equalsIgnoreCase("") && manufacturerId.equalsIgnoreCase("")) {
                 query = mProductAutoComplete.getText().toString();
             }
-            if (!productId.equalsIgnoreCase("") || !manufacturerId.equalsIgnoreCase("") || !query.equalsIgnoreCase("")) {
-
-                Call<SearchProduct> call = service.searchProduct(productId, manufacturerId, query, mFromDate, mToDate);
-                call.enqueue(new Callback<SearchProduct>() {
-                    @Override
-                    public void onResponse(Call<SearchProduct> call, Response<SearchProduct> response) {
-                        if (null != response && null != response.body()) {
-                            Log.v(TAG, response.body() + "");
-                            SearchProduct sd = response.body();
-                            mIntent = new Intent(SearchActivity.this, ResultActivity.class);
-                            mIntent.putExtra("searchProduct", sd);
-                            mIntent.putExtra("name", mName);
-                            mIntent.putExtra("place", getString(R.string.city_name));
-
-                            if (!formatedFromDate.equalsIgnoreCase("") &&
-                                    !formatedToDate.equalsIgnoreCase("")) {
-                                mIntent.putExtra("startDate", formatedFromDate);
-                                mIntent.putExtra("endDate", formatedToDate);
-                            }
-                            startActivity(mIntent);
-
-                            ArrayList<Products> productsArrayList = response.body().getProducts();
-
-                            for (Products products : productsArrayList) {
-                                RCLog.showToast(SearchActivity.this, products.getUser_product_info().getPrice_per_day() + "price per day");
-                            }
-                        } else {
-                            RCLog.showToast(getApplicationContext(), getString(R.string.product_details_not_found));
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<SearchProduct> call, Throwable t) {
-
-                    }
-                });
-            }
+            mDialog.show();
+            utility.search(productId, manufacturerId, query, mFromDate, mToDate);
         }
-    }//mTxtToDate callSearchApi()
+
+
+    }//end callSearchApi()
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -36,10 +36,15 @@
     <string name="enter_dates">Enter start date and end date</string>
     <string name="we_offer_protection">We offer protection</string>
     <string name="pick_msg">Pick-up / drop-off at the Recircle Store</string>
+    <string name="search_product">searchProduct</string>
+    <string name="name">name</string>
+    <string name="place">place</string>
+    <string name="loading">Loading...</string>
     <string name="from_date">fromDate</string>
     <string name="to_date">toDate</string>
     <string name="date_format">E MMM dd HH:mm:ss Z yyyy</string>
     <string name="month_format">MMM</string>
     <string name="day_format">EEE</string>
     <string name="error_dates">Enter dates to be saved</string>
+    <string name="something_went_wrong">Something went wrong...Please try again</string>
 </resources>

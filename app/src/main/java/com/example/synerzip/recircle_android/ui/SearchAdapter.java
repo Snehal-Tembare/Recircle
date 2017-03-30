@@ -61,8 +61,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 int position = (int) v.getTag();
                 ImageView i= (ImageView) v;
 
-//                Drawable favImg = ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_red);
-
                 if (favorite[position]) {
                     i.setImageResource(R.drawable.ic_favorite_white);
                     favorite[position]=false;

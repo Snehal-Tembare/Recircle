@@ -115,7 +115,7 @@ public class CalendarActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_save)
     public void btnSave(View view) {
-        if (!fromDate.equals(null) && !toDate.equals(null)) {
+        if (!fromDate.equals("") && !toDate.equals("")) {
             Intent intent = new Intent(CalendarActivity.this, SearchActivity.class);
             intent.putExtra(getString(R.string.from_date), fromDate.toString());
             intent.putExtra(getString(R.string.to_date), toDate.toString());
