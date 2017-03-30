@@ -264,13 +264,13 @@ public class SearchActivity extends AppCompatActivity
                 formatedFromDate = calFromDate.get(Calendar.DATE) + " " + monthFromDate + ", " + calFromDate.get(Calendar.YEAR);
                 formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
 
-                if (monthFromDate.equals(monthToDate)){
-                    formatedFromDate = calFromDate.get(Calendar.DATE)+"";
+                if (monthFromDate.equals(monthToDate)) {
+                    formatedFromDate = calFromDate.get(Calendar.DATE) + "";
                     formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
-                }else if (!monthFromDate.equals(monthToDate) && !(calFromDate.get(Calendar.YEAR)==calToDate.get(Calendar.YEAR))){
+                } else if (!monthFromDate.equals(monthToDate) && !(calFromDate.get(Calendar.YEAR) == calToDate.get(Calendar.YEAR))) {
                     formatedFromDate = calFromDate.get(Calendar.DATE) + " " + monthFromDate + ", " + calFromDate.get(Calendar.YEAR);
                     formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
-                }else if (!monthFromDate.equals(monthToDate)){
+                } else if (!monthFromDate.equals(monthToDate)) {
                     formatedFromDate = calFromDate.get(Calendar.DATE) + " " + monthFromDate;
                     formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
                 }
@@ -456,12 +456,15 @@ public class SearchActivity extends AppCompatActivity
 
     }//mTxtToDate onResume()
 
+    /**
+     * Clear all fields
+     */
     private void resetAll() {
-        query="";
-        productId="";
-        manufacturerId="";
-        mFromDate="";
-        mToDate="";
+        query = "";
+        productId = "";
+        manufacturerId = "";
+        mFromDate = "";
+        mToDate = "";
     }
 
     @OnClick(R.id.btn_search)
