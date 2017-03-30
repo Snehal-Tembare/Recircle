@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_expanded"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:id="@+id/layout_expanded"
-    android:layout_marginBottom="@dimen/common_dimens_10">
+    android:layout_marginBottom="@dimen/common_dimens_10"
+    android:orientation="vertical">
 
 
     <AutoCompleteTextView
@@ -16,10 +16,7 @@
         android:drawableLeft="@drawable/ic_search"
         android:drawablePadding="@dimen/dimen_10dp"
         android:hint="@string/hintForSearchItem"
-        android:padding="@dimen/common_dimens_10"
-
-        android:maxLines="1"
-        android:lines="1" />
+        android:padding="@dimen/common_dimens_10" />
 
     <EditText
         android:id="@+id/edt_place"
@@ -37,34 +34,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="@dimen/common_dimens_10"
-        android:weightSum="1">
+        android:padding="@dimen/common_dimens_10">
 
         <EditText
-            android:id="@+id/edt_start_date"
-            android:layout_width="@dimen/dimen_0dp"
+            android:id="@+id/edt_enter_dates"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:background="@drawable/edittxt_square"
             android:drawableLeft="@drawable/ic_calendar"
             android:drawablePadding="@dimen/dimen_10dp"
             android:focusable="false"
-            android:hint="@string/start_date"
-            android:onClick="btnStartDate"
-            android:padding="@dimen/common_dimens_10" />
-
-        <EditText
-            android:id="@+id/edt_end_date"
-            android:layout_width="@dimen/dimen_0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
+            android:padding="@dimen/common_dimens_10"
             android:background="@drawable/edittxt_square"
-            android:drawableLeft="@drawable/ic_calendar"
-            android:drawablePadding="@dimen/dimen_10dp"
-            android:focusable="false"
-            android:hint="@string/end_date"
-            android:onClick="btnEndDate"
-            android:padding="@dimen/common_dimens_10" />
+            android:hint="@string/enter_dates"
+            android:onClick="btnEnterDates"/>
+
     </LinearLayout>
 
 

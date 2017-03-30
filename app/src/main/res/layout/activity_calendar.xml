@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/calendar_inactive_month_bg"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/dimen_10dp"
+    android:paddingLeft="@dimen/dimen_10dp"
+    android:paddingRight="@dimen/dimen_10dp"
+    android:paddingTop="@dimen/dimen_10dp"
+    tools:context=".ui.CalendarActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_0dp"
+                android:layout_marginLeft="@dimen/dimen_10dp"
+                android:layout_marginRight="@dimen/dimen_10dp"
+                android:layout_weight="0.2"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dimen_10dp"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <ImageView
+                        android:id="@+id/txt_cancel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dimen_10dp"
+                        android:gravity="start"
+                        android:onClick="txtCancel"
+                        android:src="@drawable/ic_close_white"
+                        android:text="@string/cancel"
+                        android:textColor="@color/colorRed"
+                        android:textSize="@dimen/dimen_15sp" />
+
+                    <TextView
+
+                        android:layout_width="@dimen/dimen_0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:gravity="start"
+                        android:onClick="txtCancel"
+                        android:padding="@dimen/dimen_10dp"
+                        android:text="@string/cancel"
+                        android:textColor="@color/colorRed"
+                        android:textSize="@dimen/dimen_15sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/txt_reset"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginRight="@dimen/dimen_10dp"
+                        android:gravity="end"
+                        android:onClick="txtReset"
+                        android:text="@string/reset"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/dimen_15sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <TextView
+                        android:id="@+id/txt_from_date"
+                        android:layout_width="@dimen/dimen_0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:padding="@dimen/dimen_10dp"
+                        android:text="@string/enter_start_date"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/dimen_15sp" />
+
+                    <TextView
+                        android:id="@+id/txt_to_date"
+                        android:layout_width="@dimen/dimen_0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_weight="0.5"
+                        android:gravity="end"
+                        android:padding="@dimen/dimen_10dp"
+                        android:text="@string/enter_end_date"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/dimen_15sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <com.squareup.timessquare.CalendarPickerView
+                android:id="@+id/calendar_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_0dp"
+                android:layout_alignParentTop="true"
+                android:layout_weight="0.7"
+                android:background="@color/calendar_inactive_month_bg"
+                android:clipToPadding="false"
+                android:paddingBottom="@dimen/dimen_16dp"
+                android:paddingLeft="@dimen/dimen_16dp"
+                android:paddingRight="@dimen/dimen_16dp"
+                android:scrollbarStyle="insideOverlay"
+                android:smoothScrollbar="true"
+                app:tsquare_displayHeader="true" />
+
+            <Button
+                android:id="@+id/btn_save"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_margin="@dimen/dimen_10dp"
+                android:background="@color/colorWhite"
+                android:onClick="btnSave"
+                android:text="Save"
+                android:textColor="@color/calendar_inactive_month_bg" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

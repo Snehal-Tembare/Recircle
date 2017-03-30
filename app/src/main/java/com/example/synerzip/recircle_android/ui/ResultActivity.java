@@ -1,22 +1,20 @@
 package com.example.synerzip.recircle_android.ui;
 
-import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.service.carrier.CarrierMessagingService;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -31,14 +29,18 @@ import com.example.synerzip.recircle_android.models.SearchProduct;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.example.synerzip.recircle_android.utilities.SearchUtility;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTouch;
 
 /**
  * Created by Snehal Tembare on 20/3/17.
@@ -48,8 +50,6 @@ import butterknife.OnClick;
 public class ResultActivity extends AppCompatActivity {
 
     private static final String DESCRIPTION_EXPRESSION = "^[A-Za-z]+([\\-\\w\\s\\d]+)$";
-//    @BindView(R.id.img)
-//    public ImageView mImgView;
 
     private String productId = "";
     private String manufacturerId = "";
@@ -74,6 +74,13 @@ public class ResultActivity extends AppCompatActivity {
 
     private AutocompleteAdapter autocompleteAdapter;
 
+    private ProgressDialog mDialog;
+
+    private ArrayList<ProductsData> productsDataList;
+
+    private ArrayList<String> productItemList;
+
+    private List<Product> productsCustomList;
 
     @BindView(R.id.toolbar)
     public Toolbar mToolbar;
@@ -100,29 +107,18 @@ public class ResultActivity extends AppCompatActivity {
     public TextView mTxtEndDate;
 
     @BindView(R.id.auto_txt_search_item_name)
-    public AutoCompleteTextView mAutoTxtName;
+    public AutoCompleteTextView mAutoProductName;
 
     @BindView(R.id.edt_place)
     public EditText mEdtPlace;
 
-    @BindView(R.id.edt_start_date)
-    public EditText mEdtStartDate;
+    @BindView(R.id.edt_enter_dates)
+    public EditText mEdtDates;
 
-    @BindView(R.id.edt_end_date)
-    public EditText mEdtEndDate;
-
-    private SimpleDateFormat mSimpleDateFormatter;
-
-    private DatePickerDialog mFromDatePickerDialog;
-
-    private DatePickerDialog mToDatePickerDialog;
-
-    SimpleDateFormat simpleDateFormat;
-    private ProgressDialog mDialog;
-    private ArrayList<ProductsData> productsDataList;
-    private ArrayList<String> productItemList;
-    private List<Product> productsCustomList;
-
+    private Date fromDate;
+    private Date toDate;
+    private String formatedFromDate;
+    private String formatedToDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +133,7 @@ public class ResultActivity extends AppCompatActivity {
 
         mValidation = new AwesomeValidation(ValidationStyle.BASIC);
         mValidation.addValidation(this, R.id.auto_txt_search_item_name, DESCRIPTION_EXPRESSION, R.string.err_Field_empty);
+        mAutoProductName.setSingleLine();
 
         mDialog = new ProgressDialog(this);
         mDialog.setMessage(getString(R.string.loading));
@@ -161,44 +158,6 @@ public class ResultActivity extends AppCompatActivity {
         mSearchAdapter = new SearchAdapter(this, productsArrayList);
         mLvSearcedItems.setLayoutManager(new LinearLayoutManager(this));
         mLvSearcedItems.setAdapter(mSearchAdapter);
-
-        simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-
-        mSimpleDateFormatter = new SimpleDateFormat("dd-MM-yyyy");
-
-        Calendar newCalendar = Calendar.getInstance();
-        mFromDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-
-
-            public void onDateSet(DatePicker view, int selectedYear,
-                                  int selectedMonth, int selectedDay) {
-                Calendar newDate = Calendar.getInstance();
-                newDate.set(selectedYear, selectedMonth, selectedDay);
-
-                mFromDate = simpleDateFormat.format(newDate.getTime());
-
-                mEdtStartDate.setText(mSimpleDateFormatter.format(newDate.getTime()));
-
-            }
-
-        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-
-        mToDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-
-            public void onDateSet(DatePicker view, int selectedYear,
-                                  int selectedMonth, int selectedDay) {
-                Calendar newDate = Calendar.getInstance();
-
-                newDate.set(selectedYear, selectedMonth, selectedDay);
-
-                mToDate = simpleDateFormat.format(newDate.getTime());
-
-                mEdtEndDate.setText(mSimpleDateFormatter.format(newDate.getTime()));
-            }
-
-        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-
-
     }
 
     @Override
@@ -211,7 +170,7 @@ public class ResultActivity extends AppCompatActivity {
 
         utility.populateAutoCompleteData();
 
-        mAutoTxtName.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mAutoProductName.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Product product = (Product) parent.getAdapter().getItem(position);
@@ -272,7 +231,7 @@ public class ResultActivity extends AppCompatActivity {
 
                     autocompleteAdapter = new AutocompleteAdapter
                             (ResultActivity.this, R.layout.activity_search, R.id.txtProductName, productsCustomList);
-                    mAutoTxtName.setAdapter(autocompleteAdapter);
+                    mAutoProductName.setAdapter(autocompleteAdapter);
 
                 } else {
                     RCLog.showToast(getApplicationContext(), getString(R.string.product_details_not_found));
@@ -281,6 +240,61 @@ public class ResultActivity extends AppCompatActivity {
         };
 
         utility.setCallback(readyCallbak);
+
+        mAutoProductName.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_RIGHT = 2;
+
+                mAutoProductName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search, 0, R.drawable.ic_input_delete, 0);
+
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= (mAutoProductName.getRight() - mAutoProductName.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())){
+                        mAutoProductName.setText("");
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+    }
+
+    /**
+     * get dates from CalendarActivity
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                String from = data.getStringExtra(getString(R.string.from_date));
+                String to = data.getStringExtra(getString(R.string.to_date));
+                DateFormat formatter = new SimpleDateFormat(getString(R.string.date_format));
+                try {
+                    fromDate = formatter.parse(from.toString());
+                    toDate = formatter.parse(to.toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                Calendar calFromDate = Calendar.getInstance();
+                Calendar calToDate = Calendar.getInstance();
+                calFromDate.setTime(fromDate);
+                calToDate.setTime(toDate);
+                CharSequence monthFromDate = android.text.format.DateFormat
+                        .format(getString(R.string.month_format), fromDate);
+                CharSequence monthToDate = android.text.format.DateFormat
+                        .format(getString(R.string.month_format),toDate);
+                formatedFromDate = calFromDate.get(Calendar.DATE) + " " + monthFromDate + ", " + calFromDate.get(Calendar.YEAR);
+                formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
+                mEdtDates.setText(formatedFromDate + " - " + formatedToDate);
+            }
+        }
+
     }
 
     @OnClick(R.id.layout_header)
@@ -288,25 +302,25 @@ public class ResultActivity extends AppCompatActivity {
         mExpandLayout.setVisibility(View.VISIBLE);
         mHeaderLayout.setVisibility(View.GONE);
 
-        mAutoTxtName.setText(mName);
+        mAutoProductName.setText(mName);
         mEdtPlace.setText(mPlace);
-        mEdtStartDate.setText(mStartDate);
-        mEdtEndDate.setText(mEndDate);
 
     }
 
     @OnClick(R.id.btn_search)
     public void collapse() {
-        mExpandLayout.setVisibility(View.GONE);
-        mHeaderLayout.setVisibility(View.VISIBLE);
-        //TODO code yet to complete
 
-        mName = mAutoTxtName.getText().toString();
+        mName = mAutoProductName.getText().toString();
         mTxtName.setText(mName);
 
+        mTxtStartDate.setText(formatedFromDate + " - " + formatedToDate);
+
         if (mValidation.validate()) {
+            mExpandLayout.setVisibility(View.GONE);
+            mHeaderLayout.setVisibility(View.VISIBLE);
+
             if (productId.equalsIgnoreCase("") && manufacturerId.equalsIgnoreCase("")) {
-                query = mAutoTxtName.getText().toString();
+                query = mAutoProductName.getText().toString();
             }
             mDialog.show();
             utility.search(productId, manufacturerId, query, mFromDate, mToDate);
@@ -314,19 +328,15 @@ public class ResultActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.layout_expanded)
-    public void collapseView(){
+    public void collapseView() {
         mExpandLayout.setVisibility(View.GONE);
         mHeaderLayout.setVisibility(View.VISIBLE);
     }
 
-    @OnClick(R.id.edt_start_date)
-    public void showStartDate(View v) {
-        mFromDatePickerDialog.show();
-    }
-
-    @OnClick(R.id.edt_end_date)
-    public void showEndDate(View v) {
-        mToDatePickerDialog.show();
+    @OnClick(R.id.edt_enter_dates)
+    public void btnEnterDates(View view) {
+        Intent intent = new Intent(ResultActivity.this, CalendarActivity.class);
+        startActivityForResult(intent, 1);
     }
 
     @Override

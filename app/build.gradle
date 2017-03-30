@@ -41,6 +41,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
+    //progress bar
+    compile 'com.android.support:appcompat-v7:25.2.0'
     testCompile 'junit:junit:4.12'
 
     //Third party Libraries
@@ -75,6 +77,13 @@ dependencies {
 
     //Awesome Validation
     compile 'com.basgeekball:awesome-validation:2.0'
+    compile 'com.roger.catloadinglibrary:catloadinglibrary:1.0.1'
+    compile 'com.android.support:support-vector-drawable:25.2.0'
+    testCompile 'junit:junit:4.12'
+    apt 'com.jakewharton:butterknife-compiler:8.2.1'
+
+    //mPickerView libarary
+    compile 'com.squareup:android-times-square:1.6.5@aar'
 
 
 }
