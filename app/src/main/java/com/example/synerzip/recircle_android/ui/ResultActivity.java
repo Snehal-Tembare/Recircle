@@ -91,7 +91,7 @@ public class ResultActivity extends AppCompatActivity {
     public LinearLayout mHeaderLayout;
 
     @BindView(R.id.lv_searched_items)
-    public RecyclerView mLvSearcedItems;
+    public RecyclerView mSearchedItemsList;
 
     @BindView(R.id.txt_name)
     public TextView mTxtName;
@@ -157,8 +157,9 @@ public class ResultActivity extends AppCompatActivity {
         }
 
         mSearchAdapter = new SearchAdapter(this, productsArrayList);
-        mLvSearcedItems.setLayoutManager(new LinearLayoutManager(this));
-        mLvSearcedItems.setAdapter(mSearchAdapter);
+        mSearchedItemsList.setLayoutManager(new LinearLayoutManager(this));
+        mSearchedItemsList.setAdapter(mSearchAdapter);
+
     }
 
     @Override
@@ -196,14 +197,14 @@ public class ResultActivity extends AppCompatActivity {
                 if (null != searchProduct) {
                     if (searchProduct.getProducts().size() == 0) {
                         mDialog.cancel();
-                        mLvSearcedItems.setVisibility(View.GONE);
+                        mSearchedItemsList.setVisibility(View.GONE);
                         mTxtDataNotFound.setVisibility(View.VISIBLE);
                     } else {
                         productsArrayList.clear();
                         productsArrayList.addAll(sd.getProducts());
                         mSearchAdapter.notifyDataSetChanged();
                         mDialog.cancel();
-                        mLvSearcedItems.setVisibility(View.VISIBLE);
+                        mSearchedItemsList.setVisibility(View.VISIBLE);
                         mTxtDataNotFound.setVisibility(View.GONE);
                     }
                 } else {
@@ -267,14 +268,33 @@ public class ResultActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        mSearchedItemsList.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+                startActivity(new Intent(ResultActivity.this,DetailsActivity.class));
+                return true;
+            }
+
+            @Override
+            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+                RCLog.showToast(getApplicationContext(),"Recylerview clicked onTouchEvent");
+
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+                RCLog.showToast(getApplicationContext(),"Recylerview clicked onRequestDisallowInterceptTouchEvent");
+            }
+        });
     }
 
     private void resetAll() {
-        query="";
-        productId="";
-        manufacturerId="";
-        mFromDate="";
-        mToDate="";
+        query = "";
+        productId = "";
+        manufacturerId = "";
+        mFromDate = "";
+        mToDate = "";
     }
 
     /**
