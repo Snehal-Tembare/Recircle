@@ -82,8 +82,11 @@ dependencies {
     testCompile 'junit:junit:4.12'
     apt 'com.jakewharton:butterknife-compiler:8.2.1'
 
-    //mPickerView libarary
+    //mPickerView library
     compile 'com.squareup:android-times-square:1.6.5@aar'
+
+    //circularimage view
+    compile 'de.hdodenhof:circleimageview:2.1.0'
 
 
 }
