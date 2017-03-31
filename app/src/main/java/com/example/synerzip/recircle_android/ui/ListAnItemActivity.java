@@ -11,5 +11,6 @@ public class ListAnItemActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_an_item);
+        //TODO Functionality yet to be completed
     }
 }

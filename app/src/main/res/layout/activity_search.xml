@@ -12,9 +12,10 @@
 
     <FrameLayout
 
-        android:animateLayoutChanges="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true">
+
         <android.support.v4.widget.DrawerLayout
             android:id="@+id/drawer_layout"
             android:layout_width="match_parent"
@@ -33,7 +34,6 @@
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:cacheColorHint="#00000000"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -252,7 +252,6 @@
 
                     </LinearLayout>
 
-
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -294,13 +293,12 @@
             </ScrollView>
 
         </android.support.v4.widget.DrawerLayout>
+
         <include
-            android:animateLayoutChanges="true"
             android:id="@+id/progress_bar"
             layout="@layout/progress_bar_layout"
+            android:animateLayoutChanges="true"
             android:visibility="gone" />
     </FrameLayout>
-
-
 </LinearLayout>
 

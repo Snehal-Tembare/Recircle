@@ -46,10 +46,4 @@ public interface RCAPInterface {
     @GET(RCWebConstants.RC_PRODUCT_NAMES)
     Call<RootObject> productNames();
 
-  /*  @POST(RCWebConstants.RC_USER_SIGN_UP)
-    Call<> userSignUp();
-
-    @POST(RCWebConstants.RC_USER_LOG_IN)
-    Call<> userLogIn();
-*/
 }

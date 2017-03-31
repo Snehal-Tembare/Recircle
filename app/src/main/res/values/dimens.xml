@@ -42,4 +42,7 @@
     <dimen name="common_dimens_100">100dp</dimen>
     <dimen name="common_dimens_150">150dp</dimen>
     <dimen name="common_dimens_50">50dp</dimen>
+    <dimen name="dimen_100dp">100dp</dimen>
+    <dimen name="dimen_60dp">60dp</dimen>
+    <dimen name="dimen_24sp">24sp</dimen>
 </resources>

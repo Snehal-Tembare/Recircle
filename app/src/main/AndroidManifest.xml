@@ -24,8 +24,6 @@
         <activity android:name=".ui.ResultActivity" />
         <activity android:name=".ui.CalendarActivity" />
         <activity android:name=".ui.ListAnItemActivity" />
-        <activity android:name=".ui.SignUpActivity" />
-        <activity android:name=".ui.LogInActivity"></activity>
     </application>
 
 </manifest>

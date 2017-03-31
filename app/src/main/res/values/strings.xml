@@ -43,4 +43,19 @@
     <string name="day_format">EEE</string>
     <string name="error_dates">Enter dates to be saved</string>
     <string name="list_an_item_title">Go ahead and list something. We’ve got you covered.</string>
+    <string name="agreement">By listing an item, I agree to the Recircle Terms and Agreements.</string>
+    <string name="txt_enter_zip">Enter Zip*</string>
+    <string name="edit_enter_zip">Enter Zip</string>
+    <string name="list_an_item">List an item</string>
+    <string name="item_name">Item name *</string>
+    <string name="search_item">Search for an item to rent</string>
+    <string name="daily_price">Daily Rental Price*</string>
+    <string name="enter_price">Enter Price</string>
+    <string name="min_rental">Minimum Rental*</string>
+    <string name="discount">Discounts</string>
+    <string name="offer_discount">Offer a 30% discount for 5 day rentals.</string>
+    <string name="offer_discount_days">40% discount for 10 day rentals.</string>
+    <string name="item_desc">Item descripton*</string>
+    <string name="add_desc">Add description about your item</string>
+    <string name="calendar_availability">Adjust calendar of availability</string>
 </resources>

@@ -1,9 +1,7 @@
 package com.example.synerzip.recircle_android.ui;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
@@ -21,14 +19,11 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -59,7 +54,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -169,7 +163,7 @@ public class SearchActivity extends AppCompatActivity
     @BindView(R.id.edt_enter_dates)
     public EditText mEditTxtDate;
 
-    private String formatedFromDate, formatedToDate ="";
+    private String formattedFromDate, formattedToDate = "";
 
     @BindView(R.id.progress_bar)
     public RelativeLayout mProgressBar;
@@ -184,30 +178,30 @@ public class SearchActivity extends AppCompatActivity
 
         mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
 
-            setSupportActionBar(mToolbar);
-            getSupportActionBar().setDisplayShowTitleEnabled(true);
-            getSupportActionBar().setHomeButtonEnabled(true);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
 
-            //navigation drawer layout
-            ActionBarDrawerToggle toggle =
-                    new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar,
-                            R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        //navigation drawer layout
+        ActionBarDrawerToggle toggle =
+                new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar,
+                        R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
-            mDrawerLayout.addDrawerListener(toggle);
-            toggle.syncState();
-            mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        mDrawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
 
-                @Override
-                public void onClick(View v) {
-                    if (mDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
-                        mDrawerLayout.closeDrawer(Gravity.RIGHT);
-                    } else {
-                        mDrawerLayout.openDrawer(Gravity.RIGHT);
-                    }
+            @Override
+            public void onClick(View v) {
+                if (mDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
+                    mDrawerLayout.closeDrawer(Gravity.RIGHT);
+                } else {
+                    mDrawerLayout.openDrawer(Gravity.RIGHT);
                 }
-            });
-            mNavigationView.setNavigationItemSelectedListener(this);
+            }
+        });
+        mNavigationView.setNavigationItemSelectedListener(this);
 
         if (NetworkUtility.isNetworkAvailable(this)) {
 
@@ -217,7 +211,6 @@ public class SearchActivity extends AppCompatActivity
         }
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
         awesomeValidation.addValidation(this, R.id.auto_txt_search_item_name, DESCRIPTION_EXPRESSION, R.string.err_Field_empty);
-
 
     }//mTxtToDate onCreate()
 
@@ -257,10 +250,9 @@ public class SearchActivity extends AppCompatActivity
                         .format(getString(R.string.month_format), fromDate);
                 CharSequence monthToDate = android.text.format.DateFormat
                         .format(getString(R.string.month_format), toDate);
-                formatedFromDate = calFromDate.get(Calendar.DATE) + " " + monthFromDate + ", " + calFromDate.get(Calendar.YEAR);
-                formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
-                mEditTxtDate.setText(formatedFromDate + " - " + formatedToDate);
-
+                formattedFromDate = calFromDate.get(Calendar.DATE) + " " + monthFromDate + ", " + calFromDate.get(Calendar.YEAR);
+                formattedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
+                mEditTxtDate.setText(formattedFromDate + " - " + formattedToDate);
             }
         }
     }
@@ -440,7 +432,7 @@ public class SearchActivity extends AppCompatActivity
                     public void onResponse(Call<SearchProduct> call, Response<SearchProduct> response) {
 
                         mProgressBar.setVisibility(View.GONE);
-                            mDrawerLayout.setAlpha((float) 1.0);
+                        mDrawerLayout.setAlpha((float) 1.0);
 
                         if (null != response && null != response.body()) {
                             Log.v(TAG, response.body() + "");
@@ -450,10 +442,10 @@ public class SearchActivity extends AppCompatActivity
                             mIntent.putExtra("name", mName);
                             mIntent.putExtra("place", getString(R.string.city_name));
 
-                            if (!formatedFromDate.equalsIgnoreCase("") &&
-                                    !formatedToDate.equalsIgnoreCase("")) {
-                                mIntent.putExtra("startDate", formatedFromDate);
-                                mIntent.putExtra("endDate", formatedToDate);
+                            if (!formattedFromDate.equalsIgnoreCase("") &&
+                                    !formattedToDate.equalsIgnoreCase("")) {
+                                mIntent.putExtra("startDate", formattedFromDate);
+                                mIntent.putExtra("endDate", formattedToDate);
                             }
                             startActivity(mIntent);
 
