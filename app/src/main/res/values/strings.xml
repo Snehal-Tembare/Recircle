@@ -47,7 +47,7 @@
     <string name="day_format">EEE</string>
     <string name="error_dates">Enter dates to be saved</string>
     <string name="list_an_item_title">Go ahead and list something. We’ve got you covered.</string>
-    <string name="agreement">By listing an item, I agree to the Recircle Terms and Agreements.</string>
+    <string name="agreement">By listing an item, I agree to the Recircle <b>Terms and Agreements.</b></string>
     <string name="txt_enter_zip">Enter Zip*</string>
     <string name="edit_enter_zip">Enter Zip</string>
     <string name="list_an_item">List an item</string>
@@ -63,4 +63,6 @@
     <string name="add_desc">Add description about your item</string>
     <string name="calendar_availability">Adjust calendar of availability</string>
     <string name="something_went_wrong">Something went wrong...Please try again</string>
+    <string name="optional">(optional)</string>
+    <string name="upload_photos">Upload Photos (At least 1)*</string>
 </resources>

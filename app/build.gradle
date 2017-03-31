@@ -41,31 +41,6 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    //progress bar
-
-    //Third party Libraries
-
-    //support cardview
-
-    //Retrofit
-
-    //Butterknife
-
-    //Butterknife compiler
-
-    //Lombok
-
-    //Picasso
-
-    //Support recyclerview
-
-    //Awesome Validation
-
-    //mPickerView libarary
-
-    //circularimageview
-
-
     compile 'com.android.support:appcompat-v7:25.2.0'
     testCompile 'junit:junit:4.12'
     apt 'com.jakewharton:butterknife-compiler:8.2.1'
