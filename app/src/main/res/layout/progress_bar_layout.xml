@@ -23,7 +23,7 @@
         android:layout_width="@dimen/dimen_60dp"
         android:layout_height="@dimen/dimen_60dp"
         android:layout_centerInParent="true"
-        android:src="@drawable/ic_progress_bar"
+        android:src="@drawable/ic_camera"
         android:visibility="visible" />
 
 </RelativeLayout>

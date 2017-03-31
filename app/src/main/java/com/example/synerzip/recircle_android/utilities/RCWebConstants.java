@@ -6,6 +6,8 @@ package com.example.synerzip.recircle_android.utilities;
  */
 public class RCWebConstants {
 
+    public static final int RC_SUCCESS_CODE = 200;
+
     public static final int RC_ERROR_CODE_BAD_REQUEST = 400;
 
     public static final int RC_ERROR_CODE_FORBIDDEN = 403;

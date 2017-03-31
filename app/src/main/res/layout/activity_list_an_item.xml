@@ -24,13 +24,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+
             android:layout_margin="@dimen/dimen_40dp"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/list_an_item" />
+                android:text="@string/list_an_item"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/dimen_14sp" />
 
             <TextView
                 android:layout_width="wrap_content"

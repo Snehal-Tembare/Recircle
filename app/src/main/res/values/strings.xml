@@ -36,6 +36,10 @@
     <string name="enter_dates">Enter start date and end date</string>
     <string name="we_offer_protection">We offer protection</string>
     <string name="pick_msg">Pick-up / drop-off at the Recircle Store</string>
+    <string name="search_product">searchProduct</string>
+    <string name="name">name</string>
+    <string name="place">place</string>
+    <string name="loading">Loading...</string>
     <string name="from_date">fromDate</string>
     <string name="to_date">toDate</string>
     <string name="date_format">E MMM dd HH:mm:ss Z yyyy</string>
@@ -58,4 +62,5 @@
     <string name="item_desc">Item descripton*</string>
     <string name="add_desc">Add description about your item</string>
     <string name="calendar_availability">Adjust calendar of availability</string>
+    <string name="something_went_wrong">Something went wrong...Please try again</string>
 </resources>
