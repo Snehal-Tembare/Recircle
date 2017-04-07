@@ -1,7 +1,6 @@
 package com.example.synerzip.recircle_android.ui;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -12,7 +11,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -26,6 +24,7 @@ import com.example.synerzip.recircle_android.models.Product;
 import com.example.synerzip.recircle_android.models.Products;
 import com.example.synerzip.recircle_android.models.ProductsData;
 import com.example.synerzip.recircle_android.models.SearchProduct;
+import com.example.synerzip.recircle_android.utilities.HideKeyboard;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.example.synerzip.recircle_android.utilities.SearchUtility;
 
@@ -131,7 +130,7 @@ public class ResultActivity extends AppCompatActivity {
         mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
 
         mValidation = new AwesomeValidation(ValidationStyle.BASIC);
-        mValidation.addValidation(this, R.id.auto_txt_search_item_name, DESCRIPTION_EXPRESSION, R.string.err_Field_empty);
+        mValidation.addValidation(this, R.id.auto_txt_search_item_name, DESCRIPTION_EXPRESSION, R.string.enter_product_name);
         mAutoProductName.setSingleLine();
 
         mDialog = new ProgressDialog(this);
@@ -181,9 +180,7 @@ public class ResultActivity extends AppCompatActivity {
                 if (product.getProduct_id() != null && !product.getProduct_id().isEmpty()) {
                     productId = product.getProduct_id();
                 }
-                //hide keyboard after item click
-                InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                in.hideSoftInputFromWindow(parent.getApplicationWindowToken(), 0);
+                HideKeyboard.hideKeyBoard(ResultActivity.this);
 
             }
         });

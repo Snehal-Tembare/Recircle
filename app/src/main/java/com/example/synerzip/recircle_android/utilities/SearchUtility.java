@@ -37,7 +37,6 @@ public class SearchUtility {
 
     public void search(String productId, String manufacturerId, String query, String mFromDate, String mToDate) {
 
-
         service = ApiClient.getClient().create(RCAPInterface.class);
 
         if (!productId.equalsIgnoreCase("") || !manufacturerId.equalsIgnoreCase("") || !query.equalsIgnoreCase("")) {

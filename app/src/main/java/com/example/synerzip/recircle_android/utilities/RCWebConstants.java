@@ -29,4 +29,10 @@ public class RCWebConstants {
     public static final String RC_USER_SIGN_UP="/api/users";
 
     public static final String RC_USER_LOG_IN="/api/users/signin";
+
+    public static final String RC_FORGOT_PWD ="/api/users/forgotPwd";
+
+    public static final String RC_GET_OTP="/api/users/otp?";
+
+    public static final String RC_PRODUCT_INFO="/api/products/:userProductId";
 }

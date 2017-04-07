@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_30dp"
+        android:layout_marginRight="@dimen/dimen_30dp"
+        android:gravity="center"
+        android:text="@string/forgot_pwd_title"
+        android:textColor="@color/colorForgotPwdText"
+        android:textSize="@dimen/dimen_14sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_30dp"
+        android:text="@string/email"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/dimen_14sp"
+        android:visibility="gone" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/input_layout_forgot_pwd_otp_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_20dp"
+        android:layout_marginRight="@dimen/dimen_20dp"
+        android:layout_marginTop="@dimen/dimen_10dp">
+
+        <EditText
+            android:id="@+id/edit_forgot_pwd_otp_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_10dp"
+            android:height="@dimen/dimen_40dp"
+            android:hint="@string/email" />
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/btn_send_otp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/dimen_10dp"
+        android:layout_marginLeft="@dimen/dimen_60dp"
+        android:layout_marginRight="@dimen/dimen_60dp"
+        android:layout_marginTop="@dimen/dimen_20dp"
+        android:background="@drawable/round_button"
+        android:onClick="btnSendOtp"
+        android:text="@string/send_otp"
+        android:textAllCaps="false"
+        android:textColor="@color/common_white" />
+
+</LinearLayout>

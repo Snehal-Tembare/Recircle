@@ -7,8 +7,6 @@
     android:orientation="vertical"
     tools:context="com.example.synerzip.recircle_android.ui.ListAnItemActivity">
 
-    <!--TODO layout is incomplete-->
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -26,8 +24,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dimen_90dp"
-                    android:layout_marginRight="@dimen/dimen_90dp"
+                    android:layout_marginLeft="@dimen/dimen_50dp"
+                    android:layout_marginRight="@dimen/dimen_50dp"
                     android:layout_marginTop="@dimen/dimen_20dp"
                     android:gravity="center"
                     android:text="@string/list_an_item_title"
@@ -47,7 +45,6 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/dimen_20dp"
                     android:layout_marginTop="@dimen/dimen_20dp"
                     android:text="@string/list_an_item"
                     android:textColor="@color/colorPrimary"
@@ -59,15 +56,22 @@
                     android:layout_marginBottom="@dimen/dimen_10dp"
                     android:text="@string/item_name"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/dimen_14sp" />
+                    android:textSize="@dimen/dimen_14sp"
+                    android:visibility="gone" />
 
-                <EditText
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_search_item"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@drawable/edittxt_square"
-                    android:hint="@string/search_item"
-                    android:padding="@dimen/dimen_10dp"
-                    android:textSize="@dimen/dimen_14sp" />
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/edit_item_search"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dimen_50dp"
+                        android:hint="@string/search_item"
+                        android:padding="@dimen/dimen_10dp"
+                        android:textSize="@dimen/dimen_14sp" />
+                </android.support.design.widget.TextInputLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -76,15 +80,22 @@
                     android:layout_marginTop="@dimen/dimen_10dp"
                     android:text="@string/daily_price"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/dimen_14sp" />
+                    android:textSize="@dimen/dimen_14sp"
+                    android:visibility="gone" />
 
-                <EditText
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_rental_price"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@drawable/edittxt_square"
-                    android:hint="@string/enter_price"
-                    android:padding="@dimen/dimen_10dp"
-                    android:textSize="@dimen/dimen_14sp" />
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/edit_enter_price"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dimen_50dp"
+                        android:hint="@string/enter_price"
+                        android:padding="@dimen/dimen_10dp"
+                        android:textSize="@dimen/dimen_14sp" />
+                </android.support.design.widget.TextInputLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -92,14 +103,23 @@
                     android:layout_marginBottom="@dimen/dimen_10dp"
                     android:layout_marginTop="@dimen/dimen_10dp"
                     android:text="@string/min_rental"
-                    android:textColor="@color/colorPrimary" />
+                    android:textColor="@color/colorPrimary"
+                    android:visibility="gone" />
 
-                <EditText
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_min_rental"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@drawable/edittxt_square"
-                    android:padding="@dimen/dimen_10dp"
-                    android:textSize="@dimen/dimen_14sp" />
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:text="1"
+                        android:id="@+id/edit_min_rental"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dimen_50dp"
+                        android:hint="@string/min_rental"
+                        android:padding="@dimen/dimen_10dp"
+                        android:textSize="@dimen/dimen_14sp" />
+                </android.support.design.widget.TextInputLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -148,13 +168,45 @@
                     android:text="@string/upload_photos"
                     android:textColor="@color/colorPrimary" />
 
-                <EditText
-
+                <HorizontalScrollView
+                    android:id="@+id/horizontal_scroll"
                     android:layout_width="match_parent"
-                    android:layout_height="93dp"
+                    android:layout_height="@dimen/dimen_70dp"
+                    android:background="@drawable/edittxt_square">
+
+                    <LinearLayout
+                        android:id="@+id/linear"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/dimen_10dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/img_add_photos"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onClick="imgUploadPhotos"
+                            android:src="@drawable/ic_upload_photos" />
+
+                        <ImageView
+                            android:id="@+id/img_upload_photos"
+                            android:layout_width="@dimen/dimen_50dp"
+                            android:layout_height="@dimen/dimen_50dp"
+                            android:layout_marginLeft="@dimen/dimen_10dp"
+                            android:background="@drawable/edittxt_square" />
+
+                    </LinearLayout>
+
+                </HorizontalScrollView>
+
+                <EditText
+                    android:id="@+id/edit_upload_photos"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_93dp"
                     android:background="@drawable/edittxt_square"
                     android:padding="@dimen/dimen_10dp"
-                    android:textSize="@dimen/dimen_14sp" />
+                    android:textSize="@dimen/dimen_14sp"
+                    android:visibility="gone" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -162,15 +214,22 @@
                     android:layout_marginBottom="@dimen/dimen_10dp"
                     android:layout_marginTop="@dimen/dimen_10dp"
                     android:text="@string/item_desc"
-                    android:textColor="@color/colorPrimary" />
+                    android:textColor="@color/colorPrimary"
+                    android:visibility="gone" />
 
-                <EditText
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_item_desc"
                     android:layout_width="match_parent"
-                    android:layout_height="93dp"
-                    android:background="@drawable/edittxt_square"
-                    android:hint="@string/add_desc"
-                    android:padding="@dimen/dimen_10dp"
-                    android:textSize="@dimen/dimen_14sp" />
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/edit_item_desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dimen_50dp"
+                        android:hint="@string/add_desc"
+                        android:padding="@dimen/dimen_10dp"
+                        android:textSize="@dimen/dimen_14sp" />
+                </android.support.design.widget.TextInputLayout>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -181,13 +240,17 @@
                     android:textColor="@color/colorPrimary" />
 
                 <EditText
+                    android:id="@+id/edit_calendar_availability"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="@dimen/dimen_50dp"
                     android:background="@drawable/edittxt_square"
                     android:drawableLeft="@drawable/ic_calendar"
                     android:drawablePadding="@dimen/dimen_10dp"
+                    android:focusable="false"
                     android:hint="@string/calendar_availability"
+                    android:onClick="calendarAvailability"
                     android:padding="@dimen/dimen_10dp"
+                    android:textColorHint="@color/colorPrimary"
                     android:textSize="@dimen/dimen_14sp" />
 
                 <TextView
@@ -196,15 +259,22 @@
                     android:layout_marginBottom="@dimen/dimen_10dp"
                     android:layout_marginTop="@dimen/dimen_10dp"
                     android:text="@string/txt_enter_zip"
-                    android:textColor="@color/colorPrimary" />
+                    android:textColor="@color/colorPrimary"
+                    android:visibility="gone" />
 
-                <EditText
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_enter_zipcode"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@drawable/edittxt_square"
-                    android:hint="@string/edit_enter_zip"
-                    android:padding="@dimen/dimen_10dp"
-                    android:textSize="@dimen/dimen_14sp" />
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/edit_enter_zip"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dimen_50dp"
+                        android:hint="@string/edit_enter_zip"
+                        android:padding="@dimen/dimen_10dp"
+                        android:textSize="@dimen/dimen_14sp" />
+                </android.support.design.widget.TextInputLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -220,18 +290,20 @@
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/dimen_50dp"
                         android:layout_marginLeft="@dimen/dimen_10dp"
-                        android:text="@string/agreement" />
+                        android:text="@string/agreement"
+                        android:textColor="@color/colorPrimary" />
                 </LinearLayout>
 
                 <Button
-                    android:id="@+id/btn_search"
+                    android:id="@+id/btn_save_and_continue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/common_dimens_20"
                     android:background="@drawable/round_button"
+                    android:onClick="btnSaveAndContinue"
                     android:padding="@dimen/dimen_10dp"
-                    android:text="Save and Continue"
+                    android:text="@string/save_and_continue"
                     android:textAllCaps="false"
                     android:textColor="@color/common_white"
                     android:textSize="@dimen/text_size_16" />

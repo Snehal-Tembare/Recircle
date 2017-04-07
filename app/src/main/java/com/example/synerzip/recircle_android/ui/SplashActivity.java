@@ -7,10 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.example.synerzip.recircle_android.R;
 
-
 public class SplashActivity extends AppCompatActivity {
 
-    private static int SPLASH_TIME_OUT = 2000;
+    private static int SPLASH_TIME_OUT = 1500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +18,7 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(SplashActivity.this, SearchActivity.class));
+                startActivity(new Intent(SplashActivity.this, LogInActivity.class));
                 finish();
             }
         }, SPLASH_TIME_OUT);

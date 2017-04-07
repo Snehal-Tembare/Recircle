@@ -1,7 +1,5 @@
 package com.example.synerzip.recircle_android.ui;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -20,7 +18,6 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -39,6 +36,7 @@ import com.example.synerzip.recircle_android.models.ProductsData;
 import com.example.synerzip.recircle_android.models.SearchProduct;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
+import com.example.synerzip.recircle_android.utilities.HideKeyboard;
 import com.example.synerzip.recircle_android.utilities.NetworkUtility;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.example.synerzip.recircle_android.utilities.SearchUtility;
@@ -218,7 +216,7 @@ public class SearchActivity extends AppCompatActivity
             RCLog.showToast(this, getString(R.string.err_network_available));
         }
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
-        awesomeValidation.addValidation(this, R.id.auto_txt_search_item_name, DESCRIPTION_EXPRESSION, R.string.err_Field_empty);
+        awesomeValidation.addValidation(this, R.id.auto_txt_search_item_name, DESCRIPTION_EXPRESSION, R.string.enter_product_name);
 
     }//onCreate()
 
@@ -449,9 +447,7 @@ public class SearchActivity extends AppCompatActivity
                 if (product.getProduct_id() != null && !product.getProduct_id().isEmpty()) {
                     productId = product.getProduct_id();
                 }
-                //hide keyboard after item click
-                InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                in.hideSoftInputFromWindow(parent.getApplicationWindowToken(), 0);
+                HideKeyboard.hideKeyBoard(SearchActivity.this);
             }
         });
 
@@ -491,8 +487,29 @@ public class SearchActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     public boolean onNavigationItemSelected(MenuItem item) {
+
+        //TODO functionality yet to be completed
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.nav_listItem: {
+                startActivity(new Intent(SearchActivity.this, ListAnItemActivity.class));
+                RCLog.showToast(this, "List An Item");
+                break;
+            }
+            case R.id.nav_logIn: {
+                startActivity(new Intent(SearchActivity.this, LogInActivity.class));
+                RCLog.showToast(this, "Log In");
+                break;
+            }
+            case R.id.nav_signUp: {
+                startActivity(new Intent(SearchActivity.this, SignUpActivity.class));
+                RCLog.showToast(this, "Sign Up");
+                break;
+            }
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
 
