@@ -1,18 +1,41 @@
 package com.example.synerzip.recircle_android.ui;
 
+import android.content.Intent;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.OvershootInterpolator;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
+import com.example.synerzip.recircle_android.models.Products;
+import com.example.synerzip.recircle_android.models.UserProdImages;
+import com.example.synerzip.recircle_android.models.UserProdReview;
+import com.example.synerzip.recircle_android.network.ApiClient;
+import com.example.synerzip.recircle_android.network.RCAPInterface;
+import com.example.synerzip.recircle_android.utilities.RCLog;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 import at.blogc.android.views.ExpandableTextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Snehal Tembare on 31/3/17.
@@ -21,10 +44,62 @@ import butterknife.ButterKnife;
 
 public class DetailsActivity extends AppCompatActivity {
 
-    private boolean isExpandable = true;
+    private static final String TAG = "DetailsActivity";
+    private RCAPInterface service;
+    private Products product;
+
+    private ArrayList<UserProdImages> userProdImagesArrayList;
+
+    private ArrayList<UserProdReview> userProdReviewArrayList;
+
+    private ReviewsListAdapter reviewsListAdapter;
+
+    private String link;
+    private int selectedImgPosition;
+
+    private ImageAdapter mImageAdapter;
+
+    @BindView(R.id.collapsible_layout)
+    public CollapsingToolbarLayout mCollapsibleLayout;
 
     @BindView(R.id.toolbar)
     public Toolbar mToolbar;
+
+    @BindView(R.id.img_main_image)
+    public ImageView mImgMain;
+
+    @BindView(R.id.recycler_images)
+    public RecyclerView mRecyclerImages;
+
+    @BindView(R.id.txt_loading_images)
+    public TextView mTxtLoadingImages;
+
+    @BindView(R.id.img_user)
+    public ImageView mImgUser;
+
+    @BindView(R.id.txt_product_name)
+    public TextView mTxtProductName;
+
+    @BindView(R.id.txt_user_name)
+    public TextView mTxtUserName;
+
+    @BindView(R.id.txt_price)
+    public TextView mTxtPrice;
+
+    @BindView(R.id.txt_avg_rating)
+    public TextView mTxtAvgRating;
+
+    @BindView(R.id.edt_total_price)
+    public EditText mEdtTotalPrice;
+
+    @BindView(R.id.ratingbar_details)
+    public RatingBar mRatingBar;
+
+    @BindView(R.id.all_rating_avg)
+    public RatingBar mRatingAllAvg;
+
+    @BindView(R.id.imgbtn_help)
+    public ImageButton mImgHelp;
 
     @BindView(R.id.expand_txt_description)
     public ExpandableTextView mTxtDecscriptionDetail;
@@ -37,6 +112,10 @@ public class DetailsActivity extends AppCompatActivity {
 
     @BindView(R.id.txt_condition_see_more)
     public TextView mTxtConditionSeeMore;
+
+    @BindView(R.id.list_reviews)
+    public RecyclerView mReViewReviews;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,12 +131,7 @@ public class DetailsActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(R.string.recircle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
-;
-
-//        mTxtDecscriptionDetail.setExpandInterpolator(new OvershootInterpolator());
-//        mTxtDecscriptionDetail.setCollapseInterpolator(new OvershootInterpolator());
-//        mTxtConditionDetail.setExpandInterpolator(new OvershootInterpolator());
-//        mTxtConditionDetail.setCollapseInterpolator(new OvershootInterpolator());
+        mCollapsibleLayout.setTitle(getString(R.string.recircle));
 
         mTxtDescSeeMore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,11 +149,121 @@ public class DetailsActivity extends AppCompatActivity {
             }
         });
 
+        service = ApiClient.getClient().create(RCAPInterface.class);
+        Bundle bundle = getIntent().getExtras();
+        String ID = bundle.getString(getString(R.string.product_id), "");
+
+        final Call<Products> productsCall = service.getProductDetailsByID(ID);
+        productsCall.enqueue(new Callback<Products>() {
+            @Override
+            public void onResponse(Call<Products> call, Response<Products> response) {
+                if (response.body() != null) {
+
+                    mTxtLoadingImages.setVisibility(View.GONE);
+
+                    Log.v(TAG, "" + response.body().getUser_product_info().getUser_product_id());
+                    product = response.body();
+
+                    userProdReviewArrayList = product.getUser_product_info().getUser_prod_reviews();
+
+                    userProdImagesArrayList = product.getUser_product_info().getUser_prod_images();
+
+                    reviewsListAdapter = new ReviewsListAdapter(getApplicationContext(), userProdReviewArrayList);
+                    mReViewReviews.setLayoutManager(new LinearLayoutManager(DetailsActivity.this));
+                    mReViewReviews.setAdapter(reviewsListAdapter);
+
+                    mImageAdapter = new ImageAdapter(getApplicationContext(), userProdImagesArrayList, new ImageAdapter.OnImageItemClickListener() {
+                        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+                        @Override
+                        public void onImageClick(int position, UserProdImages userProdImages) {
+
+                            Picasso.with(getApplicationContext())
+                                    .load(userProdImages.getUser_prod_image_url())
+                                    .into(mImgMain);
+
+                            View view = mRecyclerImages.getChildAt(position);
+
+                            view.setBackground(getDrawable(R.drawable.selected_image_background));
+
+                            for (int i = 0; i < userProdImagesArrayList.size(); i++) {
+                                view = mRecyclerImages.getChildAt(i);
+                                if (i != position) {
+                                    view.setBackground(getDrawable(R.drawable.custom_imageview));
+                                }
+                            }
+                            link=userProdImages.getUser_prod_image_url();
+                            selectedImgPosition=position;
+
+                        }
+                    });
+
+                    mRecyclerImages.setLayoutManager(new LinearLayoutManager(DetailsActivity.this, LinearLayoutManager.HORIZONTAL, false));
+                    mRecyclerImages.setAdapter(mImageAdapter);
+
+                    mTxtProductName.setText(product.getProduct_info().getProduct_title());
+                    Picasso.with(getApplicationContext()).load(product.getUser_info()
+                            .getUser_image_url()).into(mImgUser);
+
+                    mTxtUserName.setText(product.getUser_info().getFirst_name() + " "
+                            + product.getUser_info().getLast_name());
+
+                    mRatingBar.setRating(Integer.parseInt(product.getUser_product_info().getProduct_avg_rating()));
+
+                    mRatingAllAvg.setRating(Integer.parseInt(product.getUser_product_info().getProduct_avg_rating()));
+
+                    mTxtAvgRating.setText("(" + product.getUser_product_info().getProduct_avg_rating() + ")");
+                    mTxtPrice.setText("$" + product.getUser_product_info().getPrice_per_day() + "/day");
+                    mEdtTotalPrice.setText("$" + String.valueOf(Integer.parseInt(product.getUser_product_info().getPrice_per_day()) * 2)
+                            + "  $" + product.getUser_product_info().getPrice_per_day() + "*2days");
+
+                    mTxtDecscriptionDetail.setText(product.getProduct_info().getProduct_description());
+
+                    mTxtConditionDetail.setText(product.getUser_product_info().getUser_prod_desc());
+
+                    link = product.getProduct_info().getProduct_image_url();
+
+                    Picasso.with(getApplicationContext())
+                            .load(product.getProduct_info().getProduct_image_url())
+                            .into(mImgMain);
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Products> call, Throwable t) {
+
+            }
+        });
+
+        mImgHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RCLog.showToast(getApplicationContext(), "Open LogIn activity");
+
+            }
+        });
+
+        mImgMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(DetailsActivity.this, ZoomActivity.class);
+                intent.putExtra("link", link);
+                intent.putExtra("position",selectedImgPosition);
+                intent.putParcelableArrayListExtra("images_array",userProdImagesArrayList);
+                startActivity(intent);
+            }
+        });
+
 
     }
-
     @Override
-    protected void onResume() {
-        super.onResume();
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId()==android.R.id.home){
+            finish();
+        }
+        return true;
     }
+
+
 }

@@ -10,7 +10,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
-import com.example.synerzip.recircle_android.models.PopularProducts;
+import com.example.synerzip.recircle_android.models.Products;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -20,12 +20,14 @@ import java.util.ArrayList;
  * Copyright © 2016 Synerzip. All rights reserved
  */
 public class PopularItemsAdapter extends RecyclerView.Adapter<PopularItemsAdapter.ViewHolder> {
-    private ArrayList<PopularProducts> popularProductsList;
+    private ArrayList<Products> popularProductsList;
     private Context mContext;
+    private OnItemClickListener onItemClikListner;
 
-    public PopularItemsAdapter(Context mContext, ArrayList<PopularProducts> popularProductsList) {
+    public PopularItemsAdapter(Context mContext, ArrayList<Products> popularProductsList,OnItemClickListener onItemClikListner) {
         this.mContext = mContext;
         this.popularProductsList = popularProductsList;
+        this.onItemClikListner=onItemClikListner;
     }
 
     @Override
@@ -37,7 +39,7 @@ public class PopularItemsAdapter extends RecyclerView.Adapter<PopularItemsAdapte
     @Override
     public void onBindViewHolder(PopularItemsAdapter.ViewHolder viewHolder, int position) {
 
-        PopularProducts popularProducts = popularProductsList.get(position);
+        Products popularProducts = popularProductsList.get(position);
         Picasso.with(mContext)
                 .load(popularProducts.getProduct_info()
                         .getProduct_image_url())
@@ -49,6 +51,8 @@ public class PopularItemsAdapter extends RecyclerView.Adapter<PopularItemsAdapte
         viewHolder.mTxtProductRating.setText("(" + popularProducts.getUser_product_info().getProduct_avg_rating() + ")");
         viewHolder.mTxtRenterName.setText(popularProducts.getUser_info().getFirst_name()
                 + " " + popularProducts.getUser_info().getLast_name());
+
+        viewHolder.bind(popularProductsList.get(position),onItemClikListner);
     }
 
     @Override
@@ -72,5 +76,16 @@ public class PopularItemsAdapter extends RecyclerView.Adapter<PopularItemsAdapte
             mTxtProductRating = (TextView) view.findViewById(R.id.txtRating);
             mTxtRenterName = (TextView) view.findViewById(R.id.txtRenterName);
         }
+
+        public void bind(final Products popularProducts, final OnItemClickListener  onItemClikListner) {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemClikListner.onItemClick(popularProducts);
+                }
+            });
+        }
     }
+
+
 }

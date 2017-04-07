@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -49,6 +50,7 @@ import butterknife.OnClick;
 public class ResultActivity extends AppCompatActivity {
 
     private static final String DESCRIPTION_EXPRESSION = "^[A-Za-z]+([\\-\\w\\s\\d]+)$";
+    private static final String TAG ="ResultActivity" ;
 
     private String productId = "";
     private String manufacturerId = "";
@@ -156,10 +158,20 @@ public class ResultActivity extends AppCompatActivity {
             mTxtDates.setText(mStartDate + "-" + mEndDate);
         }
 
-        mSearchAdapter = new SearchAdapter(this, productsArrayList);
+        mSearchAdapter = new SearchAdapter(this, new OnItemClickListener() {
+            @Override
+            public void onItemClick(Products product) {
+                Log.v(TAG,"onItemClick"+product.getUser_product_info().getUser_product_id());
+
+                Intent detailsIntent=new Intent(ResultActivity.this, DetailsActivity.class);
+                detailsIntent.putExtra(getString(R.string.product_id),
+                        product.getUser_product_info().getUser_product_id());
+                startActivity(detailsIntent);
+            }
+        },productsArrayList);
+
         mSearchedItemsList.setLayoutManager(new LinearLayoutManager(this));
         mSearchedItemsList.setAdapter(mSearchAdapter);
-
     }
 
     @Override
@@ -269,24 +281,7 @@ public class ResultActivity extends AppCompatActivity {
             }
         });
 
-        mSearchedItemsList.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-            @Override
-            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-                startActivity(new Intent(ResultActivity.this,DetailsActivity.class));
-                return true;
-            }
 
-            @Override
-            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-                RCLog.showToast(getApplicationContext(),"Recylerview clicked onTouchEvent");
-
-            }
-
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-                RCLog.showToast(getApplicationContext(),"Recylerview clicked onRequestDisallowInterceptTouchEvent");
-            }
-        });
     }
 
     private void resetAll() {

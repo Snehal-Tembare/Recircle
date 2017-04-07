@@ -53,9 +53,11 @@
     <string name="description">Description</string>
     <string name="description_detail">20.2MP Full-Frame CMOS Sensor Dual DIGIC 6+ Image Processors 3.2\" 1.62m-Dot Touchscreen LCD Monitor DCI 4K Video at 60 fps, 8.8MP Still Grab 61-Point High Density Reticular AF II Native ISO 51200, Expanded to ISO 409600 14 fps Shooting, 16 fps in Live View Dual Pixel CMOS AF and Movie Servo AF Built-In GPS, CFast &amp; CF Card Slots 20.2MP Full-Frame CMOS Sensor Dual DIGIC 6+ Image Processors 3.2\" 1.62m-Dot Touchscreen LCD Monitor DCI 4K Video at 60 fps, 8.8MP Still Grab 61-Point High Density Reticular AF II Native ISO 51200, Expanded to ISO 409600 14 fps Shooting, 16 fps in Live View Dual Pixel CMOS AF and Movie Servo AF Built-In GPS, CFast &amp; CF Card Slots</string>
     <string name="condition">Condition</string>
-    <string name="condition_detail">20.2MP Full-Frame CMOS Sensor Dual DIGIC 6+ Image Processors 3.2\" 1.62m-Dot Touchscreen LCD Monitor DCI 4K Video at 60 fps, 8.8MP Still Grab 61-Point High Density Reticular AF II Native ISO 51200, Expanded to ISO 409600 14 fps Shooting, 16 fps in Live View Dual Pixel CMOS AF and Movie Servo AF Built-In GPS, CFast &amp; CF Card Slots></string>
-    <string name="see_more"><u>See More</u></string>
+    <string name="see_more">See More</string>
     <string name="view_less">View less</string>
     <string name="checkbox_text">Protection Plan (Already Include In This Price)</string>
     <string name="customer_review">Customer Review(s)</string>
+    <string name="product_id">productId</string>
+    <string name="price">Price:</string>
+    <string name="loading_images">Loading Images...</string>
 </resources>

@@ -17,6 +17,7 @@ import lombok.Setter;
 @Setter
 
 public class UserInfo implements Parcelable{
+
     private String first_name;
 
     private String user_image_url;

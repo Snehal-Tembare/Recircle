@@ -1,6 +1,5 @@
 package com.example.synerzip.recircle_android.ui;
 
-import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -20,7 +19,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -33,12 +31,9 @@ import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.AllProductInfo;
-import com.example.synerzip.recircle_android.models.PopularProducts;
 import com.example.synerzip.recircle_android.models.Product;
-import com.example.synerzip.recircle_android.models.ProductDetails;
 import com.example.synerzip.recircle_android.models.Products;
 import com.example.synerzip.recircle_android.models.ProductsData;
-import com.example.synerzip.recircle_android.models.RootObject;
 import com.example.synerzip.recircle_android.models.SearchProduct;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
@@ -95,7 +90,7 @@ public class SearchActivity extends AppCompatActivity
 
     public List<Product> productsCustomList;
 
-    private ArrayList<ProductDetails> productDetails;
+    private ArrayList<Products> productDetails;
 
     private ArrayList<String> allItemsList;
 
@@ -111,7 +106,7 @@ public class SearchActivity extends AppCompatActivity
     @BindView(R.id.card_recycler_view_popular)
     public RecyclerView mRecyclerViewPopular;
 
-    private ArrayList<PopularProducts> popularProducts;
+    private ArrayList<Products> popularProducts;
 
     @BindView(R.id.txtHeaderOneContent)
     public TextView mTxtHeaderOne;
@@ -338,7 +333,7 @@ public class SearchActivity extends AppCompatActivity
                 if (null != response) {
                     productDetails = response.body().getProductDetails();
                     popularProducts = response.body().getPopularProducts();
-                    for (ProductDetails productDetails1 : productDetails) {
+                    for (Products productDetails1 : productDetails) {
                         popularProdList.add(productDetails1.getProduct_info().getProduct_title());
                         allItemsList.add(productDetails1.getProduct_info().getProduct_title());
                     }
@@ -346,11 +341,34 @@ public class SearchActivity extends AppCompatActivity
                     RCLog.showToast(getApplicationContext(), getString(R.string.product_details_not_found));
                 }
 
-                mRecentItemsAdapter = new RecentItemsAdapter(SearchActivity.this, productDetails);
+                mRecentItemsAdapter = new RecentItemsAdapter(SearchActivity.this, productDetails, new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Products product) {
+                        Log.v(TAG,"onItemClick"+product.getUser_product_info().getUser_product_id());
+
+                        Intent detailsIntent=new Intent(SearchActivity.this, DetailsActivity.class);
+                        detailsIntent.putExtra(getString(R.string.product_id),
+                                product.getUser_product_info().getUser_product_id());
+                        startActivity(detailsIntent);
+                    }
+                });
+
                 mRecyclerViewRecent.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                 mRecyclerViewRecent.setAdapter(mRecentItemsAdapter);
 
-                mPopularItemsAdapter = new PopularItemsAdapter(SearchActivity.this, popularProducts);
+                mPopularItemsAdapter = new PopularItemsAdapter(SearchActivity.this, popularProducts, new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Products product) {
+                        Log.v(TAG,"onItemClick"+product.getUser_product_info().getUser_product_id());
+
+                        Intent detailsIntent=new Intent(SearchActivity.this, DetailsActivity.class);
+                        detailsIntent.putExtra(getString(R.string.product_id),
+                                product.getUser_product_info().getUser_product_id());
+                        startActivity(detailsIntent);
+                    }
+                });
+
+
                 mRecyclerViewPopular.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                 mRecyclerViewPopular.setAdapter(mPopularItemsAdapter);
             }
@@ -452,42 +470,6 @@ public class SearchActivity extends AppCompatActivity
                 //hide keyboard after item click
                 InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 in.hideSoftInputFromWindow(parent.getApplicationWindowToken(), 0);
-            }
-        });
-
-        mRecyclerViewRecent.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-            @Override
-            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-                startActivity(new Intent(SearchActivity.this,DetailsActivity.class));
-                return true;
-            }
-
-            @Override
-            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-
-            }
-
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-            }
-        });
-
-        mRecyclerViewPopular.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-            @Override
-            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-                startActivity(new Intent(SearchActivity.this,DetailsActivity.class));
-                return true;
-            }
-
-            @Override
-            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-
-            }
-
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
             }
         });
 
