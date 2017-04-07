@@ -9,6 +9,7 @@ import com.example.synerzip.recircle_android.utilities.RCWebConstants;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 /**

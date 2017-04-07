@@ -25,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
@@ -158,17 +159,18 @@ public class SearchActivity extends AppCompatActivity
 
     private SearchUtility utility;
 
-    private ProgressDialog mDialog;
-
     private SearchProduct searchProduct;
-
 
     Date fromDate, toDate;
 
     @BindView(R.id.edt_enter_dates)
     public EditText mEditTxtDate;
 
-    String formatedFromDate, formatedToDate;
+    private String formatedFromDate, formatedToDate = "";
+
+    @BindView(R.id.progress_bar)
+    public RelativeLayout mProgressBar;
+
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -179,37 +181,36 @@ public class SearchActivity extends AppCompatActivity
 
         mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
         utility = new SearchUtility();
-        mDialog = new ProgressDialog(this);
-        mDialog.setMessage(getString(R.string.loading));
         mProductAutoComplete.setSingleLine();
 
-
         mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
-        if (NetworkUtility.isNetworkAvailable(this)) {
-            setSupportActionBar(mToolbar);
-            getSupportActionBar().setDisplayShowTitleEnabled(true);
-            getSupportActionBar().setHomeButtonEnabled(true);
 
-            //navigation drawer layout
-            ActionBarDrawerToggle toggle =
-                    new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar,
-                            R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
-            mDrawerLayout.addDrawerListener(toggle);
-            toggle.syncState();
-            mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
 
-                @Override
-                public void onClick(View v) {
-                    if (mDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
-                        mDrawerLayout.closeDrawer(Gravity.RIGHT);
-                    } else {
-                        mDrawerLayout.openDrawer(Gravity.RIGHT);
-                    }
+        //navigation drawer layout
+        ActionBarDrawerToggle toggle =
+                new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar,
+                        R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+
+        mDrawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
+                    mDrawerLayout.closeDrawer(Gravity.LEFT);
+                } else {
+                    mDrawerLayout.openDrawer(Gravity.LEFT);
                 }
-            });
-            mNavigationView.setNavigationItemSelectedListener(this);
+            }
+        });
+        mNavigationView.setNavigationItemSelectedListener(this);
 
+        if (NetworkUtility.isNetworkAvailable(this)) {
 
             getAllProductDetails();
         } else {
@@ -218,7 +219,7 @@ public class SearchActivity extends AppCompatActivity
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
         awesomeValidation.addValidation(this, R.id.auto_txt_search_item_name, DESCRIPTION_EXPRESSION, R.string.err_Field_empty);
 
-    }//mTxtToDate onCreate()
+    }//onCreate()
 
     @OnClick(R.id.edt_enter_dates)
     public void btnEnterDates(View view) {
@@ -256,9 +257,9 @@ public class SearchActivity extends AppCompatActivity
                         .format(getString(R.string.month_format), fromDate);
                 CharSequence monthToDate = android.text.format.DateFormat
                         .format(getString(R.string.month_format), toDate);
-
                 formatedFromDate = calFromDate.get(Calendar.DATE) + " " + monthFromDate + ", " + calFromDate.get(Calendar.YEAR);
                 formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
+                mEditTxtDate.setText(formatedFromDate + " - " + formatedToDate);
 
                 if (monthFromDate.equals(monthToDate)) {
                     formatedFromDate = calFromDate.get(Calendar.DATE) + "";
@@ -272,7 +273,6 @@ public class SearchActivity extends AppCompatActivity
                 }
 
                 mEditTxtDate.setText(formatedFromDate + " - " + formatedToDate);
-
             }
         }
     }
@@ -319,6 +319,7 @@ public class SearchActivity extends AppCompatActivity
 
     //get all product details
     public void getAllProductDetails() {
+
         popularProdList = new ArrayList<>();
 
         allItemsList = new ArrayList<>();
@@ -330,6 +331,7 @@ public class SearchActivity extends AppCompatActivity
         call.enqueue(new Callback<AllProductInfo>() {
             @Override
             public void onResponse(Call<AllProductInfo> call, Response<AllProductInfo> response) {
+
                 if (null != response) {
                     productDetails = response.body().getProductDetails();
                     popularProducts = response.body().getPopularProducts();
@@ -406,12 +408,14 @@ public class SearchActivity extends AppCompatActivity
                         mIntent.putExtra(getString(R.string.start_date), formatedFromDate);
                         mIntent.putExtra(getString(R.string.end_date), formatedToDate);
                     }
-                    mDialog.cancel();
+                    mProgressBar.setVisibility(View.GONE);
+                    mDrawerLayout.setAlpha((float) 1.0);
                     startActivity(mIntent);
                     mProductAutoComplete.setText("");
                     mEditTxtDate.setText("");
                 } else {
-                    mDialog.cancel();
+                    mProgressBar.setVisibility(View.GONE);
+                    mDrawerLayout.setAlpha((float) 1.0);
                     RCLog.showToast(getApplicationContext(), getString(R.string.product_details_not_found));
                 }
 
@@ -473,7 +477,7 @@ public class SearchActivity extends AppCompatActivity
             }
         });
 
-    }//mTxtToDate onResume()
+    }//onResume()
 
     /**
      * Clear all fields
@@ -489,16 +493,15 @@ public class SearchActivity extends AppCompatActivity
     @OnClick(R.id.btn_search)
     public void callSearchApi() {
         mName = mProductAutoComplete.getText().toString();
-
         if (awesomeValidation.validate()) {
 
             if (productId.equalsIgnoreCase("") && manufacturerId.equalsIgnoreCase("")) {
                 query = mProductAutoComplete.getText().toString();
             }
-            mDialog.show();
+            mProgressBar.setVisibility(View.VISIBLE);
+            mDrawerLayout.setAlpha((float) 0.6);
             utility.search(productId, manufacturerId, query, mFromDate, mToDate);
         }
-
 
     }//end callSearchApi()
 
@@ -517,7 +520,6 @@ public class SearchActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         if (item != null && item.getItemId() == android.R.id.home) {
             if (mDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
                 mDrawerLayout.closeDrawer(Gravity.RIGHT);
@@ -538,6 +540,9 @@ public class SearchActivity extends AppCompatActivity
         }
     }
 }
+
+
+
 
 
 

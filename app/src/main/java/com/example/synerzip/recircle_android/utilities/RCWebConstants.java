@@ -27,4 +27,8 @@ public class RCWebConstants {
     public static final String RC_PRODUCT_NAMES = "/api/products/prodNames";
 
     public static final String RC_PRODUCT_DETAILS = "/api/products/{userProductId}";
+
+    public static final String RC_USER_SIGN_UP="/api/users";
+
+    public static final String RC_USER_LOG_IN="/api/users/signin";
 }

@@ -86,6 +86,9 @@ dependencies {
 
     //circularimageview
     compile 'com.pkmmte.view:circularimageview:1.1'
+    //circularimage view
+    compile 'de.hdodenhof:circleimageview:2.1.0'
+
 
     //ExpandableTextView
     compile 'at.blogc:expandabletextview:1.0.3'
