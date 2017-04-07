@@ -27,6 +27,8 @@
         <activity android:name=".ui.CalendarActivity" />
         <activity android:name=".ui.DetailsActivity" />
         <activity android:name=".ui.ZoomActivity"></activity>
+        <activity android:name=".ui.CalendarActivity" />
+        <activity android:name=".ui.ListAnItemActivity" />
     </application>
 
 </manifest>

@@ -63,6 +63,8 @@
     <string name="add_desc">Add description about your item</string>
     <string name="calendar_availability">Adjust calendar of availability</string>
     <string name="something_went_wrong">Something went wrong...Please try again</string>
+    <string name="optional">(optional)</string>
+    <string name="upload_photos">Upload Photos (At least 1)*</string>
     <string name="note_hint">Include note with rental</string>
     <string name="total">Total:</string>
     <string name="request_this_item">Request this Item</string>
@@ -76,6 +78,4 @@
     <string name="product_id">productId</string>
     <string name="price">Price:</string>
     <string name="loading_images">Loading Images...</string>
-    <string name="optional">(optional)</string>
-    <string name="upload_photos">Upload Photos (At least 1)*</string>
 </resources>
