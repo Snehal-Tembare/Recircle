@@ -7,18 +7,15 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.UserProdImages;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -28,17 +25,17 @@ import butterknife.OnClick;
 
 public class ZoomActivity extends AppCompatActivity {
 
-    private static final String TAG = "ZoomActivity";
     private ArrayList<UserProdImages> userProdImagesArrayList;
     private Bundle bundle;
 
     private FragmentStatePagerAdapter adapter;
 
-    public ImageView containerImage;
     private int selectedImgPosition;
 
+    public ImageAdapter mImageAdapter;
+
     @BindView(R.id.toolbar)
-    public Toolbar mTollbar;
+    public Toolbar mToolbar;
 
     @BindView(R.id.view_pager)
     public ViewPager mViewPager;
@@ -49,11 +46,8 @@ public class ZoomActivity extends AppCompatActivity {
     @BindView(R.id.img_next)
     public ImageView mImgNext;
 
-    @BindView(R.id.container)
-    public LinearLayout mHorizontalContainer;
-
-    @BindView(R.id.horizontalscrollview)
-    public HorizontalScrollView mHorizontalScrollView;
+    @BindView(R.id.recycler_images)
+    public RecyclerView mReImages;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -62,71 +56,94 @@ public class ZoomActivity extends AppCompatActivity {
         setContentView(R.layout.activity_zoom);
         ButterKnife.bind(this);
 
-        setSupportActionBar(mTollbar);
+        setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle(R.string.recircle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mTollbar.setTitleTextColor(ContextCompat.getColor(this,R.color.common_white));
+        mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
 
 
         bundle = getIntent().getExtras();
 
-        userProdImagesArrayList = bundle.getParcelableArrayList("images_array");
-        selectedImgPosition = bundle.getInt("position", 0);
+        userProdImagesArrayList = bundle.getParcelableArrayList(getString(R.string.image_urls_array));
+        selectedImgPosition = bundle.getInt(getString(R.string.selected_image_position), 0);
 
         adapter = new ViewPagerAdapter(getSupportFragmentManager(), userProdImagesArrayList);
 
         mViewPager.setAdapter(adapter);
         mViewPager.setCurrentItem(selectedImgPosition);
 
+        mImageAdapter = new ImageAdapter(getApplicationContext(), selectedImgPosition,userProdImagesArrayList, new ImageAdapter.OnImageItemClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void onImageClick(int position, UserProdImages userProdImages) {
 
-        inflateImages();
+                mViewPager.setCurrentItem(position);
+
+                View view = mReImages.getChildAt(position);
+
+                view.setBackground(getDrawable(R.drawable.selected_image_background));
+
+                for (int i = 0; i < userProdImagesArrayList.size(); i++) {
+                    view = mReImages.getChildAt(i);
+                    if (i != position) {
+                        view.setBackground(getDrawable(R.drawable.custom_imageview));
+                    }
+                }
+            }
+        });
+
+        mReImages.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        mReImages.setAdapter(mImageAdapter);
 
     }
 
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @OnClick(R.id.img_previous)
     public void showPreviousImage() {
         if (mViewPager.getCurrentItem() > 0) {
-            mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
-        }
-    }
+          mReImages.setVisibility(View.VISIBLE);
 
-    @OnClick(R.id.img_next)
-    public void showNextImage() {
-        if (mViewPager.getCurrentItem() < mViewPager.getAdapter().getCount() - 1) {
-            mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
+            int position=mViewPager.getCurrentItem();
+            mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
+
+            View view=mReImages.getChildAt(mViewPager.getCurrentItem());
+            view.setBackground(getDrawable(R.drawable.selected_image_background));
+
+            for (int i = 0; i < userProdImagesArrayList.size(); i++) {
+                view = mReImages.getChildAt(i);
+                if (i == position) {
+                    view.setBackground(getDrawable(R.drawable.custom_imageview));
+                }
+            }
         }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void inflateImages() {
-        for (int i = 0; i < userProdImagesArrayList.size(); i++) {
-            View view = getLayoutInflater().inflate(R.layout.item_image, null);
+    @OnClick(R.id.img_next)
+    public void showNextImage() {
+        if (mViewPager.getCurrentItem() < mViewPager.getAdapter().getCount() - 1) {
+            mReImages.setVisibility(View.VISIBLE);
+            int position=mViewPager.getCurrentItem();
 
-            containerImage = (ImageView) view.findViewById(R.id.recycler_img);
+            mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
 
-            view.setOnClickListener(OnPageChangeListener(i));
+            View view=mReImages.getChildAt(mViewPager.getCurrentItem());
+            view.setBackground(getDrawable(R.drawable.selected_image_background));
 
-            Picasso.with(getApplicationContext())
-                    .load(userProdImagesArrayList.get(i).getUser_prod_image_url())
-                    .into(containerImage);
-
-            mHorizontalContainer.addView(view);
+            for (int i = 0; i < userProdImagesArrayList.size(); i++) {
+                view = mReImages.getChildAt(i);
+                if (i == position) {
+                    view.setBackground(getDrawable(R.drawable.custom_imageview));
+                }
+            }
         }
     }
 
-    private View.OnClickListener OnPageChangeListener(final int i) {
-        return new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-            @Override
-            public void onClick(View v) {
-                mViewPager.setCurrentItem(i);
-            }
-        };
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId()==android.R.id.home){
+        if (item.getItemId() == android.R.id.home) {
             finish();
         }
         return true;

@@ -3,7 +3,6 @@ package com.example.synerzip.recircle_android.ui;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import at.blogc.android.views.ExpandableTextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,7 +45,6 @@ import retrofit2.Response;
 
 public class DetailsActivity extends AppCompatActivity {
 
-    private static final String TAG = "DetailsActivity";
     private RCAPInterface service;
     private Products product;
 
@@ -55,12 +55,11 @@ public class DetailsActivity extends AppCompatActivity {
     private ReviewsListAdapter reviewsListAdapter;
 
     private String link;
-    private int selectedImgPosition;
+    private int selectedImgPosition=0;
 
     private ImageAdapter mImageAdapter;
 
-    @BindView(R.id.collapsible_layout)
-    public CollapsingToolbarLayout mCollapsibleLayout;
+    private LinearLayoutManager mLayoutManager;
 
     @BindView(R.id.toolbar)
     public Toolbar mToolbar;
@@ -116,6 +115,15 @@ public class DetailsActivity extends AppCompatActivity {
     @BindView(R.id.list_reviews)
     public RecyclerView mReViewReviews;
 
+    @BindView(R.id.img_previous)
+    public ImageView mImgPrev;
+
+    @BindView(R.id.img_next)
+    public ImageView mImgNext;
+
+    @BindView(R.id.progress_bar)
+    public RelativeLayout mProgressBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,7 +139,8 @@ public class DetailsActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(R.string.recircle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
-        mCollapsibleLayout.setTitle(getString(R.string.recircle));
+
+        mProgressBar.setVisibility(View.VISIBLE);
 
         mTxtDescSeeMore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,8 +169,8 @@ public class DetailsActivity extends AppCompatActivity {
                 if (response.body() != null) {
 
                     mTxtLoadingImages.setVisibility(View.GONE);
+                    mProgressBar.setVisibility(View.GONE);
 
-                    Log.v(TAG, "" + response.body().getUser_product_info().getUser_product_id());
                     product = response.body();
 
                     userProdReviewArrayList = product.getUser_product_info().getUser_prod_reviews();
@@ -172,7 +181,7 @@ public class DetailsActivity extends AppCompatActivity {
                     mReViewReviews.setLayoutManager(new LinearLayoutManager(DetailsActivity.this));
                     mReViewReviews.setAdapter(reviewsListAdapter);
 
-                    mImageAdapter = new ImageAdapter(getApplicationContext(), userProdImagesArrayList, new ImageAdapter.OnImageItemClickListener() {
+                    mImageAdapter = new ImageAdapter(getApplicationContext(), selectedImgPosition, userProdImagesArrayList, new ImageAdapter.OnImageItemClickListener() {
                         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                         @Override
                         public void onImageClick(int position, UserProdImages userProdImages) {
@@ -193,11 +202,14 @@ public class DetailsActivity extends AppCompatActivity {
                             }
                             link=userProdImages.getUser_prod_image_url();
                             selectedImgPosition=position;
+                            mLayoutManager.scrollToPosition(position);
 
                         }
                     });
 
-                    mRecyclerImages.setLayoutManager(new LinearLayoutManager(DetailsActivity.this, LinearLayoutManager.HORIZONTAL, false));
+                    mLayoutManager=new LinearLayoutManager(DetailsActivity.this, LinearLayoutManager.HORIZONTAL, false);
+
+                    mRecyclerImages.setLayoutManager(mLayoutManager);
                     mRecyclerImages.setAdapter(mImageAdapter);
 
                     mTxtProductName.setText(product.getProduct_info().getProduct_title());
@@ -213,6 +225,8 @@ public class DetailsActivity extends AppCompatActivity {
 
                     mTxtAvgRating.setText("(" + product.getUser_product_info().getProduct_avg_rating() + ")");
                     mTxtPrice.setText("$" + product.getUser_product_info().getPrice_per_day() + "/day");
+
+                    //To calculate total for now gave 2days
                     mEdtTotalPrice.setText("$" + String.valueOf(Integer.parseInt(product.getUser_product_info().getPrice_per_day()) * 2)
                             + "  $" + product.getUser_product_info().getPrice_per_day() + "*2days");
 
@@ -248,9 +262,8 @@ public class DetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent intent = new Intent(DetailsActivity.this, ZoomActivity.class);
-                intent.putExtra("link", link);
-                intent.putExtra("position",selectedImgPosition);
-                intent.putParcelableArrayListExtra("images_array",userProdImagesArrayList);
+                intent.putExtra(getString(R.string.selected_image_position),selectedImgPosition);
+                intent.putParcelableArrayListExtra(getString(R.string.image_urls_array),userProdImagesArrayList);
                 startActivity(intent);
             }
         });
@@ -263,6 +276,17 @@ public class DetailsActivity extends AppCompatActivity {
             finish();
         }
         return true;
+    }
+
+    @OnClick(R.id.img_next)
+    public void showNext(){
+        mLayoutManager.scrollToPosition(mLayoutManager.findLastCompletelyVisibleItemPosition()+1);
+    }
+
+    @OnClick(R.id.img_previous)
+    public void shoePrevious(){
+        mLayoutManager.scrollToPosition(mLayoutManager.findFirstCompletelyVisibleItemPosition()-1);
+
     }
 
 

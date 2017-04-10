@@ -21,7 +21,6 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     public ViewPagerAdapter(FragmentManager fm, ArrayList<UserProdImages> userProdImagesArrayList ) {
         super(fm);
         this.userProdImagesArrayList = userProdImagesArrayList;
-        this.userProdImagesArrayList.addAll(userProdImagesArrayList);
     }
 
     @Override

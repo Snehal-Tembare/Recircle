@@ -30,6 +30,7 @@
     <color name="img_border_color">#e0e0e0</color>
     <color name="selected_img_border_color">#01579b</color>
     <color name="view_color">#eeeeee</color>
+    <color name="common_text_color">#212121</color>
 
 
 </resources>

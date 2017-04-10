@@ -33,10 +33,10 @@ public class PageFragment extends Fragment {
 
     public ImageView mImgMain;
 
-    public static PageFragment getInstance(String imageUrl){
-        PageFragment pf=new PageFragment();
-        Bundle args=new Bundle();
-        args.putString("url",imageUrl);
+    public static PageFragment getInstance(String imageUrl) {
+        PageFragment pf = new PageFragment();
+        Bundle args = new Bundle();
+        args.putString("url", imageUrl);
         pf.setArguments(args);
         return pf;
     }
@@ -44,24 +44,36 @@ public class PageFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        imageUrl=getArguments().getString("url");
+        imageUrl = getArguments().getString("url");
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_page,container,false);
+        return inflater.inflate(R.layout.fragment_page, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mImgMain= (ImageView) view.findViewById(R.id.image);
-        attacher=new PhotoViewAttacher(mImgMain);
+        mImgMain = (ImageView) view.findViewById(R.id.image);
+        attacher = new PhotoViewAttacher(mImgMain);
         attacher.update();
 
         Picasso.with(getActivity()).load(imageUrl).into(mImgMain);
+
+        mImgMain.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN && ((ZoomActivity) getActivity()).mReImages.getVisibility() == View.VISIBLE) {
+                    ((ZoomActivity) getActivity()).mReImages.setVisibility(View.GONE);
+                }else if (event.getAction() == MotionEvent.ACTION_DOWN && ((ZoomActivity) getActivity()).mReImages.getVisibility() == View.GONE) {
+                    ((ZoomActivity) getActivity()).mReImages.setVisibility(View.VISIBLE);
+                }
+                return true;
+            }
+        });
 
     }
 }

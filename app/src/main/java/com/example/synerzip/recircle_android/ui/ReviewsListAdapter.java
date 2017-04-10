@@ -48,7 +48,7 @@ public class ReviewsListAdapter extends RecyclerView.Adapter<ReviewsListAdapter.
         Picasso.with(mContext).load(review.getUser().getUser_image_url()).into(holder.reviewersImage);
         holder.rating.setRating(review.getProd_rating());
         holder.avgRatingCount.setText("(" + review.getProd_rating() + ")");
-//        holder.reviewComment.setText(review.getProd_review());
+        holder.reviewComment.setText(review.getProd_review());
 
         holder.reviewSeeMore.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp">
+        android:layout_height="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <android.support.design.widget.CollapsingToolbarLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <android.support.design.widget.CollapsingToolbarLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/collapsible_layout"
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
 
             <include layout="@layout/partial_toolbar" />
 
@@ -28,7 +29,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/common_white"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -90,6 +92,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/common_dimens_15"
+                android:layout_marginRight="@dimen/common_dimens_15"
                 android:layout_marginTop="@dimen/common_dimens_10"
                 android:orientation="vertical">
 
@@ -125,11 +128,11 @@
 
                     <com.pkmmte.view.CircularImageView
                         android:id="@+id/img_user"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                        android:layout_width="@dimen/common_dimens_50"
+                        android:layout_height="@dimen/common_dimens_50"
                         app:border="false"
                         app:border_color="@color/common_white"
-                        app:border_width="1dp"
+                        app:border_width="@dimen/dimen_1dp"
                         app:shadow="true" />
 
                     <TextView
@@ -142,8 +145,8 @@
 
                     <ImageButton
                         android:id="@+id/imgbtn_help"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="@dimen/common_dimens_20"
+                        android:layout_height="@dimen/common_dimens_20"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/common_dimens_5"
                         android:src="@drawable/help" />
@@ -170,17 +173,9 @@
                         android:id="@+id/txt_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="$125/day"
                         android:textSize="@dimen/text_size_20"
                         android:textStyle="bold" />
                 </LinearLayout>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/common_dimens_10"
-                    android:text="Select Dates"
-                    android:textSize="@dimen/text_size_16" />
 
                 <EditText
                     android:id="@+id/edt_enter_dates"
@@ -188,6 +183,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/edittxt_square"
                     android:drawableLeft="@drawable/ic_calendar"
+                    android:layout_marginTop="@dimen/common_dimens_10"
                     android:drawablePadding="@dimen/dimen_10dp"
                     android:focusable="false"
                     android:hint="@string/enter_dates"
@@ -216,7 +212,8 @@
                         android:id="@+id/edt_total_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="$0" />
+                        android:text="$0"
+                        android:textSize="@dimen/text_size_14"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -239,7 +236,7 @@
                 </LinearLayout>
 
                 <Button
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/dimen_200dp"
                     android:layout_height="@dimen/dimen_40dp"
                     android:layout_gravity="center"
                     android:background="@drawable/round_button"
@@ -252,12 +249,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dimen_1dp"
                     android:layout_marginTop="@dimen/common_dimens_10"
-                    android:background="@android:color/darker_gray" />
+                    android:background="@color/view_color" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_marginTop="@dimen/common_dimens_10">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -286,7 +284,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_marginTop="@dimen/common_dimens_10">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -316,7 +315,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dimen_1dp"
                     android:layout_marginTop="@dimen/common_dimens_15"
-                    android:background="@android:color/darker_gray" />
+                    android:background="@color/view_color" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -328,7 +327,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:text="@string/customer_review" />
+                        android:text="@string/renters_review" />
 
                     <RatingBar
                         android:id="@+id/all_rating_avg"
@@ -342,7 +341,7 @@
                         android:layout_width="@dimen/common_dimens_20"
                         android:layout_height="@dimen/common_dimens_20"
                         android:layout_gravity="center_vertical"
-                        android:text="(3)" />
+                        android:textColor="@color/common_text_color"/>
                 </LinearLayout>
 
                 <android.support.v7.widget.RecyclerView
@@ -355,5 +354,11 @@
 
 
     </android.support.v4.widget.NestedScrollView>
+
+    <include
+        android:id="@+id/progress_bar"
+        layout="@layout/progress_bar_layout"
+        android:animateLayoutChanges="true"
+        android:visibility="gone" />
 
 </android.support.design.widget.CoordinatorLayout>
