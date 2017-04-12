@@ -108,9 +108,4 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         }
     }
 
-    /*interface OnItemClickListener {
-        void onItemClick(Products product);
-    }
-*/
-
 }

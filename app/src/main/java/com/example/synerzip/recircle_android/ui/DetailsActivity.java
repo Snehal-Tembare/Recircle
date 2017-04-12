@@ -2,6 +2,7 @@ package com.example.synerzip.recircle_android.ui;
 
 import android.content.Intent;
 import android.os.Build;
+import android.support.annotation.IntegerRes;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -28,7 +29,12 @@ import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import at.blogc.android.views.ExpandableTextView;
 import butterknife.BindView;
@@ -55,11 +61,18 @@ public class DetailsActivity extends AppCompatActivity {
     private ReviewsListAdapter reviewsListAdapter;
 
     private String link;
-    private int selectedImgPosition=0;
+    private int selectedImgPosition = 0;
 
     private ImageAdapter mImageAdapter;
 
     private LinearLayoutManager mLayoutManager;
+
+
+    private Date fromDate;
+    private Date toDate;
+    private String formatedFromDate;
+    private String formatedToDate;
+    private float dayCount;
 
     @BindView(R.id.toolbar)
     public Toolbar mToolbar;
@@ -69,9 +82,6 @@ public class DetailsActivity extends AppCompatActivity {
 
     @BindView(R.id.recycler_images)
     public RecyclerView mRecyclerImages;
-
-    @BindView(R.id.txt_loading_images)
-    public TextView mTxtLoadingImages;
 
     @BindView(R.id.img_user)
     public ImageView mImgUser;
@@ -90,6 +100,9 @@ public class DetailsActivity extends AppCompatActivity {
 
     @BindView(R.id.edt_total_price)
     public EditText mEdtTotalPrice;
+
+    @BindView(R.id.txt_total_label)
+    public TextView mTxtTotalLabel;
 
     @BindView(R.id.ratingbar_details)
     public RatingBar mRatingBar;
@@ -115,14 +128,11 @@ public class DetailsActivity extends AppCompatActivity {
     @BindView(R.id.list_reviews)
     public RecyclerView mReViewReviews;
 
-    @BindView(R.id.img_previous)
-    public ImageView mImgPrev;
-
-    @BindView(R.id.img_next)
-    public ImageView mImgNext;
-
     @BindView(R.id.progress_bar)
     public RelativeLayout mProgressBar;
+
+    @BindView(R.id.edt_enter_dates)
+    public EditText mEdtDates;
 
 
     @Override
@@ -130,9 +140,13 @@ public class DetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
         ButterKnife.bind(this);
-
         init();
     }
+
+
+    /**
+     * Initialize views
+     */
 
     private void init() {
         setSupportActionBar(mToolbar);
@@ -160,15 +174,14 @@ public class DetailsActivity extends AppCompatActivity {
 
         service = ApiClient.getClient().create(RCAPInterface.class);
         Bundle bundle = getIntent().getExtras();
-        String ID = bundle.getString(getString(R.string.product_id), "");
+        String productId = bundle.getString(getString(R.string.product_id), "");
 
-        final Call<Products> productsCall = service.getProductDetailsByID(ID);
+        final Call<Products> productsCall = service.getProductDetailsByID(productId);
         productsCall.enqueue(new Callback<Products>() {
             @Override
             public void onResponse(Call<Products> call, Response<Products> response) {
                 if (response.body() != null) {
 
-                    mTxtLoadingImages.setVisibility(View.GONE);
                     mProgressBar.setVisibility(View.GONE);
 
                     product = response.body();
@@ -200,14 +213,14 @@ public class DetailsActivity extends AppCompatActivity {
                                     view.setBackground(getDrawable(R.drawable.custom_imageview));
                                 }
                             }
-                            link=userProdImages.getUser_prod_image_url();
-                            selectedImgPosition=position;
+                            link = userProdImages.getUser_prod_image_url();
+                            selectedImgPosition = position;
                             mLayoutManager.scrollToPosition(position);
 
                         }
                     });
 
-                    mLayoutManager=new LinearLayoutManager(DetailsActivity.this, LinearLayoutManager.HORIZONTAL, false);
+                    mLayoutManager = new LinearLayoutManager(DetailsActivity.this, LinearLayoutManager.HORIZONTAL, false);
 
                     mRecyclerImages.setLayoutManager(mLayoutManager);
                     mRecyclerImages.setAdapter(mImageAdapter);
@@ -226,9 +239,10 @@ public class DetailsActivity extends AppCompatActivity {
                     mTxtAvgRating.setText("(" + product.getUser_product_info().getProduct_avg_rating() + ")");
                     mTxtPrice.setText("$" + product.getUser_product_info().getPrice_per_day() + "/day");
 
-                    //To calculate total for now gave 2days
-                    mEdtTotalPrice.setText("$" + String.valueOf(Integer.parseInt(product.getUser_product_info().getPrice_per_day()) * 2)
-                            + "  $" + product.getUser_product_info().getPrice_per_day() + "*2days");
+                    /**
+                     * TODO functionality yet to complete
+                     * */
+
 
                     mTxtDecscriptionDetail.setText(product.getProduct_info().getProduct_description());
 
@@ -262,32 +276,91 @@ public class DetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent intent = new Intent(DetailsActivity.this, ZoomActivity.class);
-                intent.putExtra(getString(R.string.selected_image_position),selectedImgPosition);
-                intent.putParcelableArrayListExtra(getString(R.string.image_urls_array),userProdImagesArrayList);
+                intent.putExtra(getString(R.string.selected_image_position), selectedImgPosition);
+                intent.putParcelableArrayListExtra(getString(R.string.image_urls_array), userProdImagesArrayList);
                 startActivity(intent);
             }
         });
 
 
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId()==android.R.id.home){
+        if (item.getItemId() == android.R.id.home) {
             finish();
         }
         return true;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                String from = data.getStringExtra(getString(R.string.from_date));
+                String to = data.getStringExtra(getString(R.string.to_date));
+                DateFormat formatter = new SimpleDateFormat(getString(R.string.date_format));
+                try {
+                    fromDate = formatter.parse(from.toString());
+                    toDate = formatter.parse(to.toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                Calendar calFromDate = Calendar.getInstance();
+                Calendar calToDate = Calendar.getInstance();
+                calFromDate.setTime(fromDate);
+                calToDate.setTime(toDate);
+
+                CharSequence monthFromDate = android.text.format.DateFormat
+                        .format(getString(R.string.month_format), fromDate);
+                CharSequence monthToDate = android.text.format.DateFormat
+                        .format(getString(R.string.month_format), toDate);
+                formatedFromDate = calFromDate.get(Calendar.DATE) + " " + monthFromDate + ", " + calFromDate.get(Calendar.YEAR);
+                formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
+
+                if (monthFromDate.equals(monthToDate)) {
+                    formatedFromDate = calFromDate.get(Calendar.DATE) + "";
+                    formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
+                } else if (!monthFromDate.equals(monthToDate) && !(calFromDate.get(Calendar.YEAR) == calToDate.get(Calendar.YEAR))) {
+                    formatedFromDate = calFromDate.get(Calendar.DATE) + " " + monthFromDate + ", " + calFromDate.get(Calendar.YEAR);
+                    formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
+                } else if (!monthFromDate.equals(monthToDate)) {
+                    formatedFromDate = calFromDate.get(Calendar.DATE) + " " + monthFromDate;
+                    formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
+                }
+                mEdtDates.setText(formatedFromDate + " - " + formatedToDate);
+
+                long diff = toDate.getTime() - fromDate.getTime();
+                dayCount = (float) diff / (24 * 60 * 60 * 1000);
+
+                float total = dayCount * Integer.parseInt(product.getUser_product_info().getPrice_per_day());
+                if (total != 0) {
+                    mEdtTotalPrice.setVisibility(View.VISIBLE);
+                    mTxtTotalLabel.setVisibility(View.VISIBLE);
+                    mEdtTotalPrice.setText(" $" + (int) total + "   ($"
+                            + product.getUser_product_info().getPrice_per_day() +
+                            " * " + (int) dayCount + getString(R.string.days)+")");
+                }
+
+            }
+        }
+    }
+
     @OnClick(R.id.img_next)
-    public void showNext(){
-        mLayoutManager.scrollToPosition(mLayoutManager.findLastCompletelyVisibleItemPosition()+1);
+    public void showNextImage() {
+        mLayoutManager.scrollToPosition(mLayoutManager.findLastCompletelyVisibleItemPosition() + 1);
     }
 
     @OnClick(R.id.img_previous)
-    public void shoePrevious(){
-        mLayoutManager.scrollToPosition(mLayoutManager.findFirstCompletelyVisibleItemPosition()-1);
-
+    public void showPreviousImage() {
+        mLayoutManager.scrollToPosition(mLayoutManager.findFirstCompletelyVisibleItemPosition() - 1);
     }
 
-
+    @OnClick(R.id.edt_enter_dates)
+    public void openCalendar() {
+        Intent intent = new Intent(DetailsActivity.this, CalendarActivity.class);
+        startActivityForResult(intent, 1);
+    }
 }

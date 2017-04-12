@@ -9,7 +9,7 @@
     android:layout_margin="@dimen/common_dimens_2">
     <ImageView
         android:id="@+id/recycler_img"
-        android:layout_width="@dimen/common_dimens_80"
+        android:layout_width="@dimen/common_dimens_60"
         android:layout_height="@dimen/common_dimens_60" />
 
 </LinearLayout>

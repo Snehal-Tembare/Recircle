@@ -20,8 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * mRecyclerImages
- * Created by Snehal Tembare on 6/4/17.
+ *Created by Snehal Tembare on 6/4/17.
  * Copyright © 2017 Synerzip. All rights reserved
  */
 

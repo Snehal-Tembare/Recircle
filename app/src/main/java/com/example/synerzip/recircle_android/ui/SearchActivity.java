@@ -1,6 +1,5 @@
 package com.example.synerzip.recircle_android.ui;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -91,7 +90,7 @@ public class SearchActivity extends AppCompatActivity
 
     public List<Product> productsCustomList;
 
-    private ArrayList<Products> productDetails;
+    private ArrayList<Products> productDetailsList;
 
     private ArrayList<String> allItemsList;
 
@@ -259,14 +258,15 @@ public class SearchActivity extends AppCompatActivity
                         .format(getString(R.string.month_format), toDate);
                 formatedFromDate = calFromDate.get(Calendar.DATE) + " " + monthFromDate + ", " + calFromDate.get(Calendar.YEAR);
                 formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
-                mEditTxtDate.setText(formatedFromDate + " - " + formatedToDate);
 
                 if (monthFromDate.equals(monthToDate)) {
                     formatedFromDate = calFromDate.get(Calendar.DATE) + "";
                     formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
+
                 } else if (!monthFromDate.equals(monthToDate) && !(calFromDate.get(Calendar.YEAR) == calToDate.get(Calendar.YEAR))) {
                     formatedFromDate = calFromDate.get(Calendar.DATE) + " " + monthFromDate + ", " + calFromDate.get(Calendar.YEAR);
                     formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
+
                 } else if (!monthFromDate.equals(monthToDate)) {
                     formatedFromDate = calFromDate.get(Calendar.DATE) + " " + monthFromDate;
                     formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
@@ -332,23 +332,21 @@ public class SearchActivity extends AppCompatActivity
             @Override
             public void onResponse(Call<AllProductInfo> call, Response<AllProductInfo> response) {
 
-                if (null != response) {
-                    productDetails = response.body().getProductDetails();
+                if (null != response.body()) {
+                    productDetailsList = response.body().getProductDetails();
                     popularProducts = response.body().getPopularProducts();
-                    for (Products productDetails1 : productDetails) {
-                        popularProdList.add(productDetails1.getProduct_info().getProduct_title());
-                        allItemsList.add(productDetails1.getProduct_info().getProduct_title());
+                    for (Products productDetails : productDetailsList) {
+                        popularProdList.add(productDetails.getProduct_info().getProduct_title());
+                        allItemsList.add(productDetails.getProduct_info().getProduct_title());
                     }
                 } else {
                     RCLog.showToast(getApplicationContext(), getString(R.string.product_details_not_found));
                 }
 
-                mRecentItemsAdapter = new RecentItemsAdapter(SearchActivity.this, productDetails, new OnItemClickListener() {
+                mRecentItemsAdapter = new RecentItemsAdapter(SearchActivity.this, productDetailsList, new OnItemClickListener() {
                     @Override
                     public void onItemClick(Products product) {
-                        Log.v(TAG,"onItemClick"+product.getUser_product_info().getUser_product_id());
-
-                        Intent detailsIntent=new Intent(SearchActivity.this, DetailsActivity.class);
+                        Intent detailsIntent = new Intent(SearchActivity.this, DetailsActivity.class);
                         detailsIntent.putExtra(getString(R.string.product_id),
                                 product.getUser_product_info().getUser_product_id());
                         startActivity(detailsIntent);
@@ -361,9 +359,9 @@ public class SearchActivity extends AppCompatActivity
                 mPopularItemsAdapter = new PopularItemsAdapter(SearchActivity.this, popularProducts, new OnItemClickListener() {
                     @Override
                     public void onItemClick(Products product) {
-                        Log.v(TAG,"onItemClick"+product.getUser_product_info().getUser_product_id());
+                        Log.v(TAG, "onItemClick" + product.getUser_product_info().getUser_product_id());
 
-                        Intent detailsIntent=new Intent(SearchActivity.this, DetailsActivity.class);
+                        Intent detailsIntent = new Intent(SearchActivity.this, DetailsActivity.class);
                         detailsIntent.putExtra(getString(R.string.product_id),
                                 product.getUser_product_info().getUser_product_id());
                         startActivity(detailsIntent);
