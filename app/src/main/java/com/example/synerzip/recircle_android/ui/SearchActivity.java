@@ -207,6 +207,7 @@ public class SearchActivity extends AppCompatActivity
                 }
             }
         });
+        mNavigationView.bringToFront();
         mNavigationView.setNavigationItemSelectedListener(this);
 
         if (NetworkUtility.isNetworkAvailable(this)) {
