@@ -2,6 +2,8 @@ package com.example.synerzip.recircle_android.ui;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.provider.Settings;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +13,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -23,9 +26,11 @@ import com.example.synerzip.recircle_android.models.LogInRequest;
 import com.example.synerzip.recircle_android.models.User;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
+import com.example.synerzip.recircle_android.utilities.AESEncryptionDecryption;
 import com.example.synerzip.recircle_android.utilities.HideKeyboard;
 import com.example.synerzip.recircle_android.utilities.NetworkUtility;
 import com.example.synerzip.recircle_android.utilities.RCLog;
+import com.example.synerzip.recircle_android.utilities.RCWebConstants;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -67,6 +72,7 @@ public class LogInActivity extends AppCompatActivity {
     @BindView(R.id.linear_layout)
     public LinearLayout mLinearLayout;
 
+    public String mUserId, mUserEmail,mUserToken,mUserLastName,mUserFirstName="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,9 +124,29 @@ public class LogInActivity extends AppCompatActivity {
         userCall.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
+
                 mProgressBar.setVisibility(View.GONE);
                 mLinearLayout.setAlpha((float) 1.0);
-                startActivity(new Intent(LogInActivity.this, SearchActivity.class));
+
+                if(response.isSuccessful()){
+
+                        mUserId = response.body().getUser_id();
+                        mUserName = response.body().getEmail();
+                        mUserToken = response.body().getToken();
+                        mUserFirstName = response.body().getFirst_name();
+                        mUserLastName = response.body().getLast_name();
+                    if(null!=mUserId && null!=mUserName && null!=mUserToken && null!=mUserFirstName &&null!=mUserLastName) {
+                        saveUserData();
+                        Intent intent = new Intent(LogInActivity.this, SearchActivity.class);
+                        startActivity(intent);
+                    }else{
+                        RCLog.showToast(LogInActivity.this, getString(R.string.please_try_again));
+                    }
+                }else {
+                    if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
+                        RCLog.showToast(LogInActivity.this, getString(R.string.err_credentials));
+                    }
+                }
             }
 
             @Override
@@ -169,13 +195,17 @@ public class LogInActivity extends AppCompatActivity {
                 call.enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
+
                         mProgressBar.setVisibility(View.GONE);
                         mLinearLayout.setAlpha((float) 1.0);
                         RCLog.showToast(getApplicationContext(), getString(R.string.toast_send_otp));
                         dialog.dismiss();
-                        if (response.body() != null) {
-
-                            startActivity(new Intent(LogInActivity.this, ForgotPwdActivity.class));
+                        if (response.isSuccessful()) {
+                            if(null!=mEmail) {
+                                startActivity(new Intent(LogInActivity.this, ForgotPwdActivity.class));
+                            }else {
+                                RCLog.showToast(LogInActivity.this, getString(R.string.please_try_again));
+                            }
                         }
                     }
 
@@ -277,4 +307,48 @@ public class LogInActivity extends AppCompatActivity {
             }
         }
     }
+
+    /**
+     * action bar back button
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+    /**
+     * saves user password in encrypted format in Shared Preferences
+     */
+    private void saveUserData() {
+
+        String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+
+        SharedPreferences sharedPreferences = getSharedPreferences(RCWebConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        try {
+            String encryptedPassword = AESEncryptionDecryption.encrypt(android_id, mPassword);
+            editor.putString(RCWebConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mUserToken);
+            editor.putString(RCWebConstants.RC_SHARED_PREFERENCES_USERID, mUserId);
+            editor.putString(RCWebConstants.RC_SHARED_PREFERENCES_PASSWORD, encryptedPassword);
+            editor.putBoolean(RCWebConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, true);
+            editor.putString(RCWebConstants.RC_SHARED_PREFERENCES_LOGIN_USERNAME,mUserEmail);
+            editor.putString(RCWebConstants.RC_SHARED_PREFERENCES_LOGIN_FIRST_USERNAME,mUserFirstName);
+
+            editor.apply();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

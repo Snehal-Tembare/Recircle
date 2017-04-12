@@ -1,10 +1,26 @@
 package com.example.synerzip.recircle_android.utilities;
 
+import retrofit2.http.PUT;
+
 /**
  * Created by Prajakta Patil on 7/3/17.
  * Copyright © 2016 Synerzip. All rights reserved
  */
 public class RCWebConstants {
+
+    public static final String RC_SHARED_PREFERENCES_ACCESS_TOKEN="accessToken";
+
+    public static final String RC_SHARED_PREFERENCES_LOGIN_FIRST_USERNAME="firstname";
+
+    public static final String RC_SHARED_PREFERENCES_LOGIN_USERNAME="username";
+
+    public static final String RC_SHARED_PREFERENCES_PASSWORD="password";
+
+    public static final String RC_SHARED_PREFERENCES_LOGIN_STATUS="isLoggedIn";
+
+    public static final String RC_SHARED_PREFERENCES_USERID="userId";
+
+    public static final String RC_SHARED_PREFERENCES_FILE_NAME="recircle";
 
     public static final int RC_SUCCESS_CODE = 200;
 
@@ -34,5 +50,5 @@ public class RCWebConstants {
 
     public static final String RC_GET_OTP="/api/users/otp?";
 
-    public static final String RC_PRODUCT_INFO="/api/products/:userProductId";
+    public static final int RC_ERROR_UNAUTHORISED = 401;
 }

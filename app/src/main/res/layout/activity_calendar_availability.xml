@@ -25,10 +25,10 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dimen_10dp"
                 android:layout_marginRight="@dimen/dimen_10dp"
-                android:layout_weight="0.2"
+
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -126,13 +126,13 @@
                 app:tsquare_displayHeader="true" />
 
             <Button
-                android:id="@+id/btn_save"
+                android:id="@+id/btn_calendar_save"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:layout_margin="@dimen/dimen_10dp"
                 android:background="@color/colorWhite"
-                android:onClick="btnSave"
+                android:onClick="btnCalendarSave"
                 android:text="Save"
                 android:textColor="@color/calendar_inactive_month_bg" />
 

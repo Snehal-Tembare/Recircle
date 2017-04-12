@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-<group
-    android:checkableBehavior="single">
-    <item
-        android:id="@+id/nav_listItem"
-        android:title="+ List An Item" />
-    <item
-        android:id="@+id/nav_messages"
-        android:title="Messages" />
-    <item
-        android:id="@+id/nav_rentals"
-        android:title="Rentals" />
-    <item
-        android:id="@+id/nav_payments"
-        android:title="Payments" />
-    <item
-        android:id="@+id/nav_items"
-        android:title="Items" />
-    <item
-        android:id="@+id/nav_logIn"
-        android:title="Log In" />
+        <item
+            android:id="@+id/nav_listItem"
+            android:title="+ List An Item" />
+        <item
+            android:id="@+id/nav_messages"
+            android:title="Messages" />
+        <item
+            android:id="@+id/nav_rentals"
+            android:title="Rentals" />
+        <item
+            android:id="@+id/nav_payments"
+            android:title="Payments" />
+        <item
+            android:id="@+id/nav_items"
+            android:title="Items" />
+        <item
+            android:id="@+id/nav_logIn_signUp"
+            android:title="Log In/Sign Up" />
+        <item
+            android:id="@+id/nav_logedInAs"
+            android:title="Logged in as : "
+            android:visible="false" />
+        <item
+            android:id="@+id/nav_logout"
+            android:title="Logout" />
 
-    <item
-        android:id="@+id/nav_signUp"
-        android:title="Sign Up" />
-</group>
 </menu>

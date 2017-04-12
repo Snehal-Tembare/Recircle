@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.synerzip.recircle_android">
+    package="com.example.synerzip.recircle_android" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -15,8 +15,8 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".ui.SplashActivity">
+        android:theme="@style/AppTheme" >
+        <activity android:name=".ui.SplashActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,9 +29,9 @@
         <activity android:name=".ui.ListAnItemActivity" />
         <activity android:name=".ui.SignUpActivity" />
         <activity android:name=".ui.LogInActivity" />
-        <activity android:name=".ui.CalendarAvailabilityActivity" />
-
-        <activity android:name=".ui.ForgotPwdActivity"></activity>
+        <activity android:name=".ui.ForgotPwdActivity" />
+        <activity android:name=".ui.ListItemCalendarActivity" >
+        </activity>
     </application>
 
 </manifest>

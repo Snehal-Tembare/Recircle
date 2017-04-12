@@ -117,8 +117,7 @@ public class SignUpActivity extends AppCompatActivity {
      * api call for user sign up
      */
     private void getUserSignUp() {
-        SignUpRequest signUpRequest = new SignUpRequest(mFirstName, mLastName, mEmail,
-                mPassword, mUserMobNo, mVerficationCode);
+        SignUpRequest signUpRequest = new SignUpRequest(mFirstName, mLastName, mEmail, mPassword, mUserMobNo, mVerficationCode);
 
         service = ApiClient.getClient().create(RCAPInterface.class);
         Call<User> userCall = service.userSignUp(signUpRequest);
@@ -159,6 +158,7 @@ public class SignUpActivity extends AppCompatActivity {
             mEmail = mEditEmail.getText().toString();
             mPassword = mEditPassword.getText().toString();
             mUserMobNo = Long.parseLong(mEditMobNo.getText().toString());
+
             mVerficationCode = Integer.parseInt(mEditVerificationCode.getText().toString());
             getUserSignUp();
         } else {

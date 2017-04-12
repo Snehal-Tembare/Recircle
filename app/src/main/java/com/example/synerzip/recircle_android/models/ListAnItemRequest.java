@@ -17,6 +17,7 @@ public class ListAnItemRequest {
     public ArrayList<UserProdImages> user_prod_images;
     public ArrayList<String> user_prod_unavailability;
     public int user_product_zipcode;
+    public boolean fromAustin;
 
     public ListAnItemRequest(String product_id,
                              int price_per_day,
@@ -25,7 +26,8 @@ public class ListAnItemRequest {
                              ArrayList<Discounts> user_prod_discounts,
                              ArrayList<UserProdImages> user_prod_images,
                              ArrayList<String> user_prod_unavailability,
-                             int user_product_zipcode){
+                             int user_product_zipcode,
+                             boolean fromAustin){
         this.product_id=product_id;
         this.price_per_day=price_per_day;
         this.min_rental_day=min_rental_day;
@@ -34,6 +36,7 @@ public class ListAnItemRequest {
         this.user_prod_images=user_prod_images;
         this.user_prod_unavailability=user_prod_unavailability;
         this.user_product_zipcode=user_product_zipcode;
+        this.fromAustin=fromAustin;
 
     }
 }

@@ -1,6 +1,10 @@
 package com.example.synerzip.recircle_android.ui;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
@@ -34,11 +38,13 @@ import com.example.synerzip.recircle_android.models.Product;
 import com.example.synerzip.recircle_android.models.ProductDetails;
 import com.example.synerzip.recircle_android.models.ProductsData;
 import com.example.synerzip.recircle_android.models.SearchProduct;
+import com.example.synerzip.recircle_android.models.User;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.utilities.HideKeyboard;
 import com.example.synerzip.recircle_android.utilities.NetworkUtility;
 import com.example.synerzip.recircle_android.utilities.RCLog;
+import com.example.synerzip.recircle_android.utilities.RCWebConstants;
 import com.example.synerzip.recircle_android.utilities.SearchUtility;
 
 import java.text.DateFormat;
@@ -150,8 +156,6 @@ public class SearchActivity extends AppCompatActivity
 
     private String mToDate = "";
 
-    private String mPlace;
-
     private Intent mIntent;
 
     private String mName;
@@ -170,6 +174,11 @@ public class SearchActivity extends AppCompatActivity
     @BindView(R.id.progress_bar)
     public RelativeLayout mProgressBar;
 
+    private SharedPreferences sharedPreferences;
+
+    private boolean isLoggedIn;
+
+    private String mUserFirstName = "";
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -188,6 +197,10 @@ public class SearchActivity extends AppCompatActivity
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
+        //get data from shared preferences
+        sharedPreferences = getSharedPreferences(RCWebConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
+        isLoggedIn = sharedPreferences.getBoolean(RCWebConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
+        mUserFirstName = sharedPreferences.getString(RCWebConstants.RC_SHARED_PREFERENCES_LOGIN_FIRST_USERNAME, mUserFirstName);
 
         //navigation drawer layout
         ActionBarDrawerToggle toggle =
@@ -195,6 +208,7 @@ public class SearchActivity extends AppCompatActivity
                         R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
         mDrawerLayout.addDrawerListener(toggle);
+
         toggle.syncState();
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
 
@@ -210,6 +224,22 @@ public class SearchActivity extends AppCompatActivity
         mNavigationView.bringToFront();
         mNavigationView.setNavigationItemSelectedListener(this);
 
+        Menu menu = mNavigationView.getMenu();
+        MenuItem nav_loggedInAs = menu.findItem(R.id.nav_logedInAs);
+
+        if (isLoggedIn) {
+            menu.removeItem(R.id.nav_logIn_signUp);
+            nav_loggedInAs.setVisible(true);
+            nav_loggedInAs.setTitle(getString(R.string.logged_in_as) + mUserFirstName);
+        } else {
+            menu.removeItem(R.id.nav_messages);
+            menu.removeItem(R.id.nav_rentals);
+            menu.removeItem(R.id.nav_items);
+            menu.removeItem(R.id.nav_payments);
+            menu.removeItem(R.id.nav_logout);
+            menu.removeItem(R.id.nav_logedInAs);
+        }
+        //check network availability
         if (NetworkUtility.isNetworkAvailable(this)) {
 
             getAllProductDetails();
@@ -317,7 +347,9 @@ public class SearchActivity extends AppCompatActivity
         }
     }
 
-    //get all product details
+    /**
+     * get all product details
+     */
     public void getAllProductDetails() {
 
         popularProdList = new ArrayList<>();
@@ -465,6 +497,9 @@ public class SearchActivity extends AppCompatActivity
         mToDate = "";
     }
 
+    /**
+     * button for search product
+     */
     @OnClick(R.id.btn_search)
     public void callSearchApi() {
         mName = mProductAutoComplete.getText().toString();
@@ -486,32 +521,79 @@ public class SearchActivity extends AppCompatActivity
         return true;
     }
 
+    /**
+     * navigation drawer item selection
+     *
+     * @param item
+     * @return
+     */
     @SuppressWarnings("StatementWithEmptyBody")
     public boolean onNavigationItemSelected(MenuItem item) {
-
         //TODO functionality yet to be completed
         int id = item.getItemId();
         switch (id) {
-            case R.id.nav_listItem: {
+            case R.id.nav_listItem:
+                setVisible(true);
                 startActivity(new Intent(SearchActivity.this, ListAnItemActivity.class));
-                RCLog.showToast(this, "List An Item");
                 break;
-            }
-            case R.id.nav_logIn: {
+            case R.id.nav_messages:
+                setVisible(true);
+                RCLog.showToast(SearchActivity.this, "Messages");
+                break;
+            case R.id.nav_items:
+                RCLog.showToast(SearchActivity.this, "Items");
+                break;
+            case R.id.nav_payments:
+                RCLog.showToast(SearchActivity.this, "Payments");
+                break;
+            case R.id.nav_rentals:
+                RCLog.showToast(SearchActivity.this, "Rentals");
+                break;
+
+            case R.id.nav_logIn_signUp:
                 startActivity(new Intent(SearchActivity.this, LogInActivity.class));
-                RCLog.showToast(this, "Log In");
                 break;
-            }
-            case R.id.nav_signUp: {
-                startActivity(new Intent(SearchActivity.this, SignUpActivity.class));
-                RCLog.showToast(this, "Sign Up");
+
+            case R.id.nav_logout: {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+                alertDialog.setTitle(getResources().getString(R.string.logout_alert_title));
+                alertDialog.setPositiveButton(getResources().getString(R.string.logout), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogInterface, int arg1) {
+                        dialogInterface.dismiss();
+                        clearData();
+                        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(RCWebConstants.RC_SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean(RCWebConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
+                        editor.apply();
+                        finish();
+                        Intent intent = new Intent(SearchActivity.this, LogInActivity.class);
+                        startActivity(intent);
+                    }
+                });
+
+                alertDialog.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogInterface, int arg1) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                alertDialog.show();
                 break;
             }
         }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-
         return true;
+    }
+
+    /**
+     * clears Application data
+     */
+    private void clearData() {
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(RCWebConstants.RC_SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.commit();
     }
 
     @Override
@@ -526,6 +608,9 @@ public class SearchActivity extends AppCompatActivity
         return false;
     }
 
+    /**
+     * navigation drawer back button
+     */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -535,6 +620,7 @@ public class SearchActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
+
 }
 
 

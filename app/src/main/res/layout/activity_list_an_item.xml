@@ -7,9 +7,12 @@
     android:orientation="vertical"
     tools:context="com.example.synerzip.recircle_android.ui.ListAnItemActivity">
 
+    <include layout="@layout/partial_toolbar" />
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_10dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -50,22 +53,15 @@
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/dimen_24sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/dimen_10dp"
-                    android:text="@string/item_name"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/dimen_14sp"
-                    android:visibility="gone" />
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/input_layout_search_item"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_10dp">
 
-                    <EditText
-                        android:id="@+id/edit_item_search"
+                    <AutoCompleteTextView
+                        android:id="@+id/auto_txt_list_search_item_name"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dimen_50dp"
                         android:hint="@string/search_item"
@@ -73,51 +69,38 @@
                         android:textSize="@dimen/dimen_14sp" />
                 </android.support.design.widget.TextInputLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/dimen_10dp"
-                    android:layout_marginTop="@dimen/dimen_10dp"
-                    android:text="@string/daily_price"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/dimen_14sp"
-                    android:visibility="gone" />
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/input_layout_rental_price"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_10dp">
 
                     <EditText
                         android:id="@+id/edit_enter_price"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dimen_50dp"
+                        android:layout_marginTop="@dimen/dimen_10dp"
                         android:hint="@string/enter_price"
+                        android:inputType="number"
                         android:padding="@dimen/dimen_10dp"
                         android:textSize="@dimen/dimen_14sp" />
                 </android.support.design.widget.TextInputLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/dimen_10dp"
-                    android:layout_marginTop="@dimen/dimen_10dp"
-                    android:text="@string/min_rental"
-                    android:textColor="@color/colorPrimary"
-                    android:visibility="gone" />
-
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/input_layout_min_rental"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_10dp">
 
                     <EditText
-                        android:text="1"
                         android:id="@+id/edit_min_rental"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dimen_50dp"
                         android:hint="@string/min_rental"
+                        android:inputType="number"
                         android:padding="@dimen/dimen_10dp"
+                        android:text="1"
                         android:textSize="@dimen/dimen_14sp" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -135,8 +118,10 @@
                     android:orientation="horizontal">
 
                     <CheckBox
+                        android:id="@+id/checkbox_discount_five_days"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:checked="false" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -150,8 +135,10 @@
                     android:orientation="horizontal">
 
                     <CheckBox
+                        android:id="@+id/checkbox_discount_ten_days"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:checked="false" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -175,7 +162,7 @@
                     android:background="@drawable/edittxt_square">
 
                     <LinearLayout
-                        android:id="@+id/linear"
+                        android:id="@+id/layout_upload_images"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/dimen_10dp"
@@ -188,39 +175,22 @@
                             android:onClick="imgUploadPhotos"
                             android:src="@drawable/ic_upload_photos" />
 
-                        <ImageView
+                        <LinearLayout
                             android:id="@+id/img_upload_photos"
-                            android:layout_width="@dimen/dimen_50dp"
+                            android:layout_width="match_parent"
                             android:layout_height="@dimen/dimen_50dp"
-                            android:layout_marginLeft="@dimen/dimen_10dp"
-                            android:background="@drawable/edittxt_square" />
+                            android:layout_gravity="center"
+                            android:orientation="horizontal" />
 
                     </LinearLayout>
 
                 </HorizontalScrollView>
 
-                <EditText
-                    android:id="@+id/edit_upload_photos"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimen_93dp"
-                    android:background="@drawable/edittxt_square"
-                    android:padding="@dimen/dimen_10dp"
-                    android:textSize="@dimen/dimen_14sp"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/dimen_10dp"
-                    android:layout_marginTop="@dimen/dimen_10dp"
-                    android:text="@string/item_desc"
-                    android:textColor="@color/colorPrimary"
-                    android:visibility="gone" />
-
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/input_layout_item_desc"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_10dp">
 
                     <EditText
                         android:id="@+id/edit_item_desc"
@@ -254,24 +224,26 @@
                     android:textSize="@dimen/dimen_14sp" />
 
                 <TextView
+                    android:id="@+id/txt_days_for_availability"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/dimen_10dp"
-                    android:layout_marginTop="@dimen/dimen_10dp"
-                    android:text="@string/txt_enter_zip"
-                    android:textColor="@color/colorPrimary"
-                    android:visibility="gone" />
+                    android:layout_marginBottom="@dimen/dimen_5dp"
+                    android:layout_marginTop="@dimen/dimen_5dp"
+                    android:textColor="@color/colorPrimary" />
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/input_layout_enter_zipcode"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_10dp">
 
                     <EditText
+
                         android:id="@+id/edit_enter_zip"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dimen_50dp"
                         android:hint="@string/edit_enter_zip"
+                        android:inputType="number"
                         android:padding="@dimen/dimen_10dp"
                         android:textSize="@dimen/dimen_14sp" />
                 </android.support.design.widget.TextInputLayout>

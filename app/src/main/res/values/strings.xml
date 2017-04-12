@@ -102,4 +102,14 @@
     <string name="validate_min_rental_days">Minimum rental day(s) are required</string>
     <string name="validate_item_desc">Enter item description</string>
     <string name="validate_price">Enter Price</string>
+    <string name="calendar_availability_days">listSelectedDates</string>
+    <string name="error_list_item_calendar">Enter dates to be unavailable</string>
+    <string name="calendar_availability_days_count">selectedDatesCount</string>
+    <string name="logout_alert_title">Are you sure you want to logout ?</string>
+    <string name="logout">Logout</string>
+    <string name="err_credentials">User credentials are wrong</string>
+    <string name="please_try_again">Please try again</string>
+    <string name="logged_in_as">Logged in as :</string>
+    <string name="calendar_days_selected">You have selected</string>
+    <string name="calendar_days">days as unavailable</string>
 </resources>
