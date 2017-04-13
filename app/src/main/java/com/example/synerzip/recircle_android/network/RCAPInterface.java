@@ -8,6 +8,7 @@ import com.example.synerzip.recircle_android.models.RootObject;
 import com.example.synerzip.recircle_android.models.SearchProduct;
 import com.example.synerzip.recircle_android.models.SignUpRequest;
 import com.example.synerzip.recircle_android.models.User;
+import com.example.synerzip.recircle_android.models.ZipcodeRoot;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
 
 import retrofit2.Call;
@@ -102,4 +103,12 @@ public interface RCAPInterface {
      */
     @POST(RCWebConstants.RC_GET_PRODUCT_DETAILS)
     Call<AllProductInfo> listAnItem(@Body ListAnItemRequest listAnItemRequest);
+
+    /**
+     * get zipcodes from google api
+     * @param zipcode
+     * @return
+     */
+    @GET(RCWebConstants.RC_GOOGLE_ZIPCODES)
+    Call<ZipcodeRoot> zipcodeCheck(@Query("address") String zipcode);
 }

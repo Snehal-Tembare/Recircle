@@ -13,7 +13,7 @@ import lombok.Setter;
 public class Discounts {
     public int percentage;
     public int discount_for_days;
-    public boolean isActive;
+    public int isActive;
 
     /**
      * constructor fo Discounts
@@ -24,7 +24,7 @@ public class Discounts {
      */
     public Discounts(int percentage,
                      int discount_for_days,
-                     boolean isActive) {
+                     int isActive) {
         this.percentage = percentage;
         this.discount_for_days = discount_for_days;
         this.isActive = isActive;

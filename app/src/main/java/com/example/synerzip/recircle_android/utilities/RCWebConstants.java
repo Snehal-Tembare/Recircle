@@ -51,4 +51,8 @@ public class RCWebConstants {
     public static final String RC_GET_OTP="/api/users/otp?";
 
     public static final int RC_ERROR_UNAUTHORISED = 401;
+
+    public static final String RC_SHARED_PREFERENCES_ACCESS_TOKEN_KEY ="accessToken" ;
+
+    public static final String RC_GOOGLE_ZIPCODES="https://maps.googleapis.com/maps/api/geocode/json?address";
 }

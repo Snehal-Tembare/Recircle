@@ -19,8 +19,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.squareup.timessquare.CalendarPickerView.SelectionMode.MULTIPLE;
-
-import com.example.synerzip.recircle_android.R;
 import com.squareup.timessquare.CalendarPickerView;
 
 public class ListItemCalendarActivity extends AppCompatActivity {
@@ -41,7 +39,7 @@ public class ListItemCalendarActivity extends AppCompatActivity {
         Calendar nextYear = Calendar.getInstance();
         nextYear.add(Calendar.YEAR, 1);
         Date today = new Date();
-        mPickerView.init(today, nextYear.getTime()).withSelectedDate(today).inMode(MULTIPLE);
+
         mPickerView.init(today, nextYear.getTime()).inMode(MULTIPLE);
 
         mPickerView.setOnDateSelectedListener(new CalendarPickerView.OnDateSelectedListener() {

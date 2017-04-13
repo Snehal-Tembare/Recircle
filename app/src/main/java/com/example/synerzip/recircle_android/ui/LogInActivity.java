@@ -72,7 +72,7 @@ public class LogInActivity extends AppCompatActivity {
     @BindView(R.id.linear_layout)
     public LinearLayout mLinearLayout;
 
-    public String mUserId, mUserEmail,mUserToken,mUserLastName,mUserFirstName="";
+    public String mUserId, mUserEmail,mUserToken,mUserLastName,mUserFirstName,mAccessToken="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,7 +135,10 @@ public class LogInActivity extends AppCompatActivity {
                         mUserToken = response.body().getToken();
                         mUserFirstName = response.body().getFirst_name();
                         mUserLastName = response.body().getLast_name();
-                    if(null!=mUserId && null!=mUserName && null!=mUserToken && null!=mUserFirstName &&null!=mUserLastName) {
+                        mAccessToken=response.body().getToken();
+                    if(null!=mUserId && null!=mUserName && null!=mUserToken &&
+                            null!=mUserFirstName && null!=mUserLastName && null!=mAccessToken) {
+
                         saveUserData();
                         Intent intent = new Intent(LogInActivity.this, SearchActivity.class);
                         startActivity(intent);
@@ -337,6 +340,7 @@ public class LogInActivity extends AppCompatActivity {
 
         try {
             String encryptedPassword = AESEncryptionDecryption.encrypt(android_id, mPassword);
+         //   ApiClient.getClient(getApplicationContext()).setAccessToken(mAccessToken);
             editor.putString(RCWebConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mUserToken);
             editor.putString(RCWebConstants.RC_SHARED_PREFERENCES_USERID, mUserId);
             editor.putString(RCWebConstants.RC_SHARED_PREFERENCES_PASSWORD, encryptedPassword);

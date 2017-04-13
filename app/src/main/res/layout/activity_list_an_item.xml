@@ -120,8 +120,7 @@
                     <CheckBox
                         android:id="@+id/checkbox_discount_five_days"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="false" />
+                        android:layout_height="wrap_content" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -155,18 +154,34 @@
                     android:text="@string/upload_photos"
                     android:textColor="@color/colorPrimary" />
 
-                <HorizontalScrollView
+                <Button
+                    android:id="@+id/btn_choose_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/choose" />
+
+                <LinearLayout
                     android:id="@+id/horizontal_scroll"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dimen_70dp"
-                    android:background="@drawable/edittxt_square">
+                    android:background="@drawable/edittxt_square"
+                    android:orientation="vertical">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recycler_view_upload_img"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="visible">
+
+                    </android.support.v7.widget.RecyclerView>
 
                     <LinearLayout
                         android:id="@+id/layout_upload_images"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/dimen_10dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/img_add_photos"
@@ -184,7 +199,7 @@
 
                     </LinearLayout>
 
-                </HorizontalScrollView>
+                </LinearLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/input_layout_item_desc"

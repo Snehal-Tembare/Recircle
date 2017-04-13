@@ -110,6 +110,90 @@
     <string name="err_credentials">User credentials are wrong</string>
     <string name="please_try_again">Please try again</string>
     <string name="logged_in_as">Logged in as :</string>
-    <string name="calendar_days_selected">You have selected</string>
-    <string name="calendar_days">days as unavailable</string>
+    <string name="calendar_days_selected">You have selected </string>
+    <string name="calendar_days"> days as unavailable</string>
+    <string name="choose">Choose</string>
+    <string-array name="zipcodes_list_austin">
+        <item>73301</item>
+        <item>73344</item>
+        <item>78613</item>
+        <item>78617</item>
+        <item>78652</item>
+        <item>78653</item>
+        <item>78660</item>
+        <item>78701</item>
+        <item>78702</item>
+        <item>78703</item>
+        <item>78704</item>
+        <item>78705</item>
+        <item>78708</item>
+        <item>78709</item>
+        <item>78710</item>
+        <item>78708</item>
+        <item>78709</item>
+        <item>78710</item>
+        <item>78711</item>
+        <item>78712</item>
+        <item>78713</item>
+        <item>78714</item>
+        <item>78715</item>
+        <item>78716</item>
+        <item>78717</item>
+        <item>78718</item>
+        <item>78719</item>
+        <item>78720</item>
+        <item>78721</item>
+        <item>78722</item>
+        <item>78723</item>
+        <item>78724</item>
+        <item>78725</item>
+        <item>78726</item>
+        <item>78727</item>
+        <item>78728</item>
+        <item>78729</item>
+        <item>78730</item>
+        <item>78731</item>
+        <item>78732</item>
+        <item>78733</item>
+        <item>78734</item>
+        <item>78735</item>
+        <item>78736</item>
+        <item>78739</item>
+        <item>78741</item>
+        <item>78742</item>
+        <item>78744</item>
+        <item>78745</item>
+        <item>78746</item>
+        <item>78747</item>
+        <item>78748</item>
+        <item>78749</item>
+        <item>78750</item>
+        <item>78751</item>
+        <item>78752</item>
+        <item>78753</item>
+        <item>78754</item>
+        <item>78755</item>
+        <item>78756</item>
+        <item>78757</item>
+        <item>78758</item>
+        <item>78759</item>
+        <item>78760</item>
+        <item>78761</item>
+        <item>78762</item>
+        <item>78763</item>
+        <item>78764</item>
+        <item>78765</item>
+        <item>78766</item>
+        <item>78767</item>
+        <item>78768</item>
+        <item>78769</item>
+        <item>78772</item>
+        <item>78773</item>
+        <item>78774</item>
+        <item>78778</item>
+        <item>78779</item>
+        <item>78783</item>
+        <item>78799</item>
+
+    </string-array>
 </resources>

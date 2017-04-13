@@ -1,8 +1,15 @@
 package com.example.synerzip.recircle_android.network;
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import com.example.synerzip.recircle_android.utilities.RCWebConstants;
+
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Response;
@@ -19,6 +26,7 @@ public class ApiClient {
     private static Retrofit retrofit = null;
 
     public static Retrofit getClient() {
+
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -33,5 +41,4 @@ public class ApiClient {
         }
         return retrofit;
     }
-
 }
