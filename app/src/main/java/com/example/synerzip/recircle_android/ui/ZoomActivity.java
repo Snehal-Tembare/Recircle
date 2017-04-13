@@ -55,7 +55,6 @@ public class ZoomActivity extends AppCompatActivity {
     @BindView(R.id.recycler_images)
     public RecyclerView mReImages;
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,8 +77,13 @@ public class ZoomActivity extends AppCompatActivity {
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.setCurrentItem(selectedImgPosition);
 
+        /*if (mViewPager.getCurrentItem()==userProdImagesArrayList.size()){
+            mImgNext.setVisibility(View.GONE);
+        }else if (mViewPager.getCurrentItem()==0){
+            mImgPrev.setVisibility(View.GONE);
+        }*/
+
         mImageAdapter = new ImageAdapter(getApplicationContext(), selectedImgPosition, userProdImagesArrayList, new ImageAdapter.OnImageItemClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onImageClick(int position, UserProdImages userProdImages) {
 
@@ -87,12 +91,12 @@ public class ZoomActivity extends AppCompatActivity {
 
                 View view = mReImages.getChildAt(position);
 
-                view.setBackground(getDrawable(R.drawable.selected_image_background));
+                view.setBackground(ContextCompat.getDrawable(ZoomActivity.this,R.drawable.selected_image_background));
 
                 for (int i = 0; i < userProdImagesArrayList.size(); i++) {
                     view = mReImages.getChildAt(i);
                     if (i != position) {
-                        view.setBackground(getDrawable(R.drawable.custom_imageview));
+                        view.setBackground(ContextCompat.getDrawable(ZoomActivity.this,R.drawable.custom_imageview));
                     }
                 }
             }
@@ -100,10 +104,43 @@ public class ZoomActivity extends AppCompatActivity {
 
         mReImages.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         mReImages.setAdapter(mImageAdapter);
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                View view = mReImages.getChildAt(position);
+
+                view.setBackground(ContextCompat.getDrawable(ZoomActivity.this,R.drawable.selected_image_background));
+
+                for (int i = 0; i < userProdImagesArrayList.size(); i++) {
+                    view = mReImages.getChildAt(i);
+                    if (i != mViewPager.getCurrentItem()) {
+                        view.setBackground(ContextCompat.getDrawable(ZoomActivity.this,R.drawable.custom_imageview));
+                    }
+                }
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
+    }
+
     @OnClick(R.id.img_previous)
     public void showPreviousImage() {
         if (mViewPager.getCurrentItem() > 0) {
@@ -113,12 +150,12 @@ public class ZoomActivity extends AppCompatActivity {
             mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
 
             View view = mReImages.getChildAt(mViewPager.getCurrentItem());
-            view.setBackground(getDrawable(R.drawable.selected_image_background));
+            view.setBackground(ContextCompat.getDrawable(this,R.drawable.selected_image_background));
 
             for (int i = 0; i < userProdImagesArrayList.size(); i++) {
                 view = mReImages.getChildAt(i);
                 if (i == position) {
-                    view.setBackground(getDrawable(R.drawable.custom_imageview));
+                    view.setBackground(ContextCompat.getDrawable(this,R.drawable.custom_imageview));
                 }
             }
         }

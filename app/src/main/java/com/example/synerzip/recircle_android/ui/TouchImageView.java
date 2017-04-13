@@ -188,7 +188,7 @@ public class TouchImageView extends AppCompatImageView {
                 // If the image is already rendered, scaleType has been called programmatically
                 // and the TouchImageView should be updated with the new scaleType.
                 //
-//                setZoom(this);
+                setZoom(this);
             }
         }
     }
@@ -226,7 +226,7 @@ public class TouchImageView extends AppCompatImageView {
      * Save the current matrix and view dimensions
      * in the prevMatrix and prevView variables.
      */
-    private void savePreviousImageValues() {
+    public void savePreviousImageValues() {
         if (matrix != null && viewHeight != 0 && viewWidth != 0) {
             matrix.getValues(m);
             prevMatrix.setValues(m);

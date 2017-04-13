@@ -24,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -65,6 +66,7 @@ public class SearchActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String DESCRIPTION_EXPRESSION = "^[A-Za-z]+([\\-\\w\\s\\d]+)$";
+    private static final int REQUEST_CODE = 1;
 
     @BindView(R.id.toolbar)
     public Toolbar mToolbar;
@@ -91,10 +93,6 @@ public class SearchActivity extends AppCompatActivity
     public List<Product> productsCustomList;
 
     private ArrayList<Products> productDetailsList;
-
-    private ArrayList<String> allItemsList;
-
-    public ArrayList<String> popularProdList;
 
     private PopularItemsAdapter mPopularItemsAdapter;
 
@@ -137,6 +135,9 @@ public class SearchActivity extends AppCompatActivity
 
     @BindView(R.id.edt_place)
     public EditText mEdtPlace;
+
+    @BindView(R.id.lists_layout)
+    public LinearLayout mListsLayout;
 
     private AwesomeValidation awesomeValidation;
 
@@ -223,7 +224,7 @@ public class SearchActivity extends AppCompatActivity
     @OnClick(R.id.edt_enter_dates)
     public void btnEnterDates(View view) {
         Intent intent = new Intent(SearchActivity.this, CalendarActivity.class);
-        startActivityForResult(intent, 1);
+        startActivityForResult(intent, REQUEST_CODE);
     }
 
     /**
@@ -320,9 +321,8 @@ public class SearchActivity extends AppCompatActivity
     //get all product details
     public void getAllProductDetails() {
 
-        popularProdList = new ArrayList<>();
-
-        allItemsList = new ArrayList<>();
+        productDetailsList = new ArrayList<>();
+        popularProducts = new ArrayList<>();
 
         service = ApiClient.getClient().create(RCAPInterface.class);
 
@@ -332,45 +332,23 @@ public class SearchActivity extends AppCompatActivity
             @Override
             public void onResponse(Call<AllProductInfo> call, Response<AllProductInfo> response) {
 
-                if (null != response.body()) {
-                    productDetailsList = response.body().getProductDetails();
-                    popularProducts = response.body().getPopularProducts();
-                    for (Products productDetails : productDetailsList) {
-                        popularProdList.add(productDetails.getProduct_info().getProduct_title());
-                        allItemsList.add(productDetails.getProduct_info().getProduct_title());
+                if (response.isSuccessful()) {
+                    mListsLayout.setVisibility(View.VISIBLE);
+                    if (null != response && null != response.body()) {
+
+                        if (response.body().getProductDetails() != null
+                                && response.body().getProductDetails().size() != 0
+                                && response.body().getPopularProducts() != null
+                                && response.body().getPopularProducts().size() != 0) {
+
+                            productDetailsList = response.body().getProductDetails();
+                            popularProducts = response.body().getPopularProducts();
+                            bindData();
+                        }
                     }
                 } else {
-                    RCLog.showToast(getApplicationContext(), getString(R.string.product_details_not_found));
+                    mListsLayout.setVisibility(View.GONE);
                 }
-
-                mRecentItemsAdapter = new RecentItemsAdapter(SearchActivity.this, productDetailsList, new OnItemClickListener() {
-                    @Override
-                    public void onItemClick(Products product) {
-                        Intent detailsIntent = new Intent(SearchActivity.this, DetailsActivity.class);
-                        detailsIntent.putExtra(getString(R.string.product_id),
-                                product.getUser_product_info().getUser_product_id());
-                        startActivity(detailsIntent);
-                    }
-                });
-
-                mRecyclerViewRecent.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                mRecyclerViewRecent.setAdapter(mRecentItemsAdapter);
-
-                mPopularItemsAdapter = new PopularItemsAdapter(SearchActivity.this, popularProducts, new OnItemClickListener() {
-                    @Override
-                    public void onItemClick(Products product) {
-                        Log.v(TAG, "onItemClick" + product.getUser_product_info().getUser_product_id());
-
-                        Intent detailsIntent = new Intent(SearchActivity.this, DetailsActivity.class);
-                        detailsIntent.putExtra(getString(R.string.product_id),
-                                product.getUser_product_info().getUser_product_id());
-                        startActivity(detailsIntent);
-                    }
-                });
-
-
-                mRecyclerViewPopular.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                mRecyclerViewPopular.setAdapter(mPopularItemsAdapter);
             }
 
             @Override
@@ -378,6 +356,39 @@ public class SearchActivity extends AppCompatActivity
                 Log.v(TAG, t.toString());
             }
         });
+
+
+    }
+
+    private void bindData() {
+        mRecentItemsAdapter = new RecentItemsAdapter(SearchActivity.this, productDetailsList, new OnItemClickListener() {
+            @Override
+            public void onItemClick(Products product) {
+                Intent detailsIntent = new Intent(SearchActivity.this, DetailsActivity.class);
+                detailsIntent.putExtra(getString(R.string.product_id),
+                        product.getUser_product_info().getUser_product_id());
+                startActivity(detailsIntent);
+            }
+        });
+
+        mRecyclerViewRecent.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        mRecyclerViewRecent.setAdapter(mRecentItemsAdapter);
+
+        mPopularItemsAdapter = new PopularItemsAdapter(SearchActivity.this, popularProducts, new OnItemClickListener() {
+            @Override
+            public void onItemClick(Products product) {
+                Log.v(TAG, "onItemClick" + product.getUser_product_info().getUser_product_id());
+
+                Intent detailsIntent = new Intent(SearchActivity.this, DetailsActivity.class);
+                detailsIntent.putExtra(getString(R.string.product_id),
+                        product.getUser_product_info().getUser_product_id());
+                startActivity(detailsIntent);
+            }
+        });
+
+
+        mRecyclerViewPopular.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        mRecyclerViewPopular.setAdapter(mPopularItemsAdapter);
     }
 
     @Override
@@ -396,7 +407,7 @@ public class SearchActivity extends AppCompatActivity
             public void searchProductResult(SearchProduct sd) {
                 searchProduct = sd;
                 resetAll();
-                if (null != searchProduct && !(searchProduct.getProducts().size() == 0)) {
+                if (null != searchProduct && searchProduct.getProducts().size()!= 0) {
                     mIntent = new Intent(SearchActivity.this, ResultActivity.class);
                     mIntent.putExtra(getString(R.string.search_product), searchProduct);
                     mIntent.putExtra(getString(R.string.name), mName);
@@ -450,8 +461,6 @@ public class SearchActivity extends AppCompatActivity
                             (SearchActivity.this, R.layout.activity_search, R.id.txtProductName, productsCustomList);
                     mProductAutoComplete.setAdapter(mAutocompleteAdapter);
 
-                } else {
-                    RCLog.showToast(getApplicationContext(), getString(R.string.product_details_not_found));
                 }
             }
         };

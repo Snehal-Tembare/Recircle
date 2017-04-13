@@ -1,16 +1,12 @@
 package com.example.synerzip.recircle_android.ui;
 
 import android.content.Intent;
-import android.os.Build;
-import android.support.annotation.IntegerRes;
-import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -50,6 +46,7 @@ import retrofit2.Response;
  */
 
 public class DetailsActivity extends AppCompatActivity {
+    private static final int REQUEST_CODE = 1;
 
     private RCAPInterface service;
     private Products product;
@@ -60,7 +57,6 @@ public class DetailsActivity extends AppCompatActivity {
 
     private ReviewsListAdapter reviewsListAdapter;
 
-    private String link;
     private int selectedImgPosition = 0;
 
     private ImageAdapter mImageAdapter;
@@ -180,80 +176,76 @@ public class DetailsActivity extends AppCompatActivity {
         productsCall.enqueue(new Callback<Products>() {
             @Override
             public void onResponse(Call<Products> call, Response<Products> response) {
-                if (response.body() != null) {
+                if (response.isSuccessful()) {
+                    if (response.body() != null && response!=null) {
+                        mProgressBar.setVisibility(View.GONE);
+                        product = response.body();
 
-                    mProgressBar.setVisibility(View.GONE);
+                        if (product.getUser_product_info().getUser_prod_reviews() != null
+                                && product.getUser_product_info().getUser_prod_reviews().size() != 0
+                                && product.getUser_product_info().getUser_prod_images() != null
+                                && product.getUser_product_info().getUser_prod_images().size() != 0) {
 
-                    product = response.body();
+                            userProdReviewArrayList = product.getUser_product_info().getUser_prod_reviews();
 
-                    userProdReviewArrayList = product.getUser_product_info().getUser_prod_reviews();
+                            userProdImagesArrayList = product.getUser_product_info().getUser_prod_images();
 
-                    userProdImagesArrayList = product.getUser_product_info().getUser_prod_images();
+                            reviewsListAdapter = new ReviewsListAdapter(getApplicationContext(), userProdReviewArrayList);
+                            mReViewReviews.setLayoutManager(new LinearLayoutManager(DetailsActivity.this));
+                            mReViewReviews.setAdapter(reviewsListAdapter);
 
-                    reviewsListAdapter = new ReviewsListAdapter(getApplicationContext(), userProdReviewArrayList);
-                    mReViewReviews.setLayoutManager(new LinearLayoutManager(DetailsActivity.this));
-                    mReViewReviews.setAdapter(reviewsListAdapter);
+                            mImageAdapter = new ImageAdapter(getApplicationContext(), selectedImgPosition, userProdImagesArrayList, new ImageAdapter.OnImageItemClickListener() {
+                                @Override
+                                public void onImageClick(int position, UserProdImages userProdImages) {
 
-                    mImageAdapter = new ImageAdapter(getApplicationContext(), selectedImgPosition, userProdImagesArrayList, new ImageAdapter.OnImageItemClickListener() {
-                        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-                        @Override
-                        public void onImageClick(int position, UserProdImages userProdImages) {
+                                    Picasso.with(getApplicationContext())
+                                            .load(userProdImages.getUser_prod_image_url())
+                                            .into(mImgMain);
+
+                                    View view = mRecyclerImages.getChildAt(position);
+
+                                    view.setBackground(ContextCompat.getDrawable(DetailsActivity.this, R.drawable.selected_image_background));
+
+                                    for (int i = 0; i < userProdImagesArrayList.size(); i++) {
+                                        view = mRecyclerImages.getChildAt(i);
+                                        if (i != position) {
+                                            view.setBackground(ContextCompat.getDrawable(DetailsActivity.this, R.drawable.custom_imageview));
+                                        }
+                                    }
+                                    selectedImgPosition = position;
+                                    mLayoutManager.scrollToPosition(position);
+
+                                }
+                            });
+
+                            mLayoutManager = new LinearLayoutManager(DetailsActivity.this, LinearLayoutManager.HORIZONTAL, false);
+
+                            mRecyclerImages.setLayoutManager(mLayoutManager);
+                            mRecyclerImages.setAdapter(mImageAdapter);
+
+                            mTxtProductName.setText(product.getProduct_info().getProduct_title());
+                            Picasso.with(getApplicationContext()).load(product.getUser_info()
+                                    .getUser_image_url()).into(mImgUser);
+
+                            mTxtUserName.setText(product.getUser_info().getFirst_name() + " "
+                                    + product.getUser_info().getLast_name());
+
+                            mRatingBar.setRating(Integer.parseInt(product.getUser_product_info().getProduct_avg_rating()));
+
+                            mRatingAllAvg.setRating(Integer.parseInt(product.getUser_product_info().getProduct_avg_rating()));
+
+                            mTxtAvgRating.setText("(" + product.getUser_product_info().getProduct_avg_rating() + ")");
+                            mTxtPrice.setText("$" + product.getUser_product_info().getPrice_per_day() + "/day");
+
+                            mTxtDecscriptionDetail.setText(product.getProduct_info().getProduct_description());
+
+                            mTxtConditionDetail.setText(product.getUser_product_info().getUser_prod_desc());
 
                             Picasso.with(getApplicationContext())
-                                    .load(userProdImages.getUser_prod_image_url())
+                                    .load(product.getProduct_info().getProduct_image_url())
                                     .into(mImgMain);
-
-                            View view = mRecyclerImages.getChildAt(position);
-
-                            view.setBackground(getDrawable(R.drawable.selected_image_background));
-
-                            for (int i = 0; i < userProdImagesArrayList.size(); i++) {
-                                view = mRecyclerImages.getChildAt(i);
-                                if (i != position) {
-                                    view.setBackground(getDrawable(R.drawable.custom_imageview));
-                                }
-                            }
-                            link = userProdImages.getUser_prod_image_url();
-                            selectedImgPosition = position;
-                            mLayoutManager.scrollToPosition(position);
-
                         }
-                    });
-
-                    mLayoutManager = new LinearLayoutManager(DetailsActivity.this, LinearLayoutManager.HORIZONTAL, false);
-
-                    mRecyclerImages.setLayoutManager(mLayoutManager);
-                    mRecyclerImages.setAdapter(mImageAdapter);
-
-                    mTxtProductName.setText(product.getProduct_info().getProduct_title());
-                    Picasso.with(getApplicationContext()).load(product.getUser_info()
-                            .getUser_image_url()).into(mImgUser);
-
-                    mTxtUserName.setText(product.getUser_info().getFirst_name() + " "
-                            + product.getUser_info().getLast_name());
-
-                    mRatingBar.setRating(Integer.parseInt(product.getUser_product_info().getProduct_avg_rating()));
-
-                    mRatingAllAvg.setRating(Integer.parseInt(product.getUser_product_info().getProduct_avg_rating()));
-
-                    mTxtAvgRating.setText("(" + product.getUser_product_info().getProduct_avg_rating() + ")");
-                    mTxtPrice.setText("$" + product.getUser_product_info().getPrice_per_day() + "/day");
-
-                    /**
-                     * TODO functionality yet to complete
-                     * */
-
-
-                    mTxtDecscriptionDetail.setText(product.getProduct_info().getProduct_description());
-
-                    mTxtConditionDetail.setText(product.getUser_product_info().getUser_prod_desc());
-
-                    link = product.getProduct_info().getProduct_image_url();
-
-                    Picasso.with(getApplicationContext())
-                            .load(product.getProduct_info().getProduct_image_url())
-                            .into(mImgMain);
-
+                    }
                 }
             }
 
@@ -274,7 +266,6 @@ public class DetailsActivity extends AppCompatActivity {
         mImgMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(DetailsActivity.this, ZoomActivity.class);
                 intent.putExtra(getString(R.string.selected_image_position), selectedImgPosition);
                 intent.putParcelableArrayListExtra(getString(R.string.image_urls_array), userProdImagesArrayList);
@@ -296,7 +287,7 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
+        if (requestCode == REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 String from = data.getStringExtra(getString(R.string.from_date));
                 String to = data.getStringExtra(getString(R.string.to_date));
@@ -341,7 +332,7 @@ public class DetailsActivity extends AppCompatActivity {
                     mTxtTotalLabel.setVisibility(View.VISIBLE);
                     mEdtTotalPrice.setText(" $" + (int) total + "   ($"
                             + product.getUser_product_info().getPrice_per_day() +
-                            " * " + (int) dayCount + getString(R.string.days)+")");
+                            " * " + (int) dayCount + getString(R.string.days) + ")");
                 }
 
             }

@@ -24,7 +24,6 @@ import retrofit2.Response;
  */
 
 public class SearchUtility {
-    private final String TAG = "SearchUtility";
     private RCAPInterface service;
     private SearchProduct sd;
 
@@ -47,12 +46,12 @@ public class SearchUtility {
             call.enqueue(new Callback<SearchProduct>() {
                 @Override
                 public void onResponse(Call<SearchProduct> call, Response<SearchProduct> response) {
+                    if (response.isSuccessful()){
                     if (null != response && response.code() == RCWebConstants.RC_SUCCESS_CODE
                             && null != response.body()) {
-                        Log.v(TAG, response.body() + "");
                         sd = response.body();
                         callback.searchProductResult(sd);
-                    } else {
+                    } }else {
                         callback.searchProductResult(new SearchProduct());
                     }
                 }
@@ -75,12 +74,16 @@ public class SearchUtility {
         call.enqueue(new Callback<RootObject>() {
             @Override
             public void onResponse(Call<RootObject> call, Response<RootObject> response) {
-                if (null != response && null != response.body()) {
+                if (response.isSuccessful()) {
+                    if (null != response && null != response.body()
+                            && response.body().getProductsData()!=null
+                            && response.body().getProductsData().size()!=0) {
 
-                    productsDataList = response.body().getProductsData();
+                        productsDataList = response.body().getProductsData();
 
-                    callback.allItemsResult(productsDataList);
-                }else {
+                        callback.allItemsResult(productsDataList);
+                    }
+                } else {
                     callback.allItemsResult(new ArrayList<ProductsData>());
                 }
             }

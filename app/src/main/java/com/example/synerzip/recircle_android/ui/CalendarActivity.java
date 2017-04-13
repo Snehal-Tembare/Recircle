@@ -34,9 +34,11 @@ public class CalendarActivity extends AppCompatActivity {
     @BindView(R.id.calendar_view)
     public CalendarPickerView mPickerView;
 
-    Date fromDate, toDate;
+    private Date fromDate;
+    private Date toDate;
 
-    Date selectFromDate, selectToDate;
+    private Date selectFromDate;
+    private Date selectToDate;
 
     @BindView(R.id.txt_from_date)
     public TextView mTxtFromDate;
