@@ -1,9 +1,5 @@
 package com.example.synerzip.recircle_android.ui;
 
-import android.media.MediaRecorder;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -14,15 +10,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.UserProdImages;
-
 import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -44,15 +34,6 @@ public class ZoomActivity extends AppCompatActivity {
     @BindView(R.id.view_pager)
     public ViewPager mViewPager;
 
-    @BindView(R.id.img_previous)
-    public ImageView mImgPrev;
-
-    @BindView(R.id.img_next)
-    public ImageView mImgNext;
-
-    @BindView(R.id.viewpager_layout)
-    public LinearLayout mViewPagerLayout;
-
     @BindView(R.id.recycler_images)
     public RecyclerView mReImages;
 
@@ -67,7 +48,6 @@ public class ZoomActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
 
-
         bundle = getIntent().getExtras();
 
         userProdImagesArrayList = bundle.getParcelableArrayList(getString(R.string.image_urls_array));
@@ -77,12 +57,6 @@ public class ZoomActivity extends AppCompatActivity {
         mPagerAdapter=new CustomPagerAdapter(getApplicationContext(),userProdImagesArrayList);
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.setCurrentItem(selectedImgPosition);
-
-        /*if (mViewPager.getCurrentItem()==userProdImagesArrayList.size()){
-            mImgNext.setVisibility(View.GONE);
-        }else if (mViewPager.getCurrentItem()==0){
-            mImgPrev.setVisibility(View.GONE);
-        }*/
 
         mImageAdapter = new ImageAdapter(getApplicationContext(), selectedImgPosition, userProdImagesArrayList, new ImageAdapter.OnImageItemClickListener() {
             @Override
@@ -109,8 +83,6 @@ public class ZoomActivity extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-
             }
 
             @Override
@@ -125,7 +97,6 @@ public class ZoomActivity extends AppCompatActivity {
                         view.setBackground(ContextCompat.getDrawable(ZoomActivity.this,R.drawable.custom_imageview));
                     }
                 }
-
             }
 
             @Override
@@ -133,13 +104,6 @@ public class ZoomActivity extends AppCompatActivity {
 
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-
     }
 
     @OnClick(R.id.img_previous)
@@ -162,7 +126,6 @@ public class ZoomActivity extends AppCompatActivity {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @OnClick(R.id.img_next)
     public void showNextImage() {
         if (mViewPager.getCurrentItem() < mViewPager.getAdapter().getCount() - 1) {
@@ -172,12 +135,12 @@ public class ZoomActivity extends AppCompatActivity {
             mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
 
             View view = mReImages.getChildAt(mViewPager.getCurrentItem());
-            view.setBackground(getDrawable(R.drawable.selected_image_background));
+            view.setBackground(ContextCompat.getDrawable(this,R.drawable.selected_image_background));
 
             for (int i = 0; i < userProdImagesArrayList.size(); i++) {
                 view = mReImages.getChildAt(i);
                 if (i == position) {
-                    view.setBackground(getDrawable(R.drawable.custom_imageview));
+                    view.setBackground(ContextCompat.getDrawable(this,R.drawable.custom_imageview));
                 }
             }
         }
