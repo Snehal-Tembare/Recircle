@@ -9,8 +9,7 @@
         android:layout_height="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <android.support.design.widget.CollapsingToolbarLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <android.support.design.widget.CollapsingToolbarLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/collapsible_layout"
             android:layout_width="match_parent"
@@ -26,6 +25,7 @@
 
     <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/common_white"
@@ -36,7 +36,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -89,12 +88,30 @@
                 android:layout_marginTop="@dimen/common_dimens_10"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/txt_product_name"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colortext"
-                    android:textSize="@dimen/text_size_18" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/txt_product_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/common_dimens_5"
+                        android:textColor="@color/colortext"
+                        android:textSize="@dimen/text_size_18" />
+
+                    <TextView
+                        android:id="@+id/txt_see_store_address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:padding="@dimen/common_dimens_2"
+                        android:text="@string/store_address"
+                        android:textColor="@color/colorAccent"
+                        />
+                </RelativeLayout>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -174,9 +191,9 @@
                     android:id="@+id/edt_enter_dates"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/common_dimens_10"
                     android:background="@drawable/edittxt_square"
                     android:drawableLeft="@drawable/ic_calendar"
-                    android:layout_marginTop="@dimen/common_dimens_10"
                     android:drawablePadding="@dimen/dimen_10dp"
                     android:focusable="false"
                     android:hint="@string/enter_dates"
@@ -200,16 +217,16 @@
                         android:id="@+id/txt_total_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        android:text="@string/total" />
+                        android:text="@string/total"
+                        android:visibility="gone" />
 
                     <EditText
                         android:id="@+id/edt_total_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:visibility="gone"
                         android:focusable="false"
-                        android:textSize="@dimen/text_size_14"/>
+                        android:textSize="@dimen/text_size_14"
+                        android:visibility="gone" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -250,8 +267,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginTop="@dimen/common_dimens_10">
+                    android:layout_marginTop="@dimen/common_dimens_10"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -280,8 +297,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginTop="@dimen/common_dimens_10">
+                    android:layout_marginTop="@dimen/common_dimens_10"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -323,8 +340,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:textColor="@color/common_black"
-                        android:text="@string/renters_review" />
+                        android:text="@string/renters_review"
+                        android:textColor="@color/common_black" />
 
                     <RatingBar
                         android:id="@+id/all_rating_avg"
@@ -338,13 +355,180 @@
                         android:layout_width="@dimen/common_dimens_20"
                         android:layout_height="@dimen/common_dimens_20"
                         android:layout_gravity="center_vertical"
-                        android:textColor="@color/common_text_color"/>
+                        android:textColor="@color/common_text_color" />
                 </LinearLayout>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/list_reviews"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/common_dimens_5"
+                android:layout_marginTop="@dimen/common_dimens_10"
+                android:background="@drawable/layout_border"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pick_msg"
+                    android:textColor="@color/text_color" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/common_dimens_20"
+                        android:text="@string/pick_up"
+                        android:textColor="@color/text_color" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/common_dimens_20"
+                        android:text="@string/pick_up_time"
+                        android:textColor="@color/text_color"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/common_dimens_20"
+                        android:text="@string/return_msg"
+                        android:textColor="@color/text_color" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/common_dimens_20"
+                        android:text="@string/return_time"
+                        android:textColor="@color/text_color"
+                        android:textStyle="bold" />
+
+
+                    <LinearLayout
+                        android:id="@+id/layout_see_on_map"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            android:layout_marginTop="@dimen/common_dimens_10"
+                            android:paddingLeft="@dimen/common_dimens_20"
+                            android:text="@string/store_location"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/text_size_14"
+                            android:textStyle="bold" />
+                        <ImageView
+                            android:layout_width="@dimen/common_dimens_20"
+                            android:layout_height="@dimen/common_dimens_20"
+                            android:layout_marginTop="@dimen/common_dimens_10"
+                            android:src="@mipmap/ic_map_marker"/>
+                        <TextView
+                            android:id="@+id/txt_see_on_map"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.3"
+                            android:layout_marginTop="@dimen/common_dimens_10"
+                            android:layout_height="wrap_content"
+                            android:text="@string/see_on_map"
+                            android:textColor="@color/colorAccent" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.1" />
+
+                    <LinearLayout
+                        android:id="@+id/layout_store_address"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.9"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/common_dimens_20"
+                            android:text="@string/r_address"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/text_size_14"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/txt_store_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/common_dimens_20"
+                            android:text="@string/store_name"
+                            android:textColor="@color/text_color" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/common_dimens_20"
+                            android:text="@string/address_line_1"
+                            android:textColor="@color/text_color" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/common_dimens_20"
+                            android:text="@string/city"
+                            android:textColor="@color/text_color" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/common_dimens_20"
+                            android:text="@string/telephone"
+                            android:textColor="@color/text_color" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/common_dimens_20"
+                            android:text="@string/company_email"
+                            android:textColor="@color/text_color" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/common_dimens_10"
+                            android:paddingLeft="@dimen/common_dimens_20"
+                            android:text="@string/store_hours"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/text_size_14"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/common_dimens_20"
+                            android:text="@string/store_hours_time"
+                            android:textColor="@color/text_color" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
             </LinearLayout>
 
         </LinearLayout>

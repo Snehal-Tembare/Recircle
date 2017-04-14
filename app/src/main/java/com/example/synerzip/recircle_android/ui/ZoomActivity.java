@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.UserProdImages;

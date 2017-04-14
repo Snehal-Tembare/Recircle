@@ -83,4 +83,25 @@
     <string name="url">url</string>
     <string name="date_validation_code">Select atleast one day</string>
     <string name="days">day(s)</string>
+    <string name="pick_up">Pick up</string>
+    <string name="return_msg">Return</string>
+    <string name="store_location">Store Location</string>
+    <string name="r_address">\'R\' Address</string>
+    <string name="store_name">ReCircle Store,</string>
+    <string name="address_line_1">8000 Street Name</string>
+    <string name="city">Austin, TX, 10012</string>
+    <string name="telephone">+44 (0)8888 8888</string>
+    <string name="company_email">company@company.com</string>
+    <string name="store_hours">Store Hours</string>
+    <string name="store_hours_time">9.00 am - 7.00 pm</string>
+    <string name="map_api_key">AIzaSyDKRoU-pFYaIddvtr7TvoCq_vk1iTwmgUo</string>
+    <string name="network_not_available">Network Not available</string>
+    <string name="ok">Ok</string>
+    <string name="gps_not_available">Gps Not Available</string>
+    <string name="open_location_setting">Open Location Setting</string>
+    <string name="store_address">Store Address</string>
+    <string name="see_on_map">See On Map</string>
+    <string name="store_loaction">Store Location</string>
+    <string name="pick_up_time">After 2.00 pm</string>
+    <string name="return_time">By 12.00 noon</string>
 </resources>

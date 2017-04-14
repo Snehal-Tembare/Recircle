@@ -1,14 +1,26 @@
 package com.example.synerzip.recircle_android.ui;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -23,6 +35,12 @@ import com.example.synerzip.recircle_android.models.UserProdReview;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.utilities.RCLog;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
@@ -62,7 +80,6 @@ public class DetailsActivity extends AppCompatActivity {
     private ImageAdapter mImageAdapter;
 
     private LinearLayoutManager mLayoutManager;
-
 
     private Date fromDate;
     private Date toDate;
@@ -130,12 +147,15 @@ public class DetailsActivity extends AppCompatActivity {
     @BindView(R.id.edt_enter_dates)
     public EditText mEdtDates;
 
+    @BindView(R.id.scrollView)
+    public NestedScrollView mScrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
         ButterKnife.bind(this);
+
         init();
     }
 
@@ -151,6 +171,7 @@ public class DetailsActivity extends AppCompatActivity {
         mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
 
         mProgressBar.setVisibility(View.VISIBLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
         mTxtDescSeeMore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,8 +198,9 @@ public class DetailsActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Products> call, Response<Products> response) {
                 if (response.isSuccessful()) {
-                    if (response.body() != null && response!=null) {
+                    if (response.body() != null && response != null) {
                         mProgressBar.setVisibility(View.GONE);
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         product = response.body();
 
                         if (product.getUser_product_info().getUser_prod_reviews() != null
@@ -352,6 +374,16 @@ public class DetailsActivity extends AppCompatActivity {
     @OnClick(R.id.edt_enter_dates)
     public void openCalendar() {
         Intent intent = new Intent(DetailsActivity.this, CalendarActivity.class);
-        startActivityForResult(intent, 1);
+        startActivityForResult(intent, REQUEST_CODE);
+    }
+
+    @OnClick(R.id.txt_see_store_address)
+    public void scrollLayout() {
+        mScrollView.scrollTo(0, mScrollView.getBottom());
+    }
+
+    @OnClick(R.id.layout_see_on_map)
+    public void openMap() {
+        startActivity(new Intent(DetailsActivity.this, MapActivity.class));
     }
 }
