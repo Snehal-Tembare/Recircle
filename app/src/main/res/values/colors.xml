@@ -11,6 +11,8 @@
     <color name="colorRatingBar">#1A84C1</color>
     <color name="colorRoundBtn">#337ab7</color>
     <color name="colorCardView">#B1BCBE</color>
+    <color name="layout_background_color">#c1cdcd</color>
+
     <color name="colorRed">#f00</color>
     <color name="colorSaveBack">#6b6e79</color>
 
@@ -26,6 +28,15 @@
     <color name="calendar_text_active">#ffffff</color>
     <color name="calendar_text_selected">#0097a7</color>
     <color name="calendar_text_unselectable">#fce9da</color>
+    <color name="common_black">#212121</color>
+    <color name="img_border_color">#e0e0e0</color>
+    <color name="selected_img_border_color">#01579b</color>
+    <color name="view_color">#eeeeee</color>
+    <color name="common_text_color">#212121</color>
+    <!--<color name="layout_background_color">#e8e8e8</color>-->
+    <color name="text_color">#333</color>
+    <color name="dark_text_color">#222</color>
+    <color name="background_color">#f5f5f5</color>
 
 
 </resources>

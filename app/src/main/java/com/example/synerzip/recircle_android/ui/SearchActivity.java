@@ -1,6 +1,5 @@
 package com.example.synerzip.recircle_android.ui;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -25,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -32,9 +32,8 @@ import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.AllProductInfo;
-import com.example.synerzip.recircle_android.models.PopularProducts;
 import com.example.synerzip.recircle_android.models.Product;
-import com.example.synerzip.recircle_android.models.ProductDetails;
+import com.example.synerzip.recircle_android.models.Products;
 import com.example.synerzip.recircle_android.models.ProductsData;
 import com.example.synerzip.recircle_android.models.SearchProduct;
 import com.example.synerzip.recircle_android.network.ApiClient;
@@ -67,6 +66,7 @@ public class SearchActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String DESCRIPTION_EXPRESSION = "^[A-Za-z]+([\\-\\w\\s\\d]+)$";
+    private static final int REQUEST_CODE = 1;
 
     @BindView(R.id.toolbar)
     public Toolbar mToolbar;
@@ -92,11 +92,7 @@ public class SearchActivity extends AppCompatActivity
 
     public List<Product> productsCustomList;
 
-    private ArrayList<ProductDetails> productDetails;
-
-    private ArrayList<String> allItemsList;
-
-    public ArrayList<String> popularProdList;
+    private ArrayList<Products> productDetailsList;
 
     private PopularItemsAdapter mPopularItemsAdapter;
 
@@ -108,7 +104,7 @@ public class SearchActivity extends AppCompatActivity
     @BindView(R.id.card_recycler_view_popular)
     public RecyclerView mRecyclerViewPopular;
 
-    private ArrayList<PopularProducts> popularProducts;
+    private ArrayList<Products> popularProducts;
 
     @BindView(R.id.txtHeaderOneContent)
     public TextView mTxtHeaderOne;
@@ -139,6 +135,9 @@ public class SearchActivity extends AppCompatActivity
 
     @BindView(R.id.edt_place)
     public EditText mEdtPlace;
+
+    @BindView(R.id.lists_layout)
+    public LinearLayout mListsLayout;
 
     private AwesomeValidation awesomeValidation;
 
@@ -225,7 +224,7 @@ public class SearchActivity extends AppCompatActivity
     @OnClick(R.id.edt_enter_dates)
     public void btnEnterDates(View view) {
         Intent intent = new Intent(SearchActivity.this, CalendarActivity.class);
-        startActivityForResult(intent, 1);
+        startActivityForResult(intent, REQUEST_CODE);
     }
 
     /**
@@ -260,14 +259,15 @@ public class SearchActivity extends AppCompatActivity
                         .format(getString(R.string.month_format), toDate);
                 formatedFromDate = calFromDate.get(Calendar.DATE) + " " + monthFromDate + ", " + calFromDate.get(Calendar.YEAR);
                 formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
-                mEditTxtDate.setText(formatedFromDate + " - " + formatedToDate);
 
                 if (monthFromDate.equals(monthToDate)) {
                     formatedFromDate = calFromDate.get(Calendar.DATE) + "";
                     formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
+
                 } else if (!monthFromDate.equals(monthToDate) && !(calFromDate.get(Calendar.YEAR) == calToDate.get(Calendar.YEAR))) {
                     formatedFromDate = calFromDate.get(Calendar.DATE) + " " + monthFromDate + ", " + calFromDate.get(Calendar.YEAR);
                     formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
+
                 } else if (!monthFromDate.equals(monthToDate)) {
                     formatedFromDate = calFromDate.get(Calendar.DATE) + " " + monthFromDate;
                     formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
@@ -321,9 +321,8 @@ public class SearchActivity extends AppCompatActivity
     //get all product details
     public void getAllProductDetails() {
 
-        popularProdList = new ArrayList<>();
-
-        allItemsList = new ArrayList<>();
+        productDetailsList = new ArrayList<>();
+        popularProducts = new ArrayList<>();
 
         service = ApiClient.getClient().create(RCAPInterface.class);
 
@@ -333,24 +332,23 @@ public class SearchActivity extends AppCompatActivity
             @Override
             public void onResponse(Call<AllProductInfo> call, Response<AllProductInfo> response) {
 
-                if (null != response) {
-                    productDetails = response.body().getProductDetails();
-                    popularProducts = response.body().getPopularProducts();
-                    for (ProductDetails productDetails1 : productDetails) {
-                        popularProdList.add(productDetails1.getProduct_info().getProduct_title());
-                        allItemsList.add(productDetails1.getProduct_info().getProduct_title());
+                if (response.isSuccessful()) {
+                    mListsLayout.setVisibility(View.VISIBLE);
+                    if (null != response && null != response.body()) {
+
+                        if (response.body().getProductDetails() != null
+                                && response.body().getProductDetails().size() != 0
+                                && response.body().getPopularProducts() != null
+                                && response.body().getPopularProducts().size() != 0) {
+
+                            productDetailsList = response.body().getProductDetails();
+                            popularProducts = response.body().getPopularProducts();
+                            bindData();
+                        }
                     }
                 } else {
-                    RCLog.showToast(getApplicationContext(), getString(R.string.product_details_not_found));
+                    mListsLayout.setVisibility(View.GONE);
                 }
-
-                mRecentItemsAdapter = new RecentItemsAdapter(SearchActivity.this, productDetails);
-                mRecyclerViewRecent.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                mRecyclerViewRecent.setAdapter(mRecentItemsAdapter);
-
-                mPopularItemsAdapter = new PopularItemsAdapter(SearchActivity.this, popularProducts);
-                mRecyclerViewPopular.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                mRecyclerViewPopular.setAdapter(mPopularItemsAdapter);
             }
 
             @Override
@@ -358,6 +356,39 @@ public class SearchActivity extends AppCompatActivity
                 Log.v(TAG, t.toString());
             }
         });
+
+
+    }
+
+    private void bindData() {
+        mRecentItemsAdapter = new RecentItemsAdapter(SearchActivity.this, productDetailsList, new OnItemClickListener() {
+            @Override
+            public void onItemClick(Products product) {
+                Intent detailsIntent = new Intent(SearchActivity.this, DetailsActivity.class);
+                detailsIntent.putExtra(getString(R.string.product_id),
+                        product.getUser_product_info().getUser_product_id());
+                startActivity(detailsIntent);
+            }
+        });
+
+        mRecyclerViewRecent.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        mRecyclerViewRecent.setAdapter(mRecentItemsAdapter);
+
+        mPopularItemsAdapter = new PopularItemsAdapter(SearchActivity.this, popularProducts, new OnItemClickListener() {
+            @Override
+            public void onItemClick(Products product) {
+                Log.v(TAG, "onItemClick" + product.getUser_product_info().getUser_product_id());
+
+                Intent detailsIntent = new Intent(SearchActivity.this, DetailsActivity.class);
+                detailsIntent.putExtra(getString(R.string.product_id),
+                        product.getUser_product_info().getUser_product_id());
+                startActivity(detailsIntent);
+            }
+        });
+
+
+        mRecyclerViewPopular.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        mRecyclerViewPopular.setAdapter(mPopularItemsAdapter);
     }
 
     @Override
@@ -376,7 +407,7 @@ public class SearchActivity extends AppCompatActivity
             public void searchProductResult(SearchProduct sd) {
                 searchProduct = sd;
                 resetAll();
-                if (null != searchProduct && !(searchProduct.getProducts().size() == 0)) {
+                if (null != searchProduct && searchProduct.getProducts().size()!= 0) {
                     mIntent = new Intent(SearchActivity.this, ResultActivity.class);
                     mIntent.putExtra(getString(R.string.search_product), searchProduct);
                     mIntent.putExtra(getString(R.string.name), mName);
@@ -430,8 +461,6 @@ public class SearchActivity extends AppCompatActivity
                             (SearchActivity.this, R.layout.activity_search, R.id.txtProductName, productsCustomList);
                     mProductAutoComplete.setAdapter(mAutocompleteAdapter);
 
-                } else {
-                    RCLog.showToast(getApplicationContext(), getString(R.string.product_details_not_found));
                 }
             }
         };

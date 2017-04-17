@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +17,8 @@ import lombok.Setter;
 @Getter
 @Setter
 
-public class UserProductInfo implements Parcelable{
+public class UserProductInfo implements Parcelable {
+
     private String product_id;
 
     private String avai_to_date;
@@ -35,6 +37,8 @@ public class UserProductInfo implements Parcelable{
 
     private String user_product_id;
 
+    private ArrayList<UserProdReview> user_prod_reviews;
+
     protected UserProductInfo(Parcel in) {
         product_id = in.readString();
         avai_to_date = in.readString();
@@ -44,6 +48,7 @@ public class UserProductInfo implements Parcelable{
         user_prod_desc = in.readString();
         price_per_day = in.readString();
         user_product_id = in.readString();
+        user_prod_reviews = in.readArrayList(UserProdReview.class.getClassLoader());
     }
 
     public static final Creator<UserProductInfo> CREATOR = new Creator<UserProductInfo>() {
@@ -73,5 +78,6 @@ public class UserProductInfo implements Parcelable{
         dest.writeString(user_prod_desc);
         dest.writeString(price_per_day);
         dest.writeString(user_product_id);
+        dest.writeList(user_prod_reviews);
     }
 }

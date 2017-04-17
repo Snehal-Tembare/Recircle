@@ -15,6 +15,7 @@ import lombok.Setter;
 @Setter
 
 public class ProductInfo implements Parcelable {
+
     private String product_manufacturer_name;
 
     private String product_manufacturer_id;

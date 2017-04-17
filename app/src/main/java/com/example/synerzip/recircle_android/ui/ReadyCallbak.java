@@ -11,6 +11,7 @@ import java.util.ArrayList;
  */
 
 public interface ReadyCallbak{
+
     void searchProductResult(SearchProduct sd);
 
     void allItemsResult(ArrayList<ProductsData> productsDataList);

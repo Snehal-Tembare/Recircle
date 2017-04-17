@@ -10,7 +10,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
-import com.example.synerzip.recircle_android.models.ProductDetails;
+import com.example.synerzip.recircle_android.models.Products;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -20,12 +20,14 @@ import java.util.ArrayList;
  * Copyright © 2016 Synerzip. All rights reserved
  */
 public class RecentItemsAdapter extends RecyclerView.Adapter<RecentItemsAdapter.ViewHolder> {
-    private ArrayList<ProductDetails> productDetailsList;
+    private ArrayList<Products> productDetailsList;
     private Context mContext;
+    private OnItemClickListener onItemClickListener;
 
-    public RecentItemsAdapter(Context mContext, ArrayList<ProductDetails> productDetailsList) {
+    public RecentItemsAdapter(Context mContext, ArrayList<Products> productDetailsList,OnItemClickListener onItemClickListener) {
         this.mContext = mContext;
         this.productDetailsList = productDetailsList;
+        this.onItemClickListener=onItemClickListener;
     }
 
     @Override
@@ -37,7 +39,7 @@ public class RecentItemsAdapter extends RecyclerView.Adapter<RecentItemsAdapter.
     @Override
     public void onBindViewHolder(RecentItemsAdapter.ViewHolder viewHolder, int position) {
 
-        ProductDetails productDetails = productDetailsList.get(position);
+        Products productDetails = productDetailsList.get(position);
 
         Picasso.with(mContext)
                 .load(productDetails.getProduct_info().getProduct_image_url())
@@ -50,6 +52,10 @@ public class RecentItemsAdapter extends RecyclerView.Adapter<RecentItemsAdapter.
         viewHolder.mTxtProductRating.setText("(" + productDetails.getUser_product_info().getProduct_avg_rating() + ")");
         viewHolder.mTxtRenterName.setText(productDetails.getUser_info().getFirst_name()
                 + " " + productDetails.getUser_info().getLast_name());
+
+        viewHolder.bind(productDetailsList.get(position),onItemClickListener);
+
+
     }
 
     @Override
@@ -72,6 +78,15 @@ public class RecentItemsAdapter extends RecyclerView.Adapter<RecentItemsAdapter.
             mTxtProductPrice = (TextView) view.findViewById(R.id.txtProductPrice);
             mTxtProductRating = (TextView) view.findViewById(R.id.txtRating);
             mTxtRenterName = (TextView) view.findViewById(R.id.txtRenterName);
+        }
+
+        public void bind(final Products products, final OnItemClickListener onItemClickListener) {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemClickListener.onItemClick(products);
+                }
+            });
         }
     }
 }

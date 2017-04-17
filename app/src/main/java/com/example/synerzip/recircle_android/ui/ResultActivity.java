@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -49,6 +50,7 @@ import butterknife.OnClick;
 public class ResultActivity extends AppCompatActivity {
 
     private static final String DESCRIPTION_EXPRESSION = "^[A-Za-z]+([\\-\\w\\s\\d]+)$";
+    private static final String TAG ="ResultActivity" ;
 
     private String productId = "";
     private String manufacturerId = "";
@@ -91,7 +93,7 @@ public class ResultActivity extends AppCompatActivity {
     public LinearLayout mHeaderLayout;
 
     @BindView(R.id.lv_searched_items)
-    public RecyclerView mLvSearcedItems;
+    public RecyclerView mSearchedItemsList;
 
     @BindView(R.id.txt_name)
     public TextView mTxtName;
@@ -156,9 +158,20 @@ public class ResultActivity extends AppCompatActivity {
             mTxtDates.setText(mStartDate + "-" + mEndDate);
         }
 
-        mSearchAdapter = new SearchAdapter(this, productsArrayList);
-        mLvSearcedItems.setLayoutManager(new LinearLayoutManager(this));
-        mLvSearcedItems.setAdapter(mSearchAdapter);
+        mSearchAdapter = new SearchAdapter(this, new OnItemClickListener() {
+            @Override
+            public void onItemClick(Products product) {
+                Log.v(TAG,"onItemClick"+product.getUser_product_info().getUser_product_id());
+
+                Intent detailsIntent=new Intent(ResultActivity.this, DetailsActivity.class);
+                detailsIntent.putExtra(getString(R.string.product_id),
+                        product.getUser_product_info().getUser_product_id());
+                startActivity(detailsIntent);
+            }
+        },productsArrayList);
+
+        mSearchedItemsList.setLayoutManager(new LinearLayoutManager(this));
+        mSearchedItemsList.setAdapter(mSearchAdapter);
     }
 
     @Override
@@ -196,14 +209,14 @@ public class ResultActivity extends AppCompatActivity {
                 if (null != searchProduct) {
                     if (searchProduct.getProducts().size() == 0) {
                         mDialog.cancel();
-                        mLvSearcedItems.setVisibility(View.GONE);
+                        mSearchedItemsList.setVisibility(View.GONE);
                         mTxtDataNotFound.setVisibility(View.VISIBLE);
                     } else {
                         productsArrayList.clear();
                         productsArrayList.addAll(sd.getProducts());
                         mSearchAdapter.notifyDataSetChanged();
                         mDialog.cancel();
-                        mLvSearcedItems.setVisibility(View.VISIBLE);
+                        mSearchedItemsList.setVisibility(View.VISIBLE);
                         mTxtDataNotFound.setVisibility(View.GONE);
                     }
                 } else {
@@ -267,14 +280,16 @@ public class ResultActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+
     }
 
     private void resetAll() {
-        query="";
-        productId="";
-        manufacturerId="";
-        mFromDate="";
-        mToDate="";
+        query = "";
+        productId = "";
+        manufacturerId = "";
+        mFromDate = "";
+        mToDate = "";
     }
 
     /**
