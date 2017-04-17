@@ -20,6 +20,7 @@ public class User implements Parcelable {
     private String first_name;
     private String last_name;
     private long user_mob_no;
+    private String user_image_url;
 
     /**
      * creator object for user
@@ -64,5 +65,6 @@ public class User implements Parcelable {
         dest.writeString(token);
         dest.writeString(user_id);
         dest.writeLong(user_mob_no);
+        dest.writeString(user_image_url);
     }
 }

@@ -55,7 +55,7 @@
     <Button
         android:id="@+id/btn_search"
         android:layout_width="@dimen/common_dimens_150"
-        android:layout_height="40dp"
+        android:layout_height="@dimen/dimen_40dp"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/common_dimens_10"
         android:background="@drawable/round_button"

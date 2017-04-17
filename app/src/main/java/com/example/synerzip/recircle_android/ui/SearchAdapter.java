@@ -1,9 +1,6 @@
 package com.example.synerzip.recircle_android.ui;
 
 import android.content.Context;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,12 +24,15 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     private Context mContext;
     private ArrayList<Products> productsArrayList;
     private boolean[] favorite;
+    private OnItemClickListener onItemClickListener;
 
-    public SearchAdapter(Context context, ArrayList<Products> productsArrayList) {
+    public SearchAdapter(ResultActivity context, OnItemClickListener onItemClick, ArrayList<Products> productsArrayList) {
         mContext = context;
         this.productsArrayList = productsArrayList;
-        favorite=new boolean[productsArrayList.size()];
+        onItemClickListener = onItemClick;
+        favorite = new boolean[productsArrayList.size()];
     }
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -42,6 +42,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
+
         Products product = productsArrayList.get(position);
         holder.productName.setText(product.getProduct_info().getProduct_title());
         holder.pricePerDay.setText("$" + product.getUser_product_info().getPrice_per_day() + "\\day");
@@ -59,18 +60,19 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             @Override
             public void onClick(View v) {
                 int position = (int) v.getTag();
-                ImageView i= (ImageView) v;
+                ImageView i = (ImageView) v;
 
                 if (favorite[position]) {
                     i.setImageResource(R.drawable.ic_favorite_white);
-                    favorite[position]=false;
-                }else {
+                    favorite[position] = false;
+                } else {
                     i.setImageResource(R.drawable.ic_favorite_red);
-                    favorite[position]=true;
+                    favorite[position] = true;
                 }
             }
         });
 
+        holder.bind(productsArrayList.get(position), onItemClickListener);
     }
 
     @Override
@@ -79,21 +81,30 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageView imgProduct;
-        public TextView productName;
-        public TextView pricePerDay;
-        public TextView ownerName;
-        public RatingBar ratings;
-        public ImageView imgFavorite;
+        ImageView imgProduct;
+        TextView productName;
+        TextView pricePerDay;
+        TextView ownerName;
+        RatingBar ratings;
+        ImageView imgFavorite;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             imgProduct = (ImageView) itemView.findViewById(R.id.img);
             imgFavorite = (ImageView) itemView.findViewById(R.id.img_favorite);
             productName = (TextView) itemView.findViewById(R.id.txt_name);
             pricePerDay = (TextView) itemView.findViewById(R.id.txt_rate);
-            ownerName = (TextView) itemView.findViewById(R.id.txt_owner_name);
+            ownerName = (TextView) itemView.findViewById(R.id.txt_user_name);
             ratings = (RatingBar) itemView.findViewById(R.id.ratingbar);
+        }
+
+         void bind(final Products products, final OnItemClickListener onItemClickListener) {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemClickListener.onItemClick(products);
+                }
+            });
         }
     }
 

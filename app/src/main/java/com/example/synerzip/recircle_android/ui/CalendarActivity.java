@@ -34,9 +34,11 @@ public class CalendarActivity extends AppCompatActivity {
     @BindView(R.id.calendar_view)
     public CalendarPickerView mPickerView;
 
-    Date fromDate, toDate;
+    private Date fromDate;
+    private Date toDate;
 
-    Date selectFromDate, selectToDate;
+    private Date selectFromDate;
+    private Date selectToDate;
 
     @BindView(R.id.txt_from_date)
     public TextView mTxtFromDate;
@@ -113,8 +115,7 @@ public class CalendarActivity extends AppCompatActivity {
      */
     @OnClick(R.id.txt_cancel)
     public void txtCancel(View view) {
-        Intent intent = new Intent(CalendarActivity.this, SearchActivity.class);
-        startActivity(intent);
+        finish();
     }
 
     /**
@@ -128,8 +129,12 @@ public class CalendarActivity extends AppCompatActivity {
             Intent intent = new Intent(CalendarActivity.this, SearchActivity.class);
             intent.putExtra(getString(R.string.from_date), fromDate.toString());
             intent.putExtra(getString(R.string.to_date), toDate.toString());
-            setResult(RESULT_OK, intent);
-            finish();
+            if (fromDate.equals(toDate)) {
+                RCLog.showToast(getApplicationContext(), getString(R.string.date_validation_code));
+            } else {
+                setResult(RESULT_OK, intent);
+                finish();
+            }
         } else {
             RCLog.showToast(CalendarActivity.this, getString(R.string.error_dates));
         }

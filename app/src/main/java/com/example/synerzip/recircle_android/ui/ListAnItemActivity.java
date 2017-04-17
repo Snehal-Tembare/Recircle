@@ -326,8 +326,8 @@ public class ListAnItemActivity extends AppCompatActivity {
                 new UserProdImages("https://s3.ap-south-1.amazonaws.com/cmsios/CalendarView.png",
                         "2017-02-04T13:13:09.000Z");
         listUploadItemImage.add(mUserProdImages);
-        userProductUnAvailability = new UserProductUnAvailability(mUnavailFromDate.toString(),
-                mUnavailToDate.toString());
+        userProductUnAvailability = new UserProductUnAvailability("2017-02-04T13:13:09.000Z",
+                "2017-02-04T13:13:09.000Z");
         mItemAvailability.add(userProductUnAvailability);
         return;
     }
@@ -578,9 +578,11 @@ public class ListAnItemActivity extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
+
             @Override
             public void afterTextChanged(Editable s) {
                 if (mEditMinRental.getText().toString().startsWith("0")) {
@@ -642,9 +644,11 @@ public class ListAnItemActivity extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
+
             @Override
             public void afterTextChanged(Editable s) {
                 if (mEditTxtEnterPrice.getText().toString().startsWith("0")) {

@@ -4,6 +4,7 @@ import com.example.synerzip.recircle_android.models.AllProductInfo;
 import com.example.synerzip.recircle_android.models.ForgotPwdRequest;
 import com.example.synerzip.recircle_android.models.ListAnItemRequest;
 import com.example.synerzip.recircle_android.models.LogInRequest;
+import com.example.synerzip.recircle_android.models.Products;
 import com.example.synerzip.recircle_android.models.RootObject;
 import com.example.synerzip.recircle_android.models.SearchProduct;
 import com.example.synerzip.recircle_android.models.SignUpRequest;
@@ -15,6 +16,8 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Path;
+import retrofit2.http.POST;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Query;
@@ -50,8 +53,6 @@ public interface RCAPInterface {
 
     /**
      * Get all product names
-     *
-     * @return
      */
     @GET(RCWebConstants.RC_PRODUCT_NAMES)
     Call<RootObject> productNames();
@@ -120,4 +121,12 @@ public interface RCAPInterface {
      */
     @GET(RCWebConstants.RC_GOOGLE_ZIPCODES)
     Call<ZipcodeRoot> zipcodeCheck(@Query("address") long zipcode);
+    /**
+     * Get product details
+     * @param userProductId
+    */
+
+    @GET(RCWebConstants.RC_PRODUCT_DETAILS)
+    Call<Products> getProductDetailsByID(@Path("userProductId") String userProductId);
+
 }
