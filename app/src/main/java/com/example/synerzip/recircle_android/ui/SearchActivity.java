@@ -38,7 +38,6 @@ import com.example.synerzip.recircle_android.models.Product;
 import com.example.synerzip.recircle_android.models.ProductDetails;
 import com.example.synerzip.recircle_android.models.ProductsData;
 import com.example.synerzip.recircle_android.models.SearchProduct;
-import com.example.synerzip.recircle_android.models.User;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.utilities.HideKeyboard;
@@ -402,7 +401,7 @@ public class SearchActivity extends AppCompatActivity
 
         utility.populateAutoCompleteData();
 
-        ReadyCallbak readyCallbak = new ReadyCallbak() {
+        ReadyCallback readyCallback = new ReadyCallback() {
             @Override
             public void searchProductResult(SearchProduct sd) {
                 searchProduct = sd;
@@ -467,7 +466,7 @@ public class SearchActivity extends AppCompatActivity
             }
         };
 
-        utility.setCallback(readyCallbak);
+        utility.setCallback(readyCallback);
 
         mProductAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -529,27 +528,13 @@ public class SearchActivity extends AppCompatActivity
      */
     @SuppressWarnings("StatementWithEmptyBody")
     public boolean onNavigationItemSelected(MenuItem item) {
-        //TODO functionality yet to be completed
+
         int id = item.getItemId();
         switch (id) {
             case R.id.nav_listItem:
                 setVisible(true);
                 startActivity(new Intent(SearchActivity.this, ListAnItemActivity.class));
                 break;
-            case R.id.nav_messages:
-                setVisible(true);
-                RCLog.showToast(SearchActivity.this, "Messages");
-                break;
-            case R.id.nav_items:
-                RCLog.showToast(SearchActivity.this, "Items");
-                break;
-            case R.id.nav_payments:
-                RCLog.showToast(SearchActivity.this, "Payments");
-                break;
-            case R.id.nav_rentals:
-                RCLog.showToast(SearchActivity.this, "Rentals");
-                break;
-
             case R.id.nav_logIn_signUp:
                 startActivity(new Intent(SearchActivity.this, LogInActivity.class));
                 break;
@@ -579,6 +564,20 @@ public class SearchActivity extends AppCompatActivity
                 alertDialog.show();
                 break;
             }
+            //TODO functionality yet to be completed for below menu items
+            case R.id.nav_messages:
+                setVisible(true);
+                RCLog.showToast(SearchActivity.this, TAG);
+                break;
+            case R.id.nav_items:
+                RCLog.showToast(SearchActivity.this, TAG);
+                break;
+            case R.id.nav_payments:
+                RCLog.showToast(SearchActivity.this, TAG);
+                break;
+            case R.id.nav_rentals:
+                RCLog.showToast(SearchActivity.this, TAG);
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -620,7 +619,6 @@ public class SearchActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
-
 }
 
 

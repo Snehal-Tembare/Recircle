@@ -9,6 +9,13 @@ public class ForgotPwdRequest {
     public int otp;
     public String user_name;
     public String new_password;
+
+    /**
+     * constructor fo ForgotPwdRequest
+     * @param otp
+     * @param user_name
+     * @param new_password
+     */
     public ForgotPwdRequest(int otp,
                             String user_name,
                             String new_password){

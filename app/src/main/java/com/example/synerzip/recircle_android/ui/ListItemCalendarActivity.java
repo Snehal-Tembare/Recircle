@@ -10,6 +10,9 @@ import android.view.WindowManager;
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -18,14 +21,19 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.squareup.timessquare.CalendarPickerView.SelectionMode.MULTIPLE;
-import com.squareup.timessquare.CalendarPickerView;
+import static com.squareup.timessquare.CalendarPickerView.SelectionMode.RANGE;
 
+import com.squareup.timessquare.CalendarPickerView;
+/**
+ * Created by Prajakta Patil on 31/3/17.
+ * Copyright © 2016 Synerzip. All rights reserved
+ */
 public class ListItemCalendarActivity extends AppCompatActivity {
     @BindView(R.id.calendar_availability_view)
     public CalendarPickerView mPickerView;
 
     ArrayList<Date> selectedDates;
+    Date selectFromDate, selectToDate, fromDate, toDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,13 +48,24 @@ public class ListItemCalendarActivity extends AppCompatActivity {
         nextYear.add(Calendar.YEAR, 1);
         Date today = new Date();
 
-        mPickerView.init(today, nextYear.getTime()).inMode(MULTIPLE);
+        mPickerView.init(today, nextYear.getTime()).inMode(RANGE);
 
+        //on date selected listener
         mPickerView.setOnDateSelectedListener(new CalendarPickerView.OnDateSelectedListener() {
 
             @Override
             public void onDateSelected(Date date) {
                 selectedDates = (ArrayList<Date>) mPickerView.getSelectedDates();
+                selectFromDate = selectedDates.get(0);
+                selectToDate = selectedDates.get(selectedDates.size() - 1);
+
+                DateFormat formatter = new SimpleDateFormat(getString(R.string.date_format));
+                try {
+                    fromDate = formatter.parse(selectFromDate.toString());
+                    toDate = formatter.parse(selectToDate.toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -62,17 +81,16 @@ public class ListItemCalendarActivity extends AppCompatActivity {
      */
     @OnClick(R.id.btn_calendar_save)
     public void btnCalendarSave(View view) {
-        if (selectedDates != null) {
-
+        if (fromDate != null && toDate != null) {
             Intent intent = new Intent(ListItemCalendarActivity.this, ListAnItemActivity.class);
-            intent.putExtra(getString(R.string.calendar_availability_days), selectedDates);
+            intent.putExtra(getString(R.string.unavail_from_date), fromDate.toString());
+            intent.putExtra(getString(R.string.unavail_to_date), toDate.toString());
             intent.putExtra(getString(R.string.calendar_availability_days_count), selectedDates.size());
             setResult(RESULT_OK, intent);
             finish();
         } else {
             RCLog.showToast(ListItemCalendarActivity.this, getString(R.string.error_list_item_calendar));
         }
-        RCLog.showToast(this, selectedDates + "");
     }
 
     /**
@@ -82,6 +100,10 @@ public class ListItemCalendarActivity extends AppCompatActivity {
      */
     @OnClick(R.id.txt_calendar_cancel)
     public void txtCalendarCancel(View view) {
-        startActivity(new Intent(ListItemCalendarActivity.this, ListAnItemActivity.class));
+/*        Intent intent=new Intent();
+        intent.setClassName(this,"com.example.synerzip.recircle_android.ui.ListAnItemActivity");
+        startActivity(intent);
+        */
+        finish();
     }
 }

@@ -14,6 +14,7 @@ import com.example.synerzip.recircle_android.utilities.RCWebConstants;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Query;
@@ -26,6 +27,7 @@ import retrofit2.http.Query;
 public interface RCAPInterface {
     /**
      * Get all products details
+     *
      * @return
      */
     @GET(RCWebConstants.RC_GET_PRODUCT_DETAILS)
@@ -56,6 +58,7 @@ public interface RCAPInterface {
 
     /**
      * user sign up
+     *
      * @param signUpRequest
      * @return
      */
@@ -64,6 +67,7 @@ public interface RCAPInterface {
 
     /**
      * user log in
+     *
      * @param logInRequest
      * @return
      */
@@ -72,16 +76,18 @@ public interface RCAPInterface {
 
     /**
      * get verification code
+     *
      * @param email
      * @param mobileNo
      * @return
      */
     @GET(RCWebConstants.RC_GET_OTP)
     Call<User> verificationCode(@Query("email") String email,
-                                @Query("user_mob_no")long mobileNo);
+                                @Query("user_mob_no") long mobileNo);
 
     /**
      * get otp for forgot password
+     *
      * @param userName
      * @return
      */
@@ -90,6 +96,7 @@ public interface RCAPInterface {
 
     /**
      * reset password
+     *
      * @param forgotPwdRequest
      * @return
      */
@@ -98,17 +105,19 @@ public interface RCAPInterface {
 
     /**
      * list an item
+     *
      * @param listAnItemRequest
      * @return
      */
     @POST(RCWebConstants.RC_GET_PRODUCT_DETAILS)
-    Call<AllProductInfo> listAnItem(@Body ListAnItemRequest listAnItemRequest);
+    Call<AllProductInfo> listAnItem(@Header("Authorization") String token, @Body ListAnItemRequest listAnItemRequest);
 
     /**
      * get zipcodes from google api
+     *
      * @param zipcode
      * @return
      */
     @GET(RCWebConstants.RC_GOOGLE_ZIPCODES)
-    Call<ZipcodeRoot> zipcodeCheck(@Query("address") String zipcode);
+    Call<ZipcodeRoot> zipcodeCheck(@Query("address") long zipcode);
 }

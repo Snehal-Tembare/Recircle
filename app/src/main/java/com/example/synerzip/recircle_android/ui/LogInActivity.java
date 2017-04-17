@@ -73,6 +73,10 @@ public class LogInActivity extends AppCompatActivity {
     public LinearLayout mLinearLayout;
 
     public String mUserId, mUserEmail,mUserToken,mUserLastName,mUserFirstName,mAccessToken="";
+
+    private static final String TAG = "LogInActivity";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,6 +140,7 @@ public class LogInActivity extends AppCompatActivity {
                         mUserFirstName = response.body().getFirst_name();
                         mUserLastName = response.body().getLast_name();
                         mAccessToken=response.body().getToken();
+                        Log.v(TAG,mAccessToken);
                     if(null!=mUserId && null!=mUserName && null!=mUserToken &&
                             null!=mUserFirstName && null!=mUserLastName && null!=mAccessToken) {
 
@@ -340,7 +345,6 @@ public class LogInActivity extends AppCompatActivity {
 
         try {
             String encryptedPassword = AESEncryptionDecryption.encrypt(android_id, mPassword);
-         //   ApiClient.getClient(getApplicationContext()).setAccessToken(mAccessToken);
             editor.putString(RCWebConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mUserToken);
             editor.putString(RCWebConstants.RC_SHARED_PREFERENCES_USERID, mUserId);
             editor.putString(RCWebConstants.RC_SHARED_PREFERENCES_PASSWORD, encryptedPassword);

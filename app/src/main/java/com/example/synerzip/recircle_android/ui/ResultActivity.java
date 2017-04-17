@@ -185,7 +185,7 @@ public class ResultActivity extends AppCompatActivity {
             }
         });
 
-        ReadyCallbak readyCallbak = new ReadyCallbak() {
+        ReadyCallback readyCallback = new ReadyCallback() {
             @Override
             public void searchProductResult(SearchProduct sd) {
                 searchProduct = sd;
@@ -246,7 +246,7 @@ public class ResultActivity extends AppCompatActivity {
             }
         };
 
-        utility.setCallback(readyCallbak);
+        utility.setCallback(readyCallback);
 
         mAutoProductName.setOnTouchListener(new View.OnTouchListener() {
             @Override

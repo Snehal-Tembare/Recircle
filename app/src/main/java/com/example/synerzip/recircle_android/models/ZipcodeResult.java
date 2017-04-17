@@ -6,8 +6,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Created by synerzip on 13/4/17.
+ * Created by Prajakta Patil on 13/4/17.
+ * Copyright © 2016 Synerzip. All rights reserved
  */
+
 @Getter
 @Setter
 public class ZipcodeResult {

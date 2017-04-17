@@ -1,7 +1,10 @@
 package com.example.synerzip.recircle_android.ui;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.synerzip.recircle_android.R;
-import com.example.synerzip.recircle_android.models.UserProdImages;
 
 import java.util.ArrayList;
 
@@ -18,11 +20,14 @@ import java.util.ArrayList;
  * Copyright © 2016 Synerzip. All rights reserved
  */
 
+//TODO this adapter has been created for future upload images task
+
 public class UploadImageAdapter extends RecyclerView.Adapter<UploadImageAdapter.ViewHolder> {
     private Context mContext;
-    private ArrayList<UserProdImages> mListUserProdImages;
+    private ArrayList<String> mListUserProdImages;
 
-    public UploadImageAdapter(Context mContext, ArrayList<UserProdImages> mListUserProdImages) {
+
+    public UploadImageAdapter(Context mContext, ArrayList<String> mListUserProdImages) {
         this.mContext = mContext;
         this.mListUserProdImages = mListUserProdImages;
     }
@@ -35,8 +40,7 @@ public class UploadImageAdapter extends RecyclerView.Adapter<UploadImageAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        //creates drawable from file path
-        holder.imgItem.setImageDrawable(Drawable.createFromPath(mListUserProdImages.get(position).getUser_prod_image_url()));
+        holder.imgItem.setImageDrawable(Drawable.createFromPath(mListUserProdImages.get(position)));
     }
 
     @Override
@@ -44,7 +48,9 @@ public class UploadImageAdapter extends RecyclerView.Adapter<UploadImageAdapter.
         return mListUserProdImages.size();
     }
 
-
+    /**
+     * View holder class
+     */
     class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imgItem;
         ImageView imgItemCancel;
@@ -54,6 +60,18 @@ public class UploadImageAdapter extends RecyclerView.Adapter<UploadImageAdapter.
 
             imgItem = (ImageView) itemView.findViewById(R.id.img_upload_item);
             imgItemCancel = (ImageView) itemView.findViewById(R.id.img_upload_cancel);
+            imgItemCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (v.getId() == imgItemCancel.getId()) {
+                        String itemLabel = mListUserProdImages.get(getPosition());
+                        mListUserProdImages.remove(itemLabel);
+                        notifyItemRemoved(getAdapterPosition());
+                        notifyItemRangeChanged(getAdapterPosition(), mListUserProdImages.size());
+                    }
+                }
+            });
         }
+
     }
 }

@@ -52,13 +52,13 @@
     <string name="edit_enter_zip">Enter Zip</string>
     <string name="list_an_item">List an item</string>
     <string name="item_name">Item name *</string>
-    <string name="search_item">Search for an item to rent</string>
+    <string name="search_item">Search for an item to rent *</string>
     <string name="daily_price">Daily Rental Price *</string>
-    <string name="enter_price">Enter Price</string>
+    <string name="enter_price">Daily Rental Price ($/per day)*</string>
     <string name="min_rental">Minimum Rental *</string>
     <string name="discount">Discounts</string>
     <string name="offer_discount">Offer a 30% discount for 5 day rentals.</string>
-    <string name="offer_discount_days">40% discount for 10 day rentals.</string>
+    <string name="offer_discount_days">Offer 40% discount for 10 day rentals.</string>
     <string name="item_desc">Item descripton *</string>
     <string name="add_desc">Add description about your item</string>
     <string name="calendar_availability">Adjust calendar of availability</string>
@@ -113,6 +113,16 @@
     <string name="calendar_days_selected">You have selected </string>
     <string name="calendar_days"> days as unavailable</string>
     <string name="choose">Choose</string>
+    <string name="user_must_login">User must log in</string>
+    <string name="invalid_zipcode">Invalid zipcode</string>
+    <string name="item_added">Product created successfully</string>
+    <string name="unavail_from_date">unavail_from_date</string>
+    <string name="unavail_to_date">unavail_to_date</string>
+    <string name="enetr_value_list_item">Enter the fields to add the item</string>
+    <string name="user_not_authenticated">User not authenticated</string>
+    <string name="product_creation_failed">Something went wrong. User product creation failed</string>
+    <string name="terms_and_agreement">Terms and Agreement should be accpted</string>
+    <string name="validate_zipcode">Enter at least 5 digit zipcode</string>
     <string-array name="zipcodes_list_austin">
         <item>73301</item>
         <item>73344</item>
@@ -194,6 +204,5 @@
         <item>78779</item>
         <item>78783</item>
         <item>78799</item>
-
     </string-array>
 </resources>

@@ -1,4 +1,5 @@
 package com.example.synerzip.recircle_android.network;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -22,7 +23,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class ApiClient {
-    public static final String BASE_URL = "http://8e7eb4f4.ngrok.io ";
+    public static final String BASE_URL = "http://e82462ca.ngrok.io";
     private static Retrofit retrofit = null;
 
     public static Retrofit getClient() {
@@ -31,6 +32,7 @@ public class ApiClient {
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
         httpClient.addInterceptor(logging);
         if (null == retrofit) {
             retrofit = new Retrofit.Builder()

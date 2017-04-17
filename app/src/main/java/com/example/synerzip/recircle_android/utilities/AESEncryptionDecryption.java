@@ -1,4 +1,5 @@
 package com.example.synerzip.recircle_android.utilities;
+
 import android.util.Base64;
 
 import javax.crypto.Cipher;

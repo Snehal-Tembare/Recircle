@@ -61,7 +61,6 @@ public class CalendarActivity extends AppCompatActivity {
 
         //on date selected listener
         mPickerView.setOnDateSelectedListener(new CalendarPickerView.OnDateSelectedListener() {
-
             @Override
             public void onDateSelected(Date date) {
                 ArrayList<Date> selectedDates = (ArrayList<Date>) mPickerView.getSelectedDates();
@@ -92,10 +91,10 @@ public class CalendarActivity extends AppCompatActivity {
 
                 String formatedFromDate =
                         weekdayFromDate + " , " + calFromDate.get(Calendar.DATE) + " " + monthFromDate
-                        + " " + calFromDate.get(Calendar.YEAR);
+                                + " " + calFromDate.get(Calendar.YEAR);
                 String formatedToDate =
                         weekdayToDate + " , " + calToDate.get(Calendar.DATE) + " " + monthToDate
-                        + " " + calToDate.get(Calendar.YEAR);
+                                + " " + calToDate.get(Calendar.YEAR);
 
                 mTxtFromDate.setText(formatedFromDate);
                 mTxtToDate.setText(formatedToDate);
@@ -107,15 +106,25 @@ public class CalendarActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * textview cancel to go to previous activity
+     *
+     * @param view
+     */
     @OnClick(R.id.txt_cancel)
     public void txtCancel(View view) {
         Intent intent = new Intent(CalendarActivity.this, SearchActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * button for save dates
+     *
+     * @param view
+     */
     @OnClick(R.id.btn_save)
     public void btnSave(View view) {
-        if (fromDate!=null && toDate!=null) {
+        if (fromDate != null && toDate != null) {
             Intent intent = new Intent(CalendarActivity.this, SearchActivity.class);
             intent.putExtra(getString(R.string.from_date), fromDate.toString());
             intent.putExtra(getString(R.string.to_date), toDate.toString());
@@ -126,6 +135,11 @@ public class CalendarActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * reset start and end date
+     *
+     * @param view
+     */
     @OnClick(R.id.txt_reset)
     public void txtReset(View view) {
         mTxtFromDate.setText(getString(R.string.enter_start_date));

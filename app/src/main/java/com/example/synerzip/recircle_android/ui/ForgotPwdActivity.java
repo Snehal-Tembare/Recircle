@@ -33,6 +33,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Created by Prajakta Patil on 24/3/17.
+ * Copyright © 2016 Synerzip. All rights reserved
+ */
 public class ForgotPwdActivity extends AppCompatActivity {
     RCAPInterface service;
 
@@ -281,8 +285,10 @@ public class ForgotPwdActivity extends AppCompatActivity {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
+
     /**
      * action bar back button
+     *
      * @param item
      * @return
      */

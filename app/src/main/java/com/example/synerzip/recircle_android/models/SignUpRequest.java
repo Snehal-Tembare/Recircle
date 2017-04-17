@@ -35,7 +35,5 @@ public class SignUpRequest {
         this.password = password;
         this.user_mob_no = user_mob_no;
         this.otp = otp;
-
     }
-
 }
