@@ -312,6 +312,34 @@ public class DetailsActivity extends AppCompatActivity {
             }
         });
 
+        mTxtDecscriptionDetail.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                final int lineCount = mTxtDecscriptionDetail.getLayout().getLineCount();
+                Log.v("Count", "onPreDraw" + lineCount);
+                if (lineCount > 4) {
+                    mTxtDescSeeMore.setVisibility(View.VISIBLE);
+                } else {
+                    mTxtDescSeeMore.setVisibility(View.GONE);
+                }
+                return true;
+            }
+        });
+
+        mTxtConditionDetail.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                final int lineCount = mTxtDecscriptionDetail.getLayout().getLineCount();
+                Log.v("Count", "onPreDraw" + lineCount);
+                if (lineCount > 4) {
+                    mTxtConditionSeeMore.setVisibility(View.VISIBLE);
+                } else {
+                    mTxtConditionSeeMore.setVisibility(View.GONE);
+                }
+                return true;
+            }
+        });
+
         mImgHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

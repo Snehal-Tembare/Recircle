@@ -32,7 +32,6 @@ class AllReviewsListAdapter extends RecyclerView.Adapter<AllReviewsListAdapter.V
     public AllReviewsListAdapter(Context context, ArrayList<UserProdReview> userProdReviewArrayList) {
         mContext = context;
         this.userProdReviewArrayList = userProdReviewArrayList;
-        this.userProdReviewArrayList .addAll(userProdReviewArrayList);
     }
 
     @Override

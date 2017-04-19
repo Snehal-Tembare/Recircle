@@ -407,7 +407,8 @@ public class SearchActivity extends AppCompatActivity
             public void searchProductResult(SearchProduct sd) {
                 searchProduct = sd;
                 resetAll();
-                if (null != searchProduct && searchProduct.getProducts().size()!= 0) {
+                if (null != searchProduct && searchProduct.getProducts() != null
+                        && searchProduct.getProducts().size() != 0) {
                     mIntent = new Intent(SearchActivity.this, ResultActivity.class);
                     mIntent.putExtra(getString(R.string.search_product), searchProduct);
                     mIntent.putExtra(getString(R.string.name), mName);
