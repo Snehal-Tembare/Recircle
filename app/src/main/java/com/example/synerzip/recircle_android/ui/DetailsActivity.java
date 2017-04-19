@@ -1,26 +1,26 @@
 package com.example.synerzip.recircle_android.ui;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.LocationManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.provider.Settings;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -34,13 +34,6 @@ import com.example.synerzip.recircle_android.models.UserProdImages;
 import com.example.synerzip.recircle_android.models.UserProdReview;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
-import com.example.synerzip.recircle_android.utilities.RCLog;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
@@ -65,6 +58,7 @@ import retrofit2.Response;
 
 public class DetailsActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 1;
+    private static final String EXTRA_IMAGE = "extra_image";
 
     private RCAPInterface service;
     private Products product;
@@ -108,8 +102,8 @@ public class DetailsActivity extends AppCompatActivity {
     @BindView(R.id.txt_price)
     public TextView mTxtPrice;
 
-    @BindView(R.id.txt_avg_rating)
-    public TextView mTxtAvgRating;
+    @BindView(R.id.txt_datails_rating_count)
+    public TextView mTxtDetailsRateCount;
 
     @BindView(R.id.edt_total_price)
     public EditText mEdtTotalPrice;
@@ -118,10 +112,13 @@ public class DetailsActivity extends AppCompatActivity {
     public TextView mTxtTotalLabel;
 
     @BindView(R.id.ratingbar_details)
-    public RatingBar mRatingBar;
+    public RatingBar mDetailsRating;
 
-    @BindView(R.id.all_rating_avg)
+    @BindView(R.id.all_ratingsbar)
     public RatingBar mRatingAllAvg;
+
+    @BindView(R.id.txt_all_reviews_count)
+    public TextView mTxtAvgRatingCount;
 
     @BindView(R.id.imgbtn_help)
     public ImageButton mImgHelp;
@@ -150,12 +147,20 @@ public class DetailsActivity extends AppCompatActivity {
     @BindView(R.id.scrollView)
     public NestedScrollView mScrollView;
 
+    @BindView(R.id.txt_see_all_reviews)
+    public TextView mTxtSeeAllReviews;
+
+    @BindView(R.id.collapsible_toolbar)
+    public CollapsingToolbarLayout mCollapsibleLayout;
+
+    @BindView(R.id.appbarlayout)
+    public AppBarLayout mAppBarLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
         ButterKnife.bind(this);
-
         init();
     }
 
@@ -172,6 +177,10 @@ public class DetailsActivity extends AppCompatActivity {
 
         mProgressBar.setVisibility(View.VISIBLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+        ViewCompat.setTransitionName(findViewById(R.id.appbarlayout), EXTRA_IMAGE);
+
+        mCollapsibleLayout.setExpandedTitleColor(ContextCompat.getColor(this, android.R.color.transparent));
 
         mTxtDescSeeMore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -213,6 +222,11 @@ public class DetailsActivity extends AppCompatActivity {
                             userProdImagesArrayList = product.getUser_product_info().getUser_prod_images();
 
                             reviewsListAdapter = new ReviewsListAdapter(getApplicationContext(), userProdReviewArrayList);
+                            if (userProdReviewArrayList.size() > 0) {
+                                mTxtSeeAllReviews.setVisibility(View.VISIBLE);
+                                mTxtSeeAllReviews.setText(getString(R.string.see_all_reviews) + " (" + userProdReviewArrayList.size() + ")");
+                            }
+                            mReViewReviews.addItemDecoration(new DividerItemDecoration(DetailsActivity.this, LinearLayoutManager.VERTICAL));
                             mReViewReviews.setLayoutManager(new LinearLayoutManager(DetailsActivity.this));
                             mReViewReviews.setAdapter(reviewsListAdapter);
 
@@ -222,7 +236,22 @@ public class DetailsActivity extends AppCompatActivity {
 
                                     Picasso.with(getApplicationContext())
                                             .load(userProdImages.getUser_prod_image_url())
-                                            .into(mImgMain);
+                                            .into(mImgMain, new com.squareup.picasso.Callback() {
+                                                @Override
+                                                public void onSuccess() {
+                                                    Bitmap bitmap = ((BitmapDrawable) mImgMain.getDrawable()).getBitmap();
+                                                    Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+                                                        public void onGenerated(Palette palette) {
+                                                            applyPalette(palette);
+                                                        }
+                                                    });
+                                                }
+
+                                                @Override
+                                                public void onError() {
+
+                                                }
+                                            });
 
                                     View view = mRecyclerImages.getChildAt(position);
 
@@ -246,17 +275,23 @@ public class DetailsActivity extends AppCompatActivity {
                             mRecyclerImages.setAdapter(mImageAdapter);
 
                             mTxtProductName.setText(product.getProduct_info().getProduct_title());
+
+                            mCollapsibleLayout.setTitle(product.getProduct_info().getProduct_title());
+
                             Picasso.with(getApplicationContext()).load(product.getUser_info()
                                     .getUser_image_url()).into(mImgUser);
 
                             mTxtUserName.setText(product.getUser_info().getFirst_name() + " "
                                     + product.getUser_info().getLast_name());
 
-                            mRatingBar.setRating(Integer.parseInt(product.getUser_product_info().getProduct_avg_rating()));
+                            mDetailsRating.setRating(Integer.parseInt(product.getUser_product_info().getProduct_avg_rating()));
 
                             mRatingAllAvg.setRating(Integer.parseInt(product.getUser_product_info().getProduct_avg_rating()));
 
-                            mTxtAvgRating.setText("(" + product.getUser_product_info().getProduct_avg_rating() + ")");
+                            mTxtDetailsRateCount.setText("(" + product.getUser_product_info().getProduct_avg_rating() + ")");
+
+                            mTxtAvgRatingCount.setText("(" + product.getUser_product_info().getProduct_avg_rating() + ")");
+
                             mTxtPrice.setText("$" + product.getUser_product_info().getPrice_per_day() + "/day");
 
                             mTxtDecscriptionDetail.setText(product.getProduct_info().getProduct_description());
@@ -280,8 +315,10 @@ public class DetailsActivity extends AppCompatActivity {
         mImgHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RCLog.showToast(getApplicationContext(), "Open LogIn activity");
-
+                Dialog loginDialog = new Dialog(DetailsActivity.this);
+                loginDialog.setTitle(getString(R.string.log_in));
+                loginDialog.setContentView(R.layout.log_in_dialog);
+                loginDialog.show();
             }
         });
 
@@ -296,6 +333,16 @@ public class DetailsActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void applyPalette(Palette palette) {
+        int primaryDark = ContextCompat.getColor(this, R.color.colorPrimaryDark);
+        int primary = ContextCompat.getColor(this, R.color.colorPrimary);
+        mCollapsibleLayout.setContentScrimColor(palette.getMutedColor(primary));
+        mCollapsibleLayout.setStatusBarScrimColor(palette.getDarkMutedColor(primaryDark));
+        supportStartPostponedEnterTransition();
+        supportFinishAfterTransition();
+        supportPostponeEnterTransition();
     }
 
     @Override
@@ -386,4 +433,12 @@ public class DetailsActivity extends AppCompatActivity {
     public void openMap() {
         startActivity(new Intent(DetailsActivity.this, MapActivity.class));
     }
+
+    @OnClick(R.id.txt_see_all_reviews)
+    public void showAllReviews() {
+        Intent intent = new Intent(this, AllReviewsActivity.class);
+        intent.putParcelableArrayListExtra(getString(R.string.all_reviews_list), userProdReviewArrayList);
+        startActivity(intent);
+    }
+
 }

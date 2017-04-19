@@ -24,6 +24,7 @@ public class UserProdReview implements Parcelable{
     protected UserProdReview(Parcel in) {
         reviewer_id = in.readString();
         prod_review = in.readString();
+        prod_rating = in.readInt();
         review_date = in.readString();
         user = in.readParcelable(User.class.getClassLoader());
     }
@@ -49,6 +50,7 @@ public class UserProdReview implements Parcelable{
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(reviewer_id);
         dest.writeString(prod_review);
+        dest.writeInt(prod_rating);
         dest.writeString(review_date);
         dest.writeParcelable(user, flags);
     }

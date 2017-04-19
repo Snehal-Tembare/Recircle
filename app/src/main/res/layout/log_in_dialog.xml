@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.synerzip.recircle_android.ui.DetailsActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true">
+
+        <LinearLayout
+            android:id="@+id/linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dimen_40dp"
+            android:orientation="vertical">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_20dp">
+
+                <EditText
+                    android:id="@+id/edit_login_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/email"
+                    android:padding="@dimen/dimen_10dp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_pwd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_20dp"
+                    app:passwordToggleEnabled="true">
+
+                    <EditText
+                        android:id="@+id/edit_login_pwd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/password"
+                        android:inputType="textPassword"
+                        android:padding="@dimen/dimen_10dp" />
+
+                </android.support.design.widget.TextInputLayout>
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/txt_forgot_pwd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_10dp"
+                android:gravity="end"
+                android:onClick="txtForgotPwd"
+                android:text="@string/forgot_pwd"
+                android:textColor="@color/colorTextBlue" />
+
+            <Button
+
+                android:id="@+id/btn_user_log_in"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dimen_60dp"
+                android:layout_marginRight="@dimen/dimen_60dp"
+                android:layout_marginTop="@dimen/dimen_10dp"
+                android:background="@drawable/round_button"
+                android:onClick="btnLogIn"
+                android:text="@string/log_in"
+                android:textColor="@color/common_white" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/dimen_20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dont_have_an_acc"
+                    android:textColor="@color/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/txt_create_acc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dimen_10dp"
+                    android:onClick="txtCreateAcc"
+                    android:text="@string/create_acc"
+                    android:textColor="@color/colorTextBlue" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <include
+            android:id="@+id/progress_bar"
+            layout="@layout/progress_bar_layout"
+            android:animateLayoutChanges="true"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+</LinearLayout>
