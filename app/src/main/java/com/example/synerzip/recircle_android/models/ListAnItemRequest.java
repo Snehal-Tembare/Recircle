@@ -6,18 +6,18 @@ import java.util.ArrayList;
 
 /**
  * Created by Prajakta Patil on 7/4/17.
- * Copyright © 2016 Synerzip. All rights reserved
+ * Copyright © 2017 Synerzip. All rights reserved
  */
 public class ListAnItemRequest {
-    public String product_id;
-    public int price_per_day;
-    public int min_rental_day;
-    public String user_prod_desc;
-    public ArrayList<Discounts> user_prod_discounts;
-    public ArrayList<UserProdImages> user_prod_images;
-    public ArrayList<UserProductUnAvailability> user_prod_unavailability;
-    public long user_product_zipcode;
-    public int fromAustin;
+    private String product_id;
+    private int price_per_day;
+    private int min_rental_day;
+    private String user_prod_desc;
+    private ArrayList<Discounts> user_prod_discounts;
+    private ArrayList<UserProdImages> user_prod_images;
+    private ArrayList<UserProductUnAvailability> user_prod_unavailability;
+    private long user_product_zipcode;
+    private int fromAustin;
 
     /**
      * constructor for ListAnItemRequest

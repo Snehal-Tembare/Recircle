@@ -27,12 +27,12 @@ import static com.squareup.timessquare.CalendarPickerView.SelectionMode.RANGE;
 
 /**
  * Created by Prajakta Patil on 24/3/17.
- * Copyright © 2016 Synerzip. All rights reserved
+ * Copyright © 2017 Synerzip. All rights reserved
  */
 public class CalendarActivity extends AppCompatActivity {
 
     @BindView(R.id.calendar_view)
-    public CalendarPickerView mPickerView;
+    protected CalendarPickerView mPickerView;
 
     private Date fromDate;
     private Date toDate;
@@ -41,10 +41,10 @@ public class CalendarActivity extends AppCompatActivity {
     private Date selectToDate;
 
     @BindView(R.id.txt_from_date)
-    public TextView mTxtFromDate;
+    protected TextView mTxtFromDate;
 
     @BindView(R.id.txt_to_date)
-    public TextView mTxtToDate;
+    protected TextView mTxtToDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

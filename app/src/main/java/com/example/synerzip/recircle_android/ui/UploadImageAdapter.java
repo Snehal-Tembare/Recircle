@@ -17,10 +17,8 @@ import java.util.ArrayList;
 
 /**
  * Created by Prajakta Patil on 12/4/17.
- * Copyright © 2016 Synerzip. All rights reserved
+ * Copyright © 2017 Synerzip. All rights reserved
  */
-
-//TODO this adapter has been created for future upload images task
 
 public class UploadImageAdapter extends RecyclerView.Adapter<UploadImageAdapter.ViewHolder> {
     private Context mContext;

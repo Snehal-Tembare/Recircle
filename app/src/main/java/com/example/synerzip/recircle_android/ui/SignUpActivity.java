@@ -34,7 +34,7 @@ import retrofit2.Response;
 
 /**
  * Created by Prajakta Patil on 3/4/17.
- * Copyright © 2016 Synerzip. All rights reserved
+ * Copyright © 2017 Synerzip. All rights reserved
  */
 public class SignUpActivity extends AppCompatActivity {
 
@@ -47,52 +47,52 @@ public class SignUpActivity extends AppCompatActivity {
     private long mUserMobNo;
 
     @BindView(R.id.edit_first_name)
-    public EditText mEditFirstName;
+    protected EditText mEditFirstName;
 
     @BindView(R.id.edit_last_name)
-    public EditText mEditLastName;
+    protected EditText mEditLastName;
 
     @BindView(R.id.edit_email)
-    public EditText mEditEmail;
+    protected EditText mEditEmail;
 
     @BindView(R.id.edit_pwd)
-    public EditText mEditPassword;
+    protected EditText mEditPassword;
 
     @BindView(R.id.edit_mob_no)
-    public EditText mEditMobNo;
+    protected EditText mEditMobNo;
 
     @BindView(R.id.edit_otp)
-    public EditText mEditVerificationCode;
+    protected EditText mEditVerificationCode;
 
     @BindView(R.id.input_layout_signup_first_name)
-    public TextInputLayout mInputLayoutFirstName;
+    protected TextInputLayout mInputLayoutFirstName;
 
     @BindView(R.id.input_layout_signup_last_name)
-    public TextInputLayout mInputLayoutLastName;
+    protected TextInputLayout mInputLayoutLastName;
 
     @BindView(R.id.input_layout_signup_email)
     public TextInputLayout mInputLayoutEmail;
 
     @BindView(R.id.input_layout_signup_pwd)
-    public TextInputLayout mInputLayoutPwd;
+    protected TextInputLayout mInputLayoutPwd;
 
     @BindView(R.id.input_layout_signup_mob_no)
-    public TextInputLayout mInputLayoutMobNo;
+    protected TextInputLayout mInputLayoutMobNo;
 
     @BindView(R.id.input_layout_signup_verification_code)
-    public TextInputLayout mInputLayoutVerificationCode;
+    protected TextInputLayout mInputLayoutVerificationCode;
 
     @BindView(R.id.toolbar)
-    public Toolbar mToolbar;
+    protected Toolbar mToolbar;
 
     @BindView(R.id.txt_send_code)
-    public TextView mTxtSendOtp;
+    protected TextView mTxtSendOtp;
 
     @BindView(R.id.progress_bar)
-    public RelativeLayout mProgressBar;
+    protected RelativeLayout mProgressBar;
 
     @BindView(R.id.layout_scrollView)
-    public ScrollView mScrollView;
+    protected ScrollView mScrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,12 +105,12 @@ public class SignUpActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
 
-        mEditFirstName.addTextChangedListener(new SignUpActivity.MyTextWatcher(mEditFirstName));
-        mEditLastName.addTextChangedListener(new SignUpActivity.MyTextWatcher(mEditLastName));
-        mEditEmail.addTextChangedListener(new SignUpActivity.MyTextWatcher(mEditEmail));
-        mEditPassword.addTextChangedListener(new SignUpActivity.MyTextWatcher(mEditPassword));
-        mEditMobNo.addTextChangedListener(new SignUpActivity.MyTextWatcher(mEditMobNo));
-        mEditVerificationCode.addTextChangedListener(new SignUpActivity.MyTextWatcher(mEditVerificationCode));
+        mEditFirstName.addTextChangedListener(new RCTextWatcher(mEditFirstName));
+        mEditLastName.addTextChangedListener(new RCTextWatcher(mEditLastName));
+        mEditEmail.addTextChangedListener(new RCTextWatcher(mEditEmail));
+        mEditPassword.addTextChangedListener(new RCTextWatcher(mEditPassword));
+        mEditMobNo.addTextChangedListener(new RCTextWatcher(mEditMobNo));
+        mEditVerificationCode.addTextChangedListener(new RCTextWatcher(mEditVerificationCode));
     }
 
     /**
@@ -244,11 +244,11 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
-    private class MyTextWatcher implements TextWatcher {
+    private class RCTextWatcher implements TextWatcher {
 
         private View view;
 
-        private MyTextWatcher(View view) {
+        private RCTextWatcher(View view) {
             this.view = view;
         }
 

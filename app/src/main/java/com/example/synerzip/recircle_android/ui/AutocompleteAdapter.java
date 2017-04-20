@@ -16,14 +16,14 @@ import java.util.List;
 
 /**
  * Created by Prajakta Patil on 20/3/17.
- * Copyright © 2016 Synerzip. All rights reserved
+ * Copyright © 2017 Synerzip. All rights reserved
  */
 
 public class AutocompleteAdapter extends ArrayAdapter<Product> {
 
-    Context context;
-    int resource, textViewResourceId;
-    List<Product> items, tempItems, suggestions;
+    private Context context;
+    private int resource, textViewResourceId;
+    private List<Product> items, tempItems, suggestions;
 
     public AutocompleteAdapter(Context context, int resource, int textViewResourceId, List<Product> items) {
         super(context, resource, textViewResourceId, items);

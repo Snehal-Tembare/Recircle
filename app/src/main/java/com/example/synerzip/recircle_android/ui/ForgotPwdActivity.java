@@ -41,22 +41,22 @@ public class ForgotPwdActivity extends AppCompatActivity {
     RCAPInterface service;
 
     @BindView(R.id.input_layout_forgot_pwd_email)
-    public TextInputLayout mInputLayoutEmail;
+    protected TextInputLayout mInputLayoutEmail;
 
     @BindView(R.id.input_layout_forgot_pwd_resend_otp)
-    public TextInputLayout mInputLayoutOtp;
+    protected TextInputLayout mInputLayoutOtp;
 
     @BindView(R.id.input_layout_forgot_pwd_new_pwd)
-    public TextInputLayout mInputLayoutNewPwd;
+    protected TextInputLayout mInputLayoutNewPwd;
 
     @BindView(R.id.edit_forgot_pwd_email)
-    public EditText mEditEmail;
+    protected EditText mEditEmail;
 
     @BindView(R.id.edit_forgot_pwd_otp)
-    public EditText mEditOtp;
+    protected EditText mEditOtp;
 
     @BindView(R.id.edit_forgot_pwd_new_pwd)
-    public EditText mEditNewPwd;
+    protected EditText mEditNewPwd;
 
     private String mEmail, mNewPwd;
     private int mOtp;
@@ -65,13 +65,13 @@ public class ForgotPwdActivity extends AppCompatActivity {
     public TextView mTxtResendOtp;
 
     @BindView(R.id.toolbar)
-    public Toolbar mToolbar;
+    protected Toolbar mToolbar;
 
     @BindView(R.id.progress_bar)
-    public ProgressBar mProgressBar;
+    protected ProgressBar mProgressBar;
 
     @BindView(R.id.layout_activity_forgot)
-    public LinearLayout mLinearLayout;
+    protected LinearLayout mLinearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,9 +84,9 @@ public class ForgotPwdActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
 
-        mEditEmail.addTextChangedListener(new ForgotPwdActivity.MyTextWatcher(mEditEmail));
-        mEditOtp.addTextChangedListener(new ForgotPwdActivity.MyTextWatcher(mEditOtp));
-        mEditNewPwd.addTextChangedListener(new ForgotPwdActivity.MyTextWatcher(mEditNewPwd));
+        mEditEmail.addTextChangedListener(new RCTextWatcher(mEditEmail));
+        mEditOtp.addTextChangedListener(new RCTextWatcher(mEditOtp));
+        mEditNewPwd.addTextChangedListener(new RCTextWatcher(mEditNewPwd));
     }
 
     /**
@@ -159,10 +159,8 @@ public class ForgotPwdActivity extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 mProgressBar.setVisibility(View.GONE);
                 mLinearLayout.setAlpha((float) 1.0);
-                RCLog.showToast(getApplicationContext(), getString(R.string.toast_send_otp));
-
-                if (response.body() != null) {
-                    startActivity(new Intent(ForgotPwdActivity.this, ForgotPwdActivity.class));
+                if (response.isSuccessful()) {
+                    RCLog.showToast(getApplicationContext(), getString(R.string.toast_send_otp));
                 }
             }
 
@@ -191,11 +189,11 @@ public class ForgotPwdActivity extends AppCompatActivity {
         }
     }
 
-    private class MyTextWatcher implements TextWatcher {
+    private class RCTextWatcher implements TextWatcher {
 
         private View view;
 
-        private MyTextWatcher(View view) {
+        private RCTextWatcher(View view) {
             this.view = view;
         }
 

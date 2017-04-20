@@ -1,9 +1,12 @@
 package com.example.synerzip.recircle_android.ui;
 
+import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
@@ -23,9 +26,10 @@ import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.AllProductInfo;
@@ -41,15 +45,12 @@ import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.utilities.HideKeyboard;
 import com.example.synerzip.recircle_android.utilities.NetworkUtility;
+import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
 import com.example.synerzip.recircle_android.utilities.SearchUtility;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -57,45 +58,46 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Interceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
  * Created by Prajakta Patil on 31/3/17.
- * Copyright © 2016 Synerzip. All rights reserved
+ * Copyright © 2017 Synerzip. All rights reserved
  */
 public class ListAnItemActivity extends AppCompatActivity {
 
     @BindView(R.id.txt_days_for_availability)
-    public TextView mTxtDaysOfAvailability;
+    protected TextView mTxtDaysOfAvailability;
 
     @BindView(R.id.edit_enter_price)
-    public EditText mEditTxtEnterPrice;
+    protected EditText mEditTxtEnterPrice;
 
     @BindView(R.id.edit_min_rental)
-    public EditText mEditMinRental;
+    protected EditText mEditMinRental;
 
     @BindView(R.id.edit_item_desc)
-    public EditText mEditTxtItemDesc;
+    protected EditText mEditTxtItemDesc;
 
     @BindView(R.id.edit_enter_zip)
-    public EditText mEditTxtZipcode;
+    protected EditText mEditTxtZipcode;
 
     @BindView(R.id.input_layout_search_item)
-    public TextInputLayout mInputLayoutSearchItem;
+    protected TextInputLayout mInputLayoutSearchItem;
 
     @BindView(R.id.input_layout_item_desc)
-    public TextInputLayout mInputLayoutItemDesc;
+    protected TextInputLayout mInputLayoutItemDesc;
 
     @BindView(R.id.input_layout_enter_zipcode)
-    public TextInputLayout mInputLayoutZipcode;
+    protected TextInputLayout mInputLayoutZipcode;
 
     @BindView(R.id.input_layout_min_rental)
-    public TextInputLayout mInputLayoutMinRental;
+    protected TextInputLayout mInputLayoutMinRental;
 
     @BindView(R.id.input_layout_rental_price)
-    public TextInputLayout mInputLayoutPrice;
+    protected TextInputLayout mInputLayoutPrice;
 
     private String mItemDesc;
 
@@ -103,29 +105,29 @@ public class ListAnItemActivity extends AppCompatActivity {
 
     private long mZipcode;
 
-    ArrayList<Discounts> listDiscounts;
+    private ArrayList<Discounts> listDiscounts;
 
-    ArrayList<UserProdImages> listUploadItemImage;
+    private ArrayList<UserProdImages> listUploadItemImage;
 
-    ArrayList<UserProductUnAvailability> mItemAvailability;
+    private ArrayList<UserProductUnAvailability> mItemAvailability;
 
     @BindView(R.id.img_upload_photos)
-    public LinearLayout mImgUploadPhotos;
+    protected LinearLayout mImgUploadPhotos;
 
-    RCAPInterface service;
+    private RCAPInterface service;
 
     private SearchUtility utility;
 
-    public ArrayList<String> productItemList;
+    private ArrayList<String> productItemList;
 
-    AutocompleteAdapter mAutocompleteAdapter;
+    private AutocompleteAdapter mAutocompleteAdapter;
 
     @BindView(R.id.auto_txt_list_search_item_name)
-    public AutoCompleteTextView mProductAutoComplete;
+    protected AutoCompleteTextView mProductAutoComplete;
 
-    public ArrayList<ProductsData> productsDataList;
+    private ArrayList<ProductsData> productsDataList;
 
-    public List<Product> productsCustomList;
+    private List<Product> productsCustomList;
 
     private SearchProduct searchProduct;
 
@@ -134,20 +136,20 @@ public class ListAnItemActivity extends AppCompatActivity {
     private String productId = "", mAccessToken;
 
     @BindView(R.id.checkbox_discount_five_days)
-    public CheckBox mDiscontForFiveDay;
+    protected CheckBox mDiscontForFiveDay;
 
     @BindView(R.id.checkbox_discount_ten_days)
-    public CheckBox mDiscontForTenDay;
+    protected CheckBox mDiscontForTenDay;
 
     @BindView(R.id.toolbar)
-    public Toolbar mToolbar;
+    protected Toolbar mToolbar;
 
-    public int fromAustin;
+    private int fromAustin;
 
     private UploadImageAdapter mUploadImageAdapter;
 
     @BindView(R.id.recycler_view_upload_img)
-    public RecyclerView mRecyclerView;
+    protected RecyclerView mRecyclerView;
 
     private ArrayList<String> availableDates;
 
@@ -158,16 +160,22 @@ public class ListAnItemActivity extends AppCompatActivity {
 
     private boolean isLoggedIn;
 
-    public int sizeZipcodeList;
+    private int sizeZipcodeList;
 
     public UserProductUnAvailability userProductUnAvailability;
 
-    public Date mUnavailFromDate, mUnavailToDate = null;
-
     @BindView(R.id.checkbox_agreement)
-    public CheckBox mCheckboxAreement;
+    protected CheckBox mCheckboxAgreement;
 
-    public ArrayList<String> listUploadGalleryImage;
+    private ArrayList<String> listUploadGalleryImage;
+
+    @BindView(R.id.progress_bar)
+    protected RelativeLayout mProgressBar;
+
+    @BindView(R.id.layout_list_item)
+    protected LinearLayout mLinearLayout;
+
+    private ArrayList<Date> selectedDates;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,20 +192,22 @@ public class ListAnItemActivity extends AppCompatActivity {
         listUploadGalleryImage = new ArrayList<>();
         mProductAutoComplete.setSingleLine();
 
-        mProductAutoComplete.addTextChangedListener(new ListAnItemActivity.MyTextWatcher(mProductAutoComplete));
-        mEditTxtEnterPrice.addTextChangedListener(new ListAnItemActivity.MyTextWatcher(mEditTxtEnterPrice));
-        mEditMinRental.addTextChangedListener(new ListAnItemActivity.MyTextWatcher(mEditMinRental));
-        mEditTxtItemDesc.addTextChangedListener(new ListAnItemActivity.MyTextWatcher(mEditTxtItemDesc));
-        mEditTxtZipcode.addTextChangedListener(new ListAnItemActivity.MyTextWatcher(mEditTxtZipcode));
+        mProductAutoComplete.addTextChangedListener(new RCTextWatcher(mProductAutoComplete));
+        mEditTxtEnterPrice.addTextChangedListener(new RCTextWatcher(mEditTxtEnterPrice));
+        mEditMinRental.addTextChangedListener(new RCTextWatcher(mEditMinRental));
+        mEditTxtItemDesc.addTextChangedListener(new RCTextWatcher(mEditTxtItemDesc));
+        mEditTxtZipcode.addTextChangedListener(new RCTextWatcher(mEditTxtZipcode));
         mItemAvailability = new ArrayList<>();
         listDiscounts = new ArrayList<>();
         listUploadItemImage = new ArrayList<>();
+        selectedDates=new ArrayList<>();
+
         //get data from shared preferences
-        sharedPreferences = getSharedPreferences(RCWebConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
-        isLoggedIn = sharedPreferences.getBoolean(RCWebConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
-        mAccessToken = sharedPreferences.getString(RCWebConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
+        sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
+        isLoggedIn = sharedPreferences.getBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
+        mAccessToken = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
 
-
+        //discounts checkbox listener
         mDiscontForFiveDay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -223,45 +233,57 @@ public class ListAnItemActivity extends AppCompatActivity {
      * check whether zipcode valid or not
      */
     private void checkZipcodes() {
-        service = ApiClient.getClient().create(RCAPInterface.class);
-        Call<ZipcodeRoot> call = service.zipcodeCheck(mZipcode);
-        call.enqueue(new Callback<ZipcodeRoot>() {
-            @Override
-            public void onResponse(Call<ZipcodeRoot> call, Response<ZipcodeRoot> response) {
-                if (response.isSuccessful()) {
-                    response.body();
-                    sizeZipcodeList = response.body().getResults().size();
-                    if (mZipcode != 0) {
+        if (mZipcode != 0) {
+            service = ApiClient.getClient().create(RCAPInterface.class);
+            Call<ZipcodeRoot> call = service.zipcodeCheck(mZipcode);
+            call.enqueue(new Callback<ZipcodeRoot>() {
+                @Override
+                public void onResponse(Call<ZipcodeRoot> call, Response<ZipcodeRoot> response) {
+                    if (response.isSuccessful()) {
+                        response.body();
+                        sizeZipcodeList = response.body().getResults().size();
                         String[] stringArrayZipcodes = getResources().getStringArray(R.array.zipcodes_list_austin);
                         ArrayList<String> listAustinZipcodes = new ArrayList<>();
                         listAustinZipcodes.addAll(Arrays.asList(stringArrayZipcodes));
+                        String zipcode = String.valueOf(mZipcode);
                         if (sizeZipcodeList != 0) {
-                            if (listAustinZipcodes.contains(mZipcode)) {
+                            if (listAustinZipcodes.contains(zipcode)) {
                                 fromAustin = 1;
-                            } else if (listAustinZipcodes.contains(mZipcode)) {
-                                fromAustin = 0;
+                            } else {
+                                if (listAustinZipcodes.contains(zipcode)) {
+                                    fromAustin = 0;
+                                }
                             }
+                        } else {
+                            if (sizeZipcodeList==0) {
+                                RCLog.showToast(ListAnItemActivity.this, getString(R.string.invalid_zipcode));
+                                return;
+                            }
+                        }
+                        if (mCheckboxAgreement.isChecked()) {
                             getListAnItem();
                         } else {
-                            RCLog.showToast(ListAnItemActivity.this, getString(R.string.invalid_zipcode));
+                            RCLog.showToast(ListAnItemActivity.this, getString(R.string.terms_and_agreement));
                         }
-
                     }
-
                 }
-            }
 
-            @Override
-            public void onFailure(Call<ZipcodeRoot> call, Throwable t) {
-            }
-        });
+                @Override
+                public void onFailure(Call<ZipcodeRoot> call, Throwable t) {
+                }
+            });
+        }
+        return;
     }
 
     /**
      * api call for list an item
      */
     private void getListAnItem() {
-        checkZipcodes();
+
+        mProgressBar.setVisibility(View.VISIBLE);
+        mLinearLayout.setAlpha((float) 0.6);
+
         ListAnItemRequest listAnItemRequest = new ListAnItemRequest(productId, mItemPrice, mMinRental,
                 mItemDesc, listDiscounts, listUploadItemImage, mItemAvailability, mZipcode, fromAustin);
 
@@ -272,8 +294,11 @@ public class ListAnItemActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call<AllProductInfo> call, Response<AllProductInfo> response) {
+                mProgressBar.setVisibility(View.GONE);
+                mLinearLayout.setAlpha((float) 1.0);
                 if (response.isSuccessful()) {
                     RCLog.showToast(ListAnItemActivity.this, getString(R.string.item_added));
+                    finish();
                 } else {
                     if (response.code() == RCWebConstants.RC_ERROR_CODE_BAD_REQUEST) {
                         RCLog.showToast(ListAnItemActivity.this, getString(R.string.product_creation_failed));
@@ -285,10 +310,10 @@ public class ListAnItemActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<AllProductInfo> call, Throwable t) {
+                RCLog.showToast(ListAnItemActivity.this, getString(R.string.product_not_created));
             }
         });
     }
-
 
     /**
      * list an item submit button
@@ -301,8 +326,11 @@ public class ListAnItemActivity extends AppCompatActivity {
         if (isLoggedIn) {
             HideKeyboard.hideKeyBoard(ListAnItemActivity.this);
             if (NetworkUtility.isNetworkAvailable(this)) {
-                initializeViews();
-                checkZipcodes();
+                if(getValues()) {
+                    checkZipcodes();
+                }else {
+                    RCLog.showToast(ListAnItemActivity.this,getString(R.string.mandatory_dates));
+                }
             } else {
                 RCLog.showToast(this, getResources().getString(R.string.err_network_available));
             }
@@ -313,23 +341,26 @@ public class ListAnItemActivity extends AppCompatActivity {
     }
 
     /**
-     * initialize views
+     * get values
      */
-    public void initializeViews() {
-        mItemPrice = Integer.parseInt(mEditTxtEnterPrice.getText().toString().trim());
-        mMinRental = Integer.parseInt(mEditMinRental.getText().toString().trim());
-        mItemDesc = mEditTxtItemDesc.getText().toString().trim();
-        mZipcode = Long.parseLong(mEditTxtZipcode.getText().toString().trim());
+    public boolean getValues() {
 
-        //TODO product images should be taken from amazon s3 bucket ; yet to be done
-        mUserProdImages =
-                new UserProdImages("https://s3.ap-south-1.amazonaws.com/cmsios/CalendarView.png",
-                        "2017-02-04T13:13:09.000Z");
-        listUploadItemImage.add(mUserProdImages);
-        userProductUnAvailability = new UserProductUnAvailability("2017-02-04T13:13:09.000Z",
-                "2017-02-04T13:13:09.000Z");
-        mItemAvailability.add(userProductUnAvailability);
-        return;
+        String strPrice=mEditTxtEnterPrice.getText().toString();
+        String strrental=mEditMinRental.getText().toString();
+        String strDesc=mEditTxtItemDesc.getText().toString();
+        String zipcode=mEditTxtZipcode.getText().toString();
+
+        if(!strPrice.isEmpty() &&!strrental.isEmpty()&&!strDesc.isEmpty()&&!zipcode.isEmpty()) {
+            mItemPrice = Integer.parseInt(mEditTxtEnterPrice.getText().toString().trim());
+            mMinRental = Integer.parseInt(mEditMinRental.getText().toString().trim());
+            mItemDesc = mEditTxtItemDesc.getText().toString().trim();
+            mZipcode = Long.parseLong(mEditTxtZipcode.getText().toString().trim());
+            //TODO product images should be taken from amazon s3 bucket ; yet to be done
+            mUserProdImages = new UserProdImages("https://s3.ap-south-1.amazonaws.com/cmsios/CalendarView.png", "2017-02-04T13:13:09.000Z");
+            listUploadItemImage.add(mUserProdImages);
+            return true;
+        }
+            return false;
     }
 
     /**
@@ -339,7 +370,9 @@ public class ListAnItemActivity extends AppCompatActivity {
      */
     @OnClick(R.id.edit_calendar_availability)
     public void calendarAvailability(View view) {
-        startActivityForResult(new Intent(ListAnItemActivity.this, ListItemCalendarActivity.class), 1);
+        Intent intent=new Intent(ListAnItemActivity.this, ListItemCalendarActivity.class);
+        intent.putExtra("dates",selectedDates);
+        startActivityForResult(intent, 1);
     }
 
     /**
@@ -349,13 +382,9 @@ public class ListAnItemActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         productsCustomList = new ArrayList<>();
-
         productItemList = new ArrayList<>();
-
         service = ApiClient.getClient().create(RCAPInterface.class);
-
         utility.populateAutoCompleteData();
-
         ReadyCallback readyCallback = new ReadyCallback() {
             @Override
             public void searchProductResult(SearchProduct sd) {
@@ -401,11 +430,9 @@ public class ListAnItemActivity extends AppCompatActivity {
         };
 
         utility.setCallback(readyCallback);
-
         mProductAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 Product product = (Product) parent.getAdapter().getItem(position);
                 if (product.getProduct_manufacturer_id() != null
                         && !product.getProduct_manufacturer_id().isEmpty()) {
@@ -417,7 +444,6 @@ public class ListAnItemActivity extends AppCompatActivity {
                 HideKeyboard.hideKeyBoard(ListAnItemActivity.this);
             }
         });
-
     }
 
     /**
@@ -427,8 +453,11 @@ public class ListAnItemActivity extends AppCompatActivity {
      */
     @OnClick(R.id.btn_choose_img)
     public void imgUploadPhotos(View view) {
-        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, 2);
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), 2);
     }
 
     /**
@@ -440,20 +469,14 @@ public class ListAnItemActivity extends AppCompatActivity {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 availableDates = data.getStringArrayListExtra(getString(R.string.calendar_availability_days));
-
-                String from = data.getStringExtra(getString(R.string.unavail_from_date));
-                String to = data.getStringExtra(getString(R.string.unavail_to_date));
-                DateFormat formatter = new SimpleDateFormat(getString(R.string.date_format));
-                try {
-                    mUnavailFromDate = formatter.parse(from.toString());
-                    mUnavailToDate = formatter.parse(to.toString());
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                selectedDates= (ArrayList<Date>) data.getSerializableExtra(getString(R.string.selectedDates));
+                for (String date : availableDates) {
+                    userProductUnAvailability = new UserProductUnAvailability(date, date);
+                    mItemAvailability.add(userProductUnAvailability);
                 }
                 int daysCount = data.getIntExtra(getString(R.string.calendar_availability_days_count), 0);
                 if (daysCount != 0) {
@@ -461,27 +484,58 @@ public class ListAnItemActivity extends AppCompatActivity {
                     mTxtDaysOfAvailability.setText(getString(R.string.calendar_days_selected) + " " +
                             daysCount + " " + getString(R.string.calendar_days));
                 }
-
             }
         }
-        //TODO functionality yet to be completed for upload images
+        //TODO images should be uploaded to amazon s3 bucket; yet to be done
         if (requestCode == 2 && resultCode == RESULT_OK && null != data) {
             mUploadImageAdapter = new UploadImageAdapter(ListAnItemActivity.this, listUploadGalleryImage);
-            Uri selectedImage = data.getData();
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-            cursor.moveToFirst();
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-
-            String picturePath = cursor.getString(columnIndex);
-            cursor.close();
-            listUploadGalleryImage.add(picturePath);
-            mUploadImageAdapter.notifyDataSetChanged();
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-            mRecyclerView.setAdapter(mUploadImageAdapter);
+            if (data.getData() != null) {
+                Uri uri = data.getData();
+                String filepath = getPath(ListAnItemActivity.this, uri);
+                listUploadGalleryImage.add(filepath);
+                mUploadImageAdapter.notifyDataSetChanged();
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+                mRecyclerView.setAdapter(mUploadImageAdapter);
+            } else {
+                if (data.getClipData() != null) {
+                    ClipData mClipData = data.getClipData();
+                    for (int i = 0; i < mClipData.getItemCount(); i++) {
+                        ClipData.Item item = mClipData.getItemAt(i);
+                        Uri uri = item.getUri();
+                        String filepath = getPath(ListAnItemActivity.this, uri);
+                        listUploadGalleryImage.add(filepath);
+                    }
+                    mUploadImageAdapter.notifyDataSetChanged();
+                    mRecyclerView.setAdapter(mUploadImageAdapter);
+                    mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+                }
+            }
         }
     }
+
+    /**
+     * get file path from uri
+     *
+     * @param context
+     * @param uri
+     * @return
+     */
+    public String getPath(Context context, Uri uri) {
+        String filePath = "";
+        String wholeID = DocumentsContract.getDocumentId(uri);
+        String id = wholeID.split(":")[1];
+        String[] column = {MediaStore.Images.Media.DATA};
+        String sel = MediaStore.Images.Media._ID + "=?";
+        Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                column, sel, new String[]{id}, null);
+        int columnIndex = cursor.getColumnIndex(column[0]);
+        if (cursor.moveToFirst()) {
+            filePath = cursor.getString(columnIndex);
+        }
+        cursor.close();
+        return filePath;
+    }
+
 
     /**
      * Validating form
@@ -507,11 +561,11 @@ public class ListAnItemActivity extends AppCompatActivity {
         }
     }
 
-    private class MyTextWatcher implements TextWatcher {
+    private class RCTextWatcher implements TextWatcher {
 
         private View view;
 
-        private MyTextWatcher(View view) {
+        private RCTextWatcher(View view) {
             this.view = view;
         }
 

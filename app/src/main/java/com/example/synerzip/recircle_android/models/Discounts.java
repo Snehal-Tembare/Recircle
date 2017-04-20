@@ -5,15 +5,15 @@ import lombok.Setter;
 
 /**
  * Created by Prajakta Patil on 7/4/17.
- * Copyright © 2016 Synerzip. All rights reserved
+ * Copyright © 2017 Synerzip. All rights reserved
  */
 @Getter
 @Setter
 
 public class Discounts {
-    public int percentage;
-    public int discount_for_days;
-    public int isActive;
+    private int percentage;
+    private int discount_for_days;
+    private int isActive;
 
     /**
      * constructor fo Discounts

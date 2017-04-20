@@ -4,23 +4,11 @@ import retrofit2.http.PUT;
 
 /**
  * Created by Prajakta Patil on 7/3/17.
- * Copyright © 2016 Synerzip. All rights reserved
+ * Copyright © 2017 Synerzip. All rights reserved
  */
 public class RCWebConstants {
 
-    public static final String RC_SHARED_PREFERENCES_ACCESS_TOKEN="accessToken";
-
-    public static final String RC_SHARED_PREFERENCES_LOGIN_FIRST_USERNAME="firstname";
-
-    public static final String RC_SHARED_PREFERENCES_LOGIN_USERNAME="username";
-
-    public static final String RC_SHARED_PREFERENCES_PASSWORD="password";
-
-    public static final String RC_SHARED_PREFERENCES_LOGIN_STATUS="isLoggedIn";
-
-    public static final String RC_SHARED_PREFERENCES_USERID="userId";
-
-    public static final String RC_SHARED_PREFERENCES_FILE_NAME="recircle";
+    public static final String RC_BASE_URL = "http://6656363d.ngrok.io";
 
     public static final int RC_SUCCESS_CODE = 200;
 
@@ -35,6 +23,8 @@ public class RCWebConstants {
     public static final int RC_ERROR_CODE_INTERNAL_SERVER_ERROR = 500;
 
     public static final int RC_ERROR_CODE_SERVICE_UNAVAILABLE = 503;
+
+    public static final int RC_ERROR_UNAUTHORISED = 401;
 
     public static final String RC_GET_PRODUCT_DETAILS = "/api/products";
 
@@ -52,9 +42,6 @@ public class RCWebConstants {
 
     public static final String RC_GET_OTP="/api/users/otp?";
 
-    public static final int RC_ERROR_UNAUTHORISED = 401;
-
     public static final String RC_GOOGLE_ZIPCODES="https://maps.googleapis.com/maps/api/geocode/json?";
-
 
 }

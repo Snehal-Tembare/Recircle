@@ -42,6 +42,7 @@ import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.utilities.HideKeyboard;
 import com.example.synerzip.recircle_android.utilities.NetworkUtility;
+import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
 import com.example.synerzip.recircle_android.utilities.SearchUtility;
@@ -63,7 +64,7 @@ import retrofit2.Response;
 
 /**
  * Created by Prajakta Patil on 7/3/17.
- * Copyright © 2016 Synerzip. All rights reserved
+ * Copyright © 2017 Synerzip. All rights reserved
  */
 
 public class SearchActivity extends AppCompatActivity
@@ -73,28 +74,28 @@ public class SearchActivity extends AppCompatActivity
     private static final int REQUEST_CODE = 1;
 
     @BindView(R.id.toolbar)
-    public Toolbar mToolbar;
+    protected Toolbar mToolbar;
 
     @BindView(R.id.drawer_layout)
-    public DrawerLayout mDrawerLayout;
+    protected DrawerLayout mDrawerLayout;
 
     @BindView(R.id.nav_view)
-    public NavigationView mNavigationView;
+    protected NavigationView mNavigationView;
 
     private static final String TAG = "SearchActivity";
 
-    public ArrayList<String> productItemList;
+    private ArrayList<String> productItemList;
 
-    AutocompleteAdapter mAutocompleteAdapter;
+    private AutocompleteAdapter mAutocompleteAdapter;
 
     private RCAPInterface service;
 
     @BindView(R.id.auto_txt_search_item_name)
-    public AutoCompleteTextView mProductAutoComplete;
+    protected AutoCompleteTextView mProductAutoComplete;
 
-    public ArrayList<ProductsData> productsDataList;
+    private ArrayList<ProductsData> productsDataList;
 
-    public List<Product> productsCustomList;
+    private List<Product> productsCustomList;
 
     private ArrayList<Products> productDetailsList;
 
@@ -103,45 +104,45 @@ public class SearchActivity extends AppCompatActivity
     private RecentItemsAdapter mRecentItemsAdapter;
 
     @BindView(R.id.cardRecyclerViewRecent)
-    public RecyclerView mRecyclerViewRecent;
+    protected RecyclerView mRecyclerViewRecent;
 
     @BindView(R.id.card_recycler_view_popular)
-    public RecyclerView mRecyclerViewPopular;
+    protected RecyclerView mRecyclerViewPopular;
 
     private ArrayList<Products> popularProducts;
 
     @BindView(R.id.txtHeaderOneContent)
-    public TextView mTxtHeaderOne;
+    protected TextView mTxtHeaderOne;
 
     @BindView(R.id.txtHeaderTwoContent)
-    public TextView mTxtHeaderTwo;
+    protected TextView mTxtHeaderTwo;
 
     @BindView(R.id.txtHeaderThreeContent)
-    public TextView mTxtHeaderThree;
+    protected TextView mTxtHeaderThree;
 
     @BindView(R.id.imgDownArrowOne)
-    public ImageView imgDownArrowOne;
+    protected ImageView imgDownArrowOne;
 
     @BindView(R.id.imgDownArrowTwo)
-    public ImageView imgDownArrowTwo;
+    protected ImageView imgDownArrowTwo;
 
     @BindView(R.id.imgDownArrowThree)
-    public ImageView imgDownArrowThree;
+    protected ImageView imgDownArrowThree;
 
     @BindView(R.id.imgUpArrowOne)
-    public ImageView imgUpArrowOne;
+    protected ImageView imgUpArrowOne;
 
     @BindView(R.id.imgUpArrowTwo)
-    public ImageView imgUpArrowTwo;
+    protected ImageView imgUpArrowTwo;
 
     @BindView(R.id.imgUpArrowThree)
-    public ImageView imgUpArrowThree;
+    protected ImageView imgUpArrowThree;
 
     @BindView(R.id.edt_place)
-    public EditText mEdtPlace;
+    protected EditText mEdtPlace;
 
     @BindView(R.id.lists_layout)
-    public LinearLayout mListsLayout;
+    protected LinearLayout mListsLayout;
 
     private AwesomeValidation awesomeValidation;
 
@@ -149,7 +150,7 @@ public class SearchActivity extends AppCompatActivity
 
     private String productId = "";
 
-    public String query = "";
+    private String query = "";
 
     private String mFromDate = "";
 
@@ -163,15 +164,15 @@ public class SearchActivity extends AppCompatActivity
 
     private SearchProduct searchProduct;
 
-    Date fromDate, toDate;
+    private Date fromDate, toDate;
 
     @BindView(R.id.edt_enter_dates)
-    public EditText mEditTxtDate;
+    protected EditText mEditTxtDate;
 
     private String formatedFromDate, formatedToDate = "";
 
     @BindView(R.id.progress_bar)
-    public RelativeLayout mProgressBar;
+    protected RelativeLayout mProgressBar;
 
     private SharedPreferences sharedPreferences;
 
@@ -197,9 +198,9 @@ public class SearchActivity extends AppCompatActivity
         getSupportActionBar().setHomeButtonEnabled(true);
 
         //get data from shared preferences
-        sharedPreferences = getSharedPreferences(RCWebConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
-        isLoggedIn = sharedPreferences.getBoolean(RCWebConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
-        mUserFirstName = sharedPreferences.getString(RCWebConstants.RC_SHARED_PREFERENCES_LOGIN_FIRST_USERNAME, mUserFirstName);
+        sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
+        isLoggedIn = sharedPreferences.getBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
+        mUserFirstName = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_FIRST_USERNAME, mUserFirstName);
 
         //navigation drawer layout
         ActionBarDrawerToggle toggle =
@@ -557,7 +558,6 @@ public class SearchActivity extends AppCompatActivity
      * @param item
      * @return
      */
-    @SuppressWarnings("StatementWithEmptyBody")
     public boolean onNavigationItemSelected(MenuItem item) {
 
         int id = item.getItemId();
@@ -577,9 +577,9 @@ public class SearchActivity extends AppCompatActivity
                     public void onClick(DialogInterface dialogInterface, int arg1) {
                         dialogInterface.dismiss();
                         clearData();
-                        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(RCWebConstants.RC_SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+                        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putBoolean(RCWebConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
+                        editor.putBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
                         editor.apply();
                         finish();
                         Intent intent = new Intent(SearchActivity.this, LogInActivity.class);
@@ -620,7 +620,7 @@ public class SearchActivity extends AppCompatActivity
      * clears Application data
      */
     private void clearData() {
-        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(RCWebConstants.RC_SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.commit();

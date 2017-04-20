@@ -5,15 +5,15 @@ import lombok.Setter;
 
 /**
  * Created by Prajakta Patil on 14/4/17.
- * Copyright © 2016 Synerzip. All rights reserved
+ * Copyright © 2017 Synerzip. All rights reserved
  */
 @Getter
 @Setter
 public class UserProductUnAvailability {
 
-    public String unavai_from_date;
+    private String unavai_from_date;
 
-    public String unavai_to_date;
+    private String unavai_to_date;
 
     /**
      * constructor for UserProductUnAvailability

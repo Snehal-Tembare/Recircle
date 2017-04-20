@@ -9,290 +9,304 @@
 
     <include layout="@layout/partial_toolbar" />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen_10dp">
+    <FrameLayout
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true">
+
+        <ScrollView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginTop="@dimen/dimen_10dp">
 
             <LinearLayout
+                android:id="@+id/layout_list_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dimen_50dp"
-                    android:layout_marginRight="@dimen/dimen_50dp"
-                    android:layout_marginTop="@dimen/dimen_20dp"
-                    android:gravity="center"
-                    android:text="@string/list_an_item_title"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/dimen_30sp" />
-            </LinearLayout>
-
-            <LinearLayout
-
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/dimen_30dp"
-                android:background="@color/common_white"
-                android:orientation="vertical"
-                android:padding="@dimen/dimen_20dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_20dp"
-                    android:text="@string/list_an_item"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/dimen_24sp" />
-
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/input_layout_search_item"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_10dp">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/auto_txt_list_search_item_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dimen_50dp"
-                        android:hint="@string/search_item"
-                        android:padding="@dimen/dimen_10dp"
-                        android:textSize="@dimen/dimen_14sp" />
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/input_layout_rental_price"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_10dp">
-
-                    <EditText
-                        android:id="@+id/edit_enter_price"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dimen_50dp"
-                        android:layout_marginTop="@dimen/dimen_10dp"
-                        android:hint="@string/enter_price"
-                        android:inputType="number"
-                        android:padding="@dimen/dimen_10dp"
-                        android:textSize="@dimen/dimen_14sp" />
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/input_layout_min_rental"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_10dp">
-
-                    <EditText
-                        android:id="@+id/edit_min_rental"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dimen_50dp"
-                        android:hint="@string/min_rental"
-                        android:inputType="number"
-                        android:padding="@dimen/dimen_10dp"
-                        android:text="1"
-                        android:textSize="@dimen/dimen_14sp" />
-                </android.support.design.widget.TextInputLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/dimen_10dp"
-                    android:layout_marginTop="@dimen/dimen_10dp"
-                    android:text="@string/discount"
-                    android:textColor="@color/colorPrimary" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <CheckBox
-                        android:id="@+id/checkbox_discount_five_days"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="false" />
-
-                    <TextView
-                        android:padding="@dimen/dimen_5dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/offer_discount" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <CheckBox
-
-                        android:id="@+id/checkbox_discount_ten_days"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="false" />
-
-                    <TextView
-                        android:padding="@dimen/dimen_5dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/offer_discount_days" />
-                </LinearLayout>
-
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/dimen_10dp"
-                    android:layout_marginTop="@dimen/dimen_10dp"
-                    android:text="@string/upload_photos"
-                    android:textColor="@color/colorPrimary" />
-
-                <Button
-                    android:id="@+id/btn_choose_img"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/choose" />
-
-                <LinearLayout
-                    android:layout_marginTop="@dimen/dimen_5dp"
-                    android:id="@+id/horizontal_scroll"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimen_55dp"
-                    android:background="@drawable/edittxt_square"
                     android:orientation="vertical">
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/recycler_view_upload_img"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dimen_50dp"
+                        android:layout_marginRight="@dimen/dimen_50dp"
+                        android:layout_marginTop="@dimen/dimen_20dp"
+                        android:gravity="center"
+                        android:text="@string/list_an_item_title"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/dimen_30sp" />
+                </LinearLayout>
+
+                <LinearLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dimen_30dp"
+                    android:background="@color/common_white"
+                    android:orientation="vertical"
+                    android:padding="@dimen/dimen_20dp">
+
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:visibility="visible">
+                        android:layout_marginTop="@dimen/dimen_20dp"
+                        android:text="@string/list_an_item"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/dimen_24sp" />
 
-                    </android.support.v7.widget.RecyclerView>
 
-                    <LinearLayout
-                        android:id="@+id/layout_upload_images"
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_search_item"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/dimen_10dp"
-                        android:orientation="horizontal"
-                        android:visibility="gone">
+                        android:layout_marginTop="@dimen/dimen_10dp">
 
-                        <ImageView
-                            android:id="@+id/img_add_photos"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:onClick="imgUploadPhotos"
-                            android:src="@drawable/ic_upload_photos" />
-
-                        <LinearLayout
-                            android:id="@+id/img_upload_photos"
+                        <AutoCompleteTextView
+                            android:id="@+id/auto_txt_list_search_item_name"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/dimen_50dp"
-                            android:layout_gravity="center"
-                            android:orientation="horizontal" />
+                            android:hint="@string/search_item"
+                            android:padding="@dimen/dimen_10dp"
+                            android:textSize="@dimen/dimen_14sp" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_rental_price"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_10dp">
+
+                        <EditText
+                            android:id="@+id/edit_enter_price"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/dimen_50dp"
+                            android:layout_marginTop="@dimen/dimen_10dp"
+                            android:hint="@string/enter_price"
+                            android:inputType="number"
+                            android:padding="@dimen/dimen_10dp"
+                            android:textSize="@dimen/dimen_14sp" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_min_rental"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_10dp">
+
+                        <EditText
+                            android:id="@+id/edit_min_rental"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/dimen_50dp"
+                            android:hint="@string/min_rental"
+                            android:inputType="number"
+                            android:padding="@dimen/dimen_10dp"
+                            android:text="1"
+                            android:textSize="@dimen/dimen_14sp" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dimen_10dp"
+                        android:layout_marginTop="@dimen/dimen_10dp"
+                        android:text="@string/discount"
+                        android:textColor="@color/colorPrimary" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+                            android:id="@+id/checkbox_discount_five_days"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="false" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/dimen_5dp"
+                            android:text="@string/offer_discount" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+
+                            android:id="@+id/checkbox_discount_ten_days"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="false" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/dimen_5dp"
+                            android:text="@string/offer_discount_days" />
+                    </LinearLayout>
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dimen_10dp"
+                        android:layout_marginTop="@dimen/dimen_10dp"
+                        android:text="@string/upload_photos"
+                        android:textColor="@color/colorPrimary" />
+
+                    <Button
+                        android:id="@+id/btn_choose_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/choose" />
+
+                    <LinearLayout
+                        android:id="@+id/horizontal_scroll"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dimen_55dp"
+                        android:layout_marginTop="@dimen/dimen_5dp"
+                        android:background="@drawable/edittxt_square"
+                        android:orientation="vertical">
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/recycler_view_upload_img"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="visible">
+
+                        </android.support.v7.widget.RecyclerView>
+
+                        <LinearLayout
+                            android:id="@+id/layout_upload_images"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/dimen_10dp"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <ImageView
+                                android:id="@+id/img_add_photos"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:onClick="imgUploadPhotos"
+                                android:src="@drawable/ic_upload_photos" />
+
+                            <LinearLayout
+                                android:id="@+id/img_upload_photos"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/dimen_50dp"
+                                android:layout_gravity="center"
+                                android:orientation="horizontal" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
-                </LinearLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/input_layout_item_desc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_10dp">
-
-                    <EditText
-                        android:maxLines="3"
-                        android:id="@+id/edit_item_desc"
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_item_desc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/add_desc"
-                        android:padding="@dimen/dimen_10dp"
-                        android:textSize="@dimen/dimen_14sp" />
-                </android.support.design.widget.TextInputLayout>
+                        android:layout_marginTop="@dimen/dimen_10dp">
 
-                <EditText
-                    android:id="@+id/edit_calendar_availability"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimen_50dp"
-                    android:background="@drawable/edittxt_square"
-                    android:drawableLeft="@drawable/ic_calendar"
-                    android:drawablePadding="@dimen/dimen_10dp"
-                    android:focusable="false"
-                    android:hint="@string/calendar_availability"
-                    android:onClick="calendarAvailability"
-                    android:padding="@dimen/dimen_10dp"
-                    android:textColorHint="@color/colorPrimary"
-                    android:textSize="@dimen/dimen_14sp" />
-
-                <TextView
-                    android:visibility="gone"
-                    android:id="@+id/txt_days_for_availability"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_5dp"
-                    android:textColor="@color/colorPrimary" />
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/input_layout_enter_zipcode"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_5dp">
+                        <EditText
+                            android:id="@+id/edit_item_desc"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/add_desc"
+                            android:minLines="3"
+                            android:padding="@dimen/dimen_5dp"
+                            android:textSize="@dimen/dimen_14sp" />
+                    </android.support.design.widget.TextInputLayout>
 
                     <EditText
-                        android:id="@+id/edit_enter_zip"
+                        android:id="@+id/edit_calendar_availability"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dimen_50dp"
-                        android:hint="@string/edit_enter_zip"
-                        android:inputType="number"
+                        android:background="@drawable/edittxt_square"
+                        android:drawableLeft="@drawable/ic_calendar"
+                        android:drawablePadding="@dimen/dimen_10dp"
+                        android:focusable="false"
+                        android:hint="@string/calendar_availability"
+                        android:onClick="calendarAvailability"
                         android:padding="@dimen/dimen_10dp"
+                        android:textColorHint="@color/colorPrimary"
                         android:textSize="@dimen/dimen_14sp" />
-                </android.support.design.widget.TextInputLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_10dp"
-                    android:orientation="horizontal">
-
-                    <CheckBox
-                        android:id="@+id/checkbox_agreement"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/dimen_50dp"
-                        android:layout_marginLeft="@dimen/dimen_10dp"
-                        android:text="@string/agreement"
-                        android:textColor="@color/colorPrimary" />
-                </LinearLayout>
+                        android:id="@+id/txt_days_for_availability"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_5dp"
+                        android:textColor="@color/colorPrimary"
+                        android:visibility="gone" />
 
-                <Button
-                    android:id="@+id/btn_save_and_continue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/common_dimens_20"
-                    android:background="@drawable/round_button"
-                    android:onClick="btnSaveAndContinue"
-                    android:padding="@dimen/dimen_10dp"
-                    android:text="@string/save_and_continue"
-                    android:textAllCaps="false"
-                    android:textColor="@color/common_white"
-                    android:textSize="@dimen/text_size_16" />
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_enter_zipcode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_5dp">
+
+                        <EditText
+                            android:id="@+id/edit_enter_zip"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/dimen_50dp"
+                            android:hint="@string/edit_enter_zip"
+                            android:inputType="number"
+                            android:padding="@dimen/dimen_10dp"
+                            android:textSize="@dimen/dimen_14sp" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_10dp"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+                            android:id="@+id/checkbox_agreement"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/dimen_50dp"
+                            android:layout_marginLeft="@dimen/dimen_10dp"
+                            android:text="@string/agreement"
+                            android:textColor="@color/colorPrimary" />
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/btn_save_and_continue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/common_dimens_20"
+                        android:background="@drawable/round_button"
+                        android:onClick="btnSaveAndContinue"
+                        android:padding="@dimen/dimen_10dp"
+                        android:text="@string/save_and_continue"
+                        android:textAllCaps="false"
+                        android:textColor="@color/common_white"
+                        android:textSize="@dimen/text_size_16" />
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
+        </ScrollView>
+
+        <include
+            android:id="@+id/progress_bar"
+            layout="@layout/progress_bar_layout"
+            android:animateLayoutChanges="true"
+            android:visibility="gone" />
+    </FrameLayout>
 </LinearLayout>
 

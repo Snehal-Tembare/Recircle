@@ -2,16 +2,16 @@ package com.example.synerzip.recircle_android.models;
 
 /**
  * Created by Prajakta Patil on 3/4/17.
- * Copyright © 2016 Synerzip. All rights reserved
+ * Copyright © 2017 Synerzip. All rights reserved
  */
 
 public class SignUpRequest {
-    public String first_name;
-    public String last_name;
-    public String email;
-    public String password;
-    public long user_mob_no;
-    public int otp;
+    private String first_name;
+    private String last_name;
+    private String email;
+    private String password;
+    private long user_mob_no;
+    private int otp;
 
     /**
      * constructor for sign up request

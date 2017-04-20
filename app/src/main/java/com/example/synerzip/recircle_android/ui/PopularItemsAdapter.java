@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 /**
  * Created by Prajakta Patil on 10/3/17.
- * Copyright © 2016 Synerzip. All rights reserved
+ * Copyright © 2017 Synerzip. All rights reserved
  */
 public class PopularItemsAdapter extends RecyclerView.Adapter<PopularItemsAdapter.ViewHolder> {
     private ArrayList<Products> popularProductsList;

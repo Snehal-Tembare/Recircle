@@ -71,11 +71,9 @@
             <Button
 
                 android:id="@+id/btn_user_log_in"
-                android:layout_width="match_parent"
+                android:layout_width="@dimen/dimen_180dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/dimen_60dp"
-                android:layout_marginRight="@dimen/dimen_60dp"
                 android:layout_marginTop="@dimen/dimen_10dp"
                 android:background="@drawable/round_button"
                 android:onClick="btnLogIn"

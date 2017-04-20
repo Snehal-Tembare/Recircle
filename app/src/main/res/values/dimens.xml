@@ -59,4 +59,5 @@
     <dimen name="dimen_70dp">70dp</dimen>
     <dimen name="dimen_55dp">55dp</dimen>
     <dimen name="map_height">400dp</dimen>
+    <dimen name="dimen_180dp">180dp</dimen>
 </resources>

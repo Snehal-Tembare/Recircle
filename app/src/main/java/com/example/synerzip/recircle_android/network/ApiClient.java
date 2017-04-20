@@ -23,7 +23,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class ApiClient {
-    public static final String BASE_URL = "http://e82462ca.ngrok.io";
+
     private static Retrofit retrofit = null;
 
     public static Retrofit getClient() {
@@ -36,7 +36,7 @@ public class ApiClient {
         httpClient.addInterceptor(logging);
         if (null == retrofit) {
             retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
+                    .baseUrl(RCWebConstants.RC_BASE_URL)
                     .client(httpClient.build())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();

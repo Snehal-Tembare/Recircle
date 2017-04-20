@@ -9,7 +9,7 @@ import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
 /**
  * Created by Prajakta Patil on 24/3/17.
- * Copyright © 2016 Synerzip. All rights reserved
+ * Copyright © 2017 Synerzip. All rights reserved
  */
 public class SplashActivity extends AppCompatActivity {
 

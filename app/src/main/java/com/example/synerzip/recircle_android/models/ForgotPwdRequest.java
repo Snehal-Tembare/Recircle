@@ -2,13 +2,13 @@ package com.example.synerzip.recircle_android.models;
 
 /**
  * Created by Prajakta Patil on 7/4/17.
- * Copyright © 2016 Synerzip. All rights reserved
+ * Copyright © 2017 Synerzip. All rights reserved
  */
 
 public class ForgotPwdRequest {
-    public int otp;
-    public String user_name;
-    public String new_password;
+    private int otp;
+    private String user_name;
+    private String new_password;
 
     /**
      * constructor fo ForgotPwdRequest

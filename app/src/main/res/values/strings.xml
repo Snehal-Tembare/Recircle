@@ -60,7 +60,7 @@
     <string name="offer_discount">Offer a 30% discount for 5 day rentals.</string>
     <string name="offer_discount_days">Offer 40% discount for 10 day rentals.</string>
     <string name="item_desc">Item descripton *</string>
-    <string name="add_desc">Add description about your item</string>
+    <string name="add_desc">Add description about your item *</string>
     <string name="calendar_availability">Adjust calendar of availability</string>
     <string name="something_went_wrong">Something went wrong...Please try again</string>
     <string name="optional">(optional)</string>
@@ -244,4 +244,9 @@
     <string name="store_loaction">Store Location</string>
     <string name="pick_up_time">After 2.00 pm</string>
     <string name="return_time">By 12.00 noon</string>
+    <string name="selectedDates">selectedDates</string>
+    <string name="dates">dates</string>
+    <string name="calendar_date_format">yyyy-MM-dd\'T\'HH:mm:ss.SSS\'Z\'</string>
+    <string name="product_not_created">Product creation unsuccessful</string>
+    <string name="mandatory_dates">Mandatory fields should not be empty</string>
 </resources>

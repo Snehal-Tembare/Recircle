@@ -29,6 +29,7 @@ import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.utilities.AESEncryptionDecryption;
 import com.example.synerzip.recircle_android.utilities.HideKeyboard;
 import com.example.synerzip.recircle_android.utilities.NetworkUtility;
+import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
 
@@ -41,38 +42,38 @@ import retrofit2.Response;
 
 /**
  * Created by Prajakta Patil on 3/4/17.
- * Copyright © 2016 Synerzip. All rights reserved
+ * Copyright © 2017 Synerzip. All rights reserved
  */
 public class LogInActivity extends AppCompatActivity {
 
     @BindView(R.id.edit_login_email)
-    public EditText mEditLogInEmail;
+    protected EditText mEditLogInEmail;
 
     @BindView(R.id.edit_login_pwd)
-    public EditText mEditLogInPassword;
+    protected EditText mEditLogInPassword;
 
     @BindView(R.id.input_layout_email)
-    public TextInputLayout mInputLayoutEmail;
+    protected TextInputLayout mInputLayoutEmail;
 
     @BindView(R.id.input_layout_pwd)
-    public TextInputLayout mInputLayoutPassword;
+    protected TextInputLayout mInputLayoutPassword;
 
     private String mUserName, mPassword;
 
     private RCAPInterface service;
 
     @BindView(R.id.toolbar)
-    public Toolbar mToolbar;
+    protected Toolbar mToolbar;
 
-    String mEmail;
+    private String mEmail;
 
     @BindView(R.id.progress_bar)
-    public RelativeLayout mProgressBar;
+    protected RelativeLayout mProgressBar;
 
     @BindView(R.id.linear_layout)
-    public LinearLayout mLinearLayout;
+    protected LinearLayout mLinearLayout;
 
-    public String mUserId, mUserEmail,mUserToken,mUserLastName,mUserFirstName,mAccessToken="";
+    protected String mUserId, mUserEmail,mUserToken,mUserLastName,mUserFirstName,mAccessToken="";
 
     private static final String TAG = "LogInActivity";
 
@@ -87,8 +88,8 @@ public class LogInActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
 
-        mEditLogInEmail.addTextChangedListener(new MyTextWatcher(mEditLogInEmail));
-        mEditLogInPassword.addTextChangedListener(new MyTextWatcher(mEditLogInPassword));
+        mEditLogInEmail.addTextChangedListener(new RCTextWatcher(mEditLogInEmail));
+        mEditLogInPassword.addTextChangedListener(new RCTextWatcher(mEditLogInPassword));
     }
 
     /**
@@ -289,11 +290,11 @@ public class LogInActivity extends AppCompatActivity {
         }
     }
 
-    private class MyTextWatcher implements TextWatcher {
+    private class RCTextWatcher implements TextWatcher {
 
         private View view;
 
-        private MyTextWatcher(View view) {
+        private RCTextWatcher(View view) {
             this.view = view;
         }
 
@@ -340,17 +341,17 @@ public class LogInActivity extends AppCompatActivity {
         String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
 
-        SharedPreferences sharedPreferences = getSharedPreferences(RCWebConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         try {
             String encryptedPassword = AESEncryptionDecryption.encrypt(android_id, mPassword);
-            editor.putString(RCWebConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mUserToken);
-            editor.putString(RCWebConstants.RC_SHARED_PREFERENCES_USERID, mUserId);
-            editor.putString(RCWebConstants.RC_SHARED_PREFERENCES_PASSWORD, encryptedPassword);
-            editor.putBoolean(RCWebConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, true);
-            editor.putString(RCWebConstants.RC_SHARED_PREFERENCES_LOGIN_USERNAME,mUserEmail);
-            editor.putString(RCWebConstants.RC_SHARED_PREFERENCES_LOGIN_FIRST_USERNAME,mUserFirstName);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mUserToken);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_USERID, mUserId);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_PASSWORD, encryptedPassword);
+            editor.putBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, true);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USERNAME,mUserEmail);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_FIRST_USERNAME,mUserFirstName);
 
             editor.apply();
 

@@ -8,7 +8,7 @@ import lombok.Setter;
 
 /**
  * Created by Prajakta Patil on 3/4/17.
- * Copyright © 2016 Synerzip. All rights reserved
+ * Copyright © 2017 Synerzip. All rights reserved
  */
 @Getter
 @Setter
