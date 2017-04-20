@@ -6,7 +6,7 @@ import android.widget.Toast;
 
 /**
  * Created by Prajakta Patil on 7/3/17.
- * Copyright © 2016 Synerzip. All rights reserved
+ * Copyright © 2017 Synerzip. All rights reserved
  */
 public class RCLog {
 

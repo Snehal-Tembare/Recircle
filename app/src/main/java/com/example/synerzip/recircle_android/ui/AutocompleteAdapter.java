@@ -15,14 +15,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by synerzip on 20/3/17.
+ * Created by Prajakta Patil on 20/3/17.
+ * Copyright © 2017 Synerzip. All rights reserved
  */
 
 public class AutocompleteAdapter extends ArrayAdapter<Product> {
 
-    Context context;
-    int resource, textViewResourceId;
-    List<Product> items, tempItems, suggestions;
+    private Context context;
+    private int resource, textViewResourceId;
+    private List<Product> items, tempItems, suggestions;
 
     public AutocompleteAdapter(Context context, int resource, int textViewResourceId, List<Product> items) {
         super(context, resource, textViewResourceId, items);
@@ -45,10 +46,9 @@ public class AutocompleteAdapter extends ArrayAdapter<Product> {
 
 
         if (product != null) {
-           // ImageView imgProductList = (ImageView) view.findViewById(R.id.imgProductList);
-            TextView lblName = (TextView) view.findViewById(R.id.txtProductName);
-            if (lblName != null)
-                lblName.setText(product.getProduct_manufacturer_title());
+            TextView txtProductName = (TextView) view.findViewById(R.id.txtProductName);
+            if (txtProductName != null)
+                txtProductName.setText(product.getProduct_manufacturer_title());
         }
         return view;
     }
@@ -61,8 +61,8 @@ public class AutocompleteAdapter extends ArrayAdapter<Product> {
     Filter nameFilter = new Filter() {
         @Override
         public CharSequence convertResultToString(Object resultValue) {
-            String str = ((Product) resultValue).getProduct_manufacturer_title();
-            return str;
+            String manuName = ((Product) resultValue).getProduct_manufacturer_title();
+            return manuName;
         }
 
         @Override
@@ -71,7 +71,7 @@ public class AutocompleteAdapter extends ArrayAdapter<Product> {
                 suggestions.clear();
                 for (Product product : tempItems) {
 
-                    if (product.getProduct_manufacturer_title().toLowerCase().contains(constraint.toString().toLowerCase())){
+                    if (product.getProduct_manufacturer_title().toLowerCase().contains(constraint.toString().toLowerCase())) {
                         suggestions.add(product);
                     }
                 }

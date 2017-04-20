@@ -1,7 +1,10 @@
 package com.example.synerzip.recircle_android.ui;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
@@ -19,7 +22,6 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -38,8 +40,11 @@ import com.example.synerzip.recircle_android.models.ProductsData;
 import com.example.synerzip.recircle_android.models.SearchProduct;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
+import com.example.synerzip.recircle_android.utilities.HideKeyboard;
 import com.example.synerzip.recircle_android.utilities.NetworkUtility;
+import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
+import com.example.synerzip.recircle_android.utilities.RCWebConstants;
 import com.example.synerzip.recircle_android.utilities.SearchUtility;
 
 import java.text.DateFormat;
@@ -59,7 +64,7 @@ import retrofit2.Response;
 
 /**
  * Created by Prajakta Patil on 7/3/17.
- * Copyright © 2016 Synerzip. All rights reserved
+ * Copyright © 2017 Synerzip. All rights reserved
  */
 
 public class SearchActivity extends AppCompatActivity
@@ -69,28 +74,28 @@ public class SearchActivity extends AppCompatActivity
     private static final int REQUEST_CODE = 1;
 
     @BindView(R.id.toolbar)
-    public Toolbar mToolbar;
+    protected Toolbar mToolbar;
 
     @BindView(R.id.drawer_layout)
-    public DrawerLayout mDrawerLayout;
+    protected DrawerLayout mDrawerLayout;
 
     @BindView(R.id.nav_view)
-    public NavigationView mNavigationView;
+    protected NavigationView mNavigationView;
 
     private static final String TAG = "SearchActivity";
 
-    public ArrayList<String> productItemList;
+    private ArrayList<String> productItemList;
 
-    AutocompleteAdapter mAutocompleteAdapter;
+    private AutocompleteAdapter mAutocompleteAdapter;
 
     private RCAPInterface service;
 
     @BindView(R.id.auto_txt_search_item_name)
-    public AutoCompleteTextView mProductAutoComplete;
+    protected AutoCompleteTextView mProductAutoComplete;
 
-    public ArrayList<ProductsData> productsDataList;
+    private ArrayList<ProductsData> productsDataList;
 
-    public List<Product> productsCustomList;
+    private List<Product> productsCustomList;
 
     private ArrayList<Products> productDetailsList;
 
@@ -99,45 +104,45 @@ public class SearchActivity extends AppCompatActivity
     private RecentItemsAdapter mRecentItemsAdapter;
 
     @BindView(R.id.cardRecyclerViewRecent)
-    public RecyclerView mRecyclerViewRecent;
+    protected RecyclerView mRecyclerViewRecent;
 
     @BindView(R.id.card_recycler_view_popular)
-    public RecyclerView mRecyclerViewPopular;
+    protected RecyclerView mRecyclerViewPopular;
 
     private ArrayList<Products> popularProducts;
 
     @BindView(R.id.txtHeaderOneContent)
-    public TextView mTxtHeaderOne;
+    protected TextView mTxtHeaderOne;
 
     @BindView(R.id.txtHeaderTwoContent)
-    public TextView mTxtHeaderTwo;
+    protected TextView mTxtHeaderTwo;
 
     @BindView(R.id.txtHeaderThreeContent)
-    public TextView mTxtHeaderThree;
+    protected TextView mTxtHeaderThree;
 
     @BindView(R.id.imgDownArrowOne)
-    public ImageView imgDownArrowOne;
+    protected ImageView imgDownArrowOne;
 
     @BindView(R.id.imgDownArrowTwo)
-    public ImageView imgDownArrowTwo;
+    protected ImageView imgDownArrowTwo;
 
     @BindView(R.id.imgDownArrowThree)
-    public ImageView imgDownArrowThree;
+    protected ImageView imgDownArrowThree;
 
     @BindView(R.id.imgUpArrowOne)
-    public ImageView imgUpArrowOne;
+    protected ImageView imgUpArrowOne;
 
     @BindView(R.id.imgUpArrowTwo)
-    public ImageView imgUpArrowTwo;
+    protected ImageView imgUpArrowTwo;
 
     @BindView(R.id.imgUpArrowThree)
-    public ImageView imgUpArrowThree;
+    protected ImageView imgUpArrowThree;
 
     @BindView(R.id.edt_place)
-    public EditText mEdtPlace;
+    protected EditText mEdtPlace;
 
     @BindView(R.id.lists_layout)
-    public LinearLayout mListsLayout;
+    protected LinearLayout mListsLayout;
 
     private AwesomeValidation awesomeValidation;
 
@@ -145,13 +150,11 @@ public class SearchActivity extends AppCompatActivity
 
     private String productId = "";
 
-    public String query = "";
+    private String query = "";
 
     private String mFromDate = "";
 
     private String mToDate = "";
-
-    private String mPlace;
 
     private Intent mIntent;
 
@@ -161,16 +164,21 @@ public class SearchActivity extends AppCompatActivity
 
     private SearchProduct searchProduct;
 
-    Date fromDate, toDate;
+    private Date fromDate, toDate;
 
     @BindView(R.id.edt_enter_dates)
-    public EditText mEditTxtDate;
+    protected EditText mEditTxtDate;
 
     private String formatedFromDate, formatedToDate = "";
 
     @BindView(R.id.progress_bar)
-    public RelativeLayout mProgressBar;
+    protected RelativeLayout mProgressBar;
 
+    private SharedPreferences sharedPreferences;
+
+    private boolean isLoggedIn;
+
+    private String mUserFirstName = "";
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -189,6 +197,10 @@ public class SearchActivity extends AppCompatActivity
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
+        //get data from shared preferences
+        sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
+        isLoggedIn = sharedPreferences.getBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
+        mUserFirstName = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_FIRST_USERNAME, mUserFirstName);
 
         //navigation drawer layout
         ActionBarDrawerToggle toggle =
@@ -196,6 +208,7 @@ public class SearchActivity extends AppCompatActivity
                         R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
         mDrawerLayout.addDrawerListener(toggle);
+
         toggle.syncState();
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
 
@@ -208,8 +221,25 @@ public class SearchActivity extends AppCompatActivity
                 }
             }
         });
+        mNavigationView.bringToFront();
         mNavigationView.setNavigationItemSelectedListener(this);
 
+        Menu menu = mNavigationView.getMenu();
+        MenuItem nav_loggedInAs = menu.findItem(R.id.nav_logedInAs);
+
+        if (isLoggedIn) {
+            menu.removeItem(R.id.nav_logIn_signUp);
+            nav_loggedInAs.setVisible(true);
+            nav_loggedInAs.setTitle(getString(R.string.logged_in_as) + mUserFirstName);
+        } else {
+            menu.removeItem(R.id.nav_messages);
+            menu.removeItem(R.id.nav_rentals);
+            menu.removeItem(R.id.nav_items);
+            menu.removeItem(R.id.nav_payments);
+            menu.removeItem(R.id.nav_logout);
+            menu.removeItem(R.id.nav_logedInAs);
+        }
+        //check network availability
         if (NetworkUtility.isNetworkAvailable(this)) {
 
             getAllProductDetails();
@@ -217,7 +247,7 @@ public class SearchActivity extends AppCompatActivity
             RCLog.showToast(this, getString(R.string.err_network_available));
         }
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
-        awesomeValidation.addValidation(this, R.id.auto_txt_search_item_name, DESCRIPTION_EXPRESSION, R.string.err_Field_empty);
+        awesomeValidation.addValidation(this, R.id.auto_txt_search_item_name, DESCRIPTION_EXPRESSION, R.string.enter_product_name);
 
     }//onCreate()
 
@@ -318,7 +348,9 @@ public class SearchActivity extends AppCompatActivity
         }
     }
 
-    //get all product details
+    /**
+     * get all product details
+     */
     public void getAllProductDetails() {
 
         productDetailsList = new ArrayList<>();
@@ -391,6 +423,7 @@ public class SearchActivity extends AppCompatActivity
         mRecyclerViewPopular.setAdapter(mPopularItemsAdapter);
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -402,12 +435,12 @@ public class SearchActivity extends AppCompatActivity
 
         utility.populateAutoCompleteData();
 
-        ReadyCallbak readyCallbak = new ReadyCallbak() {
+        ReadyCallback readyCallback = new ReadyCallback() {
             @Override
             public void searchProductResult(SearchProduct sd) {
                 searchProduct = sd;
                 resetAll();
-                if (null != searchProduct && searchProduct.getProducts().size()!= 0) {
+                if (null != searchProduct && !(searchProduct.getProducts().size() == 0)) {
                     mIntent = new Intent(SearchActivity.this, ResultActivity.class);
                     mIntent.putExtra(getString(R.string.search_product), searchProduct);
                     mIntent.putExtra(getString(R.string.name), mName);
@@ -465,7 +498,7 @@ public class SearchActivity extends AppCompatActivity
             }
         };
 
-        utility.setCallback(readyCallbak);
+        utility.setCallback(readyCallback);
 
         mProductAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -478,9 +511,7 @@ public class SearchActivity extends AppCompatActivity
                 if (product.getProduct_id() != null && !product.getProduct_id().isEmpty()) {
                     productId = product.getProduct_id();
                 }
-                //hide keyboard after item click
-                InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                in.hideSoftInputFromWindow(parent.getApplicationWindowToken(), 0);
+                HideKeyboard.hideKeyBoard(SearchActivity.this);
             }
         });
 
@@ -497,6 +528,9 @@ public class SearchActivity extends AppCompatActivity
         mToDate = "";
     }
 
+    /**
+     * button for search product
+     */
     @OnClick(R.id.btn_search)
     public void callSearchApi() {
         mName = mProductAutoComplete.getText().toString();
@@ -518,11 +552,78 @@ public class SearchActivity extends AppCompatActivity
         return true;
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
+    /**
+     * navigation drawer item selection
+     *
+     * @param item
+     * @return
+     */
     public boolean onNavigationItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.nav_listItem:
+                setVisible(true);
+                startActivity(new Intent(SearchActivity.this, ListAnItemActivity.class));
+                break;
+            case R.id.nav_logIn_signUp:
+                startActivity(new Intent(SearchActivity.this, LogInActivity.class));
+                break;
+
+            case R.id.nav_logout: {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+                alertDialog.setTitle(getResources().getString(R.string.logout_alert_title));
+                alertDialog.setPositiveButton(getResources().getString(R.string.logout), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogInterface, int arg1) {
+                        dialogInterface.dismiss();
+                        clearData();
+                        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
+                        editor.apply();
+                        finish();
+                        Intent intent = new Intent(SearchActivity.this, LogInActivity.class);
+                        startActivity(intent);
+                    }
+                });
+
+                alertDialog.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogInterface, int arg1) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                alertDialog.show();
+                break;
+            }
+            //TODO functionality yet to be completed for below menu items
+            case R.id.nav_messages:
+                setVisible(true);
+                RCLog.showToast(SearchActivity.this, TAG);
+                break;
+            case R.id.nav_items:
+                RCLog.showToast(SearchActivity.this, TAG);
+                break;
+            case R.id.nav_payments:
+                RCLog.showToast(SearchActivity.this, TAG);
+                break;
+            case R.id.nav_rentals:
+                RCLog.showToast(SearchActivity.this, TAG);
+                break;
+        }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    /**
+     * clears Application data
+     */
+    private void clearData() {
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.commit();
     }
 
     @Override
@@ -537,6 +638,9 @@ public class SearchActivity extends AppCompatActivity
         return false;
     }
 
+    /**
+     * navigation drawer back button
+     */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

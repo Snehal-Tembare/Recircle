@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.synerzip.recircle_android.ui.ForgotPwdActivity">
+
+    <include layout="@layout/partial_toolbar" />
+
+    <FrameLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true">
+
+        <LinearLayout
+            android:id="@+id/layout_activity_forgot"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/dimen_30dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/forgot_pwd_title"
+                android:textColor="@color/colorForgotPwdText"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_forgot_pwd_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/edit_forgot_pwd_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_40dp"
+                    android:hint="@string/email" />
+            </android.support.design.widget.TextInputLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_forgot_pwd_resend_otp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/edit_forgot_pwd_otp"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dimen_40dp"
+                        android:hint="@string/enter_forgot_pwd_otp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/txt_resend_code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignRight="@+id/input_layout_forgot_pwd_resend_otp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:gravity="center"
+                    android:onClick="txtResendOtp"
+                    android:paddingRight="@dimen/dimen_10dp"
+                    android:text="@string/resend_otp"
+                    android:textColor="@color/colorTextBlue"
+                    android:textSize="@dimen/dimen_14sp"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_forgot_pwd_new_pwd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:passwordToggleEnabled="true">
+
+                <EditText
+                    android:id="@+id/edit_forgot_pwd_new_pwd"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_40dp"
+                    android:hint="@string/enter_new_pwd"
+                    android:inputType="textPassword" />
+            </android.support.design.widget.TextInputLayout>
+
+            <Button
+
+                android:id="@+id/btn_submit"
+                android:layout_width="@dimen/dimen_180dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/dimen_20dp"
+                android:background="@drawable/round_button"
+                android:onClick="btnSubmit"
+                android:text="@string/submit"
+                android:textColor="@color/common_white" />
+
+        </LinearLayout>
+
+        <include
+            android:id="@+id/progress_bar"
+            layout="@layout/progress_bar_layout"
+            android:animateLayoutChanges="true"
+            android:visibility="gone" />
+    </FrameLayout>
+</LinearLayout>

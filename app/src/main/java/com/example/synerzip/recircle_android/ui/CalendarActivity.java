@@ -27,12 +27,12 @@ import static com.squareup.timessquare.CalendarPickerView.SelectionMode.RANGE;
 
 /**
  * Created by Prajakta Patil on 24/3/17.
- * Copyright © 2016 Synerzip. All rights reserved
+ * Copyright © 2017 Synerzip. All rights reserved
  */
 public class CalendarActivity extends AppCompatActivity {
 
     @BindView(R.id.calendar_view)
-    public CalendarPickerView mPickerView;
+    protected CalendarPickerView mPickerView;
 
     private Date fromDate;
     private Date toDate;
@@ -41,10 +41,10 @@ public class CalendarActivity extends AppCompatActivity {
     private Date selectToDate;
 
     @BindView(R.id.txt_from_date)
-    public TextView mTxtFromDate;
+    protected TextView mTxtFromDate;
 
     @BindView(R.id.txt_to_date)
-    public TextView mTxtToDate;
+    protected TextView mTxtToDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +63,6 @@ public class CalendarActivity extends AppCompatActivity {
 
         //on date selected listener
         mPickerView.setOnDateSelectedListener(new CalendarPickerView.OnDateSelectedListener() {
-
             @Override
             public void onDateSelected(Date date) {
                 ArrayList<Date> selectedDates = (ArrayList<Date>) mPickerView.getSelectedDates();
@@ -109,11 +108,21 @@ public class CalendarActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * textview cancel to go to previous activity
+     *
+     * @param view
+     */
     @OnClick(R.id.txt_cancel)
     public void txtCancel(View view) {
         finish();
     }
 
+    /**
+     * button for save dates
+     *
+     * @param view
+     */
     @OnClick(R.id.btn_save)
     public void btnSave(View view) {
         if (fromDate != null && toDate != null) {
@@ -131,6 +140,11 @@ public class CalendarActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * reset start and end date
+     *
+     * @param view
+     */
     @OnClick(R.id.txt_reset)
     public void txtReset(View view) {
         mTxtFromDate.setText(getString(R.string.enter_start_date));

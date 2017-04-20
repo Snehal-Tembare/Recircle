@@ -54,5 +54,10 @@
     <dimen name="dimen_50dp">50dp</dimen>
     <dimen name="dimen_14sp">14sp</dimen>
     <dimen name="dimen_30sp">30sp</dimen>
+    <dimen name="dimen_11sp">11sp</dimen>
+    <dimen name="dimen_93dp">93dp</dimen>
+    <dimen name="dimen_70dp">70dp</dimen>
+    <dimen name="dimen_55dp">55dp</dimen>
     <dimen name="map_height">400dp</dimen>
+    <dimen name="dimen_180dp">180dp</dimen>
 </resources>
