@@ -36,6 +36,8 @@ public class ReviewsListAdapter extends RecyclerView.Adapter<ReviewsListAdapter.
     ReviewsListAdapter(Context context, ArrayList<UserProdReview> userProdReviewArrayList) {
         mContext = context;
         this.userProdReviewArrayList = userProdReviewArrayList;
+        this.userProdReviewArrayList.addAll(userProdReviewArrayList);
+        this.userProdReviewArrayList.addAll(userProdReviewArrayList);
     }
 
 

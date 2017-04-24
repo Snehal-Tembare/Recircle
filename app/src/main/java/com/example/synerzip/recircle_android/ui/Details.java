@@ -225,7 +225,7 @@ public class Details extends AppCompatActivity {
                                 mTxtSeeAllReviews.setVisibility(View.VISIBLE);
                                 mTxtSeeAllReviews.setText(getString(R.string.see_all_reviews) + " (" + userProdReviewArrayList.size() + ")");
                             }
-                            mReViewReviews.addItemDecoration(new DividerItemDecoration(Details.this, LinearLayoutManager.VERTICAL));
+//                            mReViewReviews.addItemDecoration(new DividerItemDecoration(Details.this, LinearLayoutManager.VERTICAL));
                             mReViewReviews.setLayoutManager(new LinearLayoutManager(Details.this));
                             mReViewReviews.setAdapter(reviewsListAdapter);
 
