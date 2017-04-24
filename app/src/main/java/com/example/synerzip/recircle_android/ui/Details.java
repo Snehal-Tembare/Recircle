@@ -20,7 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
-import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -56,7 +55,7 @@ import retrofit2.Response;
  * Copyright © 2017 Synerzip. All rights reserved
  */
 
-public class DetailsActivity extends AppCompatActivity {
+public class Details extends AppCompatActivity {
     private static final int REQUEST_CODE = 1;
     private static final String EXTRA_IMAGE = "extra_image";
 
@@ -226,41 +225,22 @@ public class DetailsActivity extends AppCompatActivity {
                                 mTxtSeeAllReviews.setVisibility(View.VISIBLE);
                                 mTxtSeeAllReviews.setText(getString(R.string.see_all_reviews) + " (" + userProdReviewArrayList.size() + ")");
                             }
-                            mReViewReviews.addItemDecoration(new DividerItemDecoration(DetailsActivity.this, LinearLayoutManager.VERTICAL));
-                            mReViewReviews.setLayoutManager(new LinearLayoutManager(DetailsActivity.this));
+                            mReViewReviews.addItemDecoration(new DividerItemDecoration(Details.this, LinearLayoutManager.VERTICAL));
+                            mReViewReviews.setLayoutManager(new LinearLayoutManager(Details.this));
                             mReViewReviews.setAdapter(reviewsListAdapter);
 
                             mImageAdapter = new ImageAdapter(getApplicationContext(), selectedImgPosition, userProdImagesArrayList, new ImageAdapter.OnImageItemClickListener() {
                                 @Override
                                 public void onImageClick(int position, UserProdImages userProdImages) {
 
-                                    Picasso.with(getApplicationContext())
-                                            .load(userProdImages.getUser_prod_image_url())
-                                            .into(mImgMain, new com.squareup.picasso.Callback() {
-                                                @Override
-                                                public void onSuccess() {
-                                                    Bitmap bitmap = ((BitmapDrawable) mImgMain.getDrawable()).getBitmap();
-                                                    Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
-                                                        public void onGenerated(Palette palette) {
-                                                            applyPalette(palette);
-                                                        }
-                                                    });
-                                                }
-
-                                                @Override
-                                                public void onError() {
-
-                                                }
-                                            });
-
                                     View view = mRecyclerImages.getChildAt(position);
 
-                                    view.setBackground(ContextCompat.getDrawable(DetailsActivity.this, R.drawable.selected_image_background));
+                                    view.setBackground(ContextCompat.getDrawable(Details.this, R.drawable.selected_image_background));
 
                                     for (int i = 0; i < userProdImagesArrayList.size(); i++) {
                                         view = mRecyclerImages.getChildAt(i);
                                         if (i != position) {
-                                            view.setBackground(ContextCompat.getDrawable(DetailsActivity.this, R.drawable.custom_imageview));
+                                            view.setBackground(ContextCompat.getDrawable(Details.this, R.drawable.custom_imageview));
                                         }
                                     }
                                     selectedImgPosition = position;
@@ -269,7 +249,7 @@ public class DetailsActivity extends AppCompatActivity {
                                 }
                             });
 
-                            mLayoutManager = new LinearLayoutManager(DetailsActivity.this, LinearLayoutManager.HORIZONTAL, false);
+                            mLayoutManager = new LinearLayoutManager(Details.this, LinearLayoutManager.HORIZONTAL, false);
 
                             mRecyclerImages.setLayoutManager(mLayoutManager);
                             mRecyclerImages.setAdapter(mImageAdapter);
@@ -343,7 +323,7 @@ public class DetailsActivity extends AppCompatActivity {
         mImgHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Dialog loginDialog = new Dialog(DetailsActivity.this);
+                Dialog loginDialog = new Dialog(Details.this);
                 loginDialog.setTitle(getString(R.string.log_in));
                 loginDialog.setContentView(R.layout.log_in_dialog);
                 loginDialog.show();
@@ -353,7 +333,7 @@ public class DetailsActivity extends AppCompatActivity {
         mImgMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DetailsActivity.this, ZoomActivity.class);
+                Intent intent = new Intent(Details.this, ZoomActivity.class);
                 intent.putExtra(getString(R.string.selected_image_position), selectedImgPosition);
                 intent.putParcelableArrayListExtra(getString(R.string.image_urls_array), userProdImagesArrayList);
                 startActivity(intent);
@@ -363,15 +343,9 @@ public class DetailsActivity extends AppCompatActivity {
 
     }
 
-    private void applyPalette(Palette palette) {
-        int primaryDark = ContextCompat.getColor(this, R.color.colorPrimaryDark);
-        int primary = ContextCompat.getColor(this, R.color.colorPrimary);
-        mCollapsibleLayout.setContentScrimColor(palette.getMutedColor(primary));
-        mCollapsibleLayout.setStatusBarScrimColor(palette.getDarkMutedColor(primaryDark));
-        supportStartPostponedEnterTransition();
-        supportFinishAfterTransition();
-        supportPostponeEnterTransition();
-    }
+    /**
+     * OnClick of home button
+     */
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -380,6 +354,10 @@ public class DetailsActivity extends AppCompatActivity {
         }
         return true;
     }
+
+    /**
+     * Get selected dates
+     */
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -436,31 +414,56 @@ public class DetailsActivity extends AppCompatActivity {
         }
     }
 
+
+    /**
+     * Show next Image
+     */
+
     @OnClick(R.id.img_next)
     public void showNextImage() {
         mLayoutManager.scrollToPosition(mLayoutManager.findLastCompletelyVisibleItemPosition() + 1);
     }
+
+    /**
+     * Show previous Image
+     */
 
     @OnClick(R.id.img_previous)
     public void showPreviousImage() {
         mLayoutManager.scrollToPosition(mLayoutManager.findFirstCompletelyVisibleItemPosition() - 1);
     }
 
+    /**
+     * Opens Calendar to select dates
+     */
+
     @OnClick(R.id.edt_enter_dates)
     public void openCalendar() {
-        Intent intent = new Intent(DetailsActivity.this, CalendarActivity.class);
+        Intent intent = new Intent(Details.this, CalendarActivity.class);
         startActivityForResult(intent, REQUEST_CODE);
     }
+
+    /**
+     * Scroll to show store address
+     */
 
     @OnClick(R.id.txt_see_store_address)
     public void scrollLayout() {
         mScrollView.scrollTo(0, mScrollView.getBottom());
     }
 
+    /**
+     * Opens Map for Store address
+     */
+
     @OnClick(R.id.layout_see_on_map)
     public void openMap() {
-        startActivity(new Intent(DetailsActivity.this, MapActivity.class));
+        startActivity(new Intent(Details.this, MapActivity.class));
     }
+
+    /**
+     * Opens AllReviewsActivity
+     */
 
     @OnClick(R.id.txt_see_all_reviews)
     public void showAllReviews() {

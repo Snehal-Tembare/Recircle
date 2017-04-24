@@ -163,7 +163,7 @@ public class ResultActivity extends AppCompatActivity {
             public void onItemClick(Products product) {
                 Log.v(TAG,"onItemClick"+product.getUser_product_info().getUser_product_id());
 
-                Intent detailsIntent=new Intent(ResultActivity.this, DetailsActivity.class);
+                Intent detailsIntent=new Intent(ResultActivity.this, Details.class);
                 detailsIntent.putExtra(getString(R.string.product_id),
                         product.getUser_product_info().getUser_product_id());
                 startActivity(detailsIntent);

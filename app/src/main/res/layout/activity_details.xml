@@ -16,9 +16,9 @@
             android:id="@+id/collapsible_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:contentScrim="?attr/colorPrimary"
-            app:expandedTitleMarginEnd="64dp"
-            app:expandedTitleMarginStart="48dp"
+            app:contentScrim="@color/colorPrimary"
+            app:expandedTitleMarginEnd="@dimen/dimen_expanded_title_margin_end"
+            app:expandedTitleMarginStart="@dimen/dimen_expanded_title_margin_start"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:statusBarScrim="@color/colorPrimaryDark">
 
@@ -83,7 +83,6 @@
                         android:id="@+id/recycler_images"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
                         android:layout_weight="0.8" />
 
                     <ImageView

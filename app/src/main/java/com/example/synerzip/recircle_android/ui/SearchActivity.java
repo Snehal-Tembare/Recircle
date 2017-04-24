@@ -364,7 +364,7 @@ public class SearchActivity extends AppCompatActivity
         mRecentItemsAdapter = new RecentItemsAdapter(SearchActivity.this, productDetailsList, new OnItemClickListener() {
             @Override
             public void onItemClick(Products product) {
-                Intent detailsIntent = new Intent(SearchActivity.this, DetailsActivity.class);
+                Intent detailsIntent = new Intent(SearchActivity.this, Details.class);
                 detailsIntent.putExtra(getString(R.string.product_id),
                         product.getUser_product_info().getUser_product_id());
                 startActivity(detailsIntent);
@@ -379,7 +379,7 @@ public class SearchActivity extends AppCompatActivity
             public void onItemClick(Products product) {
                 Log.v(TAG, "onItemClick" + product.getUser_product_info().getUser_product_id());
 
-                Intent detailsIntent = new Intent(SearchActivity.this, DetailsActivity.class);
+                Intent detailsIntent = new Intent(SearchActivity.this, Details.class);
                 detailsIntent.putExtra(getString(R.string.product_id),
                         product.getUser_product_info().getUser_product_id());
                 startActivity(detailsIntent);

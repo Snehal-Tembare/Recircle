@@ -30,7 +30,7 @@
         <activity android:name=".ui.ResultActivity" />
         <activity android:name=".ui.CalendarActivity" />
         <activity android:name=".ui.ListAnItemActivity" />
-        <activity android:name=".ui.DetailsActivity" />
+        <activity android:name=".ui.Details" />
         <activity android:name=".ui.ZoomActivity" />
         <activity android:name=".ui.MapActivity" />
         <activity android:name=".ui.AllReviewsActivity"></activity>
