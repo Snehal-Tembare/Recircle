@@ -249,4 +249,6 @@
     <string name="calendar_date_format">yyyy-MM-dd\'T\'HH:mm:ss.SSS\'Z\'</string>
     <string name="product_not_created">Product creation unsuccessful</string>
     <string name="mandatory_dates">Mandatory fields should not be empty</string>
+    <string name="suggested_price">Suggested Price($/day)</string>
+    <string name="proceed">Proceed</string>
 </resources>

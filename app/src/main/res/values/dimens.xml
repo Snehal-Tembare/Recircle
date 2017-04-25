@@ -60,4 +60,5 @@
     <dimen name="dimen_55dp">55dp</dimen>
     <dimen name="map_height">400dp</dimen>
     <dimen name="dimen_180dp">180dp</dimen>
+    <dimen name="dimen_20sp">20sp</dimen>
 </resources>

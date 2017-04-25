@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<include layout="@layout/partial_toolbar"/>
+
+<TextView
+    android:textSize="@dimen/dimen_20sp"
+    android:textStyle="bold"
+    android:textColor="@color/colorPrimary"
+    android:drawablePadding="@dimen/dimen_30dp"
+    android:drawableRight="@drawable/ic_border_color"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Canon EOS Rebel T6i DSLR"/>
+    <TextView
+        android:textSize="@dimen/dimen_14sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
+        android:drawablePadding="@dimen/dimen_30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Daily Rental price"/>
+    <TextView
+        android:textSize="@dimen/dimen_14sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
+        android:drawablePadding="@dimen/dimen_30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Minimal Rental Days"/>
+    <TextView
+        android:textSize="@dimen/dimen_14sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
+        android:drawablePadding="@dimen/dimen_30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Price After Discount"/>
+    <TextView
+        android:textSize="@dimen/dimen_14sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
+        android:drawablePadding="@dimen/dimen_30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Description"/>
+    <TextView
+        android:textSize="@dimen/dimen_14sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
+        android:drawablePadding="@dimen/dimen_30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Listing Days"/>
+    <TextView
+        android:textSize="@dimen/dimen_14sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
+        android:drawablePadding="@dimen/dimen_30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Unavailable Days"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:textSize="@dimen/dimen_14sp"
+            android:textColor="@color/colorPrimary"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="4 days"/>
+        <TextView
+            android:onClick="txtShowDates"
+            android:id="@+id/txt_show_dates"
+            android:layout_marginLeft="@dimen/dimen_10dp"
+            android:textSize="@dimen/dimen_14sp"
+            android:textColor="@color/colorTextBlue"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Show Dates"/>
+    </LinearLayout>
+</LinearLayout>

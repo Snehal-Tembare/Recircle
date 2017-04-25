@@ -69,7 +69,6 @@
                 android:textColor="@color/colorTextBlue" />
 
             <Button
-
                 android:id="@+id/btn_user_log_in"
                 android:layout_width="@dimen/dimen_180dp"
                 android:layout_height="wrap_content"
