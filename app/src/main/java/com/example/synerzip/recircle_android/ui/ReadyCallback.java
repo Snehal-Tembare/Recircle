@@ -10,8 +10,7 @@ import java.util.ArrayList;
  * Copyright © 2017 Synerzip. All rights reserved
  */
 
-public interface ReadyCallbak{
-
+public interface ReadyCallback {
     void searchProductResult(SearchProduct sd);
 
     void allItemsResult(ArrayList<ProductsData> productsDataList);

@@ -1,10 +1,14 @@
 package com.example.synerzip.recircle_android.utilities;
 
+import retrofit2.http.PUT;
+
 /**
  * Created by Prajakta Patil on 7/3/17.
- * Copyright © 2016 Synerzip. All rights reserved
+ * Copyright © 2017 Synerzip. All rights reserved
  */
 public class RCWebConstants {
+
+    public static final String RC_BASE_URL = "http://6656363d.ngrok.io";
 
     public static final int RC_SUCCESS_CODE = 200;
 
@@ -20,6 +24,8 @@ public class RCWebConstants {
 
     public static final int RC_ERROR_CODE_SERVICE_UNAVAILABLE = 503;
 
+    public static final int RC_ERROR_UNAUTHORISED = 401;
+
     public static final String RC_GET_PRODUCT_DETAILS = "/api/products";
 
     public static final String RC_SEARCH_PRODUCT = "/api/products/searchProd?city=austin";
@@ -31,5 +37,11 @@ public class RCWebConstants {
     public static final String RC_USER_SIGN_UP="/api/users";
 
     public static final String RC_USER_LOG_IN="/api/users/signin";
+
+    public static final String RC_FORGOT_PWD ="/api/users/forgotPwd";
+
+    public static final String RC_GET_OTP="/api/users/otp?";
+
+    public static final String RC_GOOGLE_ZIPCODES="https://maps.googleapis.com/maps/api/geocode/json?";
 
 }

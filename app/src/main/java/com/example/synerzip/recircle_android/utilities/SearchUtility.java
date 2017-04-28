@@ -1,16 +1,13 @@
 package com.example.synerzip.recircle_android.utilities;
 
-import android.content.Context;
 import android.util.Log;
 
-import com.example.synerzip.recircle_android.R;
-import com.example.synerzip.recircle_android.models.Product;
 import com.example.synerzip.recircle_android.models.ProductsData;
 import com.example.synerzip.recircle_android.models.RootObject;
 import com.example.synerzip.recircle_android.models.SearchProduct;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
-import com.example.synerzip.recircle_android.ui.ReadyCallbak;
+import com.example.synerzip.recircle_android.ui.ReadyCallback;
 
 import java.util.ArrayList;
 
@@ -28,14 +25,13 @@ public class SearchUtility {
     private SearchProduct sd;
 
     public ArrayList<ProductsData> productsDataList;
-    private ReadyCallbak callback;
+    private ReadyCallback callback;
 
-    public void setCallback(ReadyCallbak callback) {
+    public void setCallback(ReadyCallback callback) {
         this.callback = callback;
     }
 
     public void search(String productId, String manufacturerId, String query, String mFromDate, String mToDate) {
-
 
         service = ApiClient.getClient().create(RCAPInterface.class);
 
@@ -81,6 +77,8 @@ public class SearchUtility {
 
                         productsDataList = response.body().getProductsData();
 
+                    callback.allItemsResult(productsDataList);
+                } else {
                         callback.allItemsResult(productsDataList);
                     }
                 } else {

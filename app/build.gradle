@@ -15,7 +15,7 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.example.synerzip.recircle_android"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -59,9 +59,12 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.2.0'
     compile 'com.google.code.gson:gson:2.6.2'
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
 
-    //Butterknife
+    //Retrofit Logs
+    compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
+    compile 'com.squareup:android-times-square:1.6.5@aar'
+
+    //Butterknife library
     compile 'com.jakewharton:butterknife:8.2.1'
 
     //Butterknife compiler
@@ -76,11 +79,13 @@ dependencies {
 
     //Support recyclerview
     compile 'com.android.support:recyclerview-v7:25.2.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
-    //Awesome Validation
+    //awesome validation
     compile 'com.basgeekball:awesome-validation:2.0'
 
-    //mPickerView library
+    //Custom Progrss dialog
+    compile 'de.hdodenhof:circleimageview:2.1.0'
 
     //circularimageview
     compile 'com.pkmmte.view:circularimageview:1.1'
@@ -92,9 +97,6 @@ dependencies {
     compile 'com.google.android.gms:play-services-location:10.2.1'
     compile 'com.google.android.gms:play-services-maps:10.2.1'
 
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.roger.catloadinglibrary:catloadinglibrary:1.0.1'
     compile 'com.android.support:support-vector-drawable:25.2.0'
-    compile 'com.squareup:android-times-square:1.6.5@aar'
-    compile 'de.hdodenhof:circleimageview:2.1.0'
+
 }

@@ -24,7 +24,7 @@
     <string name="product_details_not_found">Product Not Found</string>
     <string name="search_result">Search Result</string>
     <string name="city_name">Austin, Texas</string>
-    <string name="err_Field_empty">Enter Product Name</string>
+    <string name="enter_product_name">Enter Product Name</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
@@ -48,25 +48,165 @@
     <string name="error_dates">Enter dates to be saved</string>
     <string name="list_an_item_title">Go ahead and list something. We’ve got you covered.</string>
     <string name="agreement">By listing an item, I agree to the Recircle <b>Terms and Agreements.</b></string>
-    <string name="txt_enter_zip">Enter Zip*</string>
+    <string name="txt_enter_zip">Enter Zip *</string>
     <string name="edit_enter_zip">Enter Zip</string>
     <string name="list_an_item">List an item</string>
     <string name="item_name">Item name *</string>
-    <string name="search_item">Search for an item to rent</string>
-    <string name="daily_price">Daily Rental Price*</string>
-    <string name="enter_price">Enter Price</string>
-    <string name="min_rental">Minimum Rental*</string>
+    <string name="search_item">Search for an item to rent *</string>
+    <string name="daily_price">Daily Rental Price *</string>
+    <string name="enter_price">Daily Rental Price ($/per day)*</string>
+    <string name="min_rental">Minimum Rental *</string>
     <string name="discount">Discounts</string>
     <string name="offer_discount">Offer a 30% discount for 5 day rentals.</string>
-    <string name="offer_discount_days">40% discount for 10 day rentals.</string>
-    <string name="item_desc">Item descripton*</string>
-    <string name="add_desc">Add description about your item</string>
+    <string name="offer_discount_days">Offer 40% discount for 10 day rentals.</string>
+    <string name="item_desc">Item descripton *</string>
+    <string name="add_desc">Add description about your item *</string>
     <string name="calendar_availability">Adjust calendar of availability</string>
     <string name="something_went_wrong">Something went wrong...Please try again</string>
     <string name="optional">(optional)</string>
-    <string name="upload_photos">Upload Photos (At least 1)*</string>
+    <string name="upload_photos">Upload Photos (At least 1) *</string>
+    <string name="first_name">First Name *</string>
+    <string name="last_name">Last Name *</string>
+    <string name="email">Email *</string>
+    <string name="password">Password *</string>
+    <string name="mobile">Mobile *</string>
+    <string name="verification_code">Verification Code *</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="have_an_acc">Have an account ?</string>
+    <string name="log_in">Log In</string>
+    <string name="dont_have_an_acc">Dont\'t have an accout ?</string>
+    <string name="create_acc">Create Account</string>
+    <string name="enter_first_name">Enter first name</string>
+    <string name="enter_last_name">Enter last name</string>
+    <string name="enter_email">Enter email</string>
+    <string name="enter_pwd">Enter password</string>
+    <string name="enter_mob_no">Enter mobile no.</string>
+    <string name="enter_otp">Enter verification code</string>
+    <string name="forgot_pwd">Forgot password ?</string>
+    <string name="forgot_pwd_title">Give us the email you used to sign up and we\'ll send you a code to reset your password</string>
+    <string name="send_otp">Send OTP</string>
+    <string name="toast_send_otp">OTP sent to ur mobile number</string>
+    <string name="save_and_continue">Save and Continue</string>
+    <string name="enter_item_desc">Enter item description</string>
+    <string name="enter_item_price">Enter item price</string>
+    <string name="enter_new_pwd">New password *</string>
+    <string name="enter_forgot_pwd_otp">Enter OTP *</string>
+    <string name="resend_otp">Resend Code</string>
+    <string name="submit">Submit</string>
+    <string name="validate_otp">Enter 6 digit OTP</string>
+    <string name="validate_mob_no">Enter 10 digit mobile number</string>
+    <string name="validate_pwd">Enter at least 8 characters</string>
+    <string name="validate_email">Enter a valid email</string>
+    <string name="reset_pwd">Reset password</string>
+    <string name="validate_item_search">Enter item to search</string>
+    <string name="validate_min_rental_days">Minimum rental day(s) are required</string>
+    <string name="validate_item_desc">Enter item description</string>
+    <string name="validate_price">Enter Price</string>
+    <string name="calendar_availability_days">listSelectedDates</string>
+    <string name="error_list_item_calendar">Enter dates to be unavailable</string>
+    <string name="calendar_availability_days_count">selectedDatesCount</string>
+    <string name="logout_alert_title">Are you sure you want to logout ?</string>
+    <string name="logout">Logout</string>
+    <string name="err_credentials">User credentials are wrong</string>
+    <string name="please_try_again">Please try again</string>
+    <string name="logged_in_as">Logged in as :</string>
+    <string name="calendar_days_selected">You have selected </string>
+    <string name="calendar_days"> days as unavailable</string>
+    <string name="choose">Choose</string>
+    <string name="user_must_login">User must log in</string>
+    <string name="invalid_zipcode">Invalid zipcode</string>
+    <string name="item_added">Product created successfully</string>
+    <string name="unavail_from_date">unavail_from_date</string>
+    <string name="unavail_to_date">unavail_to_date</string>
+    <string name="enetr_value_list_item">Enter the fields to add the item</string>
+    <string name="user_not_authenticated">User not authenticated</string>
+    <string name="product_creation_failed">Something went wrong. User product creation failed</string>
+    <string name="terms_and_agreement">Terms and Agreement should be accpted</string>
+    <string name="validate_zipcode">Enter at least 5 digit zipcode</string>
+    <string-array name="zipcodes_list_austin">
+        <item>73301</item>
+        <item>73344</item>
+        <item>78613</item>
+        <item>78617</item>
+        <item>78652</item>
+        <item>78653</item>
+        <item>78660</item>
+        <item>78701</item>
+        <item>78702</item>
+        <item>78703</item>
+        <item>78704</item>
+        <item>78705</item>
+        <item>78708</item>
+        <item>78709</item>
+        <item>78710</item>
+        <item>78708</item>
+        <item>78709</item>
+        <item>78710</item>
+        <item>78711</item>
+        <item>78712</item>
+        <item>78713</item>
+        <item>78714</item>
+        <item>78715</item>
+        <item>78716</item>
+        <item>78717</item>
+        <item>78718</item>
+        <item>78719</item>
+        <item>78720</item>
+        <item>78721</item>
+        <item>78722</item>
+        <item>78723</item>
+        <item>78724</item>
+        <item>78725</item>
+        <item>78726</item>
+        <item>78727</item>
+        <item>78728</item>
+        <item>78729</item>
+        <item>78730</item>
+        <item>78731</item>
+        <item>78732</item>
+        <item>78733</item>
+        <item>78734</item>
+        <item>78735</item>
+        <item>78736</item>
+        <item>78739</item>
+        <item>78741</item>
+        <item>78742</item>
+        <item>78744</item>
+        <item>78745</item>
+        <item>78746</item>
+        <item>78747</item>
+        <item>78748</item>
+        <item>78749</item>
+        <item>78750</item>
+        <item>78751</item>
+        <item>78752</item>
+        <item>78753</item>
+        <item>78754</item>
+        <item>78755</item>
+        <item>78756</item>
+        <item>78757</item>
+        <item>78758</item>
+        <item>78759</item>
+        <item>78760</item>
+        <item>78761</item>
+        <item>78762</item>
+        <item>78763</item>
+        <item>78764</item>
+        <item>78765</item>
+        <item>78766</item>
+        <item>78767</item>
+        <item>78768</item>
+        <item>78769</item>
+        <item>78772</item>
+        <item>78773</item>
+        <item>78774</item>
+        <item>78778</item>
+        <item>78779</item>
+        <item>78783</item>
+        <item>78799</item>
+    </string-array>
     <string name="note_hint">Include note with rental</string>
-    <string name="total">Total:</string>
+    <string name="total">Total</string>
     <string name="request_this_item">Request this Item</string>
     <string name="description">Description</string>
     <string name="condition">Condition</string>
@@ -74,7 +214,7 @@
     <string name="view_less">View less</string>
     <string name="checkbox_text">Protection Plan (Already Include In This Price)</string>
     <string name="product_id">productId</string>
-    <string name="price">Price:</string>
+    <string name="price">Price</string>
     <string name="select_dates">Select Dates</string>
     <string name="selected_image_url">selected_image_url</string>
     <string name="selected_image_position">selected_image_position</string>
@@ -101,17 +241,39 @@
     <string name="store_address">Store Address</string>
     <string name="see_on_map">See On Map</string>
     <string name="store_loaction">Store Location</string>
-    <string name="pick_up_time">After 2.00 pm</string>
-    <string name="return_time">By 12.00 noon</string>
+    <string name="pick_up_time">2.00 pm Onwards</string>
+    <string name="return_time">Till 12.00pm</string>
+    <string name="selectedDates">selectedDates</string>
+    <string name="dates">dates</string>
+    <string name="calendar_date_format">yyyy-MM-dd\'T\'HH:mm:ss.SSS\'Z\'</string>
+    <string name="product_not_created">Product creation unsuccessful</string>
+    <string name="mandatory_dates">Mandatory fields should not be empty</string>
 
-    <string name="create_acc">Create Account</string>
-    <string name="dont_have_an_acc">Don\'t have and Account?</string>
-    <string name="log_in">Log In</string>
-    <string name="forgot_pwd">Forgot Password</string>
-    <string name="password">Password</string>
-    <string name="email">Email-Id</string>
     <string name="all_reviews_list">all_reviews_list</string>
     <string name="all_reviews">All Reviews</string>
     <string name="see_all_reviews">See All reviews</string>
     <string name="renters_review">Renter\'s Reviews</string>
+    <string name="rent">Rent</string>
+    <string name="price_details">Price Details</string>
+    <string name="Dates">Dates</string>
+    <string name="Days">Days</string>
+    <string name="product_title">product_title</string>
+    <string name="days_count">days_count</string>
+    <string name="product">product</string>
+    <string name="pricing_details">Price Details</string>
+    <string name="include_msg">Include a Message</string>
+    <string name="selected_dates">Selected Dates</string>
+    <string name="Subtotal">Subtotal</string>
+    <string name="confirm">Confirm</string>
+    <string name="proceed_to_pay">Proceed to Pay</string>
+    <string name="select_payment_mode">Select Payment Mode</string>
+    <string name="payment_options">Payment Options</string>
+    <string name="credit_card">Credit Card</string>
+    <string name="credit_card_info">Visa,Master,Amex,Diners &amp; Discover</string>
+    <string name="debit_card">Debit Card</string>
+    <string name="debit_card_info"><![CDATA[Visa,Master,Maestro & Rupay]]></string>
+    <string name="net_banking">Net Banking</string>
+    <string name="net_banking_info">All major banks are supported</string>
+    <string name="mobile_wallet">Mobile Wallet</string>
+    <string name="wallet_info"><![CDATA[PayTm,PayUmoney & Others]]></string>
 </resources>

@@ -19,12 +19,16 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
+import android.widget.ResourceCursorTreeAdapter;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
@@ -33,6 +37,7 @@ import com.example.synerzip.recircle_android.models.UserProdImages;
 import com.example.synerzip.recircle_android.models.UserProdReview;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
+import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
@@ -58,6 +63,8 @@ import retrofit2.Response;
 public class Details extends AppCompatActivity {
     private static final int REQUEST_CODE = 1;
     private static final String EXTRA_IMAGE = "extra_image";
+    public static boolean isFromNextActivity = false;
+    public static int total;
 
     private RCAPInterface service;
     private Products product;
@@ -78,82 +85,81 @@ public class Details extends AppCompatActivity {
     private Date toDate;
     private String formatedFromDate;
     private String formatedToDate;
-    private float dayCount;
+    private int dayCount;
+
+    private int pricePerDay;
 
     @BindView(R.id.toolbar)
-    public Toolbar mToolbar;
+    protected Toolbar mToolbar;
 
     @BindView(R.id.img_main_image)
-    public ImageView mImgMain;
+    protected ImageView mImgMain;
 
     @BindView(R.id.recycler_images)
-    public RecyclerView mRecyclerImages;
+    protected RecyclerView mRecyclerImages;
 
     @BindView(R.id.img_user)
-    public ImageView mImgUser;
+    protected ImageView mImgUser;
 
     @BindView(R.id.txt_product_name)
-    public TextView mTxtProductName;
+    protected TextView mTxtProductName;
 
     @BindView(R.id.txt_user_name)
-    public TextView mTxtUserName;
+    protected TextView mTxtUserName;
 
-    @BindView(R.id.txt_price)
-    public TextView mTxtPrice;
+    @BindView(R.id.btn_price)
+    protected Button mBtnPrice;
 
     @BindView(R.id.txt_datails_rating_count)
-    public TextView mTxtDetailsRateCount;
-
-    @BindView(R.id.edt_total_price)
-    public EditText mEdtTotalPrice;
-
-    @BindView(R.id.txt_total_label)
-    public TextView mTxtTotalLabel;
+    protected TextView mTxtDetailsRateCount;
 
     @BindView(R.id.ratingbar_details)
-    public RatingBar mDetailsRating;
+    protected RatingBar mDetailsRating;
 
     @BindView(R.id.all_ratingsbar)
-    public RatingBar mRatingAllAvg;
+    protected RatingBar mRatingAllAvg;
 
     @BindView(R.id.txt_all_reviews_count)
-    public TextView mTxtAvgRatingCount;
+    protected TextView mTxtAvgRatingCount;
 
     @BindView(R.id.imgbtn_help)
-    public ImageButton mImgHelp;
+    protected ImageButton mImgHelp;
 
     @BindView(R.id.expand_txt_description)
-    public ExpandableTextView mTxtDecscriptionDetail;
+    protected ExpandableTextView mTxtDecscriptionDetail;
 
     @BindView(R.id.txt_desc_see_more)
-    public TextView mTxtDescSeeMore;
+    protected TextView mTxtDescSeeMore;
 
     @BindView(R.id.expand_txt_condition)
-    public ExpandableTextView mTxtConditionDetail;
+    protected ExpandableTextView mTxtConditionDetail;
 
     @BindView(R.id.txt_condition_see_more)
-    public TextView mTxtConditionSeeMore;
+    protected TextView mTxtConditionSeeMore;
 
     @BindView(R.id.list_reviews)
-    public RecyclerView mReViewReviews;
+    protected RecyclerView mReViewReviews;
 
     @BindView(R.id.progress_bar)
-    public RelativeLayout mProgressBar;
-
-    @BindView(R.id.edt_enter_dates)
-    public EditText mEdtDates;
+    protected RelativeLayout mProgressBar;
 
     @BindView(R.id.scrollView)
-    public NestedScrollView mScrollView;
+    protected NestedScrollView mScrollView;
 
     @BindView(R.id.txt_see_all_reviews)
-    public TextView mTxtSeeAllReviews;
+    protected TextView mTxtSeeAllReviews;
 
     @BindView(R.id.collapsible_toolbar)
-    public CollapsingToolbarLayout mCollapsibleLayout;
+    protected CollapsingToolbarLayout mCollapsibleLayout;
 
     @BindView(R.id.appbarlayout)
-    public AppBarLayout mAppBarLayout;
+    protected AppBarLayout mAppBarLayout;
+
+    @BindView(R.id.btn_select_dates)
+    protected Button mBtnSelectDates;
+
+    @BindView(R.id.details_parent_linear_layout)
+    protected LinearLayout mParentLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -202,6 +208,7 @@ public class Details extends AppCompatActivity {
         String productId = bundle.getString(getString(R.string.product_id), "");
 
         final Call<Products> productsCall = service.getProductDetailsByID(productId);
+
         productsCall.enqueue(new Callback<Products>() {
             @Override
             public void onResponse(Call<Products> call, Response<Products> response) {
@@ -225,13 +232,14 @@ public class Details extends AppCompatActivity {
                                 mTxtSeeAllReviews.setVisibility(View.VISIBLE);
                                 mTxtSeeAllReviews.setText(getString(R.string.see_all_reviews) + " (" + userProdReviewArrayList.size() + ")");
                             }
-//                            mReViewReviews.addItemDecoration(new DividerItemDecoration(Details.this, LinearLayoutManager.VERTICAL));
                             mReViewReviews.setLayoutManager(new LinearLayoutManager(Details.this));
                             mReViewReviews.setAdapter(reviewsListAdapter);
 
                             mImageAdapter = new ImageAdapter(getApplicationContext(), selectedImgPosition, userProdImagesArrayList, new ImageAdapter.OnImageItemClickListener() {
                                 @Override
                                 public void onImageClick(int position, UserProdImages userProdImages) {
+
+                                    Picasso.with(Details.this).load(userProdImages.getUser_prod_image_url()).into(mImgMain);
 
                                     View view = mRecyclerImages.getChildAt(position);
 
@@ -272,7 +280,9 @@ public class Details extends AppCompatActivity {
 
                             mTxtAvgRatingCount.setText("(" + product.getUser_product_info().getProduct_avg_rating() + ")");
 
-                            mTxtPrice.setText("$" + product.getUser_product_info().getPrice_per_day() + "/day");
+                            mBtnPrice.setText("$" + product.getUser_product_info().getPrice_per_day() + "/day");
+
+                            pricePerDay = Integer.parseInt(product.getUser_product_info().getPrice_per_day());
 
                             mTxtDecscriptionDetail.setText(product.getProduct_info().getProduct_description());
 
@@ -324,8 +334,10 @@ public class Details extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Dialog loginDialog = new Dialog(Details.this);
-                loginDialog.setTitle(getString(R.string.log_in));
-                loginDialog.setContentView(R.layout.log_in_dialog);
+                loginDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                loginDialog.setContentView(R.layout.activity_log_in);
+                Toolbar toolbar = (Toolbar) loginDialog.findViewById(R.id.toolbar);
+                toolbar.setVisibility(View.GONE);
                 loginDialog.show();
             }
         });
@@ -386,34 +398,43 @@ public class Details extends AppCompatActivity {
                 formatedFromDate = calFromDate.get(Calendar.DATE) + " " + monthFromDate + ", " + calFromDate.get(Calendar.YEAR);
                 formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
 
-                if (monthFromDate.equals(monthToDate)) {
-                    formatedFromDate = calFromDate.get(Calendar.DATE) + "";
-                    formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
-                } else if (!monthFromDate.equals(monthToDate) && !(calFromDate.get(Calendar.YEAR) == calToDate.get(Calendar.YEAR))) {
-                    formatedFromDate = calFromDate.get(Calendar.DATE) + " " + monthFromDate + ", " + calFromDate.get(Calendar.YEAR);
-                    formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
-                } else if (!monthFromDate.equals(monthToDate)) {
-                    formatedFromDate = calFromDate.get(Calendar.DATE) + " " + monthFromDate;
-                    formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
-                }
-                mEdtDates.setText(formatedFromDate + " - " + formatedToDate);
-
                 long diff = toDate.getTime() - fromDate.getTime();
-                dayCount = (float) diff / (24 * 60 * 60 * 1000);
+                dayCount = (int) diff / (24 * 60 * 60 * 1000);
 
-                float total = dayCount * Integer.parseInt(product.getUser_product_info().getPrice_per_day());
+                total = (int) Math.abs(dayCount) * Integer.parseInt(product.getUser_product_info().getPrice_per_day());
+
                 if (total != 0) {
-                    mEdtTotalPrice.setVisibility(View.VISIBLE);
-                    mTxtTotalLabel.setVisibility(View.VISIBLE);
-                    mEdtTotalPrice.setText(" $" + (int) total + "   ($"
-                            + product.getUser_product_info().getPrice_per_day() +
-                            " * " + (int) dayCount + getString(R.string.days) + ")");
+                    mBtnPrice.setText(" $" + (int) total);
+                    mBtnPrice.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_info_48, 0);
+                    mBtnSelectDates.setText(getString(R.string.confirm));
+                    isFromNextActivity = true;
                 }
 
             }
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isFromNextActivity) {
+            mBtnSelectDates.setText(getString(R.string.confirm));
+            if (RentInfoActivity.isDateChanged) {
+                mBtnPrice.setText(" $" + total);
+                mBtnPrice.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_info_48, 0);
+            }
+
+        } else {
+            mBtnSelectDates.setText(getString(R.string.select_dates));
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        total = 0;
+        RentInfoActivity.isDateChanged=false;
+    }
 
     /**
      * Show next Image
@@ -437,10 +458,23 @@ public class Details extends AppCompatActivity {
      * Opens Calendar to select dates
      */
 
-    @OnClick(R.id.edt_enter_dates)
+    @OnClick(R.id.btn_select_dates)
     public void openCalendar() {
-        Intent intent = new Intent(Details.this, CalendarActivity.class);
-        startActivityForResult(intent, REQUEST_CODE);
+
+        if (mBtnSelectDates.getText().equals(getString(R.string.confirm))) {
+            Intent infoIntent = new Intent(this, RentInfoActivity.class);
+            infoIntent.putExtra(getString(R.string.product), product);
+            infoIntent.putExtra(getString(R.string.from_date), formatedFromDate);
+            infoIntent.putExtra(getString(R.string.to_date), formatedToDate);
+            infoIntent.putExtra(getString(R.string.days_count), dayCount);
+            infoIntent.putExtra(getString(R.string.total), total);
+
+            startActivity(infoIntent);
+        } else {
+            Intent intent = new Intent(Details.this, CalendarActivity.class);
+            startActivityForResult(intent, REQUEST_CODE);
+        }
+
     }
 
     /**
@@ -449,7 +483,7 @@ public class Details extends AppCompatActivity {
 
     @OnClick(R.id.txt_see_store_address)
     public void scrollLayout() {
-        mScrollView.scrollTo(0, mScrollView.getBottom());
+        mScrollView.scrollTo(0, mScrollView.getHeight());
     }
 
     /**
@@ -470,6 +504,26 @@ public class Details extends AppCompatActivity {
         Intent intent = new Intent(this, AllReviewsActivity.class);
         intent.putParcelableArrayListExtra(getString(R.string.all_reviews_list), userProdReviewArrayList);
         startActivity(intent);
+    }
+
+    /**
+     * Show Rent Information
+     */
+    @OnClick(R.id.btn_price)
+    public void showPriceInfo() {
+        if (mBtnSelectDates.getText().equals(getString(R.string.confirm))) {
+            Intent infoIntent = new Intent(this, RentInfoActivity.class);
+            infoIntent.putExtra(getString(R.string.product), product);
+            infoIntent.putExtra(getString(R.string.from_date), formatedFromDate);
+            infoIntent.putExtra(getString(R.string.to_date), formatedToDate);
+            infoIntent.putExtra(getString(R.string.days_count), dayCount);
+            infoIntent.putExtra(getString(R.string.total), total);
+
+            startActivity(infoIntent);
+        } else {
+            RCLog.showToast(getApplicationContext(), getString(R.string.select_dates));
+        }
+
     }
 
 }

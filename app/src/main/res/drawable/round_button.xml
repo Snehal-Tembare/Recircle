@@ -8,7 +8,7 @@
             <stroke
                 android:color="@color/colorRoundBtn"
                 android:width="@dimen/dimen_1dp"/>
-            <corners android:radius="50dp"/>
+            <corners android:radius="20dp"/>
         </shape>
     </item>
 </selector>

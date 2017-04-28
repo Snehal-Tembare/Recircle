@@ -17,17 +17,17 @@ import java.util.ArrayList;
 
 /**
  * Created by Prajakta Patil on 10/3/17.
- * Copyright © 2016 Synerzip. All rights reserved
+ * Copyright © 2017 Synerzip. All rights reserved
  */
 public class RecentItemsAdapter extends RecyclerView.Adapter<RecentItemsAdapter.ViewHolder> {
     private ArrayList<Products> productDetailsList;
     private Context mContext;
     private OnItemClickListener onItemClickListener;
 
-    public RecentItemsAdapter(Context mContext, ArrayList<Products> productDetailsList,OnItemClickListener onItemClickListener) {
+    public RecentItemsAdapter(Context mContext, ArrayList<Products> productDetailsList, OnItemClickListener onItemClickListener) {
         this.mContext = mContext;
         this.productDetailsList = productDetailsList;
-        this.onItemClickListener=onItemClickListener;
+        this.onItemClickListener = onItemClickListener;
     }
 
     @Override
@@ -46,14 +46,21 @@ public class RecentItemsAdapter extends RecyclerView.Adapter<RecentItemsAdapter.
                 .placeholder(R.mipmap.ic_item)
                 .into(viewHolder.mImageView);
 
-        viewHolder.mRatingBar.setRating(Float.parseFloat(productDetails.getUser_product_info().getProduct_avg_rating()));
+        if (null != productDetails.getUser_product_info().getProduct_avg_rating() &&
+                Float.parseFloat(productDetails.getUser_product_info().getProduct_avg_rating()) != 0) {
+            viewHolder.mRatingBar.setRating(Float.parseFloat(productDetails.getUser_product_info().getProduct_avg_rating()));
+            viewHolder.mTxtProductRating.setText("(" + productDetails.getUser_product_info().getProduct_avg_rating() + ")");
+        } else {
+            viewHolder.mRatingBar.setVisibility(View.GONE);
+            viewHolder.mTxtProductRating.setVisibility(View.GONE);
+        }
+
         viewHolder.mTxtProductTitle.setText(productDetails.getProduct_info().getProduct_title());
         viewHolder.mTxtProductPrice.setText("$" + productDetails.getUser_product_info().getPrice_per_day() + "/day");
-        viewHolder.mTxtProductRating.setText("(" + productDetails.getUser_product_info().getProduct_avg_rating() + ")");
         viewHolder.mTxtRenterName.setText(productDetails.getUser_info().getFirst_name()
                 + " " + productDetails.getUser_info().getLast_name());
 
-        viewHolder.bind(productDetailsList.get(position),onItemClickListener);
+        viewHolder.bind(productDetailsList.get(position), onItemClickListener);
 
 
     }

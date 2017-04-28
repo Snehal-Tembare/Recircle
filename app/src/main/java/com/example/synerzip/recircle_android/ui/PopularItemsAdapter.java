@@ -17,17 +17,17 @@ import java.util.ArrayList;
 
 /**
  * Created by Prajakta Patil on 10/3/17.
- * Copyright © 2016 Synerzip. All rights reserved
+ * Copyright © 2017 Synerzip. All rights reserved
  */
 public class PopularItemsAdapter extends RecyclerView.Adapter<PopularItemsAdapter.ViewHolder> {
     private ArrayList<Products> popularProductsList;
     private Context mContext;
     private OnItemClickListener onItemClikListner;
 
-    public PopularItemsAdapter(Context mContext, ArrayList<Products> popularProductsList,OnItemClickListener onItemClikListner) {
+    public PopularItemsAdapter(Context mContext, ArrayList<Products> popularProductsList, OnItemClickListener onItemClikListner) {
         this.mContext = mContext;
         this.popularProductsList = popularProductsList;
-        this.onItemClikListner=onItemClikListner;
+        this.onItemClikListner = onItemClikListner;
     }
 
     @Override
@@ -45,14 +45,21 @@ public class PopularItemsAdapter extends RecyclerView.Adapter<PopularItemsAdapte
                         .getProduct_image_url())
                 .placeholder(R.mipmap.ic_item)
                 .into(viewHolder.mImageView);
-        viewHolder.mRatingBar.setRating(Float.parseFloat(popularProducts.getUser_product_info().getProduct_avg_rating()));
+        if (null != popularProducts.getUser_product_info().getProduct_avg_rating() &&
+                Float.parseFloat(popularProducts.getUser_product_info().getProduct_avg_rating()) != 0) {
+            viewHolder.mRatingBar.setRating(Float.parseFloat(popularProducts.getUser_product_info().getProduct_avg_rating()));
+            viewHolder.mTxtProductRating.setText("(" + popularProducts.getUser_product_info().getProduct_avg_rating() + ")");
+        } else {
+            viewHolder.mRatingBar.setVisibility(View.GONE);
+            viewHolder.mTxtProductRating.setVisibility(View.GONE);
+        }
+
         viewHolder.mTxtProductTitle.setText(popularProducts.getProduct_info().getProduct_title());
-        viewHolder.mTxtProductPrice.setText("$"+popularProducts.getUser_product_info().getPrice_per_day()+"/day");
-        viewHolder.mTxtProductRating.setText("(" + popularProducts.getUser_product_info().getProduct_avg_rating() + ")");
+        viewHolder.mTxtProductPrice.setText("$" + popularProducts.getUser_product_info().getPrice_per_day() + "/day");
         viewHolder.mTxtRenterName.setText(popularProducts.getUser_info().getFirst_name()
                 + " " + popularProducts.getUser_info().getLast_name());
 
-        viewHolder.bind(popularProductsList.get(position),onItemClikListner);
+        viewHolder.bind(popularProductsList.get(position), onItemClikListner);
     }
 
     @Override
@@ -69,7 +76,7 @@ public class PopularItemsAdapter extends RecyclerView.Adapter<PopularItemsAdapte
 
         public ViewHolder(View view) {
             super(view);
-            mRatingBar=(RatingBar)view.findViewById(R.id.ratingBarPopular) ;
+            mRatingBar = (RatingBar) view.findViewById(R.id.ratingBarPopular);
             mImageView = (ImageView) view.findViewById(R.id.imgPopularProduct);
             mTxtProductTitle = (TextView) view.findViewById(R.id.txtProductTitle);
             mTxtProductPrice = (TextView) view.findViewById(R.id.txtProductPrice);
@@ -77,7 +84,7 @@ public class PopularItemsAdapter extends RecyclerView.Adapter<PopularItemsAdapte
             mTxtRenterName = (TextView) view.findViewById(R.id.txtRenterName);
         }
 
-        public void bind(final Products popularProducts, final OnItemClickListener  onItemClikListner) {
+        public void bind(final Products popularProducts, final OnItemClickListener onItemClikListner) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

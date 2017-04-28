@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.synerzip.recircle_android.ui.PaymentModeActivity">
+
+    <include layout="@layout/partial_toolbar"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="1"
+                android:layout_marginTop="@dimen/common_dimens_5"
+                android:layout_margin="@dimen/common_dimens_10">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.1"
+                    android:src="@drawable/ic_card"
+                    android:padding="@dimen/common_dimens_10"/>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="0.8">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/credit_card"
+                        android:textColor="@color/text_color_dark"
+                        android:padding="@dimen/common_dimens_5"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/credit_card_info"
+                        android:padding="@dimen/common_dimens_5"/>
+
+                </LinearLayout>
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/common_dimens_20"
+                    android:layout_weight="0.1"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_forward"/>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_1dp"
+                android:background="@color/background_color_dark"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="1"
+                android:layout_margin="@dimen/common_dimens_10">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.1"
+                    android:src="@drawable/ic_card"
+                    android:padding="@dimen/common_dimens_10"/>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="0.8">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/debit_card"
+                        android:textColor="@color/text_color_dark"
+                        android:padding="@dimen/common_dimens_5"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/debit_card_info"
+                        android:padding="@dimen/common_dimens_5"/>
+
+                </LinearLayout>
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/common_dimens_20"
+                    android:layout_weight="0.1"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_forward"/>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_1dp"
+                android:background="@color/background_color_dark"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="1"
+                android:layout_margin="@dimen/common_dimens_10">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.1"
+                    android:src="@drawable/ic_card"
+                    android:padding="@dimen/common_dimens_10"/>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="0.8">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/net_banking"
+                        android:textColor="@color/text_color_dark"
+                        android:padding="@dimen/common_dimens_5"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/net_banking_info"
+                        android:padding="@dimen/common_dimens_5"/>
+
+                </LinearLayout>
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/common_dimens_20"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0.1"
+                    android:src="@drawable/ic_forward"/>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_1dp"
+                android:background="@color/background_color_dark"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="1"
+                android:layout_margin="@dimen/common_dimens_10">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.1"
+                    android:src="@drawable/ic_mobile_wallet"
+                    android:padding="@dimen/common_dimens_10"/>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="0.8">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/mobile_wallet"
+                        android:textColor="@color/text_color_dark"
+                        android:padding="@dimen/common_dimens_5"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/wallet_info"
+                        android:padding="@dimen/common_dimens_5"/>
+
+                </LinearLayout>
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/common_dimens_20"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0.1"
+                    android:src="@drawable/ic_forward"/>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_1dp"
+                android:background="@color/background_color_dark"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <Button
+                android:id="@+id/btn_total_price"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:background="@color/common_black"
+                android:padding="@dimen/common_dimens_10"
+                android:textColor="@color/common_white"
+                android:textSize="@dimen/text_size_16" />
+
+            <Button
+                android:id="@+id/btn_rent"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:background="@color/colorRedSecondary"
+                android:padding="@dimen/common_dimens_10"
+                android:text="@string/rent"
+                android:textColor="@color/common_white"
+                android:textSize="@dimen/text_size_16" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/bottom_sheet_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_behavior="@string/bottom_sheet_behavior">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/common_dimens_5"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:padding="@dimen/common_dimens_5"
+                android:text="@string/price"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/text_size_16" />
+
+            <TextView
+                android:id="@+id/txt_price"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:padding="@dimen/common_dimens_5"
+                android:text="$100/day"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/text_size_16" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/common_dimens_5"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:padding="@dimen/common_dimens_5"
+                android:text="@string/discount"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/text_size_16" />
+
+            <TextView
+                android:id="@+id/txt_discount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:padding="@dimen/common_dimens_5"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/text_size_16" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

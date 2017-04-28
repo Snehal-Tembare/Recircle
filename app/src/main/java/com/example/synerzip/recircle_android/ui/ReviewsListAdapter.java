@@ -36,8 +36,6 @@ public class ReviewsListAdapter extends RecyclerView.Adapter<ReviewsListAdapter.
     ReviewsListAdapter(Context context, ArrayList<UserProdReview> userProdReviewArrayList) {
         mContext = context;
         this.userProdReviewArrayList = userProdReviewArrayList;
-        this.userProdReviewArrayList.addAll(userProdReviewArrayList);
-        this.userProdReviewArrayList.addAll(userProdReviewArrayList);
     }
 
 
@@ -54,9 +52,12 @@ public class ReviewsListAdapter extends RecyclerView.Adapter<ReviewsListAdapter.
 
         holder.reviewersName.setText(review.getUser().getFirst_name() + " " + review.getUser().getLast_name());
         Picasso.with(mContext).load(review.getUser().getUser_image_url()).into(holder.reviewersImage);
-        if (null != review.getProd_rating()) {
+        if (null != review.getProd_rating() && review.getProd_rating() != 0) {
             holder.rating.setRating(review.getProd_rating());
             holder.avgRatingCount.setText("(" + review.getProd_rating() + ")");
+        } else {
+            holder.rating.setVisibility(View.GONE);
+            holder.avgRatingCount.setVisibility(View.GONE);
         }
         holder.reviewComment.setText(review.getProd_review());
 

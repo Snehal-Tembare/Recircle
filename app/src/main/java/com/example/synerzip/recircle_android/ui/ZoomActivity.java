@@ -20,6 +20,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * Created by Snehal Tembare on 11/4/17.
+ * Copyright © 2017 Synerzip. All rights reserved
+ */
+
+
 public class ZoomActivity extends AppCompatActivity {
 
     private ArrayList<UserProdImages> userProdImagesArrayList;
