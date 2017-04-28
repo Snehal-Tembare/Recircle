@@ -97,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/dimen_20dp"
-                android:background="@drawable/round_button"
+                android:background="@drawable/round_button_blue"
                 android:onClick="btnSubmit"
                 android:text="@string/submit"
                 android:textColor="@color/common_white" />

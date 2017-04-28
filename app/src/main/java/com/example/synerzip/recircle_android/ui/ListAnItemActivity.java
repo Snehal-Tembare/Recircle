@@ -189,7 +189,7 @@ public class ListAnItemActivity extends AppCompatActivity {
 
     private long suggestedPrice;
 
-    private AllProductInfo mAllProductInfo;
+    private int daysCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,7 +205,6 @@ public class ListAnItemActivity extends AppCompatActivity {
         utility = new SearchUtility();
         listUploadGalleryImage = new ArrayList<>();
         mProductAutoComplete.setSingleLine();
-        mAllProductInfo=new AllProductInfo(Parcel.obtain());
 
         mProductAutoComplete.addTextChangedListener(new RCTextWatcher(mProductAutoComplete));
         mEditTxtEnterPrice.addTextChangedListener(new RCTextWatcher(mEditTxtEnterPrice));
@@ -219,7 +218,6 @@ public class ListAnItemActivity extends AppCompatActivity {
         selectedDates = new ArrayList<>();
 
         //get data from shared preferences
-
         sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
         isLoggedIn = sharedPreferences.getBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
         mAccessToken = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
@@ -278,7 +276,34 @@ public class ListAnItemActivity extends AppCompatActivity {
                             }
                         }
                         if (mCheckboxAgreement.isChecked()) {
-                            getListAnItem();
+
+                            Intent intent = new Intent(ListAnItemActivity.this, ListItemSummaryActivity.class);
+                            intent.putExtra(getString(R.string.unavail_dates), selectedDates);
+                            intent.putExtra(getString(R.string.unavail_dates_count), daysCount);
+                            intent.putExtra(getString(R.string.item_price), mItemPrice);
+                            intent.putExtra(getString(R.string.item_min_rental), mMinRental);
+                            intent.putExtra(getString(R.string.upload_image), listUploadItemImage);
+                            intent.putExtra(getString(R.string.uplaod_image_gallery), listUploadGalleryImage);
+                            intent.putExtra(getString(R.string.list_item_desc), mItemDesc);
+                            intent.putExtra(getString(R.string.product_title), productTitle);
+                            intent.putExtra(getString(R.string.product_id), productId);
+                            intent.putExtra(getString(R.string.discounts), listDiscounts);
+                            intent.putExtra(getString(R.string.list_unavail_days), mItemAvailability);
+                            intent.putExtra(getString(R.string.austin_check), fromAustin);
+                            intent.putExtra(getString(R.string.zipcode), mZipcode);
+
+                            if (mDiscounts.getDiscount_for_days() == 5) {
+                                double discFiveDays = Math.round(productPrice * 0.03);
+                                intent.putExtra(getString(R.string.disc_five_days), discFiveDays);
+                            }
+                            if (mDiscounts.getDiscount_for_days() == 10) {
+                                double discTenDays = Math.round(productPrice * 0.04);
+                                intent.putExtra(getString(R.string.disc_ten_days), discTenDays);
+                            }
+
+                            startActivity(intent);
+
+
                         } else {
                             RCLog.showToast(ListAnItemActivity.this, getString(R.string.terms_and_agreement));
                         }
@@ -294,120 +319,19 @@ public class ListAnItemActivity extends AppCompatActivity {
     }
 
     /**
-     * api call for list an item
-     */
-    private void getListAnItem() {
-
-        mProgressBar.setVisibility(View.VISIBLE);
-        mLinearLayout.setAlpha((float) 0.6);
-
-        ListAnItemRequest listAnItemRequest = new ListAnItemRequest(productId, mItemPrice, mMinRental,
-                mItemDesc, listDiscounts, listUploadItemImage, mItemAvailability, mZipcode, fromAustin);
-
-        service = ApiClient.getClient().create(RCAPInterface.class);
-        Call<AllProductInfo> call = service.listAnItem("Bearer " + mAccessToken, listAnItemRequest);
-        call.enqueue(new Callback<AllProductInfo>() {
-
-            @Override
-            public void onResponse(Call<AllProductInfo> call, Response<AllProductInfo> response) {
-                mProgressBar.setVisibility(View.GONE);
-                mLinearLayout.setAlpha((float) 1.0);
-                if (response.isSuccessful()) {
-                    RCLog.showToast(ListAnItemActivity.this, getString(R.string.item_added));
-                    Log.v("body",response.body()+"");
-              /*      Intent intent=new Intent(ListAnItemActivity.this, ListItemSummaryActivity.class);
-                    Bundle bundle=new Bundle();
-                    bundle.putParcelable("allProductInfo",mAllProductInfo);
-                    intent.putExtras(bundle);
-                    startActivity(intent);*/
-//                    finish();
-                } else {
-                    if (response.code() == RCWebConstants.RC_ERROR_CODE_BAD_REQUEST) {
-                        RCLog.showToast(ListAnItemActivity.this, getString(R.string.product_creation_failed));
-                    } else {
-                        RCLog.showToast(ListAnItemActivity.this, getString(R.string.user_not_authenticated));
-                        logInDialog();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<AllProductInfo> call, Throwable t) {
-                RCLog.showToast(ListAnItemActivity.this, getString(R.string.product_not_created));
-            }
-        });
-    }
-
-    /**
-     * Login again dialog
-     */
-    private void logInDialog() {
-        final Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.log_in_again_dialog);
-        dialog.setTitle(getString(R.string.log_in));
-        final EditText mEditTxtUserName = (EditText) dialog.findViewById(R.id.edit_login_email_dialog);
-        final EditText mEditTxtPwd = (EditText) dialog.findViewById(R.id.edit_login_pwd_dialog);
-
-        Button btnLogin = (Button) dialog.findViewById(R.id.btn_user_log_in_dialog);
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mProgressBar.setVisibility(View.VISIBLE);
-                mLinearLayout.setAlpha((float) 0.6);
-                final String mUserName = mEditTxtUserName.getText().toString();
-                final String mUserPwd = mEditTxtPwd.getText().toString();
-                LogInRequest logInRequest = new LogInRequest(mUserName, mUserPwd);
-
-                service = ApiClient.getClient().create(RCAPInterface.class);
-                Call<User> userCall = service.userLogIn(logInRequest);
-                userCall.enqueue(new Callback<User>() {
-                    @Override
-                    public void onResponse(Call<User> call, Response<User> response) {
-
-                        mProgressBar.setVisibility(View.GONE);
-                        mLinearLayout.setAlpha((float) 1.0);
-
-                        if (response.isSuccessful()) {
-                            mAccessToken = response.body().getToken();
-                            sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
-                            editor.apply();
-                            dialog.dismiss();
-                        } else {
-                            if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
-                                RCLog.showToast(ListAnItemActivity.this, getString(R.string.err_credentials));
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<User> call, Throwable t) {
-                        mProgressBar.setVisibility(View.GONE);
-                        mLinearLayout.setAlpha((float) 1.0);
-                    }
-                });
-            }
-        });
-
-        dialog.show();
-    }
-
-
-    /**
      * list an item submit button
      *
      * @param v
      */
     @OnClick(R.id.btn_proceed)
     public void btnProceed(View v) {
-
         submitForm();
         if (isLoggedIn) {
             HideKeyboard.hideKeyBoard(ListAnItemActivity.this);
             if (NetworkUtility.isNetworkAvailable(this)) {
                 if (getValues()) {
                     checkZipcodes();
+
                 } else {
                     RCLog.showToast(ListAnItemActivity.this, getString(R.string.mandatory_dates));
                 }
@@ -519,60 +443,60 @@ public class ListAnItemActivity extends AppCompatActivity {
                 }
                 if (product.getProduct_detail().getProduct_price() != 0) {
                     productPrice = product.getProduct_detail().getProduct_price();
-                    productTitle=product.getProduct_manufacturer_title();
+                    productTitle = product.getProduct_manufacturer_title();
                 }
                 if (product.getProduct_id() != null && !product.getProduct_id().isEmpty()) {
                     productId = product.getProduct_id();
+                    productTitle = product.getProduct_manufacturer_title();
+                    if (productPrice != 0) {
+                        productPrice = (int) Math.round(productPrice);
+                        if (productPrice > 0 && productPrice <= 100) {
+                            suggestedPrice = Math.round(0.1 * productPrice);
+                        } else if (productPrice > 100 && productPrice <= 500) {
+                            suggestedPrice = Math.round(0.04 * productPrice);
+                        } else if (productPrice > 500 && productPrice <= 1000) {
+                            suggestedPrice = Math.round(0.03 * productPrice);
 
-                    productPrice = (int) Math.round(productPrice);
-                    if (productPrice > 0 && productPrice <= 100) {
-                        suggestedPrice = Math.round(0.1 * productPrice);
-                    } else if (productPrice > 100 && productPrice <= 500) {
-                        suggestedPrice = Math.round(0.04 * productPrice);
-                    } else if (productPrice > 500 && productPrice <= 1000) {
-                        suggestedPrice = Math.round(0.03 * productPrice);
+                        } else if (productPrice > 1000 && productPrice <= 2000) {
+                            suggestedPrice = Math.round(0.02 * productPrice);
 
-                    } else if (productPrice > 1000 && productPrice <= 2000) {
-                        suggestedPrice = Math.round(0.02 * productPrice);
+                        } else if (productPrice > 2000 && productPrice <= 10000) {
+                            suggestedPrice = Math.round(0.01 * productPrice);
 
-                    } else if (productPrice > 2000 && productPrice <= 10000) {
-                        suggestedPrice = Math.round(0.01 * productPrice);
+                        } else if (productPrice > 10000 && productPrice <= 25000) {
+                            suggestedPrice = Math.round(0.07 * productPrice);
 
-                    } else if (productPrice > 10000 && productPrice <= 25000) {
-                        suggestedPrice = Math.round(0.07 * productPrice);
+                        } else {
+                            suggestedPrice = Math.round(0.03 * productPrice);
 
-                    } else {
-                        suggestedPrice = Math.round(0.03 * productPrice);
+                        }
+                        mEditTxtEnterPrice.setText(String.valueOf(suggestedPrice));
 
+                        //numeric slider for product suggested price
+                        mDiscreteSeekBar.setVisibility(View.VISIBLE);
+                        mTxtSuggestedPrice.setVisibility(View.VISIBLE);
+                        mDiscreteSeekBar.setMin(1);
+                        mDiscreteSeekBar.setMax((int) suggestedPrice * 2);
+                        mDiscreteSeekBar.setProgress((int) suggestedPrice);
+
+                        mDiscreteSeekBar.setOnProgressChangeListener(new DiscreteSeekBar.OnProgressChangeListener() {
+                            @Override
+                            public void onProgressChanged(DiscreteSeekBar seekBar, int value, boolean fromUser) {
+                                String strValue = String.valueOf(value);
+                                mEditTxtEnterPrice.setText(strValue);
+                            }
+
+                            @Override
+                            public void onStartTrackingTouch(DiscreteSeekBar seekBar) {
+                                seekBar.setProgress((int) suggestedPrice);
+                            }
+
+                            @Override
+                            public void onStopTrackingTouch(DiscreteSeekBar seekBar) {
+
+                            }
+                        });
                     }
-                    mEditTxtEnterPrice.setText(String.valueOf(suggestedPrice));
-
-                    //numeric slider for product suggested price
-                    mDiscreteSeekBar.setVisibility(View.VISIBLE);
-                    mTxtSuggestedPrice.setVisibility(View.VISIBLE);
-                    mDiscreteSeekBar.setMin(1);
-                    mDiscreteSeekBar.setMax((int) suggestedPrice * 2);
-                    mDiscreteSeekBar.setProgress((int) suggestedPrice);
-
-                    mDiscreteSeekBar.setOnProgressChangeListener(new DiscreteSeekBar.OnProgressChangeListener() {
-                        @Override
-                        public void onProgressChanged(DiscreteSeekBar seekBar, int value, boolean fromUser) {
-                            String strValue = String.valueOf(value);
-                            mEditTxtEnterPrice.setText(strValue);
-                        }
-
-                        @Override
-                        public void onStartTrackingTouch(DiscreteSeekBar seekBar) {
-                            seekBar.setProgress((int) suggestedPrice);
-
-                        }
-
-                        @Override
-                        public void onStopTrackingTouch(DiscreteSeekBar seekBar) {
-
-                        }
-                    });
-
                 }
                 HideKeyboard.hideKeyBoard(ListAnItemActivity.this);
             }
@@ -613,7 +537,7 @@ public class ListAnItemActivity extends AppCompatActivity {
                     userProductUnAvailability = new UserProductUnAvailability(date, date);
                     mItemAvailability.add(userProductUnAvailability);
                 }
-                int daysCount = data.getIntExtra(getString(R.string.calendar_availability_days_count), 0);
+                daysCount = data.getIntExtra(getString(R.string.calendar_availability_days_count), 0);
                 if (daysCount != 0) {
                     mTxtDaysOfAvailability.setVisibility(View.VISIBLE);
                     mTxtDaysOfAvailability.setText(getString(R.string.calendar_days_selected) + " " +

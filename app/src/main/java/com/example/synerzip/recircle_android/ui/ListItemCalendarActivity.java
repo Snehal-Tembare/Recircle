@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.utilities.RCLog;
@@ -14,17 +15,20 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import static com.squareup.timessquare.CalendarPickerView.SelectionMode.MULTIPLE;
-import com.squareup.timessquare.CalendarPickerView;
+
+import com.squareup.timessquare.*;
 
 /**
  * Created by Prajakta Patil on 31/3/17.
  * Copyright © 2017 Synerzip. All rights reserved
  */
-public class ListItemCalendarActivity extends AppCompatActivity {
+public class ListItemCalendarActivity extends AppCompatActivity{
     @BindView(R.id.calendar_view)
     protected CalendarPickerView mPickerView;
 
@@ -73,7 +77,13 @@ public class ListItemCalendarActivity extends AppCompatActivity {
 
             @Override
             public void onDateSelected(Date date) {
+
                 selectedDates.add(date);
+
+                List<CalendarCellDecorator> decoratorList = new ArrayList<>();
+                decoratorList.add(new MonthDecorator(ListItemCalendarActivity.this,date));
+                mPickerView.setDecorators(decoratorList);
+
                 DateFormat dateFormat = new SimpleDateFormat(getString(R.string.calendar_date_format));
                 String dateString = dateFormat.format(date);
                 datesList.add(dateString);
@@ -119,4 +129,5 @@ public class ListItemCalendarActivity extends AppCompatActivity {
     public void txtCalendarCancel(View view) {
         finish();
     }
+
 }
