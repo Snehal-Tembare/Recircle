@@ -127,7 +127,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/dimen_10dp"
-                android:background="@drawable/round_button"
+                android:background="@drawable/round_button_blue"
                 android:onClick="btnSignUp"
                 android:text="@string/sign_up"
                 android:textColor="@color/common_white" />

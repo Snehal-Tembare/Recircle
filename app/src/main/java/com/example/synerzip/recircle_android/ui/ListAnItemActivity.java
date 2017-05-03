@@ -1,11 +1,13 @@
 package com.example.synerzip.recircle_android.ui;
 
+import android.app.Dialog;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Parcel;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.design.widget.TextInputLayout;
@@ -23,21 +25,23 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.AllProductInfo;
 import com.example.synerzip.recircle_android.models.Discounts;
 import com.example.synerzip.recircle_android.models.ListAnItemRequest;
+import com.example.synerzip.recircle_android.models.LogInRequest;
 import com.example.synerzip.recircle_android.models.Product;
 import com.example.synerzip.recircle_android.models.ProductsData;
 import com.example.synerzip.recircle_android.models.SearchProduct;
+import com.example.synerzip.recircle_android.models.User;
 import com.example.synerzip.recircle_android.models.UserProdImages;
 import com.example.synerzip.recircle_android.models.UserProductUnAvailability;
 import com.example.synerzip.recircle_android.models.ZipcodeRoot;
@@ -50,6 +54,8 @@ import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
 import com.example.synerzip.recircle_android.utilities.SearchUtility;
 
+import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -58,7 +64,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.Interceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -136,27 +141,20 @@ public class ListAnItemActivity extends AppCompatActivity {
     private String productId = "", mAccessToken;
 
     @BindView(R.id.checkbox_discount_five_days)
-    protected CheckBox mDiscontForFiveDay;
+    protected CheckBox mDiscountForFiveDay;
 
     @BindView(R.id.checkbox_discount_ten_days)
-    protected CheckBox mDiscontForTenDay;
+    protected CheckBox mDiscountForTenDay;
 
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
 
     private int fromAustin;
 
-    private UploadImageAdapter mUploadImageAdapter;
-
     @BindView(R.id.recycler_view_upload_img)
     protected RecyclerView mRecyclerView;
 
-    private ArrayList<String> availableDates;
-
     private Discounts mDiscounts;
-
-    private UserProdImages mUserProdImages;
-    private SharedPreferences sharedPreferences;
 
     private boolean isLoggedIn;
 
@@ -176,6 +174,22 @@ public class ListAnItemActivity extends AppCompatActivity {
     protected LinearLayout mLinearLayout;
 
     private ArrayList<Date> selectedDates;
+
+    @BindView(R.id.price_slider)
+    protected DiscreteSeekBar mDiscreteSeekBar;
+
+    private double productPrice;
+
+    private String productTitle;
+
+    private SharedPreferences sharedPreferences;
+
+    @BindView(R.id.txt_suggested_price)
+    protected TextView mTxtSuggestedPrice;
+
+    private long suggestedPrice;
+
+    private int daysCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -197,10 +211,11 @@ public class ListAnItemActivity extends AppCompatActivity {
         mEditMinRental.addTextChangedListener(new RCTextWatcher(mEditMinRental));
         mEditTxtItemDesc.addTextChangedListener(new RCTextWatcher(mEditTxtItemDesc));
         mEditTxtZipcode.addTextChangedListener(new RCTextWatcher(mEditTxtZipcode));
+
         mItemAvailability = new ArrayList<>();
         listDiscounts = new ArrayList<>();
         listUploadItemImage = new ArrayList<>();
-        selectedDates=new ArrayList<>();
+        selectedDates = new ArrayList<>();
 
         //get data from shared preferences
         sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
@@ -208,7 +223,7 @@ public class ListAnItemActivity extends AppCompatActivity {
         mAccessToken = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
 
         //discounts checkbox listener
-        mDiscontForFiveDay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mDiscountForFiveDay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
@@ -217,7 +232,7 @@ public class ListAnItemActivity extends AppCompatActivity {
                 }
             }
         });
-        mDiscontForTenDay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mDiscountForTenDay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
@@ -255,13 +270,40 @@ public class ListAnItemActivity extends AppCompatActivity {
                                 }
                             }
                         } else {
-                            if (sizeZipcodeList==0) {
+                            if (sizeZipcodeList == 0) {
                                 RCLog.showToast(ListAnItemActivity.this, getString(R.string.invalid_zipcode));
                                 return;
                             }
                         }
                         if (mCheckboxAgreement.isChecked()) {
-                            getListAnItem();
+
+                            Intent intent = new Intent(ListAnItemActivity.this, ListItemSummaryActivity.class);
+                            intent.putExtra(getString(R.string.unavail_dates), selectedDates);
+                            intent.putExtra(getString(R.string.unavail_dates_count), daysCount);
+                            intent.putExtra(getString(R.string.item_price), mItemPrice);
+                            intent.putExtra(getString(R.string.item_min_rental), mMinRental);
+                            intent.putExtra(getString(R.string.upload_image), listUploadItemImage);
+                            intent.putExtra(getString(R.string.uplaod_image_gallery), listUploadGalleryImage);
+                            intent.putExtra(getString(R.string.list_item_desc), mItemDesc);
+                            intent.putExtra(getString(R.string.product_title), productTitle);
+                            intent.putExtra(getString(R.string.product_id), productId);
+                            intent.putExtra(getString(R.string.discounts), listDiscounts);
+                            intent.putExtra(getString(R.string.list_unavail_days), mItemAvailability);
+                            intent.putExtra(getString(R.string.austin_check), fromAustin);
+                            intent.putExtra(getString(R.string.zipcode), mZipcode);
+
+                            if (mDiscounts.getDiscount_for_days() == 5) {
+                                double discFiveDays = Math.round(productPrice * 0.03);
+                                intent.putExtra(getString(R.string.disc_five_days), discFiveDays);
+                            }
+                            if (mDiscounts.getDiscount_for_days() == 10) {
+                                double discTenDays = Math.round(productPrice * 0.04);
+                                intent.putExtra(getString(R.string.disc_ten_days), discTenDays);
+                            }
+
+                            startActivity(intent);
+
+
                         } else {
                             RCLog.showToast(ListAnItemActivity.this, getString(R.string.terms_and_agreement));
                         }
@@ -277,59 +319,21 @@ public class ListAnItemActivity extends AppCompatActivity {
     }
 
     /**
-     * api call for list an item
-     */
-    private void getListAnItem() {
-
-        mProgressBar.setVisibility(View.VISIBLE);
-        mLinearLayout.setAlpha((float) 0.6);
-
-        ListAnItemRequest listAnItemRequest = new ListAnItemRequest(productId, mItemPrice, mMinRental,
-                mItemDesc, listDiscounts, listUploadItemImage, mItemAvailability, mZipcode, fromAustin);
-
-        service = ApiClient.getClient().create(RCAPInterface.class);
-        Call<AllProductInfo> call = service.listAnItem("Bearer " + mAccessToken, listAnItemRequest);
-
-        call.enqueue(new Callback<AllProductInfo>() {
-
-            @Override
-            public void onResponse(Call<AllProductInfo> call, Response<AllProductInfo> response) {
-                mProgressBar.setVisibility(View.GONE);
-                mLinearLayout.setAlpha((float) 1.0);
-                if (response.isSuccessful()) {
-                    RCLog.showToast(ListAnItemActivity.this, getString(R.string.item_added));
-                    finish();
-                } else {
-                    if (response.code() == RCWebConstants.RC_ERROR_CODE_BAD_REQUEST) {
-                        RCLog.showToast(ListAnItemActivity.this, getString(R.string.product_creation_failed));
-                    } else {
-                        RCLog.showToast(ListAnItemActivity.this, getString(R.string.user_not_authenticated));
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<AllProductInfo> call, Throwable t) {
-                RCLog.showToast(ListAnItemActivity.this, getString(R.string.product_not_created));
-            }
-        });
-    }
-
-    /**
      * list an item submit button
      *
      * @param v
      */
-    @OnClick(R.id.btn_save_and_continue)
-    public void btnSaveAndContinue(View v) {
+    @OnClick(R.id.btn_proceed)
+    public void btnProceed(View v) {
         submitForm();
         if (isLoggedIn) {
             HideKeyboard.hideKeyBoard(ListAnItemActivity.this);
             if (NetworkUtility.isNetworkAvailable(this)) {
-                if(getValues()) {
+                if (getValues()) {
                     checkZipcodes();
-                }else {
-                    RCLog.showToast(ListAnItemActivity.this,getString(R.string.mandatory_dates));
+
+                } else {
+                    RCLog.showToast(ListAnItemActivity.this, getString(R.string.mandatory_dates));
                 }
             } else {
                 RCLog.showToast(this, getResources().getString(R.string.err_network_available));
@@ -345,22 +349,23 @@ public class ListAnItemActivity extends AppCompatActivity {
      */
     public boolean getValues() {
 
-        String strPrice=mEditTxtEnterPrice.getText().toString();
-        String strrental=mEditMinRental.getText().toString();
-        String strDesc=mEditTxtItemDesc.getText().toString();
-        String zipcode=mEditTxtZipcode.getText().toString();
+        String strPrice = mEditTxtEnterPrice.getText().toString();
+        String strRental = mEditMinRental.getText().toString();
+        String strDesc = mEditTxtItemDesc.getText().toString();
+        String strZipcode = mEditTxtZipcode.getText().toString();
 
-        if(!strPrice.isEmpty() &&!strrental.isEmpty()&&!strDesc.isEmpty()&&!zipcode.isEmpty()) {
+        if (!strPrice.isEmpty() && !strRental.isEmpty() && !strDesc.isEmpty() && !strZipcode.isEmpty()) {
             mItemPrice = Integer.parseInt(mEditTxtEnterPrice.getText().toString().trim());
             mMinRental = Integer.parseInt(mEditMinRental.getText().toString().trim());
             mItemDesc = mEditTxtItemDesc.getText().toString().trim();
             mZipcode = Long.parseLong(mEditTxtZipcode.getText().toString().trim());
             //TODO product images should be taken from amazon s3 bucket ; yet to be done
+            UserProdImages mUserProdImages;
             mUserProdImages = new UserProdImages("https://s3.ap-south-1.amazonaws.com/cmsios/CalendarView.png", "2017-02-04T13:13:09.000Z");
             listUploadItemImage.add(mUserProdImages);
             return true;
         }
-            return false;
+        return false;
     }
 
     /**
@@ -370,8 +375,8 @@ public class ListAnItemActivity extends AppCompatActivity {
      */
     @OnClick(R.id.edit_calendar_availability)
     public void calendarAvailability(View view) {
-        Intent intent=new Intent(ListAnItemActivity.this, ListItemCalendarActivity.class);
-        intent.putExtra("dates",selectedDates);
+        Intent intent = new Intent(ListAnItemActivity.this, ListItemCalendarActivity.class);
+        intent.putExtra(getString(R.string.dates), selectedDates);
         startActivityForResult(intent, 1);
     }
 
@@ -395,20 +400,16 @@ public class ListAnItemActivity extends AppCompatActivity {
             public void allItemsResult(ArrayList<ProductsData> mProductsDataList) {
                 productsDataList = mProductsDataList;
                 if (null != productsDataList && 0 != productsDataList.size()) {
-
                     for (int i = 0; i < productsDataList.size(); i++) {
                         productItemList.add(productsDataList.get(i).getProduct_manufacturer_name());
                         Product pd = new Product();
                         pd.setProduct_manufacturer_id(productsDataList.get(i).getProduct_manufacturer_id());
                         pd.setProduct_manufacturer_name(productsDataList.get(i).getProduct_manufacturer_name());
                         pd.setProduct_manufacturer_title(productsDataList.get(i).getProduct_manufacturer_name());
-
                         productsCustomList.add(pd);
                         ArrayList<Product> productsList = productsDataList.get(i).getProducts();
-
                         for (int j = 0; j < productsList.size(); j++) {
-                            productItemList.add(productsDataList
-                                    .get(i).getProduct_manufacturer_name()
+                            productItemList.add(productsDataList.get(i).getProduct_manufacturer_name()
                                     + " " + productsList.get(j).getProduct_title());
 
                             productsList.get(j).setProduct_manufacturer_title(productsDataList
@@ -419,8 +420,7 @@ public class ListAnItemActivity extends AppCompatActivity {
                     }
 
                     mAutocompleteAdapter = new AutocompleteAdapter
-                            (ListAnItemActivity.this, R.layout.activity_search,
-                                    R.id.txtProductName, productsCustomList);
+                            (ListAnItemActivity.this, R.layout.activity_search, R.id.txtProductName, productsCustomList);
                     mProductAutoComplete.setAdapter(mAutocompleteAdapter);
 
                 } else {
@@ -433,17 +433,75 @@ public class ListAnItemActivity extends AppCompatActivity {
         mProductAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                mDiscreteSeekBar.setProgress(1);
                 Product product = (Product) parent.getAdapter().getItem(position);
+
                 if (product.getProduct_manufacturer_id() != null
                         && !product.getProduct_manufacturer_id().isEmpty()) {
                     manufacturerId = product.getProduct_manufacturer_id();
                 }
+                if (product.getProduct_detail().getProduct_price() != 0) {
+                    productPrice = product.getProduct_detail().getProduct_price();
+                    productTitle = product.getProduct_manufacturer_title();
+                }
                 if (product.getProduct_id() != null && !product.getProduct_id().isEmpty()) {
                     productId = product.getProduct_id();
+                    productTitle = product.getProduct_manufacturer_title();
+                    if (productPrice != 0) {
+                        productPrice = (int) Math.round(productPrice);
+                        if (productPrice > 0 && productPrice <= 100) {
+                            suggestedPrice = Math.round(0.1 * productPrice);
+                        } else if (productPrice > 100 && productPrice <= 500) {
+                            suggestedPrice = Math.round(0.04 * productPrice);
+                        } else if (productPrice > 500 && productPrice <= 1000) {
+                            suggestedPrice = Math.round(0.03 * productPrice);
+
+                        } else if (productPrice > 1000 && productPrice <= 2000) {
+                            suggestedPrice = Math.round(0.02 * productPrice);
+
+                        } else if (productPrice > 2000 && productPrice <= 10000) {
+                            suggestedPrice = Math.round(0.01 * productPrice);
+
+                        } else if (productPrice > 10000 && productPrice <= 25000) {
+                            suggestedPrice = Math.round(0.07 * productPrice);
+
+                        } else {
+                            suggestedPrice = Math.round(0.03 * productPrice);
+
+                        }
+                        mEditTxtEnterPrice.setText(String.valueOf(suggestedPrice));
+
+                        //numeric slider for product suggested price
+                        mDiscreteSeekBar.setVisibility(View.VISIBLE);
+                        mTxtSuggestedPrice.setVisibility(View.VISIBLE);
+                        mDiscreteSeekBar.setMin(1);
+                        mDiscreteSeekBar.setMax((int) suggestedPrice * 2);
+                        mDiscreteSeekBar.setProgress((int) suggestedPrice);
+
+                        mDiscreteSeekBar.setOnProgressChangeListener(new DiscreteSeekBar.OnProgressChangeListener() {
+                            @Override
+                            public void onProgressChanged(DiscreteSeekBar seekBar, int value, boolean fromUser) {
+                                String strValue = String.valueOf(value);
+                                mEditTxtEnterPrice.setText(strValue);
+                            }
+
+                            @Override
+                            public void onStartTrackingTouch(DiscreteSeekBar seekBar) {
+                                seekBar.setProgress((int) suggestedPrice);
+                            }
+
+                            @Override
+                            public void onStopTrackingTouch(DiscreteSeekBar seekBar) {
+
+                            }
+                        });
+                    }
                 }
                 HideKeyboard.hideKeyBoard(ListAnItemActivity.this);
             }
         });
+
     }
 
     /**
@@ -472,13 +530,14 @@ public class ListAnItemActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
+                ArrayList<String> availableDates;
                 availableDates = data.getStringArrayListExtra(getString(R.string.calendar_availability_days));
-                selectedDates= (ArrayList<Date>) data.getSerializableExtra(getString(R.string.selectedDates));
+                selectedDates = (ArrayList<Date>) data.getSerializableExtra(getString(R.string.selectedDates));
                 for (String date : availableDates) {
                     userProductUnAvailability = new UserProductUnAvailability(date, date);
                     mItemAvailability.add(userProductUnAvailability);
                 }
-                int daysCount = data.getIntExtra(getString(R.string.calendar_availability_days_count), 0);
+                daysCount = data.getIntExtra(getString(R.string.calendar_availability_days_count), 0);
                 if (daysCount != 0) {
                     mTxtDaysOfAvailability.setVisibility(View.VISIBLE);
                     mTxtDaysOfAvailability.setText(getString(R.string.calendar_days_selected) + " " +
@@ -488,6 +547,7 @@ public class ListAnItemActivity extends AppCompatActivity {
         }
         //TODO images should be uploaded to amazon s3 bucket; yet to be done
         if (requestCode == 2 && resultCode == RESULT_OK && null != data) {
+            UploadImageAdapter mUploadImageAdapter;
             mUploadImageAdapter = new UploadImageAdapter(ListAnItemActivity.this, listUploadGalleryImage);
             if (data.getData() != null) {
                 Uri uri = data.getData();
@@ -705,8 +765,15 @@ public class ListAnItemActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+
                 if (mEditTxtEnterPrice.getText().toString().startsWith("0")) {
                     mEditTxtEnterPrice.setText(mEditTxtEnterPrice.getText().toString().replace("0", ""));
+                }
+                if (!s.toString().equals("")) {
+                    int i = Integer.parseInt(s.toString());
+                    if (i > 0 && i <= suggestedPrice) {
+                        mDiscreteSeekBar.setProgress(i);
+                    }
                 }
             }
         });

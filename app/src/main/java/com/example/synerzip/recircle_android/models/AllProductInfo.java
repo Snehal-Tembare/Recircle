@@ -23,7 +23,7 @@ public class AllProductInfo implements Parcelable {
 
     private ArrayList<Products> productDetails;
 
-    protected AllProductInfo(Parcel in) {
+    public AllProductInfo(Parcel in) {
         popularProducts = in.createTypedArrayList(Products.CREATOR);
         productDetails = in.createTypedArrayList(Products.CREATOR);
     }

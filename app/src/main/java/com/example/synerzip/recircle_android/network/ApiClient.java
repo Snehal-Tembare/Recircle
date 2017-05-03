@@ -7,11 +7,14 @@ import com.example.synerzip.recircle_android.utilities.RCWebConstants;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Proxy;
 
+import okhttp3.Authenticator;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.ResponseBody;
+import okhttp3.Route;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Response;
 import retrofit2.Retrofit;

@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/partial_toolbar" />
+
+    <FrameLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true">
+
+        <ScrollView
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/layout_list_item_summary"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dimen_10dp"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <TextView
+                        android:id="@+id/txt_product_title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.8"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/dimen_20sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/img_edit"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.2"
+                        android:onClick="imgEdit"
+                        android:src="@drawable/ic_edit" />
+                </LinearLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view_images"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:layout_margin="@dimen/dimen_10dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/dimen_30dp"
+                    android:paddingLeft="@dimen/dimen_20dp"
+                    android:text="@string/daily_rental_price"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/dimen_14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_item_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/dimen_30dp"
+                    android:paddingLeft="@dimen/dimen_20dp"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/dimen_14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/dimen_30dp"
+                    android:paddingLeft="@dimen/dimen_20dp"
+                    android:text="@string/min_rental_days"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/dimen_14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_item_rental"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/dimen_30dp"
+                    android:paddingLeft="@dimen/dimen_20dp"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/dimen_14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/dimen_30dp"
+                    android:paddingLeft="@dimen/dimen_20dp"
+                    android:text="@string/price_after_disc"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/dimen_14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_five_days_disc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/dimen_30dp"
+                    android:paddingLeft="@dimen/dimen_20dp"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/dimen_14sp" />
+
+                <TextView
+                    android:id="@+id/txt_ten_days_disc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/dimen_30dp"
+                    android:paddingLeft="@dimen/dimen_20dp"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/dimen_14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/dimen_30dp"
+                    android:paddingLeft="@dimen/dimen_20dp"
+                    android:text="@string/desc"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/dimen_14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_item_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/dimen_30dp"
+                    android:paddingLeft="@dimen/dimen_20dp"
+                    android:paddingRight="@dimen/dimen_20dp"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/dimen_14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/dimen_30dp"
+                    android:paddingLeft="@dimen/dimen_20dp"
+                    android:text="@string/listing_days"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/dimen_14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_listing_days"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/dimen_30dp"
+                    android:paddingLeft="@dimen/dimen_20dp"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/dimen_14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/dimen_30dp"
+                    android:paddingLeft="@dimen/dimen_20dp"
+                    android:text="@string/unavail_days"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/dimen_14sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/dimen_20dp">
+
+                    <TextView
+
+                        android:id="@+id/txt_days_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/dimen_14sp" />
+
+                    <TextView
+                        android:id="@+id/txt_show_dates"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/dimen_10dp"
+                        android:onClick="txtShowDates"
+                        android:text="@string/show_dates"
+                        android:textColor="@color/colorTextBlue"
+                        android:textSize="@dimen/dimen_14sp" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_confirm_item"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/dimen_20dp"
+                    android:layout_marginTop="@dimen/common_dimens_20"
+                    android:background="@drawable/round_button_blue"
+                    android:onClick="btnConfirmItem"
+                    android:padding="@dimen/dimen_10dp"
+                    android:text="@string/confirm_item"
+                    android:textAllCaps="false"
+                    android:textColor="@color/common_white"
+                    android:textSize="@dimen/text_size_16" />
+            </LinearLayout>
+        </ScrollView>
+
+        <include
+            android:id="@+id/progress_bar"
+            layout="@layout/progress_bar_layout"
+            android:animateLayoutChanges="true"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <include layout="@layout/partial_toolbar" />
+</LinearLayout>

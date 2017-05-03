@@ -17,7 +17,7 @@
     <color name="colorSaveBack">#6b6e79</color>
 
     <!--Calendar Picker View-->
-    <color name="calendar_highlighted_day_bg">#ffffff</color>
+    <color name="calendar_highlighted_day_bg">#e2c5c5</color>
     <color name="calendar_selected_range_bg">#ffffff</color>
     <color name="calendar_active_month_bg">#0097a7</color>
     <color name="calendar_bg">#0097a7</color>

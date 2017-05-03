@@ -252,7 +252,7 @@
                     android:layout_width="@dimen/dimen_200dp"
                     android:layout_height="@dimen/dimen_40dp"
                     android:layout_gravity="center"
-                    android:background="@drawable/round_button"
+                    android:background="@drawable/round_button_blue"
                     android:padding="@dimen/common_dimens_10"
                     android:text="@string/request_this_item"
                     android:textColor="@color/common_white"

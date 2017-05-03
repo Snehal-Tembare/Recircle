@@ -69,13 +69,12 @@
                 android:textColor="@color/colorTextBlue" />
 
             <Button
-
                 android:id="@+id/btn_user_log_in"
                 android:layout_width="@dimen/dimen_180dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/dimen_10dp"
-                android:background="@drawable/round_button"
+                android:background="@drawable/round_button_blue"
                 android:onClick="btnLogIn"
                 android:text="@string/log_in"
                 android:textColor="@color/common_white" />
