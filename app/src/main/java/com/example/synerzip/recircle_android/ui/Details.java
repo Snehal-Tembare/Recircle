@@ -306,7 +306,6 @@ public class Details extends AppCompatActivity {
             @Override
             public boolean onPreDraw() {
                 final int lineCount = mTxtDecscriptionDetail.getLayout().getLineCount();
-                Log.v("Count", "onPreDraw" + lineCount);
                 if (lineCount > 4) {
                     mTxtDescSeeMore.setVisibility(View.VISIBLE);
                 } else {
@@ -320,7 +319,6 @@ public class Details extends AppCompatActivity {
             @Override
             public boolean onPreDraw() {
                 final int lineCount = mTxtDecscriptionDetail.getLayout().getLineCount();
-                Log.v("Count", "onPreDraw" + lineCount);
                 if (lineCount > 4) {
                     mTxtConditionSeeMore.setVisibility(View.VISIBLE);
                 } else {
@@ -378,6 +376,7 @@ public class Details extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 String from = data.getStringExtra(getString(R.string.from_date));
                 String to = data.getStringExtra(getString(R.string.to_date));
+
                 DateFormat formatter = new SimpleDateFormat(getString(R.string.date_format));
                 try {
                     fromDate = formatter.parse(from.toString());
@@ -401,7 +400,7 @@ public class Details extends AppCompatActivity {
                 long diff = toDate.getTime() - fromDate.getTime();
                 dayCount = (int) diff / (24 * 60 * 60 * 1000);
 
-                total = (int) Math.abs(dayCount) * Integer.parseInt(product.getUser_product_info().getPrice_per_day());
+                total = Math.abs(dayCount) * Integer.parseInt(product.getUser_product_info().getPrice_per_day());
 
                 if (total != 0) {
                     mBtnPrice.setText(" $" + (int) total);
@@ -433,7 +432,10 @@ public class Details extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         total = 0;
-        RentInfoActivity.isDateChanged=false;
+        RentInfoActivity.isDateChanged = false;
+        if (CalendarActivity.selectedDates != null && CalendarActivity.selectedDates.size() != 0) {
+            CalendarActivity.selectedDates.clear();
+        }
     }
 
     /**
@@ -460,15 +462,21 @@ public class Details extends AppCompatActivity {
 
     @OnClick(R.id.btn_select_dates)
     public void openCalendar() {
-
-        if (mBtnSelectDates.getText().equals(getString(R.string.confirm))) {
+        if (mBtnSelectDates.getText().equals(getString(R.string.confirm)) && RentInfoActivity.isDateChanged) {
+            Intent infoIntent = new Intent(this, RentInfoActivity.class);
+            infoIntent.putExtra(getString(R.string.product), product);
+            infoIntent.putExtra(getString(R.string.from_date), RentInfoActivity.formatedFromDate);
+            infoIntent.putExtra(getString(R.string.to_date), RentInfoActivity.formatedToDate);
+            infoIntent.putExtra(getString(R.string.days_count), dayCount);
+            infoIntent.putExtra(getString(R.string.total), total);
+            startActivity(infoIntent);
+        } else if (mBtnSelectDates.getText().equals(getString(R.string.confirm))) {
             Intent infoIntent = new Intent(this, RentInfoActivity.class);
             infoIntent.putExtra(getString(R.string.product), product);
             infoIntent.putExtra(getString(R.string.from_date), formatedFromDate);
             infoIntent.putExtra(getString(R.string.to_date), formatedToDate);
             infoIntent.putExtra(getString(R.string.days_count), dayCount);
             infoIntent.putExtra(getString(R.string.total), total);
-
             startActivity(infoIntent);
         } else {
             Intent intent = new Intent(Details.this, CalendarActivity.class);
@@ -510,15 +518,22 @@ public class Details extends AppCompatActivity {
      * Show Rent Information
      */
     @OnClick(R.id.btn_price)
-    public void showPriceInfo() {
-        if (mBtnSelectDates.getText().equals(getString(R.string.confirm))) {
+    public void showRentInfo() {
+        if (mBtnSelectDates.getText().equals(getString(R.string.confirm)) && RentInfoActivity.isDateChanged) {
+            Intent infoIntent = new Intent(this, RentInfoActivity.class);
+            infoIntent.putExtra(getString(R.string.product), product);
+            infoIntent.putExtra(getString(R.string.from_date), RentInfoActivity.formatedFromDate);
+            infoIntent.putExtra(getString(R.string.to_date), RentInfoActivity.formatedToDate);
+            infoIntent.putExtra(getString(R.string.days_count), dayCount);
+            infoIntent.putExtra(getString(R.string.total), total);
+            startActivity(infoIntent);
+        } else if (mBtnSelectDates.getText().equals(getString(R.string.confirm))) {
             Intent infoIntent = new Intent(this, RentInfoActivity.class);
             infoIntent.putExtra(getString(R.string.product), product);
             infoIntent.putExtra(getString(R.string.from_date), formatedFromDate);
             infoIntent.putExtra(getString(R.string.to_date), formatedToDate);
             infoIntent.putExtra(getString(R.string.days_count), dayCount);
             infoIntent.putExtra(getString(R.string.total), total);
-
             startActivity(infoIntent);
         } else {
             RCLog.showToast(getApplicationContext(), getString(R.string.select_dates));

@@ -5,6 +5,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,6 +35,7 @@ import butterknife.OnClick;
 public class RentInfoActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE = 1;
+    private static final String TAG = "RentInfoActivity";
     public static boolean isDateChanged = false;
     public static boolean isDateEdited=false;
 
@@ -42,8 +44,9 @@ public class RentInfoActivity extends AppCompatActivity {
 
     private Date fromDate;
     private Date toDate;
-    private String formatedFromDate;
-    private String formatedToDate;
+
+    public static String formatedFromDate;
+    public static String formatedToDate;
 
     private int dayCount;
 
@@ -113,6 +116,7 @@ public class RentInfoActivity extends AppCompatActivity {
         mProduct = mBundle.getParcelable(getString(R.string.product));
 
         mTxtTitle.setText(mProduct.getProduct_info().getProduct_title());
+
         mTxtManufaturerName.setText(mProduct.getProduct_info().getProduct_manufacturer_name());
         mTxtPrice.setText("$" + mProduct.getUser_product_info().getPrice_per_day() + "/day");
 
@@ -123,6 +127,9 @@ public class RentInfoActivity extends AppCompatActivity {
 
         mTxtFromDate.setText(mBundle.getString(getString(R.string.from_date)));
         mTxtToDate.setText(mBundle.getString(getString(R.string.to_date)));
+
+        Log.v(TAG,mBundle.getString(getString(R.string.from_date)));
+        Log.v(TAG,mBundle.getString(getString(R.string.to_date)));
 
         mTxtDays.setText(String.valueOf(mBundle.getInt(getString(R.string.days_count))) + " days");
         mTxtSubTotal.setText("$" + String.valueOf(mBundle.getInt(getString(R.string.total))));
@@ -142,6 +149,8 @@ public class RentInfoActivity extends AppCompatActivity {
                         Intent intent=new Intent(RentInfoActivity.this, CalendarActivity.class);
                         intent.putExtra(getString(R.string.from_date),mBundle.getString(getString(R.string.from_date)));
                         intent.putExtra(getString(R.string.to_date),mBundle.getString(getString(R.string.to_date)));
+                        intent.putExtra(getString(R.string.selected_dates_list),CalendarActivity.selectedDates);
+                        isDateEdited=true;
 
                         startActivityForResult(intent, REQUEST_CODE);
                     }
@@ -158,6 +167,7 @@ public class RentInfoActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 String from = data.getStringExtra(getString(R.string.from_date));
                 String to = data.getStringExtra(getString(R.string.to_date));
+
                 DateFormat formatter = new SimpleDateFormat(getString(R.string.date_format));
                 try {
                     fromDate = formatter.parse(from.toString());
@@ -190,6 +200,7 @@ public class RentInfoActivity extends AppCompatActivity {
 
                 mTxtFromDate.setText(formatedFromDate);
                 mTxtToDate.setText(formatedToDate);
+
                 mTxtDays.setText(String.valueOf(dayCount) + " days");
                 mTxtSubTotal.setText("$" + String.valueOf(Details.total));
 
@@ -211,8 +222,6 @@ public class RentInfoActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Details.isFromNextActivity = true;
-
-
     }
 
     @Override
@@ -231,6 +240,7 @@ public class RentInfoActivity extends AppCompatActivity {
     @OnClick(R.id.btn_proceed_to_pay)
     public void showPaymentModes() {
         Intent intentPayMode = new Intent(this, PaymentModeActivity.class);
+        intentPayMode.putExtra(getString(R.string.total), Details.total);
         intentPayMode.putExtra(getString(R.string.total), Details.total);
         startActivity(intentPayMode);
     }

@@ -1,5 +1,6 @@
 package com.example.synerzip.recircle_android.ui;
 
+import android.content.Intent;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -21,7 +22,7 @@ import butterknife.OnClick;
  */
 public class PaymentModeActivity extends AppCompatActivity {
 
-    private BottomSheetBehavior sheetBehavior;
+    private Bundle mBundle;
 
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
@@ -41,19 +42,25 @@ public class PaymentModeActivity extends AppCompatActivity {
         init();
     }
 
+    /**
+     * Initialize views
+     */
+
     private void init() {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(getString(R.string.select_payment_mode));
         mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
 
-        Bundle bundle = getIntent().getExtras();
+        mBundle = getIntent().getExtras();
 
-        mBtnTotalPrice.setText("$" + String.valueOf(bundle.getInt(getString(R.string.total))));
-
-//        sheetBehavior = BottomSheetBehavior.from(mBottomSheetLayout);
+        mBtnTotalPrice.setText("$" + String.valueOf(mBundle.getInt(getString(R.string.total))));
 
     }
+
+    /**
+     * OnClick of home button
+     */
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -63,8 +70,14 @@ public class PaymentModeActivity extends AppCompatActivity {
         return true;
     }
 
-    @OnClick(R.id.btn_total_price)
-    public void showInfo() {
-//        sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+    /**
+     * Show credit card Info
+     */
+
+    @OnClick(R.id.layout_cc)
+    public void showCreditCardDetails() {
+        Intent ccIntent=new Intent(PaymentModeActivity.this, CreditCardActivity.class);
+        ccIntent.putExtra(getString(R.string.total),mBundle.getInt(getString(R.string.total)));
+        startActivity(ccIntent);
     }
 }
