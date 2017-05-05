@@ -5,14 +5,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.example.synerzip.recircle_android.R;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,7 +41,7 @@ public class ListedItemActivity extends AppCompatActivity {
      */
     @OnClick(R.id.btn_view_item)
     public void btnViewItem(View view) {
-        Intent intent = new Intent(ListedItemActivity.this, Details.class);
+        Intent intent = new Intent(ListedItemActivity.this, DetailsActivity.class);
         intent.putExtra(getString(R.string.product_id), productId);
         startActivity(intent);
     }

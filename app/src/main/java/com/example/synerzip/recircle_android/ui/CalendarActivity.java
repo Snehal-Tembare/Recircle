@@ -10,7 +10,9 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
+import com.example.synerzip.recircle_android.models.UserProductUnAvailability;
 import com.example.synerzip.recircle_android.utilities.RCLog;
+import com.squareup.timessquare.CalendarCellDecorator;
 import com.squareup.timessquare.CalendarPickerView;
 
 import java.text.DateFormat;
@@ -19,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,6 +38,10 @@ public class CalendarActivity extends AppCompatActivity {
     private static final String TAG = "CalendarActivity";
     public static ArrayList<Date> selectedDates;
     public ArrayList<Date> localselectedDates;
+
+    private ArrayList<Date> userProuctUnavailableDateList;
+
+    private ArrayList<UserProductUnAvailability> userProductUnAvailabilities;
 
     public static boolean isDateSelected = false;
 
@@ -117,6 +124,25 @@ public class CalendarActivity extends AppCompatActivity {
                 mTxtToDate.setText(formatedToDate);
             }
         }
+
+
+        //Manipulate dates
+        userProductUnAvailabilities = getIntent().getExtras().getParcelableArrayList(getString(R.string.unavail_dates));
+        userProuctUnavailableDateList = new ArrayList<>();
+        List<CalendarCellDecorator> decoratorList = new ArrayList<>();
+
+        for (UserProductUnAvailability unAvailability : userProductUnAvailabilities) {
+            DateFormat dateFormat = new SimpleDateFormat(getString(R.string.calendar_date_format));
+            String fromDate = unAvailability.getUnavai_from_date();
+            try {
+                decoratorList.add(new MonthDecorator(CalendarActivity.this, (dateFormat.parse(fromDate))));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        mPickerView.setDecorators(decoratorList);
+        mPickerView.init(today, nextYear.getTime()).inMode(RANGE);
+
         mPickerView.setOnDateSelectedListener(new CalendarPickerView.OnDateSelectedListener() {
             @Override
             public void onDateSelected(Date date) {

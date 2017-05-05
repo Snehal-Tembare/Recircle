@@ -3,8 +3,6 @@ package com.example.synerzip.recircle_android.ui;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -109,7 +107,7 @@ public class ReviewsListAdapter extends RecyclerView.Adapter<ReviewsListAdapter.
             super(itemView);
             reviewersImage = (CircularImageView) itemView.findViewById(R.id.img_reviewers);
             reviewersName = (TextView) itemView.findViewById(R.id.txt_reviewer_name);
-            avgRatingCount = (TextView) itemView.findViewById(R.id.txt_datails_rating_count);
+            avgRatingCount = (TextView) itemView.findViewById(R.id.txt_details_rating_count);
             reviewComment = (ExpandableTextView) itemView.findViewById(R.id.txt_review_comment);
             rating = (RatingBar) itemView.findViewById(R.id.ratingbar);
             reviewSeeMore = (TextView) itemView.findViewById(R.id.txt_review_see_more);

@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -16,8 +15,6 @@ import com.pkmmte.view.CircularImageView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-
-import at.blogc.android.views.ExpandableTextView;
 
 /**
  * Created by Snehal Tembare on 19/4/17.
@@ -73,7 +70,7 @@ class AllReviewsListAdapter extends RecyclerView.Adapter<AllReviewsListAdapter.V
             super(itemView);
             reviewersImage = (CircularImageView) itemView.findViewById(R.id.img_reviewers);
             reviewersName = (TextView) itemView.findViewById(R.id.txt_reviewer_name);
-            avgRatingCount = (TextView) itemView.findViewById(R.id.txt_datails_rating_count);
+            avgRatingCount = (TextView) itemView.findViewById(R.id.txt_details_rating_count);
             reviewComment = (TextView) itemView.findViewById(R.id.txt_review_comment);
             rating = (RatingBar) itemView.findViewById(R.id.ratingbar);
             reviewSeeMore = (TextView) itemView.findViewById(R.id.txt_review_see_more);

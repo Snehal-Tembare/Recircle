@@ -40,17 +40,17 @@
         <activity android:name=".ui.SignUpActivity" />
         <activity android:name=".ui.LogInActivity" />
         <activity android:name=".ui.ForgotPwdActivity" />
-        <activity android:name=".ui.Details" />
+        <activity android:name=".ui.DetailsActivity" />
         <activity android:name=".ui.ZoomActivity" />
         <activity android:name=".ui.MapActivity" />
         <activity android:name=".ui.ListItemCalendarActivity" />
         <activity android:name=".ui.ListItemSummaryActivity" />
         <activity android:name=".ui.ListCalendarSummaryActivity" />
-        <activity android:name=".ui.ListedItemActivity"/>
+        <activity android:name=".ui.ListedItemActivity" />
         <activity android:name=".ui.AllReviewsActivity" />
         <activity android:name=".ui.RentInfoActivity" />
         <activity android:name=".ui.PaymentModeActivity" />
-        <activity android:name=".ui.CreditCardActivity"/>
+        <activity android:name=".ui.CreditCardActivity" />
     </application>
 
 </manifest>

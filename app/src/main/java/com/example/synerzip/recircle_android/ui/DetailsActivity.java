@@ -2,8 +2,6 @@ package com.example.synerzip.recircle_android.ui;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
@@ -11,33 +9,29 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
-import android.widget.ResourceCursorTreeAdapter;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.Products;
 import com.example.synerzip.recircle_android.models.UserProdImages;
 import com.example.synerzip.recircle_android.models.UserProdReview;
+import com.example.synerzip.recircle_android.models.UserProductUnAvailability;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
-import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
@@ -60,10 +54,10 @@ import retrofit2.Response;
  * Copyright © 2017 Synerzip. All rights reserved
  */
 
-public class Details extends AppCompatActivity {
+public class DetailsActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 1;
     private static final String EXTRA_IMAGE = "extra_image";
-    public static boolean isFromNextActivity = false;
+    public static boolean isBackPressed = false;
     public static int total;
 
     private RCAPInterface service;
@@ -72,6 +66,9 @@ public class Details extends AppCompatActivity {
     private ArrayList<UserProdImages> userProdImagesArrayList;
 
     private ArrayList<UserProdReview> userProdReviewArrayList;
+
+    private ArrayList<UserProductUnAvailability> userProductUnAvailabilities;
+
 
     private ReviewsListAdapter reviewsListAdapter;
 
@@ -108,7 +105,7 @@ public class Details extends AppCompatActivity {
     @BindView(R.id.btn_price)
     protected Button mBtnPrice;
 
-    @BindView(R.id.txt_datails_rating_count)
+    @BindView(R.id.txt_details_rating_count)
     protected TextView mTxtDetailsRateCount;
 
     @BindView(R.id.ratingbar_details)
@@ -200,7 +197,7 @@ public class Details extends AppCompatActivity {
 
         service = ApiClient.getClient().create(RCAPInterface.class);
         Bundle bundle = getIntent().getExtras();
-        String productId = bundle.getString(getString(R.string.product_id), "");
+        final String productId = bundle.getString(getString(R.string.product_id), "");
 
         final Call<Products> productsCall = service.getProductDetailsByID(productId);
 
@@ -213,49 +210,56 @@ public class Details extends AppCompatActivity {
                         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         product = response.body();
 
-                        if (product.getUser_product_info().getUser_prod_reviews() != null
-                                && product.getUser_product_info().getUser_prod_reviews().size() != 0
-                                && product.getUser_product_info().getUser_prod_images() != null
-                                && product.getUser_product_info().getUser_prod_images().size() != 0) {
+                        if (product != null) {
 
-                            userProdReviewArrayList = product.getUser_product_info().getUser_prod_reviews();
+                            if (product.getUser_product_info().getUser_prod_reviews() != null
+                                    && product.getUser_product_info().getUser_prod_reviews().size() != 0) {
+                                userProdReviewArrayList = product.getUser_product_info().getUser_prod_reviews();
 
-                            userProdImagesArrayList = product.getUser_product_info().getUser_prod_images();
-
-                            reviewsListAdapter = new ReviewsListAdapter(getApplicationContext(), userProdReviewArrayList);
-                            if (userProdReviewArrayList.size() > 0) {
-                                mTxtSeeAllReviews.setVisibility(View.VISIBLE);
-                                mTxtSeeAllReviews.setText(getString(R.string.see_all_reviews) + " (" + userProdReviewArrayList.size() + ")");
-                            }
-                            mReViewReviews.setLayoutManager(new LinearLayoutManager(Details.this));
-                            mReViewReviews.setAdapter(reviewsListAdapter);
-
-                            mImageAdapter = new ImageAdapter(getApplicationContext(), selectedImgPosition, userProdImagesArrayList, new ImageAdapter.OnImageItemClickListener() {
-                                @Override
-                                public void onImageClick(int position, UserProdImages userProdImages) {
-
-                                    Picasso.with(Details.this).load(userProdImages.getUser_prod_image_url()).into(mImgMain);
-
-                                    View view = mRecyclerImages.getChildAt(position);
-
-                                    view.setBackground(ContextCompat.getDrawable(Details.this, R.drawable.selected_image_background));
-
-                                    for (int i = 0; i < userProdImagesArrayList.size(); i++) {
-                                        view = mRecyclerImages.getChildAt(i);
-                                        if (i != position) {
-                                            view.setBackground(ContextCompat.getDrawable(Details.this, R.drawable.custom_imageview));
-                                        }
-                                    }
-                                    selectedImgPosition = position;
-                                    mLayoutManager.scrollToPosition(position);
-
+                                reviewsListAdapter = new ReviewsListAdapter(getApplicationContext(), userProdReviewArrayList);
+                                if (userProdReviewArrayList.size() > 0) {
+                                    mTxtSeeAllReviews.setVisibility(View.VISIBLE);
+                                    mTxtSeeAllReviews.setText(getString(R.string.see_all_reviews) + " (" + userProdReviewArrayList.size() + ")");
                                 }
-                            });
+                                mReViewReviews.setLayoutManager(new LinearLayoutManager(DetailsActivity.this));
+                                mReViewReviews.setAdapter(reviewsListAdapter);
+                            }
+                            if (product.getUser_product_info().getUser_prod_images() != null
+                                    && product.getUser_product_info().getUser_prod_images().size() != 0) {
+                                userProdImagesArrayList = product.getUser_product_info().getUser_prod_images();
 
-                            mLayoutManager = new LinearLayoutManager(Details.this, LinearLayoutManager.HORIZONTAL, false);
+                                mImageAdapter = new ImageAdapter(getApplicationContext(), selectedImgPosition, userProdImagesArrayList, new ImageAdapter.OnImageItemClickListener() {
+                                    @Override
+                                    public void onImageClick(int position, UserProdImages userProdImages) {
 
-                            mRecyclerImages.setLayoutManager(mLayoutManager);
-                            mRecyclerImages.setAdapter(mImageAdapter);
+                                        Picasso.with(DetailsActivity.this).load(userProdImages.getUser_prod_image_url()).into(mImgMain);
+
+                                        View view = mRecyclerImages.getChildAt(position);
+
+                                        view.setBackground(ContextCompat.getDrawable(DetailsActivity.this, R.drawable.selected_image_background));
+
+                                        for (int i = 0; i < userProdImagesArrayList.size(); i++) {
+                                            view = mRecyclerImages.getChildAt(i);
+                                            if (i != position) {
+                                                view.setBackground(ContextCompat.getDrawable(DetailsActivity.this, R.drawable.custom_imageview));
+                                            }
+                                        }
+                                        selectedImgPosition = position;
+                                        mLayoutManager.scrollToPosition(position);
+
+                                    }
+                                });
+
+                                mLayoutManager = new LinearLayoutManager(DetailsActivity.this, LinearLayoutManager.HORIZONTAL, false);
+
+                                mRecyclerImages.setLayoutManager(mLayoutManager);
+                                mRecyclerImages.setAdapter(mImageAdapter);
+                            }
+
+                            if (product.getUser_product_info().getUser_prod_unavailability() != null
+                                    && product.getUser_product_info().getUser_prod_unavailability().size() != 0) {
+                                userProductUnAvailabilities = product.getUser_product_info().getUser_prod_unavailability();
+                            }
 
                             mTxtProductName.setText(product.getProduct_info().getProduct_title());
 
@@ -267,23 +271,30 @@ public class Details extends AppCompatActivity {
                             mTxtUserName.setText(product.getUser_info().getFirst_name() + " "
                                     + product.getUser_info().getLast_name());
 
-                            mDetailsRating.setRating(Integer.parseInt(product.getUser_product_info().getProduct_avg_rating()));
+                            if (product.getUser_product_info().getProduct_avg_rating() != null) {
+                                mDetailsRating.setRating(Integer.parseInt(product.getUser_product_info().getProduct_avg_rating()));
+                                mRatingAllAvg.setRating(Integer.parseInt(product.getUser_product_info().getProduct_avg_rating()));
+                                mTxtDetailsRateCount.setText("(" + product.getUser_product_info().getProduct_avg_rating() + ")");
+                                mTxtAvgRatingCount.setText("(" + product.getUser_product_info().getProduct_avg_rating() + ")");
+                            }
 
-                            mRatingAllAvg.setRating(Integer.parseInt(product.getUser_product_info().getProduct_avg_rating()));
+                            if (product.getUser_product_info().getPrice_per_day() != null) {
+                                mBtnPrice.setText(getString(R.string.rent_item_at) + product.getUser_product_info().getPrice_per_day() + "/day");
+                            }
 
-                            mTxtDetailsRateCount.setText("(" + product.getUser_product_info().getProduct_avg_rating() + ")");
+                            if (product.getProduct_info().getProduct_description() != null) {
+                                mTxtDecscriptionDetail.setText(product.getProduct_info().getProduct_description());
+                            }
 
-                            mTxtAvgRatingCount.setText("(" + product.getUser_product_info().getProduct_avg_rating() + ")");
+                            if (product.getUser_product_info().getUser_prod_desc() != null) {
+                                mTxtConditionDetail.setText(product.getUser_product_info().getUser_prod_desc());
+                            }
 
-                            mBtnPrice.setText(getString(R.string.rent_item_at) + product.getUser_product_info().getPrice_per_day() + "/day");
-
-                            mTxtDecscriptionDetail.setText(product.getProduct_info().getProduct_description());
-
-                            mTxtConditionDetail.setText(product.getUser_product_info().getUser_prod_desc());
-
-                            Picasso.with(getApplicationContext())
-                                    .load(product.getProduct_info().getProduct_image_url())
-                                    .into(mImgMain);
+                            if (product.getProduct_info().getProduct_image_url() != null) {
+                                Picasso.with(getApplicationContext())
+                                        .load(product.getProduct_info().getProduct_image_url())
+                                        .into(mImgMain);
+                            }
                         }
                     }
                 }
@@ -295,37 +306,45 @@ public class Details extends AppCompatActivity {
             }
         });
 
-        mTxtDecscriptionDetail.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-                final int lineCount = mTxtDecscriptionDetail.getLayout().getLineCount();
-                if (lineCount > 4) {
-                    mTxtDescSeeMore.setVisibility(View.VISIBLE);
-                } else {
-                    mTxtDescSeeMore.setVisibility(View.GONE);
-                }
-                return true;
-            }
-        });
+        mTxtDecscriptionDetail.getViewTreeObserver().
 
-        mTxtConditionDetail.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-                final int lineCount = mTxtDecscriptionDetail.getLayout().getLineCount();
-                if (lineCount > 4) {
-                    mTxtConditionSeeMore.setVisibility(View.VISIBLE);
-                } else {
-                    mTxtConditionSeeMore.setVisibility(View.GONE);
-                }
-                return true;
-            }
-        });
+                addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        final int lineCount = mTxtDecscriptionDetail.getLayout().getLineCount();
+                        if (lineCount > 4) {
+                            mTxtDescSeeMore.setVisibility(View.VISIBLE);
+                        } else {
+                            mTxtDescSeeMore.setVisibility(View.GONE);
+                        }
+                        return true;
+                    }
+                });
 
-        mImgHelp.setOnClickListener(new View.OnClickListener() {
+        mTxtConditionDetail.getViewTreeObserver().
+
+                addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        final int lineCount = mTxtDecscriptionDetail.getLayout().getLineCount();
+                        if (lineCount > 4) {
+                            mTxtConditionSeeMore.setVisibility(View.VISIBLE);
+                        } else {
+                            mTxtConditionSeeMore.setVisibility(View.GONE);
+                        }
+                        return true;
+                    }
+                });
+
+        mImgHelp.setOnClickListener(new View.OnClickListener()
+
+        {
             @Override
             public void onClick(View v) {
-                Dialog loginDialog = new Dialog(Details.this);
+                Dialog loginDialog = new Dialog(DetailsActivity.this);
                 loginDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//                loginDialog.setTitle(getString(R.string.log_in));
+
                 loginDialog.setContentView(R.layout.activity_log_in);
                 Toolbar toolbar = (Toolbar) loginDialog.findViewById(R.id.toolbar);
                 toolbar.setVisibility(View.GONE);
@@ -333,10 +352,12 @@ public class Details extends AppCompatActivity {
             }
         });
 
-        mImgMain.setOnClickListener(new View.OnClickListener() {
+        mImgMain.setOnClickListener(new View.OnClickListener()
+
+        {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Details.this, ZoomActivity.class);
+                Intent intent = new Intent(DetailsActivity.this, ZoomActivity.class);
                 intent.putExtra(getString(R.string.selected_image_position), selectedImgPosition);
                 intent.putParcelableArrayListExtra(getString(R.string.image_urls_array), userProdImagesArrayList);
                 startActivity(intent);
@@ -407,7 +428,7 @@ public class Details extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (isFromNextActivity) {
+        if (isBackPressed) {
             if (RentInfoActivity.isDateChanged) {
                 mBtnPrice.setText(getString(R.string.rent_item_at) + total);
                 mBtnPrice.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_info_48, 0);
@@ -420,8 +441,8 @@ public class Details extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         total = 0;
-        CalendarActivity.isDateSelected=false;
-        dayCount=0;
+        CalendarActivity.isDateSelected = false;
+        dayCount = 0;
         if (CalendarActivity.selectedDates != null && CalendarActivity.selectedDates.size() != 0) {
             CalendarActivity.selectedDates.clear();
         }
@@ -460,7 +481,7 @@ public class Details extends AppCompatActivity {
 
     @OnClick(R.id.layout_see_on_map)
     public void openMap() {
-        startActivity(new Intent(Details.this, MapActivity.class));
+        startActivity(new Intent(DetailsActivity.this, MapActivity.class));
     }
 
     /**
@@ -479,7 +500,7 @@ public class Details extends AppCompatActivity {
      */
     @OnClick(R.id.btn_price)
     public void showRentInfo() {
-        if (isFromNextActivity && RentInfoActivity.isDateChanged) {
+        if (isBackPressed && RentInfoActivity.isDateChanged) {
             Intent infoIntent = new Intent(this, RentInfoActivity.class);
             infoIntent.putExtra(getString(R.string.product), product);
             infoIntent.putExtra(getString(R.string.from_date), RentInfoActivity.formatedFromDate);
@@ -496,7 +517,8 @@ public class Details extends AppCompatActivity {
             infoIntent.putExtra(getString(R.string.total), total);
             startActivity(infoIntent);
         } else {
-            Intent intent = new Intent(Details.this, CalendarActivity.class);
+            Intent intent = new Intent(DetailsActivity.this, CalendarActivity.class);
+            intent.putParcelableArrayListExtra(getString(R.string.unavail_dates), userProductUnAvailabilities);
             startActivityForResult(intent, REQUEST_CODE);
         }
     }

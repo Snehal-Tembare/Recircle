@@ -44,7 +44,6 @@ import com.example.synerzip.recircle_android.utilities.HideKeyboard;
 import com.example.synerzip.recircle_android.utilities.NetworkUtility;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
-import com.example.synerzip.recircle_android.utilities.RCWebConstants;
 import com.example.synerzip.recircle_android.utilities.SearchUtility;
 
 import java.text.DateFormat;
@@ -396,9 +395,11 @@ public class SearchActivity extends AppCompatActivity
         mRecentItemsAdapter = new RecentItemsAdapter(SearchActivity.this, productDetailsList, new OnItemClickListener() {
             @Override
             public void onItemClick(Products product) {
-                Intent detailsIntent = new Intent(SearchActivity.this, Details.class);
+                Intent detailsIntent = new Intent(SearchActivity.this, DetailsActivity.class);
                 detailsIntent.putExtra(getString(R.string.product_id),
                         product.getUser_product_info().getUser_product_id());
+
+                Log.v("***Product Id:", product.getUser_product_info().getUser_product_id());
                 startActivity(detailsIntent);
             }
         });
@@ -411,7 +412,7 @@ public class SearchActivity extends AppCompatActivity
             public void onItemClick(Products product) {
                 Log.v(TAG, "onItemClick" + product.getUser_product_info().getUser_product_id());
 
-                Intent detailsIntent = new Intent(SearchActivity.this, Details.class);
+                Intent detailsIntent = new Intent(SearchActivity.this, DetailsActivity.class);
                 detailsIntent.putExtra(getString(R.string.product_id),
                         product.getUser_product_info().getUser_product_id());
                 startActivity(detailsIntent);
@@ -426,7 +427,7 @@ public class SearchActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        Details.isFromNextActivity=false;
+        DetailsActivity.isBackPressed =false;
 
         productsCustomList = new ArrayList<>();
 

@@ -16,6 +16,11 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * Created by Snehal Tembare on 19/4/17.
+ * Copyright © 2017 Synerzip. All rights reserved
+ */
+
 public class AllReviewsActivity extends AppCompatActivity {
 
     private ArrayList<UserProdReview> userProdReviewArrayList;
@@ -46,7 +51,6 @@ public class AllReviewsActivity extends AppCompatActivity {
         userProdReviewArrayList = bundle.getParcelableArrayList(getString(R.string.all_reviews_list));
 
         mAdapter = new AllReviewsListAdapter(getApplicationContext(), userProdReviewArrayList);
-//        mRecyleAllReviewsList.addItemDecoration(new DividerItemDecoration(this,LinearLayoutManager.VERTICAL));
 
         mRecyleAllReviewsList.setLayoutManager(new LinearLayoutManager(this));
         mRecyleAllReviewsList.setAdapter(mAdapter);
