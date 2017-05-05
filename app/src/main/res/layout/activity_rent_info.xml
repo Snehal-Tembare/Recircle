@@ -101,11 +101,11 @@
                         android:layout_height="wrap_content"
                         android:background="@color/background_color_dark"
                         android:padding="@dimen/common_dimens_5"
-                        android:drawablePadding="@dimen/common_dimens_30"
                         android:text="@string/selected_dates"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/text_size_14"
                         android:textStyle="bold"
+                        android:paddingRight="@dimen/common_dimens_5"
                         android:drawableRight="@drawable/ic_edit_30"/>
 
                     <LinearLayout
@@ -332,6 +332,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:padding="@dimen/common_dimens_5"
+                            android:textStyle="bold"
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/text_size_16" />
 
@@ -408,7 +409,7 @@
             android:orientation="horizontal"
             android:weightSum="1">
 
-            <Button
+           <!-- <Button
                 android:id="@+id/btn_total_price"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -416,13 +417,13 @@
                 android:background="@color/common_black"
                 android:padding="@dimen/common_dimens_10"
                 android:textColor="@color/common_white"
-                android:textSize="@dimen/text_size_16" />
+                android:textSize="@dimen/text_size_16" />-->
 
             <Button
                 android:id="@+id/btn_proceed_to_pay"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
                 android:background="@color/colorRedSecondary"
                 android:padding="@dimen/common_dimens_10"
                 android:text="@string/proceed_to_pay"

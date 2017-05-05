@@ -4,59 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="com.example.synerzip.recircle_android.ui.CreditCardActivity">
 
     <include layout="@layout/partial_toolbar" />
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_margin="@dimen/common_dimens_10">
 
-        <com.stripe.android.view.CardNumberEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/card_number_hint"
-            stripe:cardTextErrorColor="@color/colorRed"
-            stripe:cardTint="@android:color/holo_purple" />
+<com.craftman.cardform.CardForm
+    android:id="@+id/card_form"
+    android:layout_marginTop="@dimen/common_dimens_5"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
 
-        <com.stripe.android.view.ExpiryDateEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/expiry_date_hint"
-            stripe:cardTextErrorColor="@color/colorRed"
-            stripe:cardTint="@android:color/holo_purple" />
-
-        <com.stripe.android.view.StripeEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/name_on_card"
-            stripe:cardTextErrorColor="@color/colorRed"
-            stripe:cardTint="@android:color/holo_purple" />
-
-        <com.stripe.android.view.StripeEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/cvc_number_hint"
-            stripe:cardTextErrorColor="@color/colorRed"
-            stripe:cardTint="@android:color/holo_purple" />
-    </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom">
-            <Button
-                android:id="@+id/btn_pay"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/colorRedSecondary"
-                android:padding="@dimen/common_dimens_10"
-                android:textColor="@color/common_white"
-                android:textSize="@dimen/text_size_16" />
-        </LinearLayout>
-    </FrameLayout>
 </LinearLayout>

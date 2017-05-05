@@ -36,6 +36,8 @@ public class CalendarActivity extends AppCompatActivity {
     public static ArrayList<Date> selectedDates;
     public ArrayList<Date> localselectedDates;
 
+    public static boolean isDateSelected = false;
+
     @BindView(R.id.calendar_view)
     protected CalendarPickerView mPickerView;
 
@@ -60,11 +62,12 @@ public class CalendarActivity extends AppCompatActivity {
         setContentView(R.layout.activity_calendar);
         ButterKnife.bind(this);
 
-        selectedDates=new ArrayList<>();
+        selectedDates = new ArrayList<>();
 
         Calendar nextYear = Calendar.getInstance();
         nextYear.add(Calendar.YEAR, 1);
         Date today = new Date();
+
         mPickerView.init(today, nextYear.getTime()).withSelectedDate(today).inMode(RANGE);
         mPickerView.init(today, nextYear.getTime()).inMode(RANGE);
 
@@ -74,6 +77,7 @@ public class CalendarActivity extends AppCompatActivity {
             Bundle bundle = getIntent().getExtras();
             if (bundle != null && null != bundle.getSerializable(getString(R.string.selected_dates_list))) {
                 selectedDates = (ArrayList<Date>) getIntent().getExtras().getSerializable(getString(R.string.selected_dates_list));
+
                 mPickerView.highlightDates(selectedDates);
 
 
@@ -116,9 +120,11 @@ public class CalendarActivity extends AppCompatActivity {
         mPickerView.setOnDateSelectedListener(new CalendarPickerView.OnDateSelectedListener() {
             @Override
             public void onDateSelected(Date date) {
+
                 mPickerView.clearHighlightedDates();
 
                 localselectedDates = (ArrayList<Date>) mPickerView.getSelectedDates();
+
                 selectFromDate = localselectedDates.get(0);
                 selectToDate = localselectedDates.get(localselectedDates.size() - 1);
 
@@ -153,9 +159,6 @@ public class CalendarActivity extends AppCompatActivity {
 
                 mTxtFromDate.setText(formatedFromDate);
                 mTxtToDate.setText(formatedToDate);
-
-                Log.v(TAG, formatedFromDate);
-                Log.v(TAG, formatedToDate);
             }
 
             @Override
@@ -171,7 +174,11 @@ public class CalendarActivity extends AppCompatActivity {
      */
     @OnClick(R.id.txt_cancel)
     public void txtCancel(View view) {
-        finish();
+        if (RentInfoActivity.isDateEdited && selectedDates.size() == 0) {
+            RCLog.showToast(CalendarActivity.this, getString(R.string.error_dates));
+        } else {
+            finish();
+        }
     }
 
     /**
@@ -181,7 +188,7 @@ public class CalendarActivity extends AppCompatActivity {
      */
     @OnClick(R.id.btn_save)
     public void btnSave(View view) {
-        selectedDates.addAll(localselectedDates);
+
         if (fromDate != null && toDate != null) {
             Intent intent = new Intent(CalendarActivity.this, SearchActivity.class);
             intent.putExtra(getString(R.string.from_date), fromDate.toString());
@@ -191,8 +198,15 @@ public class CalendarActivity extends AppCompatActivity {
                 RCLog.showToast(getApplicationContext(), getString(R.string.date_validation_code));
             } else {
                 setResult(RESULT_OK, intent);
+                isDateSelected = true;
+                selectedDates.addAll(localselectedDates);
+
+                if (RentInfoActivity.isDateEdited) {
+                    RentInfoActivity.isDateChanged = true;
+                }
                 finish();
             }
+
         } else {
             RCLog.showToast(CalendarActivity.this, getString(R.string.error_dates));
         }
@@ -207,5 +221,9 @@ public class CalendarActivity extends AppCompatActivity {
     public void txtReset(View view) {
         mTxtFromDate.setText(getString(R.string.enter_start_date));
         mTxtToDate.setText(R.string.enter_end_date);
+        if (RentInfoActivity.isDateEdited) {
+            selectedDates.clear();
+            mPickerView.clearHighlightedDates();
+        }
     }
 }

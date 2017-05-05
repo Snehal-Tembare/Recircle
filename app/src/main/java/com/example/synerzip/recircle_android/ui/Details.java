@@ -85,9 +85,7 @@ public class Details extends AppCompatActivity {
     private Date toDate;
     private String formatedFromDate;
     private String formatedToDate;
-    private int dayCount;
-
-    private int pricePerDay;
+    public static int dayCount;
 
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
@@ -154,9 +152,6 @@ public class Details extends AppCompatActivity {
 
     @BindView(R.id.appbarlayout)
     protected AppBarLayout mAppBarLayout;
-
-    @BindView(R.id.btn_select_dates)
-    protected Button mBtnSelectDates;
 
     @BindView(R.id.details_parent_linear_layout)
     protected LinearLayout mParentLayout;
@@ -280,9 +275,7 @@ public class Details extends AppCompatActivity {
 
                             mTxtAvgRatingCount.setText("(" + product.getUser_product_info().getProduct_avg_rating() + ")");
 
-                            mBtnPrice.setText("$" + product.getUser_product_info().getPrice_per_day() + "/day");
-
-                            pricePerDay = Integer.parseInt(product.getUser_product_info().getPrice_per_day());
+                            mBtnPrice.setText(getString(R.string.rent_item_at) + product.getUser_product_info().getPrice_per_day() + "/day");
 
                             mTxtDecscriptionDetail.setText(product.getProduct_info().getProduct_description());
 
@@ -403,10 +396,8 @@ public class Details extends AppCompatActivity {
                 total = Math.abs(dayCount) * Integer.parseInt(product.getUser_product_info().getPrice_per_day());
 
                 if (total != 0) {
-                    mBtnPrice.setText(" $" + (int) total);
+                    mBtnPrice.setText(getString(R.string.rent_item_at) + total);
                     mBtnPrice.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_info_48, 0);
-                    mBtnSelectDates.setText(getString(R.string.confirm));
-                    isFromNextActivity = true;
                 }
 
             }
@@ -417,14 +408,11 @@ public class Details extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (isFromNextActivity) {
-            mBtnSelectDates.setText(getString(R.string.confirm));
             if (RentInfoActivity.isDateChanged) {
-                mBtnPrice.setText(" $" + total);
+                mBtnPrice.setText(getString(R.string.rent_item_at) + total);
                 mBtnPrice.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_info_48, 0);
             }
 
-        } else {
-            mBtnSelectDates.setText(getString(R.string.select_dates));
         }
     }
 
@@ -432,7 +420,8 @@ public class Details extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         total = 0;
-        RentInfoActivity.isDateChanged = false;
+        CalendarActivity.isDateSelected=false;
+        dayCount=0;
         if (CalendarActivity.selectedDates != null && CalendarActivity.selectedDates.size() != 0) {
             CalendarActivity.selectedDates.clear();
         }
@@ -457,41 +446,12 @@ public class Details extends AppCompatActivity {
     }
 
     /**
-     * Opens Calendar to select dates
-     */
-
-    @OnClick(R.id.btn_select_dates)
-    public void openCalendar() {
-        if (mBtnSelectDates.getText().equals(getString(R.string.confirm)) && RentInfoActivity.isDateChanged) {
-            Intent infoIntent = new Intent(this, RentInfoActivity.class);
-            infoIntent.putExtra(getString(R.string.product), product);
-            infoIntent.putExtra(getString(R.string.from_date), RentInfoActivity.formatedFromDate);
-            infoIntent.putExtra(getString(R.string.to_date), RentInfoActivity.formatedToDate);
-            infoIntent.putExtra(getString(R.string.days_count), dayCount);
-            infoIntent.putExtra(getString(R.string.total), total);
-            startActivity(infoIntent);
-        } else if (mBtnSelectDates.getText().equals(getString(R.string.confirm))) {
-            Intent infoIntent = new Intent(this, RentInfoActivity.class);
-            infoIntent.putExtra(getString(R.string.product), product);
-            infoIntent.putExtra(getString(R.string.from_date), formatedFromDate);
-            infoIntent.putExtra(getString(R.string.to_date), formatedToDate);
-            infoIntent.putExtra(getString(R.string.days_count), dayCount);
-            infoIntent.putExtra(getString(R.string.total), total);
-            startActivity(infoIntent);
-        } else {
-            Intent intent = new Intent(Details.this, CalendarActivity.class);
-            startActivityForResult(intent, REQUEST_CODE);
-        }
-
-    }
-
-    /**
      * Scroll to show store address
      */
 
     @OnClick(R.id.txt_see_store_address)
     public void scrollLayout() {
-        mScrollView.scrollTo(0, mScrollView.getHeight());
+        mScrollView.scrollTo(0, mScrollView.getBottom());
     }
 
     /**
@@ -519,7 +479,7 @@ public class Details extends AppCompatActivity {
      */
     @OnClick(R.id.btn_price)
     public void showRentInfo() {
-        if (mBtnSelectDates.getText().equals(getString(R.string.confirm)) && RentInfoActivity.isDateChanged) {
+        if (isFromNextActivity && RentInfoActivity.isDateChanged) {
             Intent infoIntent = new Intent(this, RentInfoActivity.class);
             infoIntent.putExtra(getString(R.string.product), product);
             infoIntent.putExtra(getString(R.string.from_date), RentInfoActivity.formatedFromDate);
@@ -527,7 +487,7 @@ public class Details extends AppCompatActivity {
             infoIntent.putExtra(getString(R.string.days_count), dayCount);
             infoIntent.putExtra(getString(R.string.total), total);
             startActivity(infoIntent);
-        } else if (mBtnSelectDates.getText().equals(getString(R.string.confirm))) {
+        } else if (CalendarActivity.isDateSelected) {
             Intent infoIntent = new Intent(this, RentInfoActivity.class);
             infoIntent.putExtra(getString(R.string.product), product);
             infoIntent.putExtra(getString(R.string.from_date), formatedFromDate);
@@ -536,9 +496,9 @@ public class Details extends AppCompatActivity {
             infoIntent.putExtra(getString(R.string.total), total);
             startActivity(infoIntent);
         } else {
-            RCLog.showToast(getApplicationContext(), getString(R.string.select_dates));
+            Intent intent = new Intent(Details.this, CalendarActivity.class);
+            startActivityForResult(intent, REQUEST_CODE);
         }
-
     }
 
 }

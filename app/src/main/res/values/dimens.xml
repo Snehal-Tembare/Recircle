@@ -65,5 +65,6 @@
     <dimen name="card_elevetion">4dp</dimen>
     <dimen name="image_height">90dp</dimen>
     <dimen name="dimen_180dp">180dp</dimen>
+    <dimen name="dimen_20sp">20sp</dimen>
     <dimen name="common_dimens_40">40dp</dimen>
 </resources>

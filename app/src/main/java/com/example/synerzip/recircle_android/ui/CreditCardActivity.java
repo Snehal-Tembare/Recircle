@@ -5,8 +5,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 
+import com.craftman.cardform.CardForm;
 import com.example.synerzip.recircle_android.R;
 
 import butterknife.BindView;
@@ -21,9 +23,6 @@ public class CreditCardActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
-
-    @BindView(R.id.btn_pay)
-    protected Button mBtnPay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +40,6 @@ public class CreditCardActivity extends AppCompatActivity {
         mToolbar.setTitleTextColor(ContextCompat.getColor(this,R.color.common_white));
 
         mBundle=getIntent().getExtras();
-
-        mBtnPay.setText(getString(R.string.pay)+" $"+mBundle.getInt(getString(R.string.total)));
     }
 
     @Override

@@ -59,7 +59,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/common_dimens_10"
         android:layout_marginBottom="@dimen/common_dimens_10"
-        android:background="@drawable/round_button"
+        android:background="@drawable/round_button_blue"
         android:onClick="callSearchApi"
         android:text="@string/search"
         android:textColor="@color/common_white"

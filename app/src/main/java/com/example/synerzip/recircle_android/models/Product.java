@@ -1,5 +1,7 @@
 package com.example.synerzip.recircle_android.models;
 
+import java.util.ArrayList;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,10 +15,11 @@ public class Product {
 
     private String product_id;
     private String product_title;
-
+    private AutoCompleteProductDetail product_detail;
     //var for internal logic
     private String product_manufacturer_id;
     private String product_manufacturer_name;
     //manufacturer name + product title
     private String product_manufacturer_title;
+
 }

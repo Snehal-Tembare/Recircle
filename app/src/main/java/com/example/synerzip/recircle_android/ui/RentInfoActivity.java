@@ -48,8 +48,6 @@ public class RentInfoActivity extends AppCompatActivity {
     public static String formatedFromDate;
     public static String formatedToDate;
 
-    private int dayCount;
-
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
 
@@ -83,8 +81,8 @@ public class RentInfoActivity extends AppCompatActivity {
     @BindView(R.id.txt_owner_name)
     protected TextView mTxtOwnerName;
 
-    @BindView(R.id.btn_total_price)
-    protected TextView mBtnTotalPrice;
+//    @BindView(R.id.btn_total_price)
+//    protected TextView mBtnTotalPrice;
 
     @BindView(R.id.txt_selected_dates)
     protected TextView mTxtSelectedDates;
@@ -128,8 +126,8 @@ public class RentInfoActivity extends AppCompatActivity {
         mTxtFromDate.setText(mBundle.getString(getString(R.string.from_date)));
         mTxtToDate.setText(mBundle.getString(getString(R.string.to_date)));
 
-        Log.v(TAG,mBundle.getString(getString(R.string.from_date)));
-        Log.v(TAG,mBundle.getString(getString(R.string.to_date)));
+//        Log.v(TAG,mBundle.getString(getString(R.string.from_date)));
+//        Log.v(TAG,mBundle.getString(getString(R.string.to_date)));
 
         mTxtDays.setText(String.valueOf(mBundle.getInt(getString(R.string.days_count))) + " days");
         mTxtSubTotal.setText("$" + String.valueOf(mBundle.getInt(getString(R.string.total))));
@@ -137,7 +135,7 @@ public class RentInfoActivity extends AppCompatActivity {
         // TODO calculate discount yet to complete
         mTxtDiscounts.setText("$0.0");
         mTxtTotal.setText(mTxtSubTotal.getText());
-        mBtnTotalPrice.setText(mTxtSubTotal.getText());
+//        mBtnTotalPrice.setText(mTxtSubTotal.getText());
 
         mTxtSelectedDates.setOnTouchListener(new View.OnTouchListener() {
             final int DRAWABLE_RIGHT = 2;
@@ -190,25 +188,24 @@ public class RentInfoActivity extends AppCompatActivity {
                 formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
 
                 long diff = toDate.getTime() - fromDate.getTime();
-                dayCount = (int) diff / (24 * 60 * 60 * 1000);
+                Details.dayCount = (int) diff / (24 * 60 * 60 * 1000);
 
-                Details.total = (int) Math.abs(dayCount) * Integer.parseInt(mProduct.getUser_product_info().getPrice_per_day());
+                Details.total = (int) Math.abs(Details.dayCount) * Integer.parseInt(mProduct.getUser_product_info().getPrice_per_day());
 
-                if (Details.total != 0) {
-                    mBtnTotalPrice.setText(" $" + Details.total);
-                }
+//                if (Details.total != 0) {
+//                    mBtnTotalPrice.setText(" $" + Details.total);
+//                }
 
                 mTxtFromDate.setText(formatedFromDate);
                 mTxtToDate.setText(formatedToDate);
 
-                mTxtDays.setText(String.valueOf(dayCount) + " days");
+                mTxtDays.setText(String.valueOf(Details.dayCount) + " days");
                 mTxtSubTotal.setText("$" + String.valueOf(Details.total));
 
                 // TODO calculate discount yet to complete
                 mTxtDiscounts.setText("$0.0");
                 mTxtTotal.setText("$" + String.valueOf(Details.total));
-                isDateChanged = true;
-
+//                Details.isFromNextActivity = true;
             }
         }
     }

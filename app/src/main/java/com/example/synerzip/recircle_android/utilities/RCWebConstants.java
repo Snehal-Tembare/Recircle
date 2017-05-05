@@ -8,7 +8,7 @@ import retrofit2.http.PUT;
  */
 public class RCWebConstants {
 
-    public static final String RC_BASE_URL = "http://6656363d.ngrok.io";
+    public static final String RC_BASE_URL = " http://91c28d43.ngrok.io";
 
     public static final int RC_SUCCESS_CODE = 200;
 

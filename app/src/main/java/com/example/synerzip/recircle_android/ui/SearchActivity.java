@@ -418,7 +418,6 @@ public class SearchActivity extends AppCompatActivity
             }
         });
 
-
         mRecyclerViewPopular.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         mRecyclerViewPopular.setAdapter(mPopularItemsAdapter);
     }
@@ -463,7 +462,6 @@ public class SearchActivity extends AppCompatActivity
                     mDrawerLayout.setAlpha((float) 1.0);
                     RCLog.showToast(getApplicationContext(), getString(R.string.product_details_not_found));
                 }
-
             }
 
             @Override

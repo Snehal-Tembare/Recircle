@@ -499,13 +499,13 @@
             android:id="@+id/btn_price"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.5"
-            android:background="@color/common_black"
+            android:layout_weight="1"
+            android:background="@color/colorRedSecondary"
             android:padding="@dimen/common_dimens_10"
             android:textColor="@color/common_white"
             android:textSize="@dimen/text_size_16" />
 
-        <Button
+       <!-- <Button
             android:id="@+id/btn_select_dates"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -514,7 +514,7 @@
             android:padding="@dimen/common_dimens_10"
             android:text="@string/select_dates"
             android:textColor="@color/common_white"
-            android:textSize="@dimen/text_size_16" />
+            android:textSize="@dimen/text_size_16" />-->
     </LinearLayout>
 
     <include
