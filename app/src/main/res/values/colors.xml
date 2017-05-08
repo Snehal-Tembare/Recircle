@@ -28,7 +28,7 @@
     <color name="calendar_text_inactive">#fce9da</color>
     <color name="calendar_text_active">#ffffff</color>
     <color name="calendar_text_selected">#0097a7</color>
-    <color name="calendar_text_unselectable">#fce9da</color>
+    <color name="calendar_text_unselectable">#9e9e9e</color>
     <color name="common_black">#212121</color>
     <color name="img_border_color">#e0e0e0</color>
     <color name="selected_img_border_color">#01579b</color>

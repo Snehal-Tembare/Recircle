@@ -33,4 +33,4 @@ public class MonthDecorator implements CalendarCellDecorator {
             calendarCellView.setBackgroundResource(R.drawable.ic_cross);
         }
         }
-    }
+}

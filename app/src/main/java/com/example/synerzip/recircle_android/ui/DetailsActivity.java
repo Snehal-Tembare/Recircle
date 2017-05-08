@@ -415,7 +415,7 @@ public class DetailsActivity extends AppCompatActivity {
                 dayCount = (int) diff / (24 * 60 * 60 * 1000);
 
                 total = Math.abs(dayCount) * Integer.parseInt(product.getUser_product_info().getPrice_per_day());
-
+                CalendarActivity.isDateSelected = true;
                 if (total != 0) {
                     mBtnPrice.setText(getString(R.string.rent_item_at) + total);
                     mBtnPrice.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_info_48, 0);
@@ -507,6 +507,7 @@ public class DetailsActivity extends AppCompatActivity {
             infoIntent.putExtra(getString(R.string.to_date), RentInfoActivity.formatedToDate);
             infoIntent.putExtra(getString(R.string.days_count), dayCount);
             infoIntent.putExtra(getString(R.string.total), total);
+            infoIntent.putParcelableArrayListExtra(getString(R.string.unavail_dates), userProductUnAvailabilities);
             startActivity(infoIntent);
         } else if (CalendarActivity.isDateSelected) {
             Intent infoIntent = new Intent(this, RentInfoActivity.class);
@@ -515,6 +516,7 @@ public class DetailsActivity extends AppCompatActivity {
             infoIntent.putExtra(getString(R.string.to_date), formatedToDate);
             infoIntent.putExtra(getString(R.string.days_count), dayCount);
             infoIntent.putExtra(getString(R.string.total), total);
+            infoIntent.putParcelableArrayListExtra(getString(R.string.unavail_dates), userProductUnAvailabilities);
             startActivity(infoIntent);
         } else {
             Intent intent = new Intent(DetailsActivity.this, CalendarActivity.class);

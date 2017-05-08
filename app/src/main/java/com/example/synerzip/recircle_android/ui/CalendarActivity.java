@@ -19,9 +19,11 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,9 +41,9 @@ public class CalendarActivity extends AppCompatActivity {
     public static ArrayList<Date> selectedDates;
     public ArrayList<Date> localselectedDates;
 
-    private ArrayList<Date> userProuctUnavailableDateList;
-
     private ArrayList<UserProductUnAvailability> userProductUnAvailabilities;
+    private Bundle bundle;
+
 
     public static boolean isDateSelected = false;
 
@@ -74,19 +76,57 @@ public class CalendarActivity extends AppCompatActivity {
         Calendar nextYear = Calendar.getInstance();
         nextYear.add(Calendar.YEAR, 1);
         Date today = new Date();
+        bundle = getIntent().getExtras();
+
+        //-----------------------
+        if (bundle != null) {
+            userProductUnAvailabilities = bundle.getParcelableArrayList(getString(R.string.unavail_dates));
+            if (userProductUnAvailabilities != null && userProductUnAvailabilities.size() != 0) {
+                List<CalendarCellDecorator> decoratorList = new ArrayList<>();
+
+                final ArrayList<Date> dateArray = new ArrayList<>();
+
+                for (UserProductUnAvailability unAvailability : userProductUnAvailabilities) {
+
+                    Log.v("onDateSelected", userProductUnAvailabilities.get(0).getUnavai_from_date() + "ListItemCalendarActivity");
+
+                    DateFormat dateFormat = new SimpleDateFormat(getString(R.string.calendar_date_format));
+
+                    Date parsedDate = null;
+                    try {
+                        parsedDate = dateFormat.parse(unAvailability.getUnavai_from_date());
+                        dateArray.add(parsedDate);
+                        decoratorList.add(new MonthDecorator(CalendarActivity.this, parsedDate));
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+                mPickerView.setDecorators(decoratorList);
+
+                mPickerView.setDateSelectableFilter(new CalendarPickerView.DateSelectableFilter() {
+                    @Override
+                    public boolean isDateSelectable(Date date) {
+                        for (int i = 0; i < dateArray.size(); i++) {
+                            if (dateArray.contains(date)) {
+                                return false;
+                            }
+                            return true;
+                        }
+                        return true;
+                    }
+                });
+            }
+        }
 
         mPickerView.init(today, nextYear.getTime()).withSelectedDate(today).inMode(RANGE);
         mPickerView.init(today, nextYear.getTime()).inMode(RANGE);
 
-        //on date selected listener
-
         if (RentInfoActivity.isDateEdited) {
-            Bundle bundle = getIntent().getExtras();
             if (bundle != null && null != bundle.getSerializable(getString(R.string.selected_dates_list))) {
                 selectedDates = (ArrayList<Date>) getIntent().getExtras().getSerializable(getString(R.string.selected_dates_list));
 
                 mPickerView.highlightDates(selectedDates);
-
 
                 selectFromDate = selectedDates.get(0);
                 selectToDate = selectedDates.get(selectedDates.size() - 1);
@@ -126,31 +166,15 @@ public class CalendarActivity extends AppCompatActivity {
         }
 
 
-        //Manipulate dates
-        userProductUnAvailabilities = getIntent().getExtras().getParcelableArrayList(getString(R.string.unavail_dates));
-        userProuctUnavailableDateList = new ArrayList<>();
-        List<CalendarCellDecorator> decoratorList = new ArrayList<>();
-
-        for (UserProductUnAvailability unAvailability : userProductUnAvailabilities) {
-            DateFormat dateFormat = new SimpleDateFormat(getString(R.string.calendar_date_format));
-            String fromDate = unAvailability.getUnavai_from_date();
-            try {
-                decoratorList.add(new MonthDecorator(CalendarActivity.this, (dateFormat.parse(fromDate))));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-        mPickerView.setDecorators(decoratorList);
-        mPickerView.init(today, nextYear.getTime()).inMode(RANGE);
-
+        //on date selected listener
         mPickerView.setOnDateSelectedListener(new CalendarPickerView.OnDateSelectedListener() {
             @Override
             public void onDateSelected(Date date) {
 
+
                 mPickerView.clearHighlightedDates();
 
                 localselectedDates = (ArrayList<Date>) mPickerView.getSelectedDates();
-
                 selectFromDate = localselectedDates.get(0);
                 selectToDate = localselectedDates.get(localselectedDates.size() - 1);
 
@@ -224,9 +248,10 @@ public class CalendarActivity extends AppCompatActivity {
                 RCLog.showToast(getApplicationContext(), getString(R.string.date_validation_code));
             } else {
                 setResult(RESULT_OK, intent);
-                isDateSelected = true;
-                selectedDates.addAll(localselectedDates);
-
+                selectedDates.clear();
+                if (localselectedDates != null && localselectedDates.size() != 0) {
+                    selectedDates.addAll(localselectedDates);
+                }
                 if (RentInfoActivity.isDateEdited) {
                     RentInfoActivity.isDateChanged = true;
                 }

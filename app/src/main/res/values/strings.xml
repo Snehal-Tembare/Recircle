@@ -45,6 +45,7 @@
     <string name="date_format">E MMM dd HH:mm:ss Z yyyy</string>
     <string name="month_format">MMM</string>
     <string name="day_format">EEE</string>
+    <string name="ddd_mm">EEE MMM dd 00:00:00 EDT yyyy</string>
     <string name="error_dates">Enter dates to be saved</string>
     <string name="list_an_item_title">Go ahead and list something. We’ve got you covered.</string>
     <string name="agreement">By listing an item, I agree to the Recircle <b>Terms and Agreements.</b></string>
@@ -316,4 +317,5 @@
     <string name="min_rental_days">Minimal Rental Days</string>
     <string name="daily_rental_price">Daily Rental price</string>
     <string name="rent_item_at">Rent Item at $</string>
+    <string name="invalid_date">This date is not available</string>
 </resources>

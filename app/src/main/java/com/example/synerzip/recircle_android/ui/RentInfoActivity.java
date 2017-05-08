@@ -1,6 +1,7 @@
 package com.example.synerzip.recircle_android.ui;
 
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,12 +14,14 @@ import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.Products;
+import com.example.synerzip.recircle_android.models.UserProductUnAvailability;
 import com.pkmmte.view.CircularImageView;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -36,7 +39,7 @@ public class RentInfoActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 1;
     private static final String TAG = "RentInfoActivity";
     public static boolean isDateChanged = false;
-    public static boolean isDateEdited=false;
+    public static boolean isDateEdited = false;
 
     private Products mProduct;
     private Bundle mBundle;
@@ -88,6 +91,7 @@ public class RentInfoActivity extends AppCompatActivity {
 
     @BindView(R.id.img_owner)
     protected CircularImageView mImgOwner;
+    private ArrayList<UserProductUnAvailability> userProductUnAvailabilities;
 
 
     @Override
@@ -107,18 +111,24 @@ public class RentInfoActivity extends AppCompatActivity {
 
         mBundle = getIntent().getExtras();
 
-        mProduct = mBundle.getParcelable(getString(R.string.product));
+        if (mBundle != null) {
 
-        mTxtTitle.setText(mProduct.getProduct_info().getProduct_title());
+            mProduct = mBundle.getParcelable(getString(R.string.product));
+            userProductUnAvailabilities = mBundle.getParcelableArrayList(getString(R.string.unavail_dates));
 
-        mTxtManufaturerName.setText(mProduct.getProduct_info().getProduct_manufacturer_name());
-        mTxtPrice.setText("$" + mProduct.getUser_product_info().getPrice_per_day() + "/day");
+            if (mProduct != null) {
 
-        Picasso.with(this).load(mProduct.getProduct_info().getProduct_image_url()).into(mImgProduct);
-        Picasso.with(this).load(mProduct.getUser_info().getUser_image_url()).into(mImgOwner);
+                mTxtTitle.setText(mProduct.getProduct_info().getProduct_title());
 
-        mTxtOwnerName.setText(mProduct.getUser_info().getFirst_name() + " " + mProduct.getUser_info().getLast_name());
+                mTxtManufaturerName.setText(mProduct.getProduct_info().getProduct_manufacturer_name());
+                mTxtPrice.setText("$" + mProduct.getUser_product_info().getPrice_per_day() + "/day");
 
+                Picasso.with(this).load(mProduct.getProduct_info().getProduct_image_url()).into(mImgProduct);
+                Picasso.with(this).load(mProduct.getUser_info().getUser_image_url()).into(mImgOwner);
+
+                mTxtOwnerName.setText(mProduct.getUser_info().getFirst_name() + " " + mProduct.getUser_info().getLast_name());
+            }
+        }
         mTxtFromDate.setText(mBundle.getString(getString(R.string.from_date)));
         mTxtToDate.setText(mBundle.getString(getString(R.string.to_date)));
 
@@ -137,11 +147,14 @@ public class RentInfoActivity extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     if (event.getRawX() >= (mTxtSelectedDates.getRight() - mTxtSelectedDates.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        Intent intent=new Intent(RentInfoActivity.this, CalendarActivity.class);
-                        intent.putExtra(getString(R.string.from_date),mBundle.getString(getString(R.string.from_date)));
-                        intent.putExtra(getString(R.string.to_date),mBundle.getString(getString(R.string.to_date)));
-                        intent.putExtra(getString(R.string.selected_dates_list),CalendarActivity.selectedDates);
-                        isDateEdited=true;
+                        Intent intent = new Intent(RentInfoActivity.this, CalendarActivity.class);
+                        intent.putExtra(getString(R.string.from_date), mBundle.getString(getString(R.string.from_date)));
+                        intent.putExtra(getString(R.string.to_date), mBundle.getString(getString(R.string.to_date)));
+                        intent.putExtra(getString(R.string.selected_dates_list), CalendarActivity.selectedDates);
+                        if (userProductUnAvailabilities != null && userProductUnAvailabilities.size() != 0) {
+                            intent.putParcelableArrayListExtra(getString(R.string.unavail_dates), userProductUnAvailabilities);
+                        }
+                        isDateEdited = true;
 
                         startActivityForResult(intent, REQUEST_CODE);
                     }
