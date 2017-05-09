@@ -1,9 +1,12 @@
 package com.example.synerzip.recircle_android.ui;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -38,6 +41,7 @@ public class UploadImageAdapter extends RecyclerView.Adapter<UploadImageAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+
         holder.imgItem.setImageDrawable(Drawable.createFromPath(mListUserProdImages.get(position)));
     }
 

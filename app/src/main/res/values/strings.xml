@@ -61,7 +61,7 @@
     <string name="offer_discount_days">Offer 40% discount for 10 day rentals.</string>
     <string name="item_desc">Item descripton *</string>
     <string name="add_desc">Add description about your item *</string>
-    <string name="calendar_availability">Adjust calendar of availability</string>
+    <string name="calendar_availability">Set unavailable dates</string>
     <string name="something_went_wrong">Something went wrong...Please try again</string>
     <string name="optional">(optional)</string>
     <string name="upload_photos">Upload Photos (At least 1) *</string>

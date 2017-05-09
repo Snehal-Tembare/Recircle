@@ -562,7 +562,7 @@ public class SearchActivity extends AppCompatActivity
         switch (id) {
             case R.id.nav_listItem:
                 setVisible(true);
-                startActivity(new Intent(SearchActivity.this, ListAnItemActivity.class));
+                startActivity(new Intent(SearchActivity.this, ItemImagesActivity.class));
                 break;
             case R.id.nav_logIn_signUp:
                 startActivity(new Intent(SearchActivity.this, LogInActivity.class));

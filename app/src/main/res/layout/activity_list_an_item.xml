@@ -67,13 +67,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dimen_10dp">
 
-                        <AutoCompleteTextView
-                            android:id="@+id/auto_txt_list_search_item_name"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/dimen_50dp"
-                            android:hint="@string/search_item"
-                            android:padding="@dimen/dimen_10dp"
-                            android:textSize="@dimen/dimen_14sp" />
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
@@ -103,6 +96,14 @@
                         app:dsb_mirrorForRtl="true"
                         app:dsb_progressColor="@color/colorTextBlue"
                         app:dsb_value="1" />
+
+                    <AutoCompleteTextView
+                        android:id="@+id/auto_txt_list_search_item_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dimen_50dp"
+                        android:hint="@string/search_item"
+                        android:padding="@dimen/dimen_10dp"
+                        android:textSize="@dimen/dimen_14sp" />
 
                     <TextView
                         android:id="@+id/txt_suggested_price"
@@ -193,9 +194,8 @@
                     <LinearLayout
                         android:id="@+id/horizontal_scroll"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/dimen_55dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dimen_5dp"
-                        android:background="@drawable/edittxt_square"
                         android:orientation="vertical">
 
                         <android.support.v7.widget.RecyclerView

@@ -201,8 +201,6 @@ public class ListItemSummaryActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(ListItemSummaryActivity.this, LinearLayoutManager.HORIZONTAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mListItemImageAdapter);
-
-
     }
 
     /**

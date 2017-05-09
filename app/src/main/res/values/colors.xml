@@ -37,6 +37,7 @@
     <color name="text_color">#333</color>
     <color name="dark_text_color">#222</color>
     <color name="background_color">#f5f5f5</color>
+    <color name="colorUploadImage">#e53935</color>
 
     <color name="colorForgotPwdText">#333333</color>
 </resources>
