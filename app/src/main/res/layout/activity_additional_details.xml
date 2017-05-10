@@ -44,6 +44,9 @@
         android:textSize="@dimen/dimen_14sp" />
 
     <TextView
+        android:layout_marginBottom="@dimen/dimen_20dp"
+        android:layout_marginLeft="@dimen/dimen_20dp"
+        android:layout_below="@+id/edit_calendar_availability"
         android:id="@+id/txt_days_for_availability"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -78,7 +81,7 @@
         android:layout_marginRight="@dimen/dimen_20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btn_confirm"
+        android:layout_above="@+id/btn_next"
         android:orientation="horizontal">
 
         <CheckBox
@@ -88,6 +91,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
+
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dimen_50dp"
             android:layout_marginLeft="@dimen/dimen_10dp"
@@ -95,14 +99,15 @@
             android:textColor="@color/colorPrimary" />
     </LinearLayout>
     <Button
-        android:id="@+id/btn_confirm"
+        android:onClick="btnNext"
+        android:id="@+id/btn_next"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
         android:layout_marginTop="@dimen/dimen_10dp"
         android:background="@drawable/border_upload_image"
-        android:text="@string/save_and_continue"
+        android:text="@string/next"
         android:textAllCaps="false"
         android:textColor="@color/common_white" />
 </RelativeLayout>

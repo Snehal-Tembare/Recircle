@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -25,9 +26,11 @@ import com.example.synerzip.recircle_android.models.Discounts;
 import com.example.synerzip.recircle_android.models.Product;
 import com.example.synerzip.recircle_android.models.ProductsData;
 import com.example.synerzip.recircle_android.models.SearchProduct;
+import com.example.synerzip.recircle_android.models.UserProdImages;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.utilities.HideKeyboard;
+import com.example.synerzip.recircle_android.utilities.NetworkUtility;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.example.synerzip.recircle_android.utilities.SearchUtility;
@@ -40,7 +43,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
+/**
+ * Created by Prajakta Patil on 9/5/17.
+ * Copyright © 2017 Synerzip. All rights reserved
+ */
 public class ItemImagesActivity extends AppCompatActivity {
 
     @BindView(R.id.edit_enter_price)
@@ -58,9 +64,9 @@ public class ItemImagesActivity extends AppCompatActivity {
     @BindView(R.id.input_layout_rental_price)
     protected TextInputLayout mInputLayoutPrice;
 
-    private int mItemPrice, mMinRental;
+    public static int mItemPrice, mMinRental;
 
-    private ArrayList<Discounts> listDiscounts;
+    public static ArrayList<Discounts> listDiscounts;
 
     private RCAPInterface service;
 
@@ -81,7 +87,7 @@ public class ItemImagesActivity extends AppCompatActivity {
 
     private String manufacturerId = "";
 
-    private String productId = "";
+    public static String productId = "";
 
     @BindView(R.id.checkbox_discount_five_days)
     protected CheckBox mDiscountForFiveDay;
@@ -99,7 +105,7 @@ public class ItemImagesActivity extends AppCompatActivity {
 
     private double productPrice;
 
-    private String productTitle;
+    public static String productTitle;
 
     private SharedPreferences sharedPreferences;
 
@@ -155,15 +161,32 @@ public class ItemImagesActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_choose_img)
     public void btnUploadImg(View view){
-        Intent intent=new Intent(ItemImagesActivity.this,UploadImgActivity.class);
-        intent.putExtra(getString(R.string.item_price), mItemPrice);
-        intent.putExtra(getString(R.string.item_min_rental), mMinRental);
-        intent.putExtra(getString(R.string.product_title), productTitle);
-        intent.putExtra(getString(R.string.product_id), productId);
-        intent.putExtra(getString(R.string.discounts), listDiscounts);
-        startActivity(intent);
-    }
+        submitForm();
+        HideKeyboard.hideKeyBoard(ItemImagesActivity.this);
+        if (NetworkUtility.isNetworkAvailable(this)) {
+            if (getValues()) {
+                Intent intent=new Intent(ItemImagesActivity.this,UploadImgActivity.class);
+                startActivity(intent);
+            } else {
+                RCLog.showToast(ItemImagesActivity.this, getString(R.string.mandatory_dates));
+            }
+        } else {
+            RCLog.showToast(this, getResources().getString(R.string.err_network_available));
+        }
 
+    }
+public boolean getValues(){
+
+    String strPrice = mEditTxtEnterPrice.getText().toString();
+    String strRental = mEditMinRental.getText().toString();
+
+    if (!strPrice.isEmpty() && !strRental.isEmpty() ) {
+        mItemPrice = Integer.parseInt(mEditTxtEnterPrice.getText().toString().trim());
+        mMinRental = Integer.parseInt(mEditMinRental.getText().toString().trim());
+        return true;
+    }
+    return false;
+}
     /**
      * search item autocomplete textview
      */

@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dimen_10dp"
             android:onClick="imgGalleryImg"
-            android:src="@drawable/ic_upload_new" />
+            android:src="@drawable/ic_upload_gallery" />
 
         <ImageView
             android:id="@+id/img_camera"
@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dimen_10dp"
             android:onClick="imgCameraImg"
-            android:src="@drawable/ic_upload_new_1" />
+            android:src="@drawable/ic_upload_camera"/>
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView

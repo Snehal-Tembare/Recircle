@@ -282,4 +282,5 @@
     <string name="price_after_disc">Price After Discount</string>
     <string name="min_rental_days">Minimal Rental Days</string>
     <string name="daily_rental_price">Daily Rental price</string>
+    <string name="next"><![CDATA[Next >>]]></string>
 </resources>

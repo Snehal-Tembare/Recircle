@@ -18,8 +18,11 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
+import com.example.synerzip.recircle_android.models.Discounts;
+import com.example.synerzip.recircle_android.utilities.RCLog;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -28,10 +31,13 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
+/**
+ * Created by Prajakta Patil on 9/5/17.
+ * Copyright © 2017 Synerzip. All rights reserved
+ */
 public class UploadImgActivity extends AppCompatActivity {
 
-    private ArrayList<String> listUploadGalleryImage;
+    public static ArrayList<String> listUploadGalleryImage;
 
     @BindView(R.id.recycler_view_upload_img)
     protected RecyclerView mRecyclerView;
@@ -47,10 +53,15 @@ public class UploadImgActivity extends AppCompatActivity {
     }
     @OnClick(R.id.img_proceed)
     public void btnProceed(View view){
-        Intent intent=new Intent(UploadImgActivity.this,AdditionalDetailsActivity.class);
-        intent.putExtra(getString(R.string.uplaod_image_gallery), listUploadGalleryImage);
+        if(listUploadGalleryImage.size()!=0) {
+            Intent intent = new Intent(UploadImgActivity.this, AdditionalDetailsActivity.class);
+            intent.putExtra(getString(R.string.uplaod_image_gallery), listUploadGalleryImage);
+            Log.v("intent_gallery_images", listUploadGalleryImage + "");
 
-        startActivity(intent);
+            startActivity(intent);
+        }else {
+            RCLog.showToast(UploadImgActivity.this,"Upload at least one image");
+        }
     }
     @OnClick(R.id.img_gallery)
     public void imgGalleryImg(View view){

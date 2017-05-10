@@ -39,7 +39,7 @@ public class ListCalendarSummaryActivity extends AppCompatActivity {
     @BindView(R.id.txt_reset)
     protected TextView mTxtReset;
 
-    private ArrayList<Date> unavailableDates;
+    public static ArrayList<Date> unavailableDates;
 
     @BindView(R.id.btn_save)
     protected Button mBtnSave;

@@ -64,6 +64,14 @@ public class ListItemSummaryActivity extends AppCompatActivity {
 
     private String productId = "";
 
+    private ArrayList<Discounts> listDiscounts;
+
+    @BindView(R.id.txt_five_days_disc)
+    protected TextView mTxtDiscFiveDays;
+
+    @BindView(R.id.txt_ten_days_disc)
+    protected TextView mTxtDiscTenDays;
+
     private String mItemDesc;
 
     private int mItemPrice, mMinRental;
@@ -72,13 +80,12 @@ public class ListItemSummaryActivity extends AppCompatActivity {
 
     private int fromAustin;
 
-    private ArrayList<Discounts> listDiscounts;
 
     private ArrayList<UserProdImages> listUploadItemImage;
 
     private ArrayList<UserProductUnAvailability> mItemAvailability;
 
-    private ArrayList<Date> unavailableDates;
+    public static ArrayList<Date> unavailableDates;
 
     @BindView(R.id.txt_days_count)
     protected TextView mTxtDaysCount;
@@ -105,12 +112,6 @@ public class ListItemSummaryActivity extends AppCompatActivity {
 
     @BindView(R.id.txt_listing_days)
     protected TextView mTxtListingDay;
-
-    @BindView(R.id.txt_five_days_disc)
-    protected TextView mTxtDiscFiveDays;
-
-    @BindView(R.id.txt_ten_days_disc)
-    protected TextView mTxtDiscTenDays;
 
     @BindView(R.id.progress_bar)
     protected RelativeLayout mProgressBar;
@@ -139,9 +140,10 @@ public class ListItemSummaryActivity extends AppCompatActivity {
         mAccessToken = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
         unavailableDates = new ArrayList<>();
 
-        unavailableDates = (ArrayList<Date>) getIntent().getSerializableExtra(getString(R.string.unavail_dates));
+        listUploadItemImage=new ArrayList<>();
+        unavailableDates = ListCalendarSummaryActivity.unavailableDates;
         int datesCount;
-        datesCount = getIntent().getIntExtra(getString(R.string.unavail_dates_count), 0);
+        datesCount = AdditionalDetailsActivity.daysCount;
         if (datesCount != 0) {
             mTxtDaysCount.setText(datesCount + " days");
         } else {
@@ -149,8 +151,8 @@ public class ListItemSummaryActivity extends AppCompatActivity {
             mTxtShowDates.setVisibility(View.GONE);
         }
 
-        productId = getIntent().getStringExtra(getString(R.string.product_id));
-        listDiscounts = getIntent().getParcelableArrayListExtra(getString(R.string.discounts));
+        productId = ItemImagesActivity.productId;
+        listDiscounts = ItemImagesActivity.listDiscounts;
         double discFiveDays, discTenDays;
         discFiveDays = getIntent().getDoubleExtra(getString(R.string.disc_five_days), 0);
         discTenDays = getIntent().getDoubleExtra(getString(R.string.disc_ten_days), 0);
@@ -158,24 +160,30 @@ public class ListItemSummaryActivity extends AppCompatActivity {
         mTxtDiscFiveDays.setText(getString(R.string.disc_five) + " " + String.valueOf(discFiveDays) + " " + getString(R.string.five_days));
         mTxtDiscTenDays.setText(getString(R.string.disc_ten) + " " + String.valueOf(discTenDays) + " " + getString(R.string.ten_days));
 
-        mItemAvailability = getIntent().getParcelableArrayListExtra(getString(R.string.list_unavail_days));
+        mItemAvailability = AdditionalDetailsActivity.mItemAvailability;
 
-        mZipcode = getIntent().getLongExtra(getString(R.string.zipcode), 0);
-        fromAustin = getIntent().getIntExtra(getString(R.string.austin_check), 0);
+        mZipcode = AdditionalDetailsActivity.mZipcode;
+        fromAustin = AdditionalDetailsActivity.fromAustin;
 
         String currentDate = new SimpleDateFormat("MMM dd, yyyy").format(new Date());
         mTxtListingDay.setText(currentDate);
 
-        mTxtProductTitle.setText(getIntent().getStringExtra(getString(R.string.product_title)));
-        mItemPrice = getIntent().getIntExtra(getString(R.string.item_price), 0);
+        mTxtProductTitle.setText(ItemImagesActivity.productTitle);
+
+        mItemPrice = ItemImagesActivity.mItemPrice;
         mTxtItemPrice.setText("$ " + mItemPrice + "/day");
-        mMinRental = getIntent().getIntExtra(getString(R.string.item_min_rental), 0);
+        mMinRental = ItemImagesActivity.mMinRental;
         mTxtItemRental.setText(mMinRental + " days");
 
-        mItemDesc = getIntent().getStringExtra(getString(R.string.list_item_desc));
+        mItemDesc = AdditionalDetailsActivity.mItemDesc;
         mTxtItemDesc.setText(mItemDesc);
-        listUploadItemImage = (ArrayList<UserProdImages>) getIntent().getSerializableExtra(getString(R.string.upload_image));
-        uploadGalleryImages = (ArrayList<String>) getIntent().getSerializableExtra(getString(R.string.uplaod_image_gallery));
+
+        //TODO product images should be taken from amazon s3 bucket ; yet to be done
+        UserProdImages mUserProdImages;
+        mUserProdImages = new UserProdImages("https://s3.ap-south-1.amazonaws.com/cmsios/CalendarView.png", "2017-02-04T13:13:09.000Z");
+        listUploadItemImage.add(mUserProdImages);
+
+        uploadGalleryImages = UploadImgActivity.listUploadGalleryImage;
 
         final ListItemImageAdapter mListItemImageAdapter = new ListItemImageAdapter
                 (ListItemSummaryActivity.this, selectedImgPosition, uploadGalleryImages,
@@ -326,7 +334,7 @@ public class ListItemSummaryActivity extends AppCompatActivity {
     @OnClick(R.id.txt_show_dates)
     public void txtShowDates(View view) {
         Intent intent = new Intent(ListItemSummaryActivity.this, ListCalendarSummaryActivity.class);
-        intent.putExtra(getString(R.string.unavail_dates), unavailableDates);
+
         startActivity(intent);
     }
 
