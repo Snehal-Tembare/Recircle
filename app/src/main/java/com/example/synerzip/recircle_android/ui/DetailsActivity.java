@@ -59,99 +59,66 @@ public class DetailsActivity extends AppCompatActivity {
     private static final String EXTRA_IMAGE = "extra_image";
     public static boolean isBackPressed = false;
     public static int total;
-
+    public static int dayCount;
+    @BindView(R.id.toolbar)
+    protected Toolbar mToolbar;
+    @BindView(R.id.img_main_image)
+    protected ImageView mImgMain;
+    @BindView(R.id.recycler_images)
+    protected RecyclerView mRecyclerImages;
+    @BindView(R.id.img_user)
+    protected ImageView mImgUser;
+    @BindView(R.id.txt_product_name)
+    protected TextView mTxtProductName;
+    @BindView(R.id.txt_user_name)
+    protected TextView mTxtUserName;
+    @BindView(R.id.btn_price)
+    protected Button mBtnPrice;
+    @BindView(R.id.txt_details_rating_count)
+    protected TextView mTxtDetailsRateCount;
+    @BindView(R.id.ratingbar_details)
+    protected RatingBar mDetailsRating;
+    @BindView(R.id.all_ratingsbar)
+    protected RatingBar mRatingAllAvg;
+    @BindView(R.id.txt_all_reviews_count)
+    protected TextView mTxtAvgRatingCount;
+    @BindView(R.id.imgbtn_help)
+    protected ImageButton mImgHelp;
+    @BindView(R.id.expand_txt_description)
+    protected ExpandableTextView mTxtDecscriptionDetail;
+    @BindView(R.id.txt_desc_see_more)
+    protected TextView mTxtDescSeeMore;
+    @BindView(R.id.expand_txt_condition)
+    protected ExpandableTextView mTxtConditionDetail;
+    @BindView(R.id.txt_condition_see_more)
+    protected TextView mTxtConditionSeeMore;
+    @BindView(R.id.list_reviews)
+    protected RecyclerView mReViewReviews;
+    @BindView(R.id.progress_bar)
+    protected RelativeLayout mProgressBar;
+    @BindView(R.id.scrollView)
+    protected NestedScrollView mScrollView;
+    @BindView(R.id.txt_see_all_reviews)
+    protected TextView mTxtSeeAllReviews;
+    @BindView(R.id.collapsible_toolbar)
+    protected CollapsingToolbarLayout mCollapsibleLayout;
+    @BindView(R.id.appbarlayout)
+    protected AppBarLayout mAppBarLayout;
+    @BindView(R.id.details_parent_linear_layout)
+    protected LinearLayout mParentLayout;
     private RCAPInterface service;
     private Products product;
-
     private ArrayList<UserProdImages> userProdImagesArrayList;
-
     private ArrayList<UserProdReview> userProdReviewArrayList;
-
     private ArrayList<UserProductUnAvailability> userProductUnAvailabilities;
-
-
     private ReviewsListAdapter reviewsListAdapter;
-
     private int selectedImgPosition = 0;
-
     private ImageAdapter mImageAdapter;
-
     private LinearLayoutManager mLayoutManager;
-
     private Date fromDate;
     private Date toDate;
     private String formatedFromDate;
     private String formatedToDate;
-    public static int dayCount;
-
-    @BindView(R.id.toolbar)
-    protected Toolbar mToolbar;
-
-    @BindView(R.id.img_main_image)
-    protected ImageView mImgMain;
-
-    @BindView(R.id.recycler_images)
-    protected RecyclerView mRecyclerImages;
-
-    @BindView(R.id.img_user)
-    protected ImageView mImgUser;
-
-    @BindView(R.id.txt_product_name)
-    protected TextView mTxtProductName;
-
-    @BindView(R.id.txt_user_name)
-    protected TextView mTxtUserName;
-
-    @BindView(R.id.btn_price)
-    protected Button mBtnPrice;
-
-    @BindView(R.id.txt_details_rating_count)
-    protected TextView mTxtDetailsRateCount;
-
-    @BindView(R.id.ratingbar_details)
-    protected RatingBar mDetailsRating;
-
-    @BindView(R.id.all_ratingsbar)
-    protected RatingBar mRatingAllAvg;
-
-    @BindView(R.id.txt_all_reviews_count)
-    protected TextView mTxtAvgRatingCount;
-
-    @BindView(R.id.imgbtn_help)
-    protected ImageButton mImgHelp;
-
-    @BindView(R.id.expand_txt_description)
-    protected ExpandableTextView mTxtDecscriptionDetail;
-
-    @BindView(R.id.txt_desc_see_more)
-    protected TextView mTxtDescSeeMore;
-
-    @BindView(R.id.expand_txt_condition)
-    protected ExpandableTextView mTxtConditionDetail;
-
-    @BindView(R.id.txt_condition_see_more)
-    protected TextView mTxtConditionSeeMore;
-
-    @BindView(R.id.list_reviews)
-    protected RecyclerView mReViewReviews;
-
-    @BindView(R.id.progress_bar)
-    protected RelativeLayout mProgressBar;
-
-    @BindView(R.id.scrollView)
-    protected NestedScrollView mScrollView;
-
-    @BindView(R.id.txt_see_all_reviews)
-    protected TextView mTxtSeeAllReviews;
-
-    @BindView(R.id.collapsible_toolbar)
-    protected CollapsingToolbarLayout mCollapsibleLayout;
-
-    @BindView(R.id.appbarlayout)
-    protected AppBarLayout mAppBarLayout;
-
-    @BindView(R.id.details_parent_linear_layout)
-    protected LinearLayout mParentLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -295,6 +262,8 @@ public class DetailsActivity extends AppCompatActivity {
                                         .load(product.getProduct_info().getProduct_image_url())
                                         .into(mImgMain);
                             }
+
+
                         }
                     }
                 }
@@ -343,8 +312,6 @@ public class DetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Dialog loginDialog = new Dialog(DetailsActivity.this);
                 loginDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//                loginDialog.setTitle(getString(R.string.log_in));
-
                 loginDialog.setContentView(R.layout.activity_log_in);
                 Toolbar toolbar = (Toolbar) loginDialog.findViewById(R.id.toolbar);
                 toolbar.setVisibility(View.GONE);

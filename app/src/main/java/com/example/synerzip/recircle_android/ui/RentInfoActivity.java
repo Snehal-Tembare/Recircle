@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.StringTokenizer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,57 +41,42 @@ public class RentInfoActivity extends AppCompatActivity {
     private static final String TAG = "RentInfoActivity";
     public static boolean isDateChanged = false;
     public static boolean isDateEdited = false;
-
-    private Products mProduct;
-    private Bundle mBundle;
-
-    private Date fromDate;
-    private Date toDate;
-
     public static String formatedFromDate;
     public static String formatedToDate;
-
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
-
     @BindView(R.id.txt_item_title)
     protected TextView mTxtTitle;
-
     @BindView(R.id.txt_manufaturer_name)
     protected TextView mTxtManufaturerName;
-
     @BindView(R.id.txt_price)
     protected TextView mTxtPrice;
-
     @BindView(R.id.txt_days)
     protected TextView mTxtDays;
-
     @BindView(R.id.txt_from_date)
     protected TextView mTxtFromDate;
-
     @BindView(R.id.txt_to_date)
     protected TextView mTxtToDate;
-
     @BindView(R.id.txt_subtotal)
     protected TextView mTxtSubTotal;
-
     @BindView(R.id.txt_discount)
     protected TextView mTxtDiscounts;
-
     @BindView(R.id.txt_total)
     protected TextView mTxtTotal;
-
     @BindView(R.id.txt_owner_name)
     protected TextView mTxtOwnerName;
-
     @BindView(R.id.txt_selected_dates)
     protected TextView mTxtSelectedDates;
-
     @BindView(R.id.img_product)
     protected ImageView mImgProduct;
-
     @BindView(R.id.img_owner)
     protected CircularImageView mImgOwner;
+    boolean isDiscountForFivedays;
+    boolean isDiscountForTendays;
+    private Products mProduct;
+    private Bundle mBundle;
+    private Date fromDate;
+    private Date toDate;
     private ArrayList<UserProductUnAvailability> userProductUnAvailabilities;
 
 
@@ -127,6 +113,22 @@ public class RentInfoActivity extends AppCompatActivity {
                 Picasso.with(this).load(mProduct.getUser_info().getUser_image_url()).into(mImgOwner);
 
                 mTxtOwnerName.setText(mProduct.getUser_info().getFirst_name() + " " + mProduct.getUser_info().getLast_name());
+
+                if(mProduct.getUser_product_info().getUser_product_discounts()!=null
+                        && mProduct.getUser_product_info().getUser_product_discounts().size()!=0){
+                    isDiscountForFivedays=mProduct.getUser_product_info().getUser_product_discounts().get(0).getIsActive();
+                    isDiscountForTendays=mProduct.getUser_product_info().getUser_product_discounts().get(1).getIsActive();
+                }
+
+                if (DetailsActivity.dayCount>=5 && !isDiscountForFivedays){
+                    DetailsActivity.total= (int) (mBundle.getInt(getString(R.string.total)) * 0.3);
+                    mTxtDiscounts.setText("$"+(String.valueOf(mBundle.getInt(getString(R.string.total)) * 0.3)));
+
+                } else if (DetailsActivity.dayCount>=10 && !isDiscountForTendays){
+                    DetailsActivity.total= (int) (mBundle.getInt(getString(R.string.total)) * 0.4);
+                }else {
+                    DetailsActivity.total=mBundle.getInt(getString(R.string.total));
+                }
             }
         }
         mTxtFromDate.setText(mBundle.getString(getString(R.string.from_date)));
@@ -137,7 +139,6 @@ public class RentInfoActivity extends AppCompatActivity {
         mTxtSubTotal.setText("$" + String.valueOf(mBundle.getInt(getString(R.string.total))));
 
         // TODO calculate discount yet to complete
-        mTxtDiscounts.setText("$0.0");
         mTxtTotal.setText(mTxtSubTotal.getText());
 
         mTxtSelectedDates.setOnTouchListener(new View.OnTouchListener() {
