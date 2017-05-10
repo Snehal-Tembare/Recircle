@@ -172,36 +172,12 @@
                             android:padding="@dimen/dimen_5dp"
                             android:text="@string/offer_discount_days" />
                     </LinearLayout>
-                    <!--
-                                        <Button
-                                            android:textColor="@color/common_white"
-                                            android:id="@+id/btn_choose_img"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginTop="@dimen/dimen_10dp"
-                                            android:layout_marginBottom="@dimen/dimen_10dp"
-                                            android:background="@drawable/border_upload_image"
-                                            android:text="@string/upload_photos"
-                                            android:textAllCaps="false" />-->
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
 
-        <!--    <Button
-                android:id="@+id/btn_proceed"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginTop="@dimen/common_dimens_20"
-                android:background="@color/colorPrimary"
-                android:onClick="btnProceed"
-                android:padding="@dimen/dimen_10dp"
-                android:text="@string/proceed"
-                android:textAllCaps="false"
-                android:textColor="@color/common_white"
-                android:textSize="@dimen/text_size_16" />-->
         <Button
-            android:id="@+id/btn_choose_img"
+            android:id="@+id/btn_upload_img"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"

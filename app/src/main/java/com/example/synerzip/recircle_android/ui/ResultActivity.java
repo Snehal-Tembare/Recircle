@@ -269,7 +269,8 @@ public class ResultActivity extends AppCompatActivity {
                 mAutoProductName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search, 0, R.drawable.ic_input_delete, 0);
 
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if (event.getRawX() >= (mAutoProductName.getRight() - mAutoProductName.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                    if (event.getRawX() >= (mAutoProductName.getRight() -
+                            mAutoProductName.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                         mAutoProductName.setText("");
                         return true;
                     }

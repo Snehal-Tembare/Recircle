@@ -62,11 +62,12 @@
                 android:id="@+id/txt_forgot_pwd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dimen_10dp"
-                android:gravity="end"
+                android:paddingLeft="@dimen/dimen_10dp"
+                android:gravity="center"
                 android:onClick="txtForgotPwd"
                 android:text="@string/forgot_pwd"
-                android:textColor="@color/colorTextBlue" />
+                android:textColor="@color/colorTextBlue"
+                android:layout_marginBottom="@dimen/common_dimens_20"/>
 
             <Button
                 android:id="@+id/btn_user_log_in"

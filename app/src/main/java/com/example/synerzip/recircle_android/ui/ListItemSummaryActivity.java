@@ -3,19 +3,16 @@ package com.example.synerzip.recircle_android.ui;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.Image;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -25,7 +22,6 @@ import com.example.synerzip.recircle_android.models.AllProductInfo;
 import com.example.synerzip.recircle_android.models.Discounts;
 import com.example.synerzip.recircle_android.models.ListAnItemRequest;
 import com.example.synerzip.recircle_android.models.LogInRequest;
-import com.example.synerzip.recircle_android.models.SearchProduct;
 import com.example.synerzip.recircle_android.models.User;
 import com.example.synerzip.recircle_android.models.UserProdImages;
 import com.example.synerzip.recircle_android.models.UserProductUnAvailability;
@@ -34,7 +30,6 @@ import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
-import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -80,12 +75,11 @@ public class ListItemSummaryActivity extends AppCompatActivity {
 
     private int fromAustin;
 
-
     private ArrayList<UserProdImages> listUploadItemImage;
 
     private ArrayList<UserProductUnAvailability> mItemAvailability;
 
-    public static ArrayList<Date> unavailableDates;
+    private ArrayList<Date> unavailableDates;
 
     @BindView(R.id.txt_days_count)
     protected TextView mTxtDaysCount;
@@ -141,7 +135,7 @@ public class ListItemSummaryActivity extends AppCompatActivity {
         unavailableDates = new ArrayList<>();
 
         listUploadItemImage=new ArrayList<>();
-        unavailableDates = ListCalendarSummaryActivity.unavailableDates;
+        unavailableDates =AdditionalDetailsActivity.selectedDates;
         int datesCount;
         datesCount = AdditionalDetailsActivity.daysCount;
         if (datesCount != 0) {
@@ -151,8 +145,8 @@ public class ListItemSummaryActivity extends AppCompatActivity {
             mTxtShowDates.setVisibility(View.GONE);
         }
 
-        productId = ItemImagesActivity.productId;
-        listDiscounts = ItemImagesActivity.listDiscounts;
+        productId = ListItemActivity.productId;
+        listDiscounts = ListItemActivity.listDiscounts;
         double discFiveDays, discTenDays;
         discFiveDays = getIntent().getDoubleExtra(getString(R.string.disc_five_days), 0);
         discTenDays = getIntent().getDoubleExtra(getString(R.string.disc_ten_days), 0);
@@ -168,11 +162,11 @@ public class ListItemSummaryActivity extends AppCompatActivity {
         String currentDate = new SimpleDateFormat("MMM dd, yyyy").format(new Date());
         mTxtListingDay.setText(currentDate);
 
-        mTxtProductTitle.setText(ItemImagesActivity.productTitle);
+        mTxtProductTitle.setText(ListItemActivity.productTitle);
 
-        mItemPrice = ItemImagesActivity.mItemPrice;
+        mItemPrice = ListItemActivity.mItemPrice;
         mTxtItemPrice.setText("$ " + mItemPrice + "/day");
-        mMinRental = ItemImagesActivity.mMinRental;
+        mMinRental = ListItemActivity.mMinRental;
         mTxtItemRental.setText(mMinRental + " days");
 
         mItemDesc = AdditionalDetailsActivity.mItemDesc;
@@ -334,7 +328,6 @@ public class ListItemSummaryActivity extends AppCompatActivity {
     @OnClick(R.id.txt_show_dates)
     public void txtShowDates(View view) {
         Intent intent = new Intent(ListItemSummaryActivity.this, ListCalendarSummaryActivity.class);
-
         startActivity(intent);
     }
 

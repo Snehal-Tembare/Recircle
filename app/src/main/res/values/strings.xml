@@ -55,7 +55,7 @@
     <string name="search_item">Search for an item to rent *</string>
     <string name="daily_price">Daily Rental Price *</string>
     <string name="enter_price">Daily Rental Price ($/per day)*</string>
-    <string name="min_rental">Minimum Rental (day(s)) *</string>
+    <string name="min_rental">Minimum Rent Days *</string>
     <string name="discount">Discounts</string>
     <string name="offer_discount">Offer a 30% discount for 5 day rentals.</string>
     <string name="offer_discount_days">Offer 40% discount for 10 day rentals.</string>
@@ -85,7 +85,7 @@
     <string name="forgot_pwd">Forgot password ?</string>
     <string name="forgot_pwd_title">Give us the email you used to sign up and we\'ll send you a code to reset your password</string>
     <string name="send_otp">Send OTP</string>
-    <string name="toast_send_otp">OTP sent to ur mobile number</string>
+    <string name="toast_send_otp">OTP sent to your mobile number</string>
     <string name="save_and_continue">Save and Continue</string>
     <string name="enter_item_desc">Enter item description</string>
     <string name="enter_item_price">Enter item price</string>
@@ -119,7 +119,7 @@
     <string name="unavail_from_date">unavail_from_date</string>
     <string name="unavail_to_date">unavail_to_date</string>
     <string name="enetr_value_list_item">Enter the fields to add the item</string>
-    <string name="user_not_authenticated">Session Expired. Please Login Again.</string>
+    <string name="user_not_authenticated">User not authenticated</string>
     <string name="product_creation_failed">Something went wrong. User product creation failed</string>
     <string name="terms_and_agreement">Terms and Agreement should be accpted</string>
     <string name="validate_zipcode">Enter at least 5 digit zipcode</string>
@@ -205,17 +205,16 @@
         <item>78783</item>
         <item>78799</item>
     </string-array>
-    <string name="note_hint">Include note with rental</string>
-    <string name="total">Total:</string>
+    <string name="note_hint">Include note with renter</string>
+    <string name="total">Total</string>
     <string name="request_this_item">Request this Item</string>
     <string name="description">Description</string>
     <string name="condition">Condition</string>
     <string name="see_more">See More</string>
     <string name="view_less">View less</string>
     <string name="checkbox_text">Protection Plan (Already Include In This Price)</string>
-    <string name="renters_review">Renters Review(s)</string>
     <string name="product_id">productId</string>
-    <string name="price">Price:</string>
+    <string name="price">Price</string>
     <string name="select_dates">Select Dates</string>
     <string name="selected_image_url">selected_image_url</string>
     <string name="selected_image_position">selected_image_position</string>
@@ -242,16 +241,50 @@
     <string name="store_address">Store Address</string>
     <string name="see_on_map">See On Map</string>
     <string name="store_loaction">Store Location</string>
-    <string name="pick_up_time">After 2.00 pm</string>
-    <string name="return_time">By 12.00 noon</string>
+    <string name="pick_up_time">2.00 pm Onwards</string>
+    <string name="return_time">Till 12.00pm</string>
     <string name="selectedDates">selectedDates</string>
     <string name="dates">dates</string>
     <string name="calendar_date_format">yyyy-MM-dd\'T\'HH:mm:ss.SSS\'Z\'</string>
     <string name="product_not_created">Product creation unsuccessful</string>
     <string name="mandatory_dates">Mandatory fields should not be empty</string>
+
+    <string name="all_reviews_list">all_reviews_list</string>
+    <string name="all_reviews">All Reviews</string>
+    <string name="see_all_reviews">See All reviews</string>
+    <string name="renters_review">Renter\'s Reviews</string>
+    <string name="rent">Rent</string>
+    <string name="price_details">Price Details</string>
+    <string name="Dates">Dates</string>
+    <string name="Days">Days</string>
+    <string name="product_title">product_title</string>
+    <string name="days_count">days_count</string>
+    <string name="product">product</string>
+    <string name="pricing_details">Price Details</string>
+    <string name="include_msg">Include a Message</string>
+    <string name="selected_dates">Selected Dates</string>
+    <string name="Subtotal">Subtotal</string>
+    <string name="confirm">Confirm</string>
+    <string name="proceed_to_pay">Proceed to Pay</string>
+    <string name="select_payment_mode">Select Payment Mode</string>
+    <string name="payment_options">Payment Options</string>
+    <string name="credit_card">Credit Card</string>
+    <string name="credit_card_info">Visa,Master,Amex,Diners &amp; Discover</string>
+    <string name="debit_card">Debit Card</string>
+    <string name="debit_card_info"><![CDATA[Visa,Master,Maestro & Rupay]]></string>
+    <string name="net_banking">Net Banking</string>
+    <string name="net_banking_info">All major banks are supported</string>
+    <string name="mobile_wallet">Mobile Wallet</string>
+    <string name="wallet_info"><![CDATA[PayTm,PayUmoney & Others]]></string>
+    <string name="selected_dates_list">selected_dates_list</string>
+    <string name="credit_card_details">Credit Card Details</string>
+    <string name="name_on_card">Name On Card</string>
+    <string name="pay">Pay</string>
+
+
     <string name="suggested_price">Suggested Price($/day)</string>
     <string name="proceed">Proceed</string>
-    <string name="confirm_item"><![CDATA[Confirm & List]]></string>
+    <string name="confirm_item">List this item</string>
     <string name="unavail_dates">unavailableDates</string>
     <string name="unavail_dates_count">unavailDatesCount</string>
     <string name="item_price">itemPrice</string>
@@ -259,7 +292,7 @@
     <string name="upload_image">uploadImageList</string>
     <string name="uplaod_image_gallery">uploadGalleryImages</string>
     <string name="list_item_desc">itemDesc</string>
-    <string name="product_title">productTitle</string>
+    <!--<string name="product_title">productTitle</string>-->
     <string name="list_new_item">+ List an item</string>
     <string name="discounts">discounts</string>
     <string name="list_unavail_days">listUnavailDays</string>
@@ -282,5 +315,6 @@
     <string name="price_after_disc">Price After Discount</string>
     <string name="min_rental_days">Minimal Rental Days</string>
     <string name="daily_rental_price">Daily Rental price</string>
+    <string name="rent_item_at">Rent Item at $</string>
     <string name="next"><![CDATA[Next >>]]></string>
 </resources>

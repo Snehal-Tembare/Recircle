@@ -7,12 +7,12 @@
     <include layout="@layout/partial_toolbar" />
 
     <android.support.design.widget.TextInputLayout
-        android:layout_below="@+id/toolbar"
-        android:layout_marginLeft="@dimen/dimen_20dp"
-        android:layout_marginRight="@dimen/dimen_20dp"
         android:id="@+id/input_layout_item_desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:layout_marginLeft="@dimen/dimen_20dp"
+        android:layout_marginRight="@dimen/dimen_20dp"
         android:layout_marginTop="@dimen/dimen_100dp">
 
         <EditText
@@ -22,17 +22,17 @@
             android:hint="@string/add_desc"
             android:minLines="3"
             android:padding="@dimen/dimen_5dp"
-            android:textSize="@dimen/dimen_14sp" />
+            android:textSize="@dimen/dimen_16sp" />
     </android.support.design.widget.TextInputLayout>
 
     <EditText
-        android:layout_marginTop="@dimen/dimen_20dp"
-        android:layout_marginLeft="@dimen/dimen_20dp"
-        android:layout_marginRight="@dimen/dimen_20dp"
         android:id="@+id/edit_calendar_availability"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_50dp"
         android:layout_below="@+id/input_layout_item_desc"
+        android:layout_marginLeft="@dimen/dimen_20dp"
+        android:layout_marginRight="@dimen/dimen_20dp"
+        android:layout_marginTop="@dimen/dimen_20dp"
         android:background="@drawable/edittxt_square"
         android:drawableLeft="@drawable/ic_calendar"
         android:drawablePadding="@dimen/dimen_10dp"
@@ -44,12 +44,12 @@
         android:textSize="@dimen/dimen_14sp" />
 
     <TextView
-        android:layout_marginBottom="@dimen/dimen_20dp"
-        android:layout_marginLeft="@dimen/dimen_20dp"
-        android:layout_below="@+id/edit_calendar_availability"
         android:id="@+id/txt_days_for_availability"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_calendar_availability"
+        android:layout_marginBottom="@dimen/dimen_20dp"
+        android:layout_marginLeft="@dimen/dimen_20dp"
         android:layout_marginTop="@dimen/dimen_5dp"
         android:textColor="@color/colorPrimary"
         android:visibility="gone" />
@@ -60,14 +60,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/edit_calendar_availability"
-        android:layout_marginTop="@dimen/dimen_20dp">
+        android:layout_marginTop="@dimen/dimen_40dp">
 
         <EditText
-            android:layout_marginLeft="@dimen/dimen_20dp"
-            android:layout_marginRight="@dimen/dimen_20dp"
             android:id="@+id/edit_enter_zip"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_50dp"
+            android:layout_marginLeft="@dimen/dimen_20dp"
+            android:layout_marginRight="@dimen/dimen_20dp"
             android:hint="@string/edit_enter_zip"
             android:inputType="number"
             android:padding="@dimen/dimen_10dp"
@@ -75,20 +75,20 @@
     </android.support.design.widget.TextInputLayout>
 
     <LinearLayout
-        android:layout_marginBottom="@dimen/dimen_20dp"
-
-        android:layout_marginLeft="@dimen/dimen_20dp"
-        android:layout_marginRight="@dimen/dimen_20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btn_next"
+        android:layout_below="@+id/input_layout_enter_zipcode"
+        android:layout_marginBottom="@dimen/dimen_20dp"
+        android:layout_marginLeft="@dimen/dimen_20dp"
+        android:layout_marginRight="@dimen/dimen_20dp"
+        android:layout_marginTop="@dimen/dimen_20dp"
         android:orientation="horizontal">
 
         <CheckBox
-            android:layout_marginTop="@dimen/dimen_10dp"
             android:id="@+id/checkbox_agreement"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_10dp" />
 
         <TextView
 
@@ -98,8 +98,8 @@
             android:text="@string/agreement"
             android:textColor="@color/colorPrimary" />
     </LinearLayout>
+
     <Button
-        android:onClick="btnNext"
         android:id="@+id/btn_next"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -107,6 +107,7 @@
         android:layout_gravity="bottom"
         android:layout_marginTop="@dimen/dimen_10dp"
         android:background="@drawable/border_upload_image"
+        android:onClick="btnNext"
         android:text="@string/next"
         android:textAllCaps="false"
         android:textColor="@color/common_white" />

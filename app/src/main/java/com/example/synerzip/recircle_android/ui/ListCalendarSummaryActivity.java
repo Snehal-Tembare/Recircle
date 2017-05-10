@@ -51,7 +51,7 @@ public class ListCalendarSummaryActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         unavailableDates = new ArrayList<>();
-        unavailableDates = (ArrayList<Date>) getIntent().getSerializableExtra(getString(R.string.unavail_dates));
+        unavailableDates = AdditionalDetailsActivity.selectedDates;
 
         mTxtFromDate.setVisibility(View.GONE);
         mTxtToDate.setVisibility(View.GONE);
@@ -63,8 +63,9 @@ public class ListCalendarSummaryActivity extends AppCompatActivity {
         Date today = new Date();
 
         mPickerView.init(today, calendar.getTime());
-        mPickerView.highlightDates(unavailableDates);
-
+        if (unavailableDates != null && !unavailableDates.isEmpty()) {
+            mPickerView.highlightDates(unavailableDates);
+        }
     }
 
     /**

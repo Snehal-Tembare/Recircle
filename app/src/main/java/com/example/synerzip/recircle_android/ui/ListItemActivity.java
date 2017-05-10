@@ -9,13 +9,11 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -26,7 +24,6 @@ import com.example.synerzip.recircle_android.models.Discounts;
 import com.example.synerzip.recircle_android.models.Product;
 import com.example.synerzip.recircle_android.models.ProductsData;
 import com.example.synerzip.recircle_android.models.SearchProduct;
-import com.example.synerzip.recircle_android.models.UserProdImages;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.utilities.HideKeyboard;
@@ -47,7 +44,7 @@ import butterknife.OnClick;
  * Created by Prajakta Patil on 9/5/17.
  * Copyright © 2017 Synerzip. All rights reserved
  */
-public class ItemImagesActivity extends AppCompatActivity {
+public class ListItemActivity extends AppCompatActivity {
 
     @BindView(R.id.edit_enter_price)
     protected EditText mEditTxtEnterPrice;
@@ -128,9 +125,9 @@ public class ItemImagesActivity extends AppCompatActivity {
         utility = new SearchUtility();
         mProductAutoComplete.setSingleLine();
 
-        mProductAutoComplete.addTextChangedListener(new ItemImagesActivity.RCTextWatcher(mProductAutoComplete));
-        mEditTxtEnterPrice.addTextChangedListener(new ItemImagesActivity.RCTextWatcher(mEditTxtEnterPrice));
-        mEditMinRental.addTextChangedListener(new ItemImagesActivity.RCTextWatcher(mEditMinRental));
+        mProductAutoComplete.addTextChangedListener(new ListItemActivity.RCTextWatcher(mProductAutoComplete));
+        mEditTxtEnterPrice.addTextChangedListener(new ListItemActivity.RCTextWatcher(mEditTxtEnterPrice));
+        mEditMinRental.addTextChangedListener(new ListItemActivity.RCTextWatcher(mEditMinRental));
 
         listDiscounts = new ArrayList<>();
 
@@ -159,16 +156,16 @@ public class ItemImagesActivity extends AppCompatActivity {
 
     }//end onCreate()
 
-    @OnClick(R.id.btn_choose_img)
+    @OnClick(R.id.btn_upload_img)
     public void btnUploadImg(View view){
         submitForm();
-        HideKeyboard.hideKeyBoard(ItemImagesActivity.this);
+        HideKeyboard.hideKeyBoard(ListItemActivity.this);
         if (NetworkUtility.isNetworkAvailable(this)) {
             if (getValues()) {
-                Intent intent=new Intent(ItemImagesActivity.this,UploadImgActivity.class);
+                Intent intent=new Intent(ListItemActivity.this,UploadImgActivity.class);
                 startActivity(intent);
             } else {
-                RCLog.showToast(ItemImagesActivity.this, getString(R.string.mandatory_dates));
+                RCLog.showToast(ListItemActivity.this, getString(R.string.mandatory_dates));
             }
         } else {
             RCLog.showToast(this, getResources().getString(R.string.err_network_available));
@@ -227,7 +224,7 @@ public boolean getValues(){
                     }
 
                     mAutocompleteAdapter = new AutocompleteAdapter
-                            (ItemImagesActivity.this, R.layout.activity_search, R.id.txtProductName, productsCustomList);
+                            (ListItemActivity.this, R.layout.activity_search, R.id.txtProductName, productsCustomList);
                     mProductAutoComplete.setAdapter(mAutocompleteAdapter);
 
                 } else {
@@ -305,7 +302,7 @@ public boolean getValues(){
                         });
                     }
                 }
-                HideKeyboard.hideKeyBoard(ItemImagesActivity.this);
+                HideKeyboard.hideKeyBoard(ListItemActivity.this);
             }
         });
 

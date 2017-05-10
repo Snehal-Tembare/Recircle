@@ -13,14 +13,14 @@ import lombok.Setter;
 @Getter
 @Setter
 public class User implements Parcelable {
+    private String first_name;
+    private String last_name;
+    private String user_image_url;
     private String message;
     private String user_id;
     private String token;
     private String email;
-    private String first_name;
-    private String last_name;
     private long user_mob_no;
-    private String user_image_url;
 
     /**
      * creator object for user
@@ -39,16 +39,19 @@ public class User implements Parcelable {
 
     /**
      * constructor for user
+     *
      * @param in
      */
     public User(Parcel in) {
+        first_name = in.readString();
+        last_name = in.readString();
+        user_image_url = in.readString();
         message = in.readString();
         user_id = in.readString();
         token = in.readString();
         email = in.readString();
-        first_name = in.readString();
-        last_name = in.readString();
         user_mob_no = in.readLong();
+
     }
 
     @Override
@@ -60,11 +63,11 @@ public class User implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(first_name);
         dest.writeString(last_name);
+        dest.writeString(user_image_url);
         dest.writeString(message);
         dest.writeString(email);
         dest.writeString(token);
         dest.writeString(user_id);
         dest.writeLong(user_mob_no);
-        dest.writeString(user_image_url);
     }
 }

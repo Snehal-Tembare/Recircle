@@ -45,7 +45,7 @@ public class AdditionalDetailsActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
 
-    private ArrayList<Date> selectedDates;
+    public static ArrayList<Date> selectedDates;
 
     public UserProductUnAvailability userProductUnAvailability;
 
@@ -197,6 +197,7 @@ public class AdditionalDetailsActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_next)
     public void btnNext(View view){
+        
         if(getValues()) {
           checkZipcodes();
         }else {
