@@ -44,7 +44,6 @@ import com.example.synerzip.recircle_android.utilities.HideKeyboard;
 import com.example.synerzip.recircle_android.utilities.NetworkUtility;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
-import com.example.synerzip.recircle_android.utilities.RCWebConstants;
 import com.example.synerzip.recircle_android.utilities.SearchUtility;
 
 import java.text.DateFormat;
@@ -399,6 +398,8 @@ public class SearchActivity extends AppCompatActivity
                 Intent detailsIntent = new Intent(SearchActivity.this, DetailsActivity.class);
                 detailsIntent.putExtra(getString(R.string.product_id),
                         product.getUser_product_info().getUser_product_id());
+
+                Log.v("***Product Id:", product.getUser_product_info().getUser_product_id());
                 startActivity(detailsIntent);
             }
         });
@@ -426,6 +427,8 @@ public class SearchActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        DetailsActivity.isBackPressed =false;
+
         productsCustomList = new ArrayList<>();
 
         productItemList = new ArrayList<>();
@@ -439,7 +442,8 @@ public class SearchActivity extends AppCompatActivity
             public void searchProductResult(SearchProduct sd) {
                 searchProduct = sd;
                 resetAll();
-                if (null != searchProduct && !(searchProduct.getProducts().size() == 0)) {
+                if (null != searchProduct && searchProduct.getProducts() != null
+                        && searchProduct.getProducts().size() != 0) {
                     mIntent = new Intent(SearchActivity.this, ResultActivity.class);
                     mIntent.putExtra(getString(R.string.search_product), searchProduct);
                     mIntent.putExtra(getString(R.string.name), mName);

@@ -10,12 +10,21 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.UserProdImages;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+/**
+ * Created by Snehal Tembare on 11/4/17.
+ * Copyright © 2017 Synerzip. All rights reserved
+ */
+
 
 public class ZoomActivity extends AppCompatActivity {
 
@@ -54,7 +63,7 @@ public class ZoomActivity extends AppCompatActivity {
         selectedImgPosition = bundle.getInt(getString(R.string.selected_image_position), 0);
 
 
-        mPagerAdapter=new CustomPagerAdapter(getApplicationContext(),userProdImagesArrayList);
+        mPagerAdapter = new CustomPagerAdapter(getApplicationContext(), userProdImagesArrayList);
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.setCurrentItem(selectedImgPosition);
 
@@ -66,12 +75,12 @@ public class ZoomActivity extends AppCompatActivity {
 
                 View view = mReImages.getChildAt(position);
 
-                view.setBackground(ContextCompat.getDrawable(ZoomActivity.this,R.drawable.selected_image_background));
+                view.setBackground(ContextCompat.getDrawable(ZoomActivity.this, R.drawable.selected_image_background));
 
                 for (int i = 0; i < userProdImagesArrayList.size(); i++) {
                     view = mReImages.getChildAt(i);
                     if (i != position) {
-                        view.setBackground(ContextCompat.getDrawable(ZoomActivity.this,R.drawable.custom_imageview));
+                        view.setBackground(ContextCompat.getDrawable(ZoomActivity.this, R.drawable.custom_imageview));
                     }
                 }
             }
@@ -89,12 +98,12 @@ public class ZoomActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 View view = mReImages.getChildAt(position);
 
-                view.setBackground(ContextCompat.getDrawable(ZoomActivity.this,R.drawable.selected_image_background));
+                view.setBackground(ContextCompat.getDrawable(ZoomActivity.this, R.drawable.selected_image_background));
 
                 for (int i = 0; i < userProdImagesArrayList.size(); i++) {
                     view = mReImages.getChildAt(i);
                     if (i != mViewPager.getCurrentItem()) {
-                        view.setBackground(ContextCompat.getDrawable(ZoomActivity.this,R.drawable.custom_imageview));
+                        view.setBackground(ContextCompat.getDrawable(ZoomActivity.this, R.drawable.custom_imageview));
                     }
                 }
             }
@@ -106,6 +115,10 @@ public class ZoomActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Show previous Image
+     */
+
     @OnClick(R.id.img_previous)
     public void showPreviousImage() {
         if (mViewPager.getCurrentItem() > 0) {
@@ -115,16 +128,20 @@ public class ZoomActivity extends AppCompatActivity {
             mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
 
             View view = mReImages.getChildAt(mViewPager.getCurrentItem());
-            view.setBackground(ContextCompat.getDrawable(this,R.drawable.selected_image_background));
+            view.setBackground(ContextCompat.getDrawable(this, R.drawable.selected_image_background));
 
             for (int i = 0; i < userProdImagesArrayList.size(); i++) {
                 view = mReImages.getChildAt(i);
                 if (i == position) {
-                    view.setBackground(ContextCompat.getDrawable(this,R.drawable.custom_imageview));
+                    view.setBackground(ContextCompat.getDrawable(this, R.drawable.custom_imageview));
                 }
             }
         }
     }
+
+    /**
+     * Show next Image
+     */
 
     @OnClick(R.id.img_next)
     public void showNextImage() {
@@ -135,17 +152,21 @@ public class ZoomActivity extends AppCompatActivity {
             mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
 
             View view = mReImages.getChildAt(mViewPager.getCurrentItem());
-            view.setBackground(ContextCompat.getDrawable(this,R.drawable.selected_image_background));
+            view.setBackground(ContextCompat.getDrawable(this, R.drawable.selected_image_background));
 
             for (int i = 0; i < userProdImagesArrayList.size(); i++) {
                 view = mReImages.getChildAt(i);
                 if (i == position) {
-                    view.setBackground(ContextCompat.getDrawable(this,R.drawable.custom_imageview));
+                    view.setBackground(ContextCompat.getDrawable(this, R.drawable.custom_imageview));
                 }
             }
         }
     }
 
+
+    /**
+     * OnClick of home button
+     */
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

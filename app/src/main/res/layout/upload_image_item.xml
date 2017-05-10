@@ -5,8 +5,8 @@
 
     <ImageView
         android:id="@+id/img_upload_item"
-        android:layout_width="@dimen/dimen_50dp"
-        android:layout_height="@dimen/dimen_50dp"
+        android:layout_width="@dimen/dimen_70dp"
+        android:layout_height="@dimen/dimen_70dp"
         android:padding="@dimen/dimen_10dp"
         android:scaleType="fitXY"
         android:src="@drawable/ic_camera" />

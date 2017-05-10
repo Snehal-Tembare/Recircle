@@ -1,23 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbarlayout"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="@dimen/appbar_layout_height"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <android.support.design.widget.CollapsingToolbarLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/collapsible_layout"
+            android:id="@+id/collapsible_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:expandedTitleMarginEnd="@dimen/dimen_expanded_title_margin_end"
+            app:expandedTitleMarginStart="@dimen/dimen_expanded_title_margin_start"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:statusBarScrim="@color/colorPrimaryDark">
 
-            <include layout="@layout/partial_toolbar" />
+            <ImageView
+                android:id="@+id/img_main_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/common_dimens_10"
+                android:paddingRight="@dimen/common_dimens_10"
+                android:scaleType="fitCenter"
+                app:layout_collapseMode="parallax"
+                app:layout_scrollFlags="scroll|enterAlways" />
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
@@ -28,11 +50,13 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/common_white"
+        android:clipToPadding="false"
         android:orientation="vertical"
+        android:scrollbarStyle="insideOverlay"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
+            android:id="@+id/details_parent_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -42,16 +66,9 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/img_main_image"
-                    android:layout_width="@dimen/common_dimens_150"
-                    android:layout_height="@dimen/common_dimens_180"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/common_dimens_10" />
-
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="horizontal"
                     android:weightSum="1">
 
@@ -61,13 +78,12 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="0.1"
-                        android:src="@mipmap/ic_previous" />
+                        android:src="@drawable/ic_previous_grey" />
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/recycler_images"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
                         android:layout_weight="0.8" />
 
                     <ImageView
@@ -76,21 +92,21 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="0.1"
-                        android:src="@mipmap/ic_next" />
+                        android:src="@drawable/ic_next_grey" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/common_dimens_15"
-                android:layout_marginRight="@dimen/common_dimens_15"
                 android:layout_marginTop="@dimen/common_dimens_10"
                 android:orientation="vertical">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/common_dimens_15"
+                    android:layout_marginRight="@dimen/common_dimens_15"
                     android:orientation="horizontal">
 
                     <TextView
@@ -108,14 +124,15 @@
                         android:layout_alignParentRight="true"
                         android:padding="@dimen/common_dimens_2"
                         android:text="@string/store_address"
-                        android:textColor="@color/colorAccent"
-                        />
+                        android:textColor="@color/colorAccent" />
                 </RelativeLayout>
 
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/common_dimens_15"
+                    android:layout_marginRight="@dimen/common_dimens_15"
                     android:orientation="horizontal">
 
                     <RatingBar
@@ -125,7 +142,7 @@
                         android:layout_height="wrap_content" />
 
                     <TextView
-                        android:id="@+id/txt_avg_rating"
+                        android:id="@+id/txt_details_rating_count"
                         android:layout_width="@dimen/common_dimens_20"
                         android:layout_height="@dimen/common_dimens_20" />
 
@@ -134,6 +151,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/common_dimens_15"
+                    android:layout_marginRight="@dimen/common_dimens_15"
                     android:orientation="horizontal">
 
                     <com.pkmmte.view.CircularImageView
@@ -162,113 +181,15 @@
                         android:src="@drawable/help" />
                 </LinearLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimen_1dp"
-                    android:layout_marginTop="@dimen/common_dimens_5"
-                    android:background="@color/view_color" />
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/price"
-                        android:textSize="@dimen/text_size_16" />
-
-                    <TextView
-                        android:id="@+id/txt_price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_20"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <EditText
-                    android:id="@+id/edt_enter_dates"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/common_dimens_10"
+                    android:layout_marginRight="@dimen/common_dimens_10"
                     android:layout_marginTop="@dimen/common_dimens_10"
-                    android:background="@drawable/edittxt_square"
-                    android:drawableLeft="@drawable/ic_calendar"
-                    android:drawablePadding="@dimen/dimen_10dp"
-                    android:focusable="false"
-                    android:hint="@string/enter_dates"
-                    android:padding="@dimen/common_dimens_10" />
-
-                <EditText
-                    android:id="@+id/edt_note"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/common_dimens_50"
-                    android:layout_marginTop="@dimen/common_dimens_10"
-                    android:background="@drawable/edittxt_square"
-                    android:hint="@string/note_hint"
-                    android:padding="@dimen/common_dimens_5" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/txt_total_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/total"
-                        android:visibility="gone" />
-
-                    <EditText
-                        android:id="@+id/edt_total_price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:focusable="false"
-                        android:textSize="@dimen/text_size_14"
-                        android:visibility="gone" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <CheckBox
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:text="@string/checkbox_text" />
-
-                    <ImageButton
-                        android:layout_width="@dimen/common_dimens_10"
-                        android:layout_height="@dimen/common_dimens_10"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/common_dimens_5"
-                        android:src="@drawable/ic_about" />
-                </LinearLayout>
-
-                <Button
-                    android:layout_width="@dimen/dimen_200dp"
-                    android:layout_height="@dimen/dimen_40dp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/round_button_blue"
-                    android:padding="@dimen/common_dimens_10"
-                    android:text="@string/request_this_item"
-                    android:textColor="@color/common_white"
-                    android:textSize="@dimen/text_size_16" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimen_1dp"
-                    android:layout_marginTop="@dimen/common_dimens_10"
-                    android:background="@color/view_color" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/common_dimens_10"
-                    android:orientation="vertical">
+                    android:background="@color/common_white"
+                    android:orientation="vertical"
+                    android:padding="@dimen/common_dimens_5">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -282,7 +203,10 @@
                         android:id="@+id/expand_txt_description"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:letterSpacing="0.01"
+                        android:lineSpacingMultiplier="1.1"
                         android:maxLines="4"
+                        android:padding="@dimen/common_dimens_5"
                         android:textSize="@dimen/text_size_14" />
 
                     <TextView
@@ -297,8 +221,12 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/common_dimens_10"
+                    android:layout_marginRight="@dimen/common_dimens_10"
                     android:layout_marginTop="@dimen/common_dimens_10"
-                    android:orientation="vertical">
+                    android:background="@color/common_white"
+                    android:orientation="vertical"
+                    android:padding="@dimen/common_dimens_5">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -313,6 +241,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:includeFontPadding="true"
+                        android:lineSpacingMultiplier="1.1"
                         android:maxLines="4" />
 
                     <TextView
@@ -340,11 +269,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/common_dimens_5"
+                        android:paddingLeft="@dimen/common_dimens_5"
                         android:text="@string/renters_review"
                         android:textColor="@color/common_black" />
 
                     <RatingBar
-                        android:id="@+id/all_rating_avg"
+                        android:id="@+id/all_ratingsbar"
                         style="?android:attr/ratingBarStyleSmall"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -352,16 +283,32 @@
                         android:layout_marginLeft="@dimen/common_dimens_5" />
 
                     <TextView
+                        android:id="@+id/txt_all_reviews_count"
                         android:layout_width="@dimen/common_dimens_20"
                         android:layout_height="@dimen/common_dimens_20"
                         android:layout_gravity="center_vertical"
                         android:textColor="@color/common_text_color" />
                 </LinearLayout>
 
+                <TextView
+                    android:id="@+id/txt_see_all_reviews"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/common_dimens_5"
+                    android:layout_marginRight="@dimen/common_dimens_5"
+                    android:drawableRight="@drawable/ic_next_blue"
+                    android:padding="@dimen/common_dimens_5"
+                    android:textColor="@color/colorAccent"
+                    android:textStyle="bold"
+                    android:visibility="visible" />
+
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/list_reviews"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/common_dimens_5" />
+
+
             </LinearLayout>
 
             <LinearLayout
@@ -419,27 +366,30 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
+
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0.5"
                             android:layout_marginTop="@dimen/common_dimens_10"
+                            android:layout_weight="0.5"
                             android:paddingLeft="@dimen/common_dimens_20"
                             android:text="@string/store_location"
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/text_size_14"
                             android:textStyle="bold" />
+
                         <ImageView
                             android:layout_width="@dimen/common_dimens_20"
                             android:layout_height="@dimen/common_dimens_20"
                             android:layout_marginTop="@dimen/common_dimens_10"
-                            android:src="@mipmap/ic_map_marker"/>
+                            android:src="@mipmap/ic_map_marker" />
+
                         <TextView
                             android:id="@+id/txt_see_on_map"
                             android:layout_width="0dp"
-                            android:layout_weight="0.3"
-                            android:layout_marginTop="@dimen/common_dimens_10"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/common_dimens_10"
+                            android:layout_weight="0.3"
                             android:text="@string/see_on_map"
                             android:textColor="@color/colorAccent" />
                     </LinearLayout>
@@ -461,6 +411,7 @@
                         android:id="@+id/layout_store_address"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/common_dimens_40"
                         android:layout_weight="0.9"
                         android:orientation="vertical">
 
@@ -508,6 +459,7 @@
                             android:paddingLeft="@dimen/common_dimens_20"
                             android:text="@string/company_email"
                             android:textColor="@color/text_color" />
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -530,11 +482,30 @@
                 </LinearLayout>
 
             </LinearLayout>
-
         </LinearLayout>
 
 
     </android.support.v4.widget.NestedScrollView>
+
+    <LinearLayout
+        style="@style/Widget.Design.BottomSheet.Modal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        app:layout_behavior="@string/bottom_sheet_behavior">
+
+        <Button
+            android:id="@+id/btn_price"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorRedSecondary"
+            android:padding="@dimen/common_dimens_10"
+            android:textColor="@color/common_white"
+            android:textSize="@dimen/text_size_16" />
+
+    </LinearLayout>
 
     <include
         android:id="@+id/progress_bar"
