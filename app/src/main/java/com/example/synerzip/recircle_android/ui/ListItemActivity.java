@@ -9,11 +9,13 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -40,6 +42,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 /**
  * Created by Prajakta Patil on 9/5/17.
  * Copyright © 2017 Synerzip. All rights reserved
@@ -111,10 +114,15 @@ public class ListItemActivity extends AppCompatActivity {
 
     private long suggestedPrice;
 
+    public static double discFiveDays, discTenDays;
+
+    @BindView(R.id.btn_upload_img)
+    protected Button mBtnUploadImg;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_item_images);
+        setContentView(R.layout.activity_list_item);
         ButterKnife.bind(this);
 
         setSupportActionBar(mToolbar);
@@ -153,16 +161,15 @@ public class ListItemActivity extends AppCompatActivity {
                 }
             }
         });
-
     }//end onCreate()
 
     @OnClick(R.id.btn_upload_img)
-    public void btnUploadImg(View view){
+    public void btnUploadImg(View view) {
         submitForm();
         HideKeyboard.hideKeyBoard(ListItemActivity.this);
         if (NetworkUtility.isNetworkAvailable(this)) {
             if (getValues()) {
-                Intent intent=new Intent(ListItemActivity.this,UploadImgActivity.class);
+                Intent intent = new Intent(ListItemActivity.this, UploadImgActivity.class);
                 startActivity(intent);
             } else {
                 RCLog.showToast(ListItemActivity.this, getString(R.string.mandatory_dates));
@@ -170,20 +177,29 @@ public class ListItemActivity extends AppCompatActivity {
         } else {
             RCLog.showToast(this, getResources().getString(R.string.err_network_available));
         }
-
     }
-public boolean getValues(){
 
-    String strPrice = mEditTxtEnterPrice.getText().toString();
-    String strRental = mEditMinRental.getText().toString();
+    public boolean getValues() {
 
-    if (!strPrice.isEmpty() && !strRental.isEmpty() ) {
-        mItemPrice = Integer.parseInt(mEditTxtEnterPrice.getText().toString().trim());
-        mMinRental = Integer.parseInt(mEditMinRental.getText().toString().trim());
-        return true;
+        String strPrice = mEditTxtEnterPrice.getText().toString();
+        String strRental = mEditMinRental.getText().toString();
+
+        if (!strPrice.isEmpty() && !strRental.isEmpty()) {
+            mItemPrice = Integer.parseInt(mEditTxtEnterPrice.getText().toString().trim());
+            mMinRental = Integer.parseInt(mEditMinRental.getText().toString().trim());
+            if(mDiscounts.getDiscount_for_days()!=0) {
+                if (mDiscounts.getDiscount_for_days() == 5) {
+                    discFiveDays = Math.round(productPrice * 0.03);
+                }
+                if (mDiscounts.getDiscount_for_days() == 10) {
+                    discTenDays = Math.round(productPrice * 0.04);
+                }
+            }
+            return true;
+        }
+        return false;
     }
-    return false;
-}
+
     /**
      * search item autocomplete textview
      */
@@ -194,6 +210,7 @@ public boolean getValues(){
         productItemList = new ArrayList<>();
         service = ApiClient.getClient().create(RCAPInterface.class);
         utility.populateAutoCompleteData();
+
         ReadyCallback readyCallback = new ReadyCallback() {
             @Override
             public void searchProductResult(SearchProduct sd) {
@@ -463,8 +480,7 @@ public boolean getValues(){
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                onBackPressed();
-                finish();
+                startActivity(new Intent(ListItemActivity.this, SearchActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

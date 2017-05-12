@@ -17,7 +17,8 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimen_10dp">
+            android:layout_marginTop="@dimen/dimen_10dp"
+            android:isScrollContainer="false">
 
             <LinearLayout
                 android:id="@+id/layout_list_item"
@@ -183,12 +184,9 @@
             android:layout_gravity="bottom"
             android:layout_marginTop="@dimen/dimen_10dp"
             android:background="@drawable/border_upload_image"
-            android:onClick="btnUploadImg"
             android:text="@string/upload_photos"
-            android:textAllCaps="false"
             android:textColor="@color/common_white" />
     </FrameLayout>
-
 </LinearLayout>
 
 

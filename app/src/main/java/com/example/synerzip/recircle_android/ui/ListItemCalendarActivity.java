@@ -33,6 +33,7 @@ import com.squareup.timessquare.*;
  * Copyright © 2017 Synerzip. All rights reserved
  */
 public class ListItemCalendarActivity extends AppCompatActivity {
+
     @BindView(R.id.calendar_view)
     protected CalendarPickerView mPickerView;
 
@@ -46,7 +47,9 @@ public class ListItemCalendarActivity extends AppCompatActivity {
     protected TextView mTxtReset;
 
     public static ArrayList<Date> selectedDates;
+
     private ArrayList<String> datesList;
+
     private ArrayList<Date> restoreDates;
 
     @Override
@@ -108,7 +111,6 @@ public class ListItemCalendarActivity extends AppCompatActivity {
                 List<CalendarCellDecorator> decoratorList = new ArrayList<>();
                 decoratorList.add(new MonthDecorator(ListItemCalendarActivity.this, null, date));
                 mPickerView.setDecorators(decoratorList);
-
             }
         });
 

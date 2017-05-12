@@ -398,8 +398,6 @@ public class SearchActivity extends AppCompatActivity
                 Intent detailsIntent = new Intent(SearchActivity.this, DetailsActivity.class);
                 detailsIntent.putExtra(getString(R.string.product_id),
                         product.getUser_product_info().getUser_product_id());
-
-                Log.v("***Product Id:", product.getUser_product_info().getUser_product_id());
                 startActivity(detailsIntent);
             }
         });
@@ -427,7 +425,7 @@ public class SearchActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        DetailsActivity.isBackPressed =false;
+        DetailsActivity.isBackPressed = false;
 
         productsCustomList = new ArrayList<>();
 
@@ -622,7 +620,8 @@ public class SearchActivity extends AppCompatActivity
      * clears Application data
      */
     private void clearData() {
-        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getApplicationContext().
+                getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.commit();

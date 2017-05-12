@@ -5,6 +5,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -19,7 +20,7 @@ import butterknife.OnClick;
  * Copyright © 2017 Synerzip. All rights reserved
  */
 
-public class ListedItemActivity extends AppCompatActivity {
+public class ListItemSuccessActivity extends AppCompatActivity {
     private String productId;
 
     @BindView(R.id.toolbar)
@@ -35,7 +36,6 @@ public class ListedItemActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(R.string.list_an_item);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
-
         productId = getIntent().getExtras().getString(getString(R.string.product_id));
     }
 
@@ -46,7 +46,7 @@ public class ListedItemActivity extends AppCompatActivity {
      */
     @OnClick(R.id.btn_view_item)
     public void btnViewItem(View view) {
-        Intent intent = new Intent(ListedItemActivity.this, DetailsActivity.class);
+        Intent intent = new Intent(ListItemSuccessActivity.this, DetailsActivity.class);
         intent.putExtra(getString(R.string.product_id), productId);
         startActivity(intent);
     }
@@ -58,7 +58,7 @@ public class ListedItemActivity extends AppCompatActivity {
      */
     @OnClick(R.id.btn_list_item)
     public void btnListItem(View view) {
-        startActivity(new Intent(ListedItemActivity.this, ListItemActivity.class));
+        startActivity(new Intent(ListItemSuccessActivity.this, ListItemActivity.class));
     }
 
     /**
@@ -71,7 +71,9 @@ public class ListedItemActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                onBackPressed();
+                Intent intent = new Intent(ListItemSuccessActivity.this, SearchActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
                 finish();
                 return true;
             default:

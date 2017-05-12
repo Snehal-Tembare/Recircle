@@ -3,8 +3,8 @@
     android:id="@+id/layout_expanded"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/background_dark"
     android:layout_marginBottom="@dimen/common_dimens_10"
+    android:background="@android:color/background_dark"
     android:orientation="vertical">
 
 
@@ -41,13 +41,12 @@
             android:id="@+id/edt_enter_dates"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/edittxt_square"
             android:drawableLeft="@drawable/ic_calendar"
             android:drawablePadding="@dimen/dimen_10dp"
             android:focusable="false"
-            android:padding="@dimen/common_dimens_10"
-            android:background="@drawable/edittxt_square"
             android:hint="@string/enter_dates"
-            android:onClick="btnEnterDates"/>
+            android:padding="@dimen/common_dimens_10" />
 
     </LinearLayout>
 
@@ -57,10 +56,9 @@
         android:layout_width="@dimen/common_dimens_150"
         android:layout_height="@dimen/dimen_40dp"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/common_dimens_10"
         android:layout_marginBottom="@dimen/common_dimens_10"
+        android:layout_marginTop="@dimen/common_dimens_10"
         android:background="@drawable/round_button_blue"
-        android:onClick="callSearchApi"
         android:text="@string/search"
         android:textColor="@color/common_white"
         android:textSize="@dimen/text_size_16" />

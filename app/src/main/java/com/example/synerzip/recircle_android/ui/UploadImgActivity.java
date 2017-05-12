@@ -56,11 +56,10 @@ public class UploadImgActivity extends AppCompatActivity {
         if(listUploadGalleryImage.size()!=0) {
             Intent intent = new Intent(UploadImgActivity.this, AdditionalDetailsActivity.class);
             intent.putExtra(getString(R.string.uplaod_image_gallery), listUploadGalleryImage);
-            Log.v("intent_gallery_images", listUploadGalleryImage + "");
 
             startActivity(intent);
         }else {
-            RCLog.showToast(UploadImgActivity.this,"Upload at least one image");
+            RCLog.showToast(UploadImgActivity.this,getString(R.string.upload_img));
         }
     }
     @OnClick(R.id.img_gallery)
@@ -93,7 +92,6 @@ public class UploadImgActivity extends AppCompatActivity {
                 mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
                 mRecyclerView.setAdapter(mUploadImageAdapter);
         }
-        //TODO images should be uploaded to amazon s3 bucket; yet to be done
         if (requestCode == 2 && resultCode == RESULT_OK && null != data) {
             UploadImageAdapter mUploadImageAdapter;
             mUploadImageAdapter = new UploadImageAdapter(UploadImgActivity.this, listUploadGalleryImage);

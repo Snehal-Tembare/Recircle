@@ -1,14 +1,12 @@
 package com.example.synerzip.recircle_android.utilities;
 
-import retrofit2.http.PUT;
-
 /**
  * Created by Prajakta Patil on 7/3/17.
  * Copyright © 2017 Synerzip. All rights reserved
  */
 public class RCWebConstants {
 
-    public static final String RC_BASE_URL = "https://b7421a24.ngrok.io";
+    public static final String RC_BASE_URL = "http://c8ce60a4.ngrok.io";
 
     public static final int RC_SUCCESS_CODE = 200;
 

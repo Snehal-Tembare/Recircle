@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/apk/res-auto"
     package="com.example.synerzip.recircle_android">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -53,10 +52,12 @@
         <activity android:name=".ui.ListItemCalendarActivity" />
         <activity android:name=".ui.ListItemSummaryActivity" />
         <activity android:name=".ui.ListCalendarSummaryActivity" />
-        <activity android:name=".ui.ListedItemActivity" />
-        <activity android:name=".ui.ListItemActivity" />
+        <activity android:name=".ui.ListItemSuccessActivity" />
+        <activity
+            android:name=".ui.ListItemActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".ui.UploadImgActivity" />
-        <activity android:name=".ui.AdditionalDetailsActivity"></activity>
+        <activity android:name=".ui.AdditionalDetailsActivity" />
         <activity android:name=".ui.AllReviewsActivity" />
         <activity android:name=".ui.RentInfoActivity" />
         <activity android:name=".ui.PaymentModeActivity" />

@@ -38,10 +38,9 @@
         android:drawablePadding="@dimen/dimen_10dp"
         android:focusable="false"
         android:hint="@string/calendar_availability"
-        android:onClick="calendarAvailability"
         android:padding="@dimen/dimen_10dp"
         android:textColorHint="@color/colorPrimary"
-        android:textSize="@dimen/dimen_14sp" />
+        android:textSize="@dimen/dimen_16sp" />
 
     <TextView
         android:id="@+id/txt_days_for_availability"
@@ -71,17 +70,14 @@
             android:hint="@string/edit_enter_zip"
             android:inputType="number"
             android:padding="@dimen/dimen_10dp"
-            android:textSize="@dimen/dimen_14sp" />
+            android:textSize="@dimen/dimen_16sp" />
     </android.support.design.widget.TextInputLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/input_layout_enter_zipcode"
-        android:layout_marginBottom="@dimen/dimen_20dp"
-        android:layout_marginLeft="@dimen/dimen_20dp"
-        android:layout_marginRight="@dimen/dimen_20dp"
-        android:layout_marginTop="@dimen/dimen_20dp"
+        android:layout_margin="@dimen/dimen_20dp"
         android:orientation="horizontal">
 
         <CheckBox
@@ -107,8 +103,6 @@
         android:layout_gravity="bottom"
         android:layout_marginTop="@dimen/dimen_10dp"
         android:background="@drawable/border_upload_image"
-        android:onClick="btnNext"
         android:text="@string/next"
-        android:textAllCaps="false"
         android:textColor="@color/common_white" />
 </RelativeLayout>

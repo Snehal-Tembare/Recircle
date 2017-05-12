@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -54,6 +55,8 @@ public class ListItemSummaryActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
 
     private String mAccessToken;
+
+    private boolean isLoggedIn;
 
     private RCAPInterface service;
 
@@ -132,28 +135,25 @@ public class ListItemSummaryActivity extends AppCompatActivity {
         //get data from shared preferences
         sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
         mAccessToken = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
+        isLoggedIn=sharedPreferences.getBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS,false);
         unavailableDates = new ArrayList<>();
 
-        listUploadItemImage=new ArrayList<>();
-        unavailableDates =AdditionalDetailsActivity.selectedDates;
+        listUploadItemImage = new ArrayList<>();
+        unavailableDates = AdditionalDetailsActivity.selectedDates;
         int datesCount;
         datesCount = AdditionalDetailsActivity.daysCount;
         if (datesCount != 0) {
             mTxtDaysCount.setText(datesCount + " days");
         } else {
-            mTxtDaysCount.setText("Dates are not selected");
+            mTxtDaysCount.setText(getString(R.string.dates_not_selected));
             mTxtShowDates.setVisibility(View.GONE);
         }
 
         productId = ListItemActivity.productId;
         listDiscounts = ListItemActivity.listDiscounts;
-        double discFiveDays, discTenDays;
-        discFiveDays = getIntent().getDoubleExtra(getString(R.string.disc_five_days), 0);
-        discTenDays = getIntent().getDoubleExtra(getString(R.string.disc_ten_days), 0);
 
-        mTxtDiscFiveDays.setText(getString(R.string.disc_five) + " " + String.valueOf(discFiveDays) + " " + getString(R.string.five_days));
-        mTxtDiscTenDays.setText(getString(R.string.disc_ten) + " " + String.valueOf(discTenDays) + " " + getString(R.string.ten_days));
-
+        mTxtDiscFiveDays.setText(getString(R.string.five_days)+"$ "+String.valueOf(ListItemActivity.discFiveDays) );
+        mTxtDiscTenDays.setText(getString(R.string.ten_days)+"$ " +String.valueOf(ListItemActivity.discTenDays));
         mItemAvailability = AdditionalDetailsActivity.mItemAvailability;
 
         mZipcode = AdditionalDetailsActivity.mZipcode;
@@ -174,7 +174,7 @@ public class ListItemSummaryActivity extends AppCompatActivity {
 
         //TODO product images should be taken from amazon s3 bucket ; yet to be done
         UserProdImages mUserProdImages;
-        mUserProdImages = new UserProdImages("https://s3.ap-south-1.amazonaws.com/cmsios/CalendarView.png", "2017-02-04T13:13:09.000Z");
+        mUserProdImages = new UserProdImages("https://s3.ap-south-1.amazonaws.com/recircleimages/1398934243000_1047081.jpg", "2017-02-04T13:13:09.000Z");
         listUploadItemImage.add(mUserProdImages);
 
         uploadGalleryImages = UploadImgActivity.listUploadGalleryImage;
@@ -194,7 +194,6 @@ public class ListItemSummaryActivity extends AppCompatActivity {
                                         view.setBackground(ContextCompat.getDrawable(ListItemSummaryActivity.this, R.drawable.custom_imageview));
                                     }
                                 }
-
                                 selectedImgPosition = position;
                                 mLayoutManager.scrollToPosition(position);
                             }
@@ -224,8 +223,9 @@ public class ListItemSummaryActivity extends AppCompatActivity {
                 mLinearLayout.setAlpha((float) 1.0);
                 if (response.isSuccessful()) {
                     RCLog.showToast(ListItemSummaryActivity.this, getString(R.string.item_added));
-                    Intent intent = new Intent(ListItemSummaryActivity.this, ListedItemActivity.class);
-                    intent.putExtra(getString(R.string.product_id), productId);
+                    Intent intent = new Intent(ListItemSummaryActivity.this, ListItemSuccessActivity.class);
+                    String userProductId=response.body().getUser_product_id();
+                    intent.putExtra(getString(R.string.product_id), userProductId);
                     startActivity(intent);
                 } else {
                     if (response.code() == RCWebConstants.RC_ERROR_CODE_BAD_REQUEST) {
@@ -250,7 +250,7 @@ public class ListItemSummaryActivity extends AppCompatActivity {
     private void logInDialog() {
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.log_in_again_dialog);
-        dialog.setTitle(getString(R.string.log_in));
+        dialog.setTitle(getString(R.string.log_in_again));
         final EditText mEditTxtUserName = (EditText) dialog.findViewById(R.id.edit_login_email_dialog);
         final EditText mEditTxtPwd = (EditText) dialog.findViewById(R.id.edit_login_pwd_dialog);
 
@@ -306,7 +306,7 @@ public class ListItemSummaryActivity extends AppCompatActivity {
      */
     @OnClick(R.id.img_edit)
     public void imgEdit(View view) {
-        finish();
+       finish();
     }
 
     /**
@@ -316,8 +316,11 @@ public class ListItemSummaryActivity extends AppCompatActivity {
      */
     @OnClick(R.id.btn_confirm_item)
     public void btnConfirmItem(View view) {
-        getListAnItem();
-
+        if(isLoggedIn) {
+            getListAnItem();
+        }else {
+            RCLog.showToast(ListItemSummaryActivity.this,getString(R.string.user_must_login));
+        }
     }
 
     /**

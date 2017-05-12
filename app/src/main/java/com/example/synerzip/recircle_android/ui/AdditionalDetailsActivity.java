@@ -32,15 +32,12 @@ import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 /**
  * Created by Prajakta Patil on 9/5/17.
  * Copyright © 2017 Synerzip. All rights reserved
  */
 public class AdditionalDetailsActivity extends AppCompatActivity {
-
-    private ArrayList<UserProdImages> listUploadItemImage;
-
-    private ArrayList<String> uploadGalleryImages;
 
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
@@ -74,6 +71,7 @@ public class AdditionalDetailsActivity extends AppCompatActivity {
 
     @BindView(R.id.edit_enter_zip)
     protected EditText mEditTxtZipcode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,12 +81,11 @@ public class AdditionalDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(R.string.list_an_item);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
-
-        uploadGalleryImages = new ArrayList<>();
         selectedDates = new ArrayList<>();
         mItemAvailability = new ArrayList<>();
 
     }
+
     /**
      * check whether zipcode valid or not
      */
@@ -154,6 +151,7 @@ public class AdditionalDetailsActivity extends AppCompatActivity {
         }
         return false;
     }
+
     /**
      * enter calendar unavailability
      *
@@ -196,14 +194,14 @@ public class AdditionalDetailsActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.btn_next)
-    public void btnNext(View view){
-        
-        if(getValues()) {
-          checkZipcodes();
-        }else {
+    public void btnNext(View view) {
+        if (getValues()) {
+            checkZipcodes();
+        } else {
             RCLog.showToast(AdditionalDetailsActivity.this, getString(R.string.mandatory_dates));
         }
     }
+
     /**
      * action bar back button
      *

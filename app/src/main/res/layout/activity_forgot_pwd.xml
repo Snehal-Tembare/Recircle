@@ -66,7 +66,6 @@
                     android:layout_centerVertical="true"
                     android:layout_marginTop="@dimen/dimen_10dp"
                     android:gravity="center"
-                    android:onClick="txtResendOtp"
                     android:paddingRight="@dimen/dimen_10dp"
                     android:text="@string/resend_otp"
                     android:textColor="@color/colorTextBlue"
@@ -98,7 +97,6 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/dimen_20dp"
                 android:background="@drawable/round_button_blue"
-                android:onClick="btnSubmit"
                 android:text="@string/submit"
                 android:textColor="@color/common_white" />
 

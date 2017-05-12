@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
 
@@ -41,8 +42,11 @@ public class UploadImageAdapter extends RecyclerView.Adapter<UploadImageAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-
+        if(position==0){
+            holder.txtCoverImage.setVisibility(View.VISIBLE);
+        }
         holder.imgItem.setImageDrawable(Drawable.createFromPath(mListUserProdImages.get(position)));
+        holder.imgItem.setAlpha(0.7f);
     }
 
     @Override
@@ -56,12 +60,15 @@ public class UploadImageAdapter extends RecyclerView.Adapter<UploadImageAdapter.
     class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imgItem;
         ImageView imgItemCancel;
+        TextView txtCoverImage;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             imgItem = (ImageView) itemView.findViewById(R.id.img_upload_item);
             imgItemCancel = (ImageView) itemView.findViewById(R.id.img_upload_cancel);
+            txtCoverImage=(TextView) itemView.findViewById(R.id.txt_cover_image);
+
             imgItemCancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -70,6 +77,7 @@ public class UploadImageAdapter extends RecyclerView.Adapter<UploadImageAdapter.
                         mListUserProdImages.remove(itemLabel);
                         notifyItemRemoved(getAdapterPosition());
                         notifyItemRangeChanged(getAdapterPosition(), mListUserProdImages.size());
+
                     }
                 }
             });

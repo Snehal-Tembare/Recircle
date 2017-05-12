@@ -8,12 +8,15 @@
     <color name="colorHomeBackground">#f1f1f1</color>
     <color name="common_white">#ffffff</color>
     <color name="colorWhite">#ffffff</color>
-    <color name="colortext">#282828</color>
+    <color name="colorText">#282828</color>
+    <color name="colorGrey">#363333</color>
+    <color name="colorBlack">#000000</color>
     <color name="colorTextBlue">#1A84C1</color>
     <color name="colorRatingBar">#1A84C1</color>
     <color name="colorRoundBtn">#337ab7</color>
     <color name="colorCardView">#B1BCBE</color>
     <color name="layout_background_color">#c1cdcd</color>
+    <color name="colorLightGrey">#c1c9c2</color>
 
     <color name="colorRed">#f00</color>
     <color name="colorRedSecondary">#e53935</color>

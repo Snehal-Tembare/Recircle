@@ -128,5 +128,4 @@ public interface RCAPInterface {
 
     @GET(RCWebConstants.RC_PRODUCT_DETAILS)
     Call<Products> getProductDetailsByID(@Path("userProductId") String userProductId);
-
 }

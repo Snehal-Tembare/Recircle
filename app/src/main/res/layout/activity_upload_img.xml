@@ -2,9 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="@color/colorGrey"
     android:orientation="vertical">
-    <!--<include layout="@layout/partial_toolbar" />-->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,10 +16,9 @@
             android:id="@+id/txt_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimen_20dp"
             android:layout_marginRight="@dimen/dimen_20dp"
+            android:layout_marginTop="@dimen/dimen_20dp"
             android:gravity="start"
-            android:onClick="txtCancel"
             android:src="@drawable/ic_close_white"
             android:text="@string/cancel"
             android:textColor="@color/colorRed"
@@ -30,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_10dp"
             android:gravity="center"
-            android:text="Let's upload some product images now !"
+            android:text="@string/upload_img_msg"
             android:textColor="@color/common_white"
             android:textSize="@dimen/dimen_20sp" />
     </LinearLayout>
@@ -48,7 +47,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dimen_10dp"
-            android:onClick="imgGalleryImg"
             android:src="@drawable/ic_upload_gallery" />
 
         <ImageView
@@ -56,8 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dimen_10dp"
-            android:onClick="imgCameraImg"
-            android:src="@drawable/ic_upload_camera"/>
+            android:src="@drawable/ic_upload_camera" />
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
@@ -78,6 +75,5 @@
         android:layout_marginTop="@dimen/dimen_10dp"
         android:background="@drawable/border_upload_image"
         android:text="@string/proceed"
-        android:textAllCaps="false"
         android:textColor="@color/common_white" />
 </RelativeLayout>

@@ -292,7 +292,6 @@
     <string name="upload_image">uploadImageList</string>
     <string name="uplaod_image_gallery">uploadGalleryImages</string>
     <string name="list_item_desc">itemDesc</string>
-    <!--<string name="product_title">productTitle</string>-->
     <string name="list_new_item">+ List an item</string>
     <string name="discounts">discounts</string>
     <string name="list_unavail_days">listUnavailDays</string>
@@ -304,8 +303,8 @@
     <string name="list_item_success">Success! Your listing is live</string>
     <string name="disc_five_days">discFiveDays</string>
     <string name="disc_ten_days">discTenDays</string>
-    <string name="five_days">\(30% discount)</string>
-    <string name="ten_days">(40% discount)</string>
+    <string name="five_days">30% discount for 5 days : </string>
+    <string name="ten_days">40% discount for 10 days : </string>
     <string name="disc_five">5 days $</string>
     <string name="disc_ten">10 days $</string>
     <string name="show_dates">Show Dates</string>
@@ -317,4 +316,10 @@
     <string name="daily_rental_price">Daily Rental price</string>
     <string name="rent_item_at">Rent Item at $</string>
     <string name="next"><![CDATA[Next >>]]></string>
+    <string name="upload_img">Upload at least one image</string>
+    <string name="upload_img_msg">Let\'s upload some product images now !</string>
+    <string name="send_code">Send Code</string>
+    <string name="dates_not_selected">Dates are not selected</string>
+    <string name="log_in_again">Please login again.</string>
+    <string name="save">Save</string>
 </resources>

@@ -72,10 +72,8 @@
                 android:layout_marginLeft="@dimen/dimen_30dp"
                 android:layout_marginRight="@dimen/dimen_30dp"
                 android:background="@drawable/round_button_white"
-                android:onClick="btnViewItem"
                 android:padding="@dimen/dimen_10dp"
                 android:text="@string/view_an_item"
-                android:textAllCaps="false"
                 android:textColor="@color/colorTextBlue"
                 android:textSize="@dimen/text_size_16" />
 
@@ -88,10 +86,8 @@
                 android:layout_marginRight="@dimen/dimen_30dp"
                 android:layout_marginTop="@dimen/dimen_20dp"
                 android:background="@drawable/round_button_blue"
-                android:onClick="btnListItem"
                 android:padding="@dimen/dimen_10dp"
                 android:text="@string/list_new_item"
-                android:textAllCaps="false"
                 android:textColor="@color/common_white"
                 android:textSize="@dimen/text_size_16" />
         </LinearLayout>

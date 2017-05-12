@@ -20,22 +20,22 @@ import java.util.Date;
 
 public class MonthDecorator implements CalendarCellDecorator {
 
-    private Date selectedDate,unSelectedDate ;
+    private Date selectedDate, unSelectedDate;
     private Context mContext;
 
-    public MonthDecorator(Context mContext, @Nullable Date selectedDate,@Nullable Date unSelectedDate) {
+    public MonthDecorator(Context mContext, @Nullable Date selectedDate, @Nullable Date unSelectedDate) {
 
         this.selectedDate = selectedDate;
         this.mContext = mContext;
-        this.unSelectedDate=unSelectedDate;
+        this.unSelectedDate = unSelectedDate;
     }
 
     @Override
     public void decorate(CalendarCellView calendarCellView, Date date) {
         if (date == selectedDate) {
             calendarCellView.setBackgroundResource(R.drawable.ic_cross);
-        }else {
-            if(date==unSelectedDate){
+        } else {
+            if (date == unSelectedDate) {
                 calendarCellView.setBackgroundResource(0);
             }
         }

@@ -64,6 +64,11 @@ public class ListCalendarSummaryActivity extends AppCompatActivity {
 
         mPickerView.init(today, calendar.getTime());
         if (unavailableDates != null && !unavailableDates.isEmpty()) {
+            for(Date date:unavailableDates) {
+                List<CalendarCellDecorator> decoratorList = new ArrayList<>();
+                decoratorList.add(new MonthDecorator(ListCalendarSummaryActivity.this, date, null));
+                mPickerView.setDecorators(decoratorList);
+            }
             mPickerView.highlightDates(unavailableDates);
         }
     }

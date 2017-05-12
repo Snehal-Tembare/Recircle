@@ -87,7 +87,7 @@
                             android:gravity="center"
                             android:text="@string/why_use_recircle"
                             android:textAllCaps="true"
-                            android:textColor="@color/colortext"
+                            android:textColor="@color/colorText"
                             android:textSize="@dimen/text_size_30" />
 
                         <LinearLayout
@@ -97,7 +97,6 @@
                             android:layout_gravity="center"
                             android:layout_margin="@dimen/dimen_20dp"
                             android:background="@drawable/border_header_title"
-                            android:onClick="headerOne"
                             android:orientation="vertical">
 
                             <ImageView
@@ -114,7 +113,7 @@
                                 android:layout_margin="@dimen/dimen_20dp"
                                 android:gravity="center"
                                 android:text="@string/we_offer_protection"
-                                android:textColor="@color/colortext"
+                                android:textColor="@color/colorText"
                                 android:textSize="@dimen/dimen_17sp" />
 
                             <ImageView
@@ -140,7 +139,7 @@
                                 android:gravity="center"
                                 android:padding="@dimen/dimen_20dp"
                                 android:text="@string/exp_list_content"
-                                android:textColor="@color/colortext"
+                                android:textColor="@color/colorText"
                                 android:textSize="@dimen/dimen_17sp"
                                 android:visibility="gone" />
                         </LinearLayout>
@@ -152,7 +151,6 @@
                             android:layout_gravity="center"
                             android:layout_margin="@dimen/dimen_20dp"
                             android:background="@drawable/border_header_title"
-                            android:onClick="headerTwo"
                             android:orientation="vertical">
 
                             <ImageView
@@ -166,7 +164,7 @@
                                 android:layout_margin="@dimen/dimen_20dp"
                                 android:gravity="center"
                                 android:text="@string/pick_msg"
-                                android:textColor="@color/colortext"
+                                android:textColor="@color/colorText"
                                 android:textSize="@dimen/dimen_17sp" />
 
                             <ImageView
@@ -192,7 +190,7 @@
                                 android:gravity="center"
                                 android:padding="@dimen/dimen_20dp"
                                 android:text="@string/exp_list_content"
-                                android:textColor="@color/colortext"
+                                android:textColor="@color/colorText"
                                 android:textSize="@dimen/dimen_17sp"
                                 android:visibility="gone" />
                         </LinearLayout>
@@ -204,7 +202,6 @@
                             android:layout_gravity="center"
                             android:layout_margin="@dimen/dimen_20dp"
                             android:background="@drawable/border_header_title"
-                            android:onClick="headerThree"
                             android:orientation="vertical">
 
                             <ImageView
@@ -218,7 +215,7 @@
                                 android:layout_margin="@dimen/dimen_20dp"
                                 android:gravity="center"
                                 android:text="We handle payments."
-                                android:textColor="@color/colortext"
+                                android:textColor="@color/colorText"
                                 android:textSize="@dimen/dimen_17sp" />
 
                             <ImageView
@@ -244,18 +241,20 @@
                                 android:gravity="center"
                                 android:padding="@dimen/dimen_20dp"
                                 android:text="@string/exp_list_content"
-                                android:textColor="@color/colortext"
+                                android:textColor="@color/colorText"
                                 android:textSize="@dimen/dimen_17sp"
                                 android:visibility="gone" />
                         </LinearLayout>
 
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/lists_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:visibility="visible">
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -264,7 +263,7 @@
                             android:gravity="center"
                             android:text="@string/recent_items"
                             android:textAllCaps="true"
-                            android:textColor="@color/colortext"
+                            android:textColor="@color/colorText"
                             android:textSize="@dimen/text_size_30" />
 
                         <android.support.v7.widget.RecyclerView
@@ -282,7 +281,7 @@
                             android:gravity="center"
                             android:text="@string/popular_items"
                             android:textAllCaps="true"
-                            android:textColor="@color/colortext"
+                            android:textColor="@color/colorText"
                             android:textSize="@dimen/text_size_30" />
 
                         <android.support.v7.widget.RecyclerView
