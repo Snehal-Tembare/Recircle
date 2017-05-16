@@ -32,7 +32,7 @@ public class PopularItemsAdapter extends RecyclerView.Adapter<PopularItemsAdapte
 
     @Override
     public PopularItemsAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.popular_prod_row_layout, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.popular_prod_row, viewGroup, false);
         return new PopularItemsAdapter.ViewHolder(view);
     }
 
@@ -64,7 +64,7 @@ public class PopularItemsAdapter extends RecyclerView.Adapter<PopularItemsAdapte
 
     @Override
     public int getItemCount() {
-        return popularProductsList.size();
+        return 6;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

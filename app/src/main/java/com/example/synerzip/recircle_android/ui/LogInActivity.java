@@ -146,7 +146,7 @@ public class LogInActivity extends AppCompatActivity {
                             null!=mUserFirstName && null!=mUserLastName && null!=mAccessToken) {
 
                         saveUserData();
-                        Intent intent = new Intent(LogInActivity.this, SearchActivity.class);
+                        Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
                         startActivity(intent);
                     }else{
                         RCLog.showToast(LogInActivity.this, getString(R.string.please_try_again));

@@ -10,25 +10,27 @@
     android:layout_marginTop="@dimen/dimen_5dp"
     android:layout_weight="1"
     android:background="@drawable/cardbackground"
-    card_view:cardCornerRadius="@dimen/dimen_0dp">
+    card_view:cardCornerRadius="@dimen/dimen_3dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/imgPopularProduct"
-            android:layout_width="@dimen/dimen_90dp"
-            android:layout_height="@dimen/dimen_90dp"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="@dimen/dimen_10dp"
+            android:id="@+id/img_recent_product"
+            android:layout_width="@dimen/dimen_80dp"
+            android:layout_height="@dimen/dimen_80dp"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="fitXY"
             android:src="@mipmap/ic_item" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_margin="@dimen/dimen_10dp"
+            android:gravity="center"
             android:orientation="vertical">
 
             <TextView
@@ -36,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_10dp"
-                android:textSize="@dimen/text_size_18"
+                android:textSize="@dimen/text_size_14"
                 android:textStyle="bold" />
 
             <TextView
@@ -53,7 +55,7 @@
                 android:orientation="horizontal">
 
                 <RatingBar
-                    android:id="@+id/ratingBarPopular"
+                    android:id="@+id/ratingBar"
                     style="?android:attr/ratingBarStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -62,21 +64,22 @@
                     android:id="@+id/txtRating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dimen_10dp"
                     android:textColor="@color/colorRatingBar"
                     android:textSize="@dimen/text_size_14" />
+
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/txtProductPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_7dp"
+                android:gravity="center"
+                android:textSize="@dimen/dimen_15sp"
+                android:textStyle="bold" />
+
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/txtProductPrice"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/dimen_15dp"
-            android:layout_marginTop="@dimen/dimen_20dp"
-            android:gravity="end"
-            android:textSize="@dimen/dimen_15sp"
-            android:textStyle="bold" />
     </LinearLayout>
 
 </android.support.v7.widget.CardView>

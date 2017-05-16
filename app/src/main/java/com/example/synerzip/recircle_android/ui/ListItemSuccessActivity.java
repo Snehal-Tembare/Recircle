@@ -58,7 +58,7 @@ public class ListItemSuccessActivity extends AppCompatActivity {
      */
     @OnClick(R.id.btn_list_item)
     public void btnListItem(View view) {
-        startActivity(new Intent(ListItemSuccessActivity.this, ListItemActivity.class));
+        startActivity(new Intent(ListItemSuccessActivity.this, HomeActivity.class));
     }
 
     /**
@@ -71,7 +71,7 @@ public class ListItemSuccessActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(ListItemSuccessActivity.this, SearchActivity.class);
+                Intent intent = new Intent(ListItemSuccessActivity.this, HomeActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();

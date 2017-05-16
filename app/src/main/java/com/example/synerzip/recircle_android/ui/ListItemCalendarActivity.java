@@ -125,7 +125,7 @@ public class ListItemCalendarActivity extends AppCompatActivity {
 
     public void btnCalendarSave(View view) {
         if (!datesList.isEmpty() && datesList.size() != 0) {
-            Intent intent = new Intent(ListItemCalendarActivity.this, ListItemActivity.class);
+            Intent intent = new Intent(ListItemCalendarActivity.this, HomeActivity.class);
             intent.putExtra(getString(R.string.calendar_availability_days_count), datesList.size());
             intent.putExtra(getString(R.string.calendar_availability_days), datesList);
             intent.putExtra(getString(R.string.selectedDates), selectedDates);

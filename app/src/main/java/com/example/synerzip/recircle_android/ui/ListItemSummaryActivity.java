@@ -149,11 +149,12 @@ public class ListItemSummaryActivity extends AppCompatActivity {
             mTxtShowDates.setVisibility(View.GONE);
         }
 
-        productId = ListItemActivity.productId;
-        listDiscounts = ListItemActivity.listDiscounts;
+        productId = ListItemFragment.productId;
+        listDiscounts = ListItemFragment.listDiscounts;
 
-        mTxtDiscFiveDays.setText(getString(R.string.five_days)+"$ "+String.valueOf(ListItemActivity.discFiveDays) );
-        mTxtDiscTenDays.setText(getString(R.string.ten_days)+"$ " +String.valueOf(ListItemActivity.discTenDays));
+        //TODO changes needed for ListAnItem api for discount ; the functionality should be dynamic
+        mTxtDiscFiveDays.setText(getString(R.string.five_days)+"$ "+String.valueOf(ListItemFragment.discFiveDays) );
+        mTxtDiscTenDays.setText(getString(R.string.ten_days)+"$ " +String.valueOf(ListItemFragment.discTenDays));
         mItemAvailability = AdditionalDetailsActivity.mItemAvailability;
 
         mZipcode = AdditionalDetailsActivity.mZipcode;
@@ -162,11 +163,11 @@ public class ListItemSummaryActivity extends AppCompatActivity {
         String currentDate = new SimpleDateFormat("MMM dd, yyyy").format(new Date());
         mTxtListingDay.setText(currentDate);
 
-        mTxtProductTitle.setText(ListItemActivity.productTitle);
+        mTxtProductTitle.setText(ListItemFragment.productTitle);
 
-        mItemPrice = ListItemActivity.mItemPrice;
+        mItemPrice = ListItemFragment.mItemPrice;
         mTxtItemPrice.setText("$ " + mItemPrice + "/day");
-        mMinRental = ListItemActivity.mMinRental;
+        mMinRental = ListItemFragment.mMinRental;
         mTxtItemRental.setText(mMinRental + " days");
 
         mItemDesc = AdditionalDetailsActivity.mItemDesc;
@@ -174,7 +175,8 @@ public class ListItemSummaryActivity extends AppCompatActivity {
 
         //TODO product images should be taken from amazon s3 bucket ; yet to be done
         UserProdImages mUserProdImages;
-        mUserProdImages = new UserProdImages("https://s3.ap-south-1.amazonaws.com/recircleimages/1398934243000_1047081.jpg", "2017-02-04T13:13:09.000Z");
+        mUserProdImages = new UserProdImages("https://s3.ap-south-1.amazonaws.com/recircleimages/1398934243000_1047081.jpg",
+                "2017-02-04T13:13:09.000Z");
         listUploadItemImage.add(mUserProdImages);
 
         uploadGalleryImages = UploadImgActivity.listUploadGalleryImage;

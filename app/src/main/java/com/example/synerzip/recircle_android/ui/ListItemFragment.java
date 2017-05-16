@@ -1,17 +1,18 @@
 package com.example.synerzip.recircle_android.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
@@ -44,10 +45,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by Prajakta Patil on 9/5/17.
+ * Created by Prajakta Patil on 15/5/17.
  * Copyright © 2017 Synerzip. All rights reserved
  */
-public class ListItemActivity extends AppCompatActivity {
+public class ListItemFragment extends Fragment {
 
     @BindView(R.id.edit_enter_price)
     protected EditText mEditTxtEnterPrice;
@@ -95,9 +96,6 @@ public class ListItemActivity extends AppCompatActivity {
     @BindView(R.id.checkbox_discount_ten_days)
     protected CheckBox mDiscountForTenDay;
 
-    @BindView(R.id.toolbar)
-    protected Toolbar mToolbar;
-
     private Discounts mDiscounts;
 
     @BindView(R.id.price_slider)
@@ -119,28 +117,31 @@ public class ListItemActivity extends AppCompatActivity {
     @BindView(R.id.btn_upload_img)
     protected Button mBtnUploadImg;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_item);
-        ButterKnife.bind(this);
+    /**
+     * ListItemFragment empty constructor
+     */
+    public ListItemFragment() {
+    }
 
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle(R.string.list_an_item);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_list_item, container, false);
+        ButterKnife.bind(this, view);
+
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         utility = new SearchUtility();
         mProductAutoComplete.setSingleLine();
 
-        mProductAutoComplete.addTextChangedListener(new ListItemActivity.RCTextWatcher(mProductAutoComplete));
-        mEditTxtEnterPrice.addTextChangedListener(new ListItemActivity.RCTextWatcher(mEditTxtEnterPrice));
-        mEditMinRental.addTextChangedListener(new ListItemActivity.RCTextWatcher(mEditMinRental));
+        mProductAutoComplete.addTextChangedListener(new ListItemFragment.RCTextWatcher(mProductAutoComplete));
+        mEditTxtEnterPrice.addTextChangedListener(new ListItemFragment.RCTextWatcher(mEditTxtEnterPrice));
+        mEditMinRental.addTextChangedListener(new ListItemFragment.RCTextWatcher(mEditMinRental));
 
         listDiscounts = new ArrayList<>();
 
         //get data from shared preferences
-        sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
+        sharedPreferences = getActivity().getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, getActivity().MODE_PRIVATE);
 
         //discounts checkbox listener
         mDiscountForFiveDay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -161,21 +162,23 @@ public class ListItemActivity extends AppCompatActivity {
                 }
             }
         });
-    }//end onCreate()
+        return view;
+
+    }//end onCreateView()
 
     @OnClick(R.id.btn_upload_img)
     public void btnUploadImg(View view) {
         submitForm();
-        HideKeyboard.hideKeyBoard(ListItemActivity.this);
-        if (NetworkUtility.isNetworkAvailable(this)) {
+        HideKeyboard.hideKeyBoard(getActivity());
+        if (NetworkUtility.isNetworkAvailable(getActivity())) {
             if (getValues()) {
-                Intent intent = new Intent(ListItemActivity.this, UploadImgActivity.class);
+                Intent intent = new Intent(getActivity(), UploadImgActivity.class);
                 startActivity(intent);
             } else {
-                RCLog.showToast(ListItemActivity.this, getString(R.string.mandatory_dates));
+                RCLog.showToast(getActivity(), getString(R.string.mandatory_dates));
             }
         } else {
-            RCLog.showToast(this, getResources().getString(R.string.err_network_available));
+            RCLog.showToast(getActivity(), getResources().getString(R.string.err_network_available));
         }
     }
 
@@ -187,7 +190,7 @@ public class ListItemActivity extends AppCompatActivity {
         if (!strPrice.isEmpty() && !strRental.isEmpty()) {
             mItemPrice = Integer.parseInt(mEditTxtEnterPrice.getText().toString().trim());
             mMinRental = Integer.parseInt(mEditMinRental.getText().toString().trim());
-            if(mDiscounts.getDiscount_for_days()!=0) {
+            if (mDiscounts.getDiscount_for_days() != 0) {
                 if (mDiscounts.getDiscount_for_days() == 5) {
                     discFiveDays = Math.round(productPrice * 0.03);
                 }
@@ -204,7 +207,7 @@ public class ListItemActivity extends AppCompatActivity {
      * search item autocomplete textview
      */
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         productsCustomList = new ArrayList<>();
         productItemList = new ArrayList<>();
@@ -241,11 +244,11 @@ public class ListItemActivity extends AppCompatActivity {
                     }
 
                     mAutocompleteAdapter = new AutocompleteAdapter
-                            (ListItemActivity.this, R.layout.activity_search, R.id.txtProductName, productsCustomList);
+                            (getActivity(), R.layout.fragment_search_item, R.id.txtProductName, productsCustomList);
                     mProductAutoComplete.setAdapter(mAutocompleteAdapter);
 
                 } else {
-                    RCLog.showToast(getApplicationContext(), getString(R.string.product_details_not_found));
+                    RCLog.showToast(getActivity(), getString(R.string.product_details_not_found));
                 }
             }
         };
@@ -319,7 +322,7 @@ public class ListItemActivity extends AppCompatActivity {
                         });
                     }
                 }
-                HideKeyboard.hideKeyBoard(ListItemActivity.this);
+                HideKeyboard.hideKeyBoard(getActivity());
             }
         });
 
@@ -376,7 +379,7 @@ public class ListItemActivity extends AppCompatActivity {
 
     private void requestFocus(View view) {
         if (view.requestFocus()) {
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
 
@@ -468,22 +471,5 @@ public class ListItemActivity extends AppCompatActivity {
             mInputLayoutPrice.setErrorEnabled(false);
         }
         return true;
-    }
-
-    /**
-     * action bar back button
-     *
-     * @param item
-     * @return
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                startActivity(new Intent(ListItemActivity.this, SearchActivity.class));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 }

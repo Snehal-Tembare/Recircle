@@ -109,7 +109,7 @@
     <string name="logout">Logout</string>
     <string name="err_credentials">User credentials are wrong</string>
     <string name="please_try_again">Please try again</string>
-    <string name="logged_in_as">Logged in as :</string>
+    <string name="logged_in_as">Logged in as : </string>
     <string name="calendar_days_selected">You have selected </string>
     <string name="calendar_days"> days as unavailable</string>
     <string name="choose">Choose</string>
@@ -322,4 +322,10 @@
     <string name="dates_not_selected">Dates are not selected</string>
     <string name="log_in_again">Please login again.</string>
     <string name="save">Save</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tab_search">Search An Item</string>
+    <string name="tab_list">List An Item</string>
 </resources>

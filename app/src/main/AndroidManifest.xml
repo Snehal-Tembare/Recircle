@@ -40,7 +40,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.SearchActivity" />
         <activity android:name=".ui.ResultActivity" />
         <activity android:name=".ui.CalendarActivity" />
         <activity android:name=".ui.SignUpActivity" />
@@ -53,15 +52,13 @@
         <activity android:name=".ui.ListItemSummaryActivity" />
         <activity android:name=".ui.ListCalendarSummaryActivity" />
         <activity android:name=".ui.ListItemSuccessActivity" />
-        <activity
-            android:name=".ui.ListItemActivity"
-            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".ui.UploadImgActivity" />
         <activity android:name=".ui.AdditionalDetailsActivity" />
         <activity android:name=".ui.AllReviewsActivity" />
         <activity android:name=".ui.RentInfoActivity" />
         <activity android:name=".ui.PaymentModeActivity" />
         <activity android:name=".ui.CreditCardActivity" />
+        <activity android:name=".ui.HomeActivity"/>
     </application>
 
 </manifest>

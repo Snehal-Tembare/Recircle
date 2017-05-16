@@ -32,7 +32,7 @@ public class RecentItemsAdapter extends RecyclerView.Adapter<RecentItemsAdapter.
 
     @Override
     public RecentItemsAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recent_prod_row_layout, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recent_prod_row, viewGroup, false);
         return new ViewHolder(view);
     }
 
@@ -61,17 +61,14 @@ public class RecentItemsAdapter extends RecyclerView.Adapter<RecentItemsAdapter.
                 + " " + productDetails.getUser_info().getLast_name());
 
         viewHolder.bind(productDetailsList.get(position), onItemClickListener);
-
-
     }
 
     @Override
     public int getItemCount() {
-        return productDetailsList.size();
+        return 6;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-
 
         private TextView mTxtProductTitle, mTxtProductPrice, mTxtProductRating, mTxtRenterName;
         ImageView mImageView;

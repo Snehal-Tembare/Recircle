@@ -250,7 +250,7 @@ public class ResultActivity extends AppCompatActivity {
                     }
 
                     autocompleteAdapter = new AutocompleteAdapter
-                            (ResultActivity.this, R.layout.activity_search, R.id.txtProductName, productsCustomList);
+                            (ResultActivity.this, R.layout.fragment_search_item, R.id.txtProductName, productsCustomList);
                     mAutoProductName.setAdapter(autocompleteAdapter);
 
                 } else {
