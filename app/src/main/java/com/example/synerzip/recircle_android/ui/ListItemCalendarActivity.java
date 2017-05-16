@@ -3,6 +3,7 @@ package com.example.synerzip.recircle_android.ui;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -32,8 +33,8 @@ import com.squareup.timessquare.*;
  * Created by Prajakta Patil on 31/3/17.
  * Copyright © 2017 Synerzip. All rights reserved
  */
-public class ListItemCalendarActivity extends AppCompatActivity {
 
+public class ListItemCalendarActivity extends AppCompatActivity {
     @BindView(R.id.calendar_view)
     protected CalendarPickerView mPickerView;
 
@@ -105,7 +106,9 @@ public class ListItemCalendarActivity extends AppCompatActivity {
             public void onDateUnselected(Date date) {
                 selectedDates.remove(date);
                 DateFormat newDateFormat = new SimpleDateFormat(getString(R.string.calendar_date_format));
+                Log.v("Date",date.toString());
                 String dateString = newDateFormat.format(date);
+                Log.v("Date",dateString);
                 datesList.remove(dateString);
 
                 List<CalendarCellDecorator> decoratorList = new ArrayList<>();

@@ -62,6 +62,7 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/layout_images"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -260,6 +261,7 @@
                     android:background="@color/view_color" />
 
                 <LinearLayout
+                    android:id="@+id/layout_renters_review"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/common_dimens_10"
@@ -284,7 +286,7 @@
 
                     <TextView
                         android:id="@+id/txt_all_reviews_count"
-                        android:layout_width="@dimen/common_dimens_20"
+                        android:layout_width="wrap_content"
                         android:layout_height="@dimen/common_dimens_20"
                         android:layout_gravity="center_vertical"
                         android:textColor="@color/common_text_color" />

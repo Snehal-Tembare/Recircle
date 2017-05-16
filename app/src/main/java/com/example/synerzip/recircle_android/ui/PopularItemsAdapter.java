@@ -46,12 +46,13 @@ public class PopularItemsAdapter extends RecyclerView.Adapter<PopularItemsAdapte
                 .placeholder(R.mipmap.ic_item)
                 .into(viewHolder.mImageView);
         if (null != popularProducts.getUser_product_info().getProduct_avg_rating() &&
-                Float.parseFloat(popularProducts.getUser_product_info().getProduct_avg_rating()) != 0) {
+                 popularProducts.getUser_product_info().getUser_prod_reviews()!=null
+                &&  popularProducts.getUser_product_info().getUser_prod_reviews().size() != 0) {
             viewHolder.mRatingBar.setRating(Float.parseFloat(popularProducts.getUser_product_info().getProduct_avg_rating()));
-            viewHolder.mTxtProductRating.setText("(" + popularProducts.getUser_product_info().getProduct_avg_rating() + ")");
+            viewHolder.mTxtProductReviews.setText("(" + popularProducts.getUser_product_info().getUser_prod_reviews().size() + ")");
         } else {
             viewHolder.mRatingBar.setVisibility(View.GONE);
-            viewHolder.mTxtProductRating.setVisibility(View.GONE);
+            viewHolder.mTxtProductReviews.setVisibility(View.GONE);
         }
 
         viewHolder.mTxtProductTitle.setText(popularProducts.getProduct_info().getProduct_title());
@@ -70,7 +71,7 @@ public class PopularItemsAdapter extends RecyclerView.Adapter<PopularItemsAdapte
     public class ViewHolder extends RecyclerView.ViewHolder {
 
 
-        private TextView mTxtProductTitle, mTxtProductPrice, mTxtProductRating, mTxtRenterName;
+        private TextView mTxtProductTitle, mTxtProductPrice, mTxtProductReviews, mTxtRenterName;
         private ImageView mImageView;
         private RatingBar mRatingBar;
 
@@ -78,10 +79,10 @@ public class PopularItemsAdapter extends RecyclerView.Adapter<PopularItemsAdapte
             super(view);
             mRatingBar = (RatingBar) view.findViewById(R.id.ratingBarPopular);
             mImageView = (ImageView) view.findViewById(R.id.imgPopularProduct);
-            mTxtProductTitle = (TextView) view.findViewById(R.id.txtProductTitle);
-            mTxtProductPrice = (TextView) view.findViewById(R.id.txtProductPrice);
-            mTxtProductRating = (TextView) view.findViewById(R.id.txtRating);
-            mTxtRenterName = (TextView) view.findViewById(R.id.txtRenterName);
+            mTxtProductTitle = (TextView) view.findViewById(R.id.txtPopProductTitle);
+            mTxtProductPrice = (TextView) view.findViewById(R.id.txtPopProductPrice);
+            mTxtProductReviews = (TextView) view.findViewById(R.id.txtPopReviews);
+            mTxtRenterName = (TextView) view.findViewById(R.id.txtPopRenterName);
         }
 
         public void bind(final Products popularProducts, final OnItemClickListener onItemClikListner) {

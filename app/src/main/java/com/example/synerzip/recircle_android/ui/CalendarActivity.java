@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
+import com.example.synerzip.recircle_android.models.Products;
 import com.example.synerzip.recircle_android.models.UserProductUnAvailability;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.squareup.timessquare.CalendarCellDecorator;
@@ -19,9 +20,11 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,6 +41,11 @@ public class CalendarActivity extends AppCompatActivity {
     private static final String TAG = "CalendarActivity";
     public static ArrayList<Date> selectedDates;
     public ArrayList<Date> localselectedDates;
+
+    private ArrayList<UserProductUnAvailability> userProductUnAvailabilities;
+    private Bundle bundle;
+    private Products product;
+
 
     private ArrayList<Date> userProuctUnavailableDateList;
 
@@ -72,19 +80,54 @@ public class CalendarActivity extends AppCompatActivity {
         Calendar nextYear = Calendar.getInstance();
         nextYear.add(Calendar.YEAR, 1);
         Date today = new Date();
+        bundle = getIntent().getExtras();
+
+        //-----------------------
+        if (bundle != null) {
+            userProductUnAvailabilities = bundle.getParcelableArrayList(getString(R.string.unavail_dates));
+            product = bundle.getParcelable(getString(R.string.product));
+            if (userProductUnAvailabilities != null && userProductUnAvailabilities.size() != 0) {
+
+                final ArrayList<Date> dateArray = new ArrayList<>();
+
+                for (UserProductUnAvailability unAvailability : userProductUnAvailabilities) {
+
+                    Log.v("onDateSelected", userProductUnAvailabilities.get(0).getUnavai_from_date() + "ListItemCalendarActivity");
+
+                    DateFormat dateFormat = new SimpleDateFormat(getString(R.string.calendar_date_format));
+
+                    Date parsedDate = null;
+                    try {
+                        parsedDate = dateFormat.parse(unAvailability.getUnavai_from_date());
+                        dateArray.add(parsedDate);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                mPickerView.setDateSelectableFilter(new CalendarPickerView.DateSelectableFilter() {
+                    @Override
+                    public boolean isDateSelectable(Date date) {
+                        for (int i = 0; i < dateArray.size(); i++) {
+                            if (dateArray.contains(date)) {
+                                return false;
+                            }
+                            return true;
+                        }
+                        return true;
+                    }
+                });
+            }
+        }
 
         mPickerView.init(today, nextYear.getTime()).withSelectedDate(today).inMode(RANGE);
         mPickerView.init(today, nextYear.getTime()).inMode(RANGE);
 
-        //on date selected listener
-
         if (RentInfoActivity.isDateEdited) {
-            Bundle bundle = getIntent().getExtras();
             if (bundle != null && null != bundle.getSerializable(getString(R.string.selected_dates_list))) {
                 selectedDates = (ArrayList<Date>) getIntent().getExtras().getSerializable(getString(R.string.selected_dates_list));
 
                 mPickerView.highlightDates(selectedDates);
-
 
                 selectFromDate = selectedDates.get(0);
                 selectToDate = selectedDates.get(selectedDates.size() - 1);
@@ -123,14 +166,16 @@ public class CalendarActivity extends AppCompatActivity {
             }
         }
 
+
+        //on date selected listener
         mPickerView.setOnDateSelectedListener(new CalendarPickerView.OnDateSelectedListener() {
             @Override
             public void onDateSelected(Date date) {
 
+
                 mPickerView.clearHighlightedDates();
 
                 localselectedDates = (ArrayList<Date>) mPickerView.getSelectedDates();
-
                 selectFromDate = localselectedDates.get(0);
                 selectToDate = localselectedDates.get(localselectedDates.size() - 1);
 
@@ -202,17 +247,27 @@ public class CalendarActivity extends AppCompatActivity {
             intent.putExtra(getString(R.string.selected_dates_list), selectedDates);
             if (fromDate.equals(toDate)) {
                 RCLog.showToast(getApplicationContext(), getString(R.string.date_validation_code));
-            } else {
-                setResult(RESULT_OK, intent);
-                isDateSelected = true;
-                selectedDates.addAll(localselectedDates);
-
-                if (RentInfoActivity.isDateEdited) {
-                    RentInfoActivity.isDateChanged = true;
-                }
-                finish();
             }
 
+            selectedDates.clear();
+            if (localselectedDates != null && localselectedDates.size() != 0) {
+                selectedDates.addAll(localselectedDates);
+            }
+            if (RentInfoActivity.isDateEdited) {
+                RentInfoActivity.isDateChanged = true;
+            }
+            if (DetailsActivity.isShowInfo) {
+                Intent infoIntent = new Intent(this, RentInfoActivity.class);
+                infoIntent.putExtra(getString(R.string.from_date), fromDate.toString());
+                infoIntent.putExtra(getString(R.string.to_date), toDate.toString());
+                infoIntent.putExtra(getString(R.string.selected_dates_list), selectedDates);
+                infoIntent.putExtra(getString(R.string.product), product);
+                startActivity(infoIntent);
+                DetailsActivity.isShowInfo = false;
+            } else {
+                setResult(RESULT_OK, intent);
+            }
+            finish();
         } else {
             RCLog.showToast(CalendarActivity.this, getString(R.string.error_dates));
         }

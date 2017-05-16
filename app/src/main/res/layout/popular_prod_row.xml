@@ -34,7 +34,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/txtProductTitle"
+                android:id="@+id/txtPopProductTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_10dp"
@@ -42,7 +42,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/txtRenterName"
+                android:id="@+id/txtPopRenterName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/dimen_7dp"
@@ -61,7 +61,7 @@
                     android:layout_height="wrap_content" />
 
                 <TextView
-                    android:id="@+id/txtRating"
+                    android:id="@+id/txtPopReviews"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dimen_5dp"
@@ -70,7 +70,7 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/txtProductPrice"
+                android:id="@+id/txtPopProductPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_7dp"

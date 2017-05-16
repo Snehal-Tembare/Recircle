@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.Products;
+import com.example.synerzip.recircle_android.models.RentItem;
 import com.example.synerzip.recircle_android.models.UserProdImages;
 import com.example.synerzip.recircle_android.models.UserProdReview;
 import com.example.synerzip.recircle_android.models.UserProductUnAvailability;
@@ -56,12 +57,13 @@ import retrofit2.Response;
  */
 
 public class DetailsActivity extends AppCompatActivity {
-    private static final int REQUEST_CODE = 1;
+
     private static final String EXTRA_IMAGE = "extra_image";
+
     public static boolean isBackPressed = false;
-    public static int total;
 
     private RCAPInterface service;
+
     private Products product;
 
     private ArrayList<UserProdImages> userProdImagesArrayList;
@@ -78,11 +80,7 @@ public class DetailsActivity extends AppCompatActivity {
 
     private LinearLayoutManager mLayoutManager;
 
-    private Date fromDate;
-    private Date toDate;
-    private String formatedFromDate;
-    private String formatedToDate;
-    public static int dayCount;
+    public static boolean isShowInfo;
 
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
@@ -144,6 +142,9 @@ public class DetailsActivity extends AppCompatActivity {
     @BindView(R.id.txt_see_all_reviews)
     protected TextView mTxtSeeAllReviews;
 
+    @BindView(R.id.layout_renters_review)
+    protected LinearLayout mLayoutRentersReview;
+
     @BindView(R.id.collapsible_toolbar)
     protected CollapsingToolbarLayout mCollapsibleLayout;
 
@@ -152,6 +153,9 @@ public class DetailsActivity extends AppCompatActivity {
 
     @BindView(R.id.details_parent_linear_layout)
     protected LinearLayout mParentLayout;
+
+    @BindView(R.id.layout_images)
+    protected LinearLayout mLayoutImages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -210,11 +214,10 @@ public class DetailsActivity extends AppCompatActivity {
                         product = response.body();
 
                         if (product != null) {
-
                             if (product.getUser_product_info().getUser_prod_reviews() != null
                                     && product.getUser_product_info().getUser_prod_reviews().size() != 0) {
                                 userProdReviewArrayList = product.getUser_product_info().getUser_prod_reviews();
-
+                                mLayoutRentersReview.setVisibility(View.GONE);
                                 reviewsListAdapter = new ReviewsListAdapter(getApplicationContext(), userProdReviewArrayList);
                                 if (userProdReviewArrayList.size() > 0) {
                                     mTxtSeeAllReviews.setVisibility(View.VISIBLE);
@@ -222,9 +225,13 @@ public class DetailsActivity extends AppCompatActivity {
                                 }
                                 mReViewReviews.setLayoutManager(new LinearLayoutManager(DetailsActivity.this));
                                 mReViewReviews.setAdapter(reviewsListAdapter);
+                            } else {
+                                mTxtSeeAllReviews.setVisibility(View.GONE);
+                                mLayoutRentersReview.setVisibility(View.GONE);
                             }
                             if (product.getUser_product_info().getUser_prod_images() != null
-                                    && product.getUser_product_info().getUser_prod_images().size() != 0) {
+                                    && product.getUser_product_info().getUser_prod_images().size() > 1) {
+                                mLayoutImages.setVisibility(View.VISIBLE);
                                 userProdImagesArrayList = product.getUser_product_info().getUser_prod_images();
 
                                 mImageAdapter = new ImageAdapter(getApplicationContext(), selectedImgPosition, userProdImagesArrayList, new ImageAdapter.OnImageItemClickListener() {
@@ -253,6 +260,8 @@ public class DetailsActivity extends AppCompatActivity {
 
                                 mRecyclerImages.setLayoutManager(mLayoutManager);
                                 mRecyclerImages.setAdapter(mImageAdapter);
+                            } else {
+                                mLayoutImages.setVisibility(View.GONE);
                             }
 
                             if (product.getUser_product_info().getUser_prod_unavailability() != null
@@ -271,10 +280,20 @@ public class DetailsActivity extends AppCompatActivity {
                                     + product.getUser_info().getLast_name());
 
                             if (product.getUser_product_info().getProduct_avg_rating() != null) {
-                                mDetailsRating.setRating(Integer.parseInt(product.getUser_product_info().getProduct_avg_rating()));
-                                mRatingAllAvg.setRating(Integer.parseInt(product.getUser_product_info().getProduct_avg_rating()));
+                                mDetailsRating.setVisibility(View.VISIBLE);
+                                mRatingAllAvg.setVisibility(View.VISIBLE);
+                                mTxtDetailsRateCount.setVisibility(View.VISIBLE);
+                                mTxtAvgRatingCount.setVisibility(View.VISIBLE);
+
+                                mDetailsRating.setRating(Float.parseFloat(product.getUser_product_info().getProduct_avg_rating()));
+                                mRatingAllAvg.setRating(Float.parseFloat(product.getUser_product_info().getProduct_avg_rating()));
                                 mTxtDetailsRateCount.setText("(" + product.getUser_product_info().getProduct_avg_rating() + ")");
-                                mTxtAvgRatingCount.setText("(" + product.getUser_product_info().getProduct_avg_rating() + ")");
+                                mTxtAvgRatingCount.setText("(" + String.valueOf(product.getUser_product_info().getProduct_avg_rating()) + ")");
+                            } else {
+                                mDetailsRating.setVisibility(View.GONE);
+                                mRatingAllAvg.setVisibility(View.GONE);
+                                mTxtDetailsRateCount.setVisibility(View.GONE);
+                                mTxtAvgRatingCount.setVisibility(View.GONE);
                             }
 
                             if (product.getUser_product_info().getPrice_per_day() != null) {
@@ -289,10 +308,14 @@ public class DetailsActivity extends AppCompatActivity {
                                 mTxtConditionDetail.setText(product.getUser_product_info().getUser_prod_desc());
                             }
 
-                            if (product.getProduct_info().getProduct_image_url() != null) {
+                            if (product.getUser_product_info().getUser_prod_images() != null
+                                    && !product.getUser_product_info().getUser_prod_images().isEmpty()) {
                                 Picasso.with(getApplicationContext())
-                                        .load(product.getProduct_info().getProduct_image_url())
+                                        .load(product.getUser_product_info().getUser_prod_images().get(0).getUser_prod_image_url())
                                         .into(mImgMain);
+                                if (product.getUser_product_info().getUser_prod_images().size() == 1) {
+
+                                }
                             }
                         }
                     }
@@ -342,8 +365,6 @@ public class DetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Dialog loginDialog = new Dialog(DetailsActivity.this);
                 loginDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//                loginDialog.setTitle(getString(R.string.log_in));
-
                 loginDialog.setContentView(R.layout.activity_log_in);
                 Toolbar toolbar = (Toolbar) loginDialog.findViewById(R.id.toolbar);
                 toolbar.setVisibility(View.GONE);
@@ -378,70 +399,12 @@ public class DetailsActivity extends AppCompatActivity {
         return true;
     }
 
-    /**
-     * Get selected dates
-     */
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                String from = data.getStringExtra(getString(R.string.from_date));
-                String to = data.getStringExtra(getString(R.string.to_date));
-
-                DateFormat formatter = new SimpleDateFormat(getString(R.string.date_format));
-                try {
-                    fromDate = formatter.parse(from.toString());
-                    toDate = formatter.parse(to.toString());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-                Calendar calFromDate = Calendar.getInstance();
-                Calendar calToDate = Calendar.getInstance();
-                calFromDate.setTime(fromDate);
-                calToDate.setTime(toDate);
-
-                CharSequence monthFromDate = android.text.format.DateFormat
-                        .format(getString(R.string.month_format), fromDate);
-                CharSequence monthToDate = android.text.format.DateFormat
-                        .format(getString(R.string.month_format), toDate);
-                formatedFromDate = calFromDate.get(Calendar.DATE) + " " + monthFromDate + ", " + calFromDate.get(Calendar.YEAR);
-                formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
-
-                long diff = toDate.getTime() - fromDate.getTime();
-                dayCount = (int) diff / (24 * 60 * 60 * 1000);
-
-                total = Math.abs(dayCount) * Integer.parseInt(product.getUser_product_info().getPrice_per_day());
-
-                if (total != 0) {
-                    mBtnPrice.setText(getString(R.string.rent_item_at) + total);
-                    mBtnPrice.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_info_48, 0);
-                }
-
-            }
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (isBackPressed) {
-            if (RentInfoActivity.isDateChanged) {
-                mBtnPrice.setText(getString(R.string.rent_item_at) + total);
-                mBtnPrice.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_info_48, 0);
-            }
-
-        }
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        total = 0;
         CalendarActivity.isDateSelected = false;
-        dayCount = 0;
+        RentInfoActivity.isDateEdited = false;
+
         if (CalendarActivity.selectedDates != null && CalendarActivity.selectedDates.size() != 0) {
             CalendarActivity.selectedDates.clear();
         }
@@ -498,28 +461,12 @@ public class DetailsActivity extends AppCompatActivity {
      * Show Rent Information
      */
     @OnClick(R.id.btn_price)
-    public void showRentInfo() {
-        if (isBackPressed && RentInfoActivity.isDateChanged) {
-            Intent infoIntent = new Intent(this, RentInfoActivity.class);
-            infoIntent.putExtra(getString(R.string.product), product);
-            infoIntent.putExtra(getString(R.string.from_date), RentInfoActivity.formatedFromDate);
-            infoIntent.putExtra(getString(R.string.to_date), RentInfoActivity.formatedToDate);
-            infoIntent.putExtra(getString(R.string.days_count), dayCount);
-            infoIntent.putExtra(getString(R.string.total), total);
-            startActivity(infoIntent);
-        } else if (CalendarActivity.isDateSelected) {
-            Intent infoIntent = new Intent(this, RentInfoActivity.class);
-            infoIntent.putExtra(getString(R.string.product), product);
-            infoIntent.putExtra(getString(R.string.from_date), formatedFromDate);
-            infoIntent.putExtra(getString(R.string.to_date), formatedToDate);
-            infoIntent.putExtra(getString(R.string.days_count), dayCount);
-            infoIntent.putExtra(getString(R.string.total), total);
-            startActivity(infoIntent);
-        } else {
-            Intent intent = new Intent(DetailsActivity.this, CalendarActivity.class);
-            intent.putParcelableArrayListExtra(getString(R.string.unavail_dates), userProductUnAvailabilities);
-            startActivityForResult(intent, REQUEST_CODE);
-        }
+    public void showCalendarActivity() {
+        isShowInfo = true;
+        Intent intent = new Intent(DetailsActivity.this, CalendarActivity.class);
+        intent.putParcelableArrayListExtra(getString(R.string.unavail_dates), userProductUnAvailabilities);
+        intent.putExtra(getString(R.string.product), product);
+        startActivity(intent);
     }
 
 }

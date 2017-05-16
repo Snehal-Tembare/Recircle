@@ -5,6 +5,7 @@ import com.example.synerzip.recircle_android.models.ForgotPwdRequest;
 import com.example.synerzip.recircle_android.models.ListAnItemRequest;
 import com.example.synerzip.recircle_android.models.LogInRequest;
 import com.example.synerzip.recircle_android.models.Products;
+import com.example.synerzip.recircle_android.models.RentItem;
 import com.example.synerzip.recircle_android.models.RootObject;
 import com.example.synerzip.recircle_android.models.SearchProduct;
 import com.example.synerzip.recircle_android.models.SignUpRequest;
@@ -121,6 +122,7 @@ public interface RCAPInterface {
      */
     @GET(RCWebConstants.RC_GOOGLE_ZIPCODES)
     Call<ZipcodeRoot> zipcodeCheck(@Query("address") long zipcode);
+
     /**
      * Get product details
      * @param userProductId
@@ -128,4 +130,13 @@ public interface RCAPInterface {
 
     @GET(RCWebConstants.RC_PRODUCT_DETAILS)
     Call<Products> getProductDetailsByID(@Path("userProductId") String userProductId);
+
+    /**
+     * Request for Rent and Item
+     * @param rentItem
+    */
+
+    @POST(RCWebConstants.RC_RENT_ITEM)
+    Call<RentItem> rentItem(@Header("Authorization") String token,@Body RentItem rentItem);
+
 }

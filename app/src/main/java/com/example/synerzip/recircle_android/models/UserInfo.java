@@ -18,6 +18,8 @@ import lombok.Setter;
 
 public class UserInfo implements Parcelable{
 
+    private String user_id;
+
     private String first_name;
 
     private String user_image_url;
@@ -29,6 +31,7 @@ public class UserInfo implements Parcelable{
     private String last_name;
 
     protected UserInfo(Parcel in) {
+        user_id = in.readString();
         first_name = in.readString();
         user_image_url = in.readString();
         email = in.readString();
@@ -54,6 +57,7 @@ public class UserInfo implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(user_id);
         dest.writeString(first_name);
         dest.writeString(user_image_url);
         dest.writeString(email);
