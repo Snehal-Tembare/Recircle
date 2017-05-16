@@ -85,7 +85,6 @@ public class CalendarActivity extends AppCompatActivity {
             userProductUnAvailabilities = bundle.getParcelableArrayList(getString(R.string.unavail_dates));
             product = bundle.getParcelable(getString(R.string.product));
             if (userProductUnAvailabilities != null && userProductUnAvailabilities.size() != 0) {
-                List<CalendarCellDecorator> decoratorList = new ArrayList<>();
 
                 final ArrayList<Date> dateArray = new ArrayList<>();
 
@@ -99,13 +98,10 @@ public class CalendarActivity extends AppCompatActivity {
                     try {
                         parsedDate = dateFormat.parse(unAvailability.getUnavai_from_date());
                         dateArray.add(parsedDate);
-                        decoratorList.add(new MonthDecorator(CalendarActivity.this, parsedDate));
-
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
                 }
-                mPickerView.setDecorators(decoratorList);
 
                 mPickerView.setDateSelectableFilter(new CalendarPickerView.DateSelectableFilter() {
                     @Override
