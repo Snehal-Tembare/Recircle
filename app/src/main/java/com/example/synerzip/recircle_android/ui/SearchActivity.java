@@ -427,7 +427,6 @@ public class SearchActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        DetailsActivity.isBackPressed =false;
 
         productsCustomList = new ArrayList<>();
 

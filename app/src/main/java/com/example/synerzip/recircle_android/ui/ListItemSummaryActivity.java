@@ -75,7 +75,6 @@ public class ListItemSummaryActivity extends AppCompatActivity {
     private ArrayList<Discounts> listDiscounts;
 
     private ArrayList<UserProdImages> listUploadItemImage;
-
     private ArrayList<UserProductUnAvailability> mItemAvailability;
 
     private ArrayList<Date> unavailableDates;

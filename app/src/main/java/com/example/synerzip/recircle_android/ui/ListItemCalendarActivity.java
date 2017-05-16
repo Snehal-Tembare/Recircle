@@ -3,13 +3,16 @@ package com.example.synerzip.recircle_android.ui;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.utilities.RCLog;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,6 +23,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 import static com.squareup.timessquare.CalendarPickerView.SelectionMode.MULTIPLE;
 
 import com.squareup.timessquare.*;
@@ -28,7 +32,7 @@ import com.squareup.timessquare.*;
  * Created by Prajakta Patil on 31/3/17.
  * Copyright © 2017 Synerzip. All rights reserved
  */
-public class ListItemCalendarActivity extends AppCompatActivity{
+public class ListItemCalendarActivity extends AppCompatActivity {
     @BindView(R.id.calendar_view)
     protected CalendarPickerView mPickerView;
 
@@ -81,7 +85,7 @@ public class ListItemCalendarActivity extends AppCompatActivity{
                 selectedDates.add(date);
 
                 List<CalendarCellDecorator> decoratorList = new ArrayList<>();
-                decoratorList.add(new MonthDecorator(ListItemCalendarActivity.this,date));
+                decoratorList.add(new MonthDecorator(ListItemCalendarActivity.this, date));
                 mPickerView.setDecorators(decoratorList);
 
                 DateFormat dateFormat = new SimpleDateFormat(getString(R.string.calendar_date_format));
@@ -93,7 +97,9 @@ public class ListItemCalendarActivity extends AppCompatActivity{
             public void onDateUnselected(Date date) {
                 selectedDates.remove(date);
                 DateFormat newDateFormat = new SimpleDateFormat(getString(R.string.calendar_date_format));
+                Log.v("Date",date.toString());
                 String dateString = newDateFormat.format(date);
+                Log.v("Date",dateString);
                 datesList.remove(dateString);
             }
         });
