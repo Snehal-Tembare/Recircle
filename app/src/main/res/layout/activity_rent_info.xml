@@ -365,7 +365,7 @@
                         android:textSize="@dimen/text_size_16" />
 
                     <EditText
-                        android:id="@+id/edt_note"
+                        android:id="@+id/edt_user_msg"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/common_dimens_60"
                         android:layout_marginTop="@dimen/common_dimens_10"
@@ -384,6 +384,7 @@
                     android:orientation="horizontal">
 
                     <CheckBox
+                        android:id="@+id/check_protection_plan"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"

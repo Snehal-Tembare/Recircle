@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
+import com.example.synerzip.recircle_android.models.Products;
 import com.example.synerzip.recircle_android.models.UserProductUnAvailability;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.squareup.timessquare.CalendarCellDecorator;
@@ -43,6 +44,7 @@ public class CalendarActivity extends AppCompatActivity {
 
     private ArrayList<UserProductUnAvailability> userProductUnAvailabilities;
     private Bundle bundle;
+    private Products product;
 
 
     public static boolean isDateSelected = false;
@@ -81,6 +83,7 @@ public class CalendarActivity extends AppCompatActivity {
         //-----------------------
         if (bundle != null) {
             userProductUnAvailabilities = bundle.getParcelableArrayList(getString(R.string.unavail_dates));
+            product = bundle.getParcelable(getString(R.string.product));
             if (userProductUnAvailabilities != null && userProductUnAvailabilities.size() != 0) {
                 List<CalendarCellDecorator> decoratorList = new ArrayList<>();
 
@@ -246,18 +249,27 @@ public class CalendarActivity extends AppCompatActivity {
             intent.putExtra(getString(R.string.selected_dates_list), selectedDates);
             if (fromDate.equals(toDate)) {
                 RCLog.showToast(getApplicationContext(), getString(R.string.date_validation_code));
-            } else {
-                setResult(RESULT_OK, intent);
-                selectedDates.clear();
-                if (localselectedDates != null && localselectedDates.size() != 0) {
-                    selectedDates.addAll(localselectedDates);
-                }
-                if (RentInfoActivity.isDateEdited) {
-                    RentInfoActivity.isDateChanged = true;
-                }
-                finish();
             }
 
+            selectedDates.clear();
+            if (localselectedDates != null && localselectedDates.size() != 0) {
+                selectedDates.addAll(localselectedDates);
+            }
+            if (RentInfoActivity.isDateEdited) {
+                RentInfoActivity.isDateChanged = true;
+            }
+            if (DetailsActivity.isShowInfo) {
+                Intent infoIntent = new Intent(this, RentInfoActivity.class);
+                infoIntent.putExtra(getString(R.string.from_date), fromDate.toString());
+                infoIntent.putExtra(getString(R.string.to_date), toDate.toString());
+                infoIntent.putExtra(getString(R.string.selected_dates_list), selectedDates);
+                infoIntent.putExtra(getString(R.string.product), product);
+                startActivity(infoIntent);
+                DetailsActivity.isShowInfo = false;
+            } else {
+                setResult(RESULT_OK, intent);
+            }
+            finish();
         } else {
             RCLog.showToast(CalendarActivity.this, getString(R.string.error_dates));
         }

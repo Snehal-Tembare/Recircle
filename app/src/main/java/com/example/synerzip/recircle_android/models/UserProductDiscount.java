@@ -15,13 +15,17 @@ import lombok.Setter;
 @Setter
 
 public class UserProductDiscount implements Parcelable {
-    private String userProdDiscId;
-    private Integer discountForDays;
+    private String user_prod_disc_id;
+    private Integer discount_for_days;
     private Integer percentage;
     private Boolean isActive;
 
+
     protected UserProductDiscount(Parcel in) {
-        userProdDiscId = in.readString();
+        user_prod_disc_id = in.readString();
+        discount_for_days = in.readInt();
+        percentage = in.readInt();
+        isActive = in.readByte()!=0;
     }
 
     public static final Creator<UserProductDiscount> CREATOR = new Creator<UserProductDiscount>() {
@@ -43,6 +47,9 @@ public class UserProductDiscount implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(userProdDiscId);
+        dest.writeString(user_prod_disc_id);
+        dest.writeInt(discount_for_days);
+        dest.writeInt(percentage);
+        dest.writeByte((byte) (isActive ? 1 : 0));
     }
 }

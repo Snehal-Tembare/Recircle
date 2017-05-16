@@ -23,15 +23,13 @@ import butterknife.OnClick;
 public class PaymentModeActivity extends AppCompatActivity {
 
     private Bundle mBundle;
+    private String user_id;
 
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
 
     @BindView(R.id.btn_total_price)
     protected Button mBtnTotalPrice;
-
-    @BindView(R.id.bottom_sheet_layout)
-    protected LinearLayout mBottomSheetLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +52,9 @@ public class PaymentModeActivity extends AppCompatActivity {
 
         mBundle = getIntent().getExtras();
 
-        mBtnTotalPrice.setText("$" + String.valueOf(mBundle.getInt(getString(R.string.total))));
+        if (mBundle != null) {
+            mBtnTotalPrice.setText("$" + String.valueOf(mBundle.getInt(getString(R.string.total))));
+        }
 
     }
 
@@ -76,8 +76,21 @@ public class PaymentModeActivity extends AppCompatActivity {
 
     @OnClick(R.id.layout_cc)
     public void showCreditCardDetails() {
-        Intent ccIntent=new Intent(PaymentModeActivity.this, CreditCardActivity.class);
-        ccIntent.putExtra(getString(R.string.total),mBundle.getInt(getString(R.string.total)));
+        Intent ccIntent = new Intent(PaymentModeActivity.this, CreditCardActivity.class);
+        ccIntent.putExtra(getString(R.string.total), mBundle.getInt(getString(R.string.total)));
+        ccIntent.putExtra(getString(R.string.user_id), mBundle.getString(getString(R.string.user_id)));
+        startActivity(ccIntent);
+    }
+
+    /**
+     * Show debit card Info
+     */
+
+    @OnClick(R.id.layout_dc)
+    public void showDebitCardDetails() {
+        Intent ccIntent = new Intent(PaymentModeActivity.this, CreditCardActivity.class);
+        ccIntent.putExtra(getString(R.string.total), mBundle.getInt(getString(R.string.total)));
+        ccIntent.putExtra(getString(R.string.user_id), mBundle.getInt(getString(R.string.user_id)));
         startActivity(ccIntent);
     }
 }

@@ -1,7 +1,6 @@
 package com.example.synerzip.recircle_android.ui;
 
 import android.content.Intent;
-import android.os.Parcelable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,11 +8,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.Products;
+import com.example.synerzip.recircle_android.models.RentItem;
 import com.example.synerzip.recircle_android.models.UserProductUnAvailability;
 import com.pkmmte.view.CircularImageView;
 import com.squareup.picasso.Picasso;
@@ -24,7 +26,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.StringTokenizer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,43 +42,71 @@ public class RentInfoActivity extends AppCompatActivity {
     private static final String TAG = "RentInfoActivity";
     public static boolean isDateChanged = false;
     public static boolean isDateEdited = false;
-    public static String formatedFromDate;
-    public static String formatedToDate;
+    public String formatedFromDate;
+    public String formatedToDate;
+    private int discount = 0;
+    private int finalTotal = 0;
+    private int subTotal;
+    private int percentage;
+    private int forDays;
+    public static RentItem mRentItem;
+
+    private String user_id;
+
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
+
     @BindView(R.id.txt_item_title)
     protected TextView mTxtTitle;
+
     @BindView(R.id.txt_manufaturer_name)
     protected TextView mTxtManufaturerName;
+
     @BindView(R.id.txt_price)
     protected TextView mTxtPrice;
+
     @BindView(R.id.txt_days)
     protected TextView mTxtDays;
+
     @BindView(R.id.txt_from_date)
     protected TextView mTxtFromDate;
+
     @BindView(R.id.txt_to_date)
     protected TextView mTxtToDate;
+
     @BindView(R.id.txt_subtotal)
     protected TextView mTxtSubTotal;
+
     @BindView(R.id.txt_discount)
     protected TextView mTxtDiscounts;
+
     @BindView(R.id.txt_total)
     protected TextView mTxtTotal;
+
     @BindView(R.id.txt_owner_name)
     protected TextView mTxtOwnerName;
+
     @BindView(R.id.txt_selected_dates)
     protected TextView mTxtSelectedDates;
+
     @BindView(R.id.img_product)
     protected ImageView mImgProduct;
+
     @BindView(R.id.img_owner)
     protected CircularImageView mImgOwner;
-    boolean isDiscountForFivedays;
-    boolean isDiscountForTendays;
+
+    @BindView(R.id.edt_user_msg)
+    protected EditText mEdtUserMsg;
+
+    @BindView(R.id.check_protection_plan)
+    protected CheckBox mChckProtectionPlan;
+
     private Products mProduct;
     private Bundle mBundle;
     private Date fromDate;
     private Date toDate;
     private ArrayList<UserProductUnAvailability> userProductUnAvailabilities;
+    private int dayCount;
 
 
     @Override
@@ -102,7 +131,15 @@ public class RentInfoActivity extends AppCompatActivity {
             mProduct = mBundle.getParcelable(getString(R.string.product));
             userProductUnAvailabilities = mBundle.getParcelableArrayList(getString(R.string.unavail_dates));
 
+
             if (mProduct != null) {
+                mRentItem = new RentItem();
+                mRentItem.setUser_product_id(mProduct.getUser_product_info().getUser_product_id());
+                mRentItem.setOrder_from_date(mBundle.getString(getString(R.string.from_date)));
+                mRentItem.setOrder_to_date(mBundle.getString(getString(R.string.to_date)));
+                if (mProduct.getUser_info().getUser_id() != null) {
+                    user_id = mProduct.getUser_info().getUser_id();
+                }
 
                 mTxtTitle.setText(mProduct.getProduct_info().getProduct_title());
 
@@ -113,34 +150,19 @@ public class RentInfoActivity extends AppCompatActivity {
                 Picasso.with(this).load(mProduct.getUser_info().getUser_image_url()).into(mImgOwner);
 
                 mTxtOwnerName.setText(mProduct.getUser_info().getFirst_name() + " " + mProduct.getUser_info().getLast_name());
+                dayCount = calculateDayCount(mBundle.getString(getString(R.string.from_date)),
+                        mBundle.getString(getString(R.string.to_date)));
+                mTxtFromDate.setText(formatedFromDate);
+                mTxtToDate.setText(formatedToDate);
 
-                if(mProduct.getUser_product_info().getUser_product_discounts()!=null
-                        && mProduct.getUser_product_info().getUser_product_discounts().size()!=0){
-                    isDiscountForFivedays=mProduct.getUser_product_info().getUser_product_discounts().get(0).getIsActive();
-                    isDiscountForTendays=mProduct.getUser_product_info().getUser_product_discounts().get(1).getIsActive();
-                }
-
-                if (DetailsActivity.dayCount>=5 && !isDiscountForFivedays){
-                    DetailsActivity.total= (int) (mBundle.getInt(getString(R.string.total)) * 0.3);
-                    mTxtDiscounts.setText("$"+(String.valueOf(mBundle.getInt(getString(R.string.total)) * 0.3)));
-
-                } else if (DetailsActivity.dayCount>=10 && !isDiscountForTendays){
-                    DetailsActivity.total= (int) (mBundle.getInt(getString(R.string.total)) * 0.4);
-                }else {
-                    DetailsActivity.total=mBundle.getInt(getString(R.string.total));
-                }
+                subTotal = dayCount * Integer.parseInt(mProduct.getUser_product_info().getPrice_per_day());
+                finalTotal = subTotal;
+                mTxtDays.setText(String.valueOf(dayCount) + " " + getString(R.string.days));
+                mTxtSubTotal.setText("$" + String.valueOf(subTotal));
             }
         }
-        mTxtFromDate.setText(mBundle.getString(getString(R.string.from_date)));
-        mTxtToDate.setText(mBundle.getString(getString(R.string.to_date)));
 
-
-        mTxtDays.setText(String.valueOf(mBundle.getInt(getString(R.string.days_count))) + " days");
-        mTxtSubTotal.setText("$" + String.valueOf(mBundle.getInt(getString(R.string.total))));
-
-        // TODO calculate discount yet to complete
-        mTxtTotal.setText(mTxtSubTotal.getText());
-
+        //It handles edit dates functionality
         mTxtSelectedDates.setOnTouchListener(new View.OnTouchListener() {
             final int DRAWABLE_RIGHT = 2;
 
@@ -156,13 +178,41 @@ public class RentInfoActivity extends AppCompatActivity {
                             intent.putParcelableArrayListExtra(getString(R.string.unavail_dates), userProductUnAvailabilities);
                         }
                         isDateEdited = true;
-
                         startActivityForResult(intent, REQUEST_CODE);
                     }
                 }
                 return true;
             }
         });
+    }
+
+    /**
+     * Calculate selected no of days
+     */
+
+    private int calculateDayCount(String from, String to) {
+
+        DateFormat formatter = new SimpleDateFormat(getString(R.string.date_format));
+        try {
+            fromDate = formatter.parse(from.toString());
+            toDate = formatter.parse(to.toString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Calendar calFromDate = Calendar.getInstance();
+        Calendar calToDate = Calendar.getInstance();
+        calFromDate.setTime(fromDate);
+        calToDate.setTime(toDate);
+        CharSequence monthFromDate = android.text.format.DateFormat
+                .format(getString(R.string.month_format), fromDate);
+        CharSequence monthToDate = android.text.format.DateFormat
+                .format(getString(R.string.month_format), toDate);
+        formatedFromDate = calFromDate.get(Calendar.DATE) + " " + monthFromDate + ", " + calFromDate.get(Calendar.YEAR);
+        formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
+        long diff = toDate.getTime() - fromDate.getTime();
+        dayCount = (int) diff / (24 * 60 * 60 * 1000);
+
+        return dayCount;
     }
 
     @Override
@@ -173,60 +223,65 @@ public class RentInfoActivity extends AppCompatActivity {
                 String from = data.getStringExtra(getString(R.string.from_date));
                 String to = data.getStringExtra(getString(R.string.to_date));
 
-                DateFormat formatter = new SimpleDateFormat(getString(R.string.date_format));
-                try {
-                    fromDate = formatter.parse(from.toString());
-                    toDate = formatter.parse(to.toString());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                dayCount = calculateDayCount(from, to);
 
-                Calendar calFromDate = Calendar.getInstance();
-                Calendar calToDate = Calendar.getInstance();
-                calFromDate.setTime(fromDate);
-                calToDate.setTime(toDate);
-
-                CharSequence monthFromDate = android.text.format.DateFormat
-                        .format(getString(R.string.month_format), fromDate);
-                CharSequence monthToDate = android.text.format.DateFormat
-                        .format(getString(R.string.month_format), toDate);
-
-                formatedFromDate = calFromDate.get(Calendar.DATE) + " " + monthFromDate + ", " + calFromDate.get(Calendar.YEAR);
-                formatedToDate = calToDate.get(Calendar.DATE) + " " + monthToDate + ", " + calToDate.get(Calendar.YEAR);
-
-                long diff = toDate.getTime() - fromDate.getTime();
-                DetailsActivity.dayCount = (int) diff / (24 * 60 * 60 * 1000);
-
-                DetailsActivity.total = Math.abs(DetailsActivity.dayCount) * Integer.parseInt(mProduct.getUser_product_info().getPrice_per_day());
+                subTotal = Math.abs(dayCount) * Integer.parseInt(mProduct.getUser_product_info().getPrice_per_day());
+                finalTotal = subTotal;
+                discount = 0;
 
                 mTxtFromDate.setText(formatedFromDate);
                 mTxtToDate.setText(formatedToDate);
+                mTxtDays.setText(String.valueOf(dayCount) + " " + getString(R.string.days));
+            }
+        }
+    }
 
-                mTxtDays.setText(String.valueOf(DetailsActivity.dayCount) + " days");
-                mTxtSubTotal.setText("$" + String.valueOf(DetailsActivity.total));
 
-                // TODO calculate discount yet to complete
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mProduct != null) {
+            //Calculate discount
+            if (mProduct.getUser_product_info().getUser_product_discounts() != null
+                    && mProduct.getUser_product_info().getUser_product_discounts().size() > 0) {
+
+                for (int i = 0; i < mProduct.getUser_product_info().getUser_product_discounts().size(); i++) {
+                    if (mProduct.getUser_product_info().getUser_product_discounts().get(i).getIsActive() != null
+                            && dayCount >= mProduct.getUser_product_info().getUser_product_discounts().get(i).getDiscount_for_days()
+                            && !mProduct.getUser_product_info().getUser_product_discounts().get(i).getIsActive()) {
+                        discount = subTotal * mProduct.getUser_product_info().getUser_product_discounts().get(i).getPercentage() / 100;
+                        finalTotal = subTotal - discount;
+                        percentage = mProduct.getUser_product_info().getUser_product_discounts().get(i).getPercentage();
+                        forDays = mProduct.getUser_product_info().getUser_product_discounts().get(i).getDiscount_for_days();
+                    }
+                }
+
+                if (discount == 0) {
+                    mTxtDiscounts.setText("$0.0");
+                    mTxtSubTotal.setText("$" + String.valueOf(subTotal));
+                    mTxtTotal.setText("$" + String.valueOf(finalTotal));
+                } else {
+                    mTxtDiscounts.setText("$" + discount + " (" + percentage + "% for " + forDays + " " + getString(R.string.days) + ")");
+                    mTxtSubTotal.setText("$" + String.valueOf(subTotal));
+                    mTxtTotal.setText("$" + String.valueOf(finalTotal));
+                }
+            } else {
                 mTxtDiscounts.setText("$0.0");
-                mTxtTotal.setText("$" + String.valueOf(DetailsActivity.total));
+                mTxtTotal.setText("$" + String.valueOf(subTotal));
             }
         }
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
     public void onBackPressed() {
         super.onBackPressed();
-        DetailsActivity.isBackPressed = true;
+        DetailsActivity.isShowInfo = true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            DetailsActivity.isBackPressed = true;
             finish();
         }
         return true;
@@ -238,9 +293,23 @@ public class RentInfoActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_proceed_to_pay)
     public void showPaymentModes() {
+
+        mRentItem.setUser_msg(mEdtUserMsg.getText().toString());
+        mRentItem.setPayment_total(subTotal);
+        mRentItem.setPayment_discount(discount);
+        mRentItem.setService_fee(10);
+        mRentItem.setProtection_plan_fee(2);
+        mRentItem.setFinal_payment(finalTotal);
+
+        if (mChckProtectionPlan.isChecked()) {
+            mRentItem.setProtection_plan(1);
+        } else {
+            mRentItem.setProtection_plan(0);
+        }
+
         Intent intentPayMode = new Intent(this, PaymentModeActivity.class);
-        intentPayMode.putExtra(getString(R.string.total), DetailsActivity.total);
-        intentPayMode.putExtra(getString(R.string.total), DetailsActivity.total);
+        intentPayMode.putExtra(getString(R.string.total), finalTotal);
+        intentPayMode.putExtra(getString(R.string.user_id), user_id);
         startActivity(intentPayMode);
     }
 }
