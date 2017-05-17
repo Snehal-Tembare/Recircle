@@ -39,15 +39,16 @@ import static com.squareup.timessquare.CalendarPickerView.SelectionMode.RANGE;
 public class CalendarActivity extends AppCompatActivity {
 
     private static final String TAG = "CalendarActivity";
+
     public static ArrayList<Date> selectedDates;
+
     public ArrayList<Date> localselectedDates;
 
     private ArrayList<UserProductUnAvailability> userProductUnAvailabilities;
+
     private Bundle bundle;
+
     private Products product;
-
-
-    private ArrayList<Date> userProuctUnavailableDateList;
 
     public static boolean isDateSelected = false;
 
@@ -82,7 +83,6 @@ public class CalendarActivity extends AppCompatActivity {
         Date today = new Date();
         bundle = getIntent().getExtras();
 
-        //-----------------------
         if (bundle != null) {
             userProductUnAvailabilities = bundle.getParcelableArrayList(getString(R.string.unavail_dates));
             product = bundle.getParcelable(getString(R.string.product));
@@ -252,22 +252,13 @@ public class CalendarActivity extends AppCompatActivity {
             selectedDates.clear();
             if (localselectedDates != null && localselectedDates.size() != 0) {
                 selectedDates.addAll(localselectedDates);
+
+                if (RentInfoActivity.isDateEdited) {
+                    RentInfoActivity.isDateChanged = true;
+                }
+                finish();
             }
-            if (RentInfoActivity.isDateEdited) {
-                RentInfoActivity.isDateChanged = true;
-            }
-            if (DetailsActivity.isShowInfo) {
-                Intent infoIntent = new Intent(this, RentInfoActivity.class);
-                infoIntent.putExtra(getString(R.string.from_date), fromDate.toString());
-                infoIntent.putExtra(getString(R.string.to_date), toDate.toString());
-                infoIntent.putExtra(getString(R.string.selected_dates_list), selectedDates);
-                infoIntent.putExtra(getString(R.string.product), product);
-                startActivity(infoIntent);
-                DetailsActivity.isShowInfo = false;
-            } else {
-                setResult(RESULT_OK, intent);
-            }
-            finish();
+
         } else {
             RCLog.showToast(CalendarActivity.this, getString(R.string.error_dates));
         }

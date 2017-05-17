@@ -60,6 +60,7 @@
         <activity android:name=".ui.CreditCardActivity" />
         <activity android:name=".ui.HomeActivity"/>
         <activity android:name=".ui.RentItemSuccessActivity"></activity>
+        <activity android:name=".ui.RentItemSuccessActivity"></activity>
     </application>
 
 </manifest>

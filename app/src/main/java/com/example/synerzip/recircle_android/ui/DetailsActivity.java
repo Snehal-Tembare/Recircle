@@ -62,25 +62,9 @@ public class DetailsActivity extends AppCompatActivity {
 
     public static boolean isBackPressed = false;
 
-    private RCAPInterface service;
-
-    private Products product;
-
-    private ArrayList<UserProdImages> userProdImagesArrayList;
-
-    private ArrayList<UserProdReview> userProdReviewArrayList;
-
-    private ArrayList<UserProductUnAvailability> userProductUnAvailabilities;
-
-    private ReviewsListAdapter reviewsListAdapter;
-
-    private int selectedImgPosition = 0;
-
-    private ImageAdapter mImageAdapter;
-
-    private LinearLayoutManager mLayoutManager;
-
     public static boolean isShowInfo;
+
+    public String user_id;
 
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
@@ -156,6 +140,16 @@ public class DetailsActivity extends AppCompatActivity {
 
     @BindView(R.id.layout_images)
     protected LinearLayout mLayoutImages;
+
+    private RCAPInterface service;
+    private Products product;
+    private ArrayList<UserProdImages> userProdImagesArrayList;
+    private ArrayList<UserProdReview> userProdReviewArrayList;
+    private ArrayList<UserProductUnAvailability> userProductUnAvailabilities;
+    private ReviewsListAdapter reviewsListAdapter;
+    private int selectedImgPosition = 0;
+    private ImageAdapter mImageAdapter;
+    private LinearLayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

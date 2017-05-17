@@ -332,7 +332,7 @@
     <string name="invalid_date">This date is not available</string>
     <string name="expiry_date_error">Correct expiry date is required</string>
     <string name="enter_valid_data">Enter valid data</string>
-    <string name="item_requested_successfully">Item Requested Successfully</string>
     <string name="user_id">user_id</string>
+    <string name="item_requested_successfully">Item Requested Successfully</string>
     <string name="rent_warning_msg">Warning! You can not rent your own item.</string>
 </resources>
