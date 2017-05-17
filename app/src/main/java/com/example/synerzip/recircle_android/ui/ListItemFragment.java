@@ -105,8 +105,6 @@ public class ListItemFragment extends Fragment {
 
     public static String productTitle;
 
-    private SharedPreferences sharedPreferences;
-
     @BindView(R.id.txt_suggested_price)
     protected TextView mTxtSuggestedPrice;
 
@@ -139,9 +137,6 @@ public class ListItemFragment extends Fragment {
         mEditMinRental.addTextChangedListener(new ListItemFragment.RCTextWatcher(mEditMinRental));
 
         listDiscounts = new ArrayList<>();
-
-        //get data from shared preferences
-        sharedPreferences = getActivity().getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, getActivity().MODE_PRIVATE);
 
         //discounts checkbox listener
         mDiscountForFiveDay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

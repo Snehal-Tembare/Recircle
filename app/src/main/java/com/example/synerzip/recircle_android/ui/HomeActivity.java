@@ -39,6 +39,7 @@ import butterknife.ButterKnife;
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "SearchFragment";
+
     @BindView(R.id.drawer_layout)
     protected DrawerLayout mDrawerLayout;
 
@@ -181,11 +182,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     public void onClick(DialogInterface dialogInterface, int arg1) {
                         dialogInterface.dismiss();
                         clearData();
-                        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
-                        editor.apply();
-                        finish();
                         Intent intent = new Intent(HomeActivity.this, LogInActivity.class);
                         startActivity(intent);
                     }

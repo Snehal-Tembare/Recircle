@@ -97,7 +97,6 @@ CreditCardActivity extends AppCompatActivity implements OnPayBtnClickListner {
 
         mTxtPaymentAmount.setVisibility(View.GONE);
 
-//        awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
         service = ApiClient.getClient().create(RCAPInterface.class);
 
         //get data from shared preferences
@@ -106,7 +105,6 @@ CreditCardActivity extends AppCompatActivity implements OnPayBtnClickListner {
         mAccessToken = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
         looged_user_id = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_USERID, user_id);
 
-//       awesomeValidation.addValidation(CreditCardActivity.this, R.id.expiry_date, EXPIRARY_DATE_PATTERN, R.string.expiry_date_error);
         mBundle = getIntent().getExtras();
         if (mBundle != null) {
             user_id = mBundle.getString(getString(R.string.user_id));

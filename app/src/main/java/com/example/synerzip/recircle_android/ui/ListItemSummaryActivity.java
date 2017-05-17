@@ -134,7 +134,8 @@ public class ListItemSummaryActivity extends AppCompatActivity {
         //get data from shared preferences
         sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
         mAccessToken = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
-        isLoggedIn=sharedPreferences.getBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS,false);
+        isLoggedIn = sharedPreferences.getBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
+
         unavailableDates = new ArrayList<>();
 
         listUploadItemImage = new ArrayList<>();
@@ -152,8 +153,8 @@ public class ListItemSummaryActivity extends AppCompatActivity {
         listDiscounts = ListItemFragment.listDiscounts;
 
         //TODO changes needed for ListAnItem api for discount ; the functionality should be dynamic
-        mTxtDiscFiveDays.setText(getString(R.string.five_days)+"$ "+String.valueOf(ListItemFragment.discFiveDays) );
-        mTxtDiscTenDays.setText(getString(R.string.ten_days)+"$ " +String.valueOf(ListItemFragment.discTenDays));
+        mTxtDiscFiveDays.setText(getString(R.string.five_days) + "$ " + String.valueOf(ListItemFragment.discFiveDays));
+        mTxtDiscTenDays.setText(getString(R.string.ten_days) + "$ " + String.valueOf(ListItemFragment.discTenDays));
         mItemAvailability = AdditionalDetailsActivity.mItemAvailability;
 
         mZipcode = AdditionalDetailsActivity.mZipcode;
@@ -225,7 +226,7 @@ public class ListItemSummaryActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     RCLog.showToast(ListItemSummaryActivity.this, getString(R.string.item_added));
                     Intent intent = new Intent(ListItemSummaryActivity.this, ListItemSuccessActivity.class);
-                    String userProductId=response.body().getUser_product_id();
+                    String userProductId = response.body().getUser_product_id();
                     intent.putExtra(getString(R.string.product_id), userProductId);
                     startActivity(intent);
                 } else {
@@ -307,7 +308,7 @@ public class ListItemSummaryActivity extends AppCompatActivity {
      */
     @OnClick(R.id.img_edit)
     public void imgEdit(View view) {
-       finish();
+        finish();
     }
 
     /**
@@ -317,10 +318,10 @@ public class ListItemSummaryActivity extends AppCompatActivity {
      */
     @OnClick(R.id.btn_confirm_item)
     public void btnConfirmItem(View view) {
-        if(isLoggedIn) {
+        if (isLoggedIn) {
             getListAnItem();
-        }else {
-            RCLog.showToast(ListItemSummaryActivity.this,getString(R.string.user_must_login));
+        } else {
+            RCLog.showToast(ListItemSummaryActivity.this, getString(R.string.user_must_login));
         }
     }
 
