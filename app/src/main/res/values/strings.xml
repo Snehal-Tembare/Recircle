@@ -224,7 +224,7 @@
     <string name="date_validation_code">Select atleast one day</string>
     <string name="days">day(s)</string>
     <string name="pick_up">Pick up</string>
-    <string name="return_msg">Return</string>
+    <string name="return_word">Return</string>
     <string name="store_location">Store Location</string>
     <string name="r_address">\'R\' Address</string>
     <string name="store_name">ReCircle Store,</string>
@@ -323,4 +323,14 @@
     <string name="item_requested_successfully">Item Requested Successfully</string>
     <string name="user_id">user_id</string>
     <string name="rent_warning_msg">Warning! You can not rent your own item.</string>
+    <string name="rent_item">Rent Item</string>
+    <string name="item_request_success">We\'ll notify you when the owner accepts your request</string>
+    <string name="view_all_requests">View All Requests</string>
+    <string name="item_request_faild">Something went wrong.Item Request Faild</string>
+    <string name="pending_requests">Pending Requests</string>
+    <string name="enter_proper_card_details">Enter proper card details</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="ask_question">Ask Question?</string>
 </resources>

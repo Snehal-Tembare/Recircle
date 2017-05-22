@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/common_dimens_10"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.pkmmte.view.CircularImageView
+                android:id="@+id/img_user"
+                android:layout_width="@dimen/common_dimens_50"
+                android:layout_height="@dimen/common_dimens_50"
+                android:src="@drawable/ownerimage"
+                app:border="false"
+                app:border_color="@color/common_white"
+                app:border_width="@dimen/dimen_1dp"
+                app:shadow="true" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txt_user_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Snehal Tembare"
+                    android:textSize="@dimen/text_size_16"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_request_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/common_dimens_2"
+                    android:text="Request Id:2324435423"
+                    android:textSize="@dimen/text_size_16" />
+
+                <TextView
+                    android:id="@+id/txt_request"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Requested on Apr 20,2017,7:30:00PM" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_dimens_2"
+            android:background="@color/view_color"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_dimens_5"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/img_item"
+                android:layout_width="@dimen/common_dimens_100"
+                android:layout_height="@dimen/common_dimens_100"
+                android:layout_marginRight="@dimen/common_dimens_5"
+                android:layout_marginLeft="@dimen/common_dimens_5"
+                android:src="@drawable/ic_camera" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/common_dimens_10"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txt_item_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical|center"
+                    android:layout_marginBottom="@dimen/common_dimens_2"
+                    android:text="EOS 5D Mark III"
+                    android:textSize="@dimen/text_size_16"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:id="@+id/txt_from_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="29May - 3Jun 2017"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/text_size_16"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_days"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="2 days"
+                    android:textSize="@dimen/text_size_16"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/common_dimens_2"
+                    android:text="$200"
+                    android:textSize="@dimen/text_size_16"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end|center_vertical">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/common_dimens_40"
+                android:background="@drawable/round_button_blue"
+                android:text="Approve"
+                android:textColor="@color/common_white" />
+
+            <ImageButton
+                android:layout_width="@dimen/common_dimens_45"
+                android:layout_height="@dimen/common_dimens_50"
+                android:src="@drawable/ic_decline_80" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Time to Respond: 21 May,2017  7:30:00pm"
+                android:gravity="end"
+                android:background="@color/common_orange_color"
+                android:padding="@dimen/common_dimens_5"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>

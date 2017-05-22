@@ -27,7 +27,6 @@ import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.Products;
-import com.example.synerzip.recircle_android.models.RentItem;
 import com.example.synerzip.recircle_android.models.UserProdImages;
 import com.example.synerzip.recircle_android.models.UserProdReview;
 import com.example.synerzip.recircle_android.models.UserProductUnAvailability;
@@ -35,12 +34,7 @@ import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.squareup.picasso.Picasso;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 import at.blogc.android.views.ExpandableTextView;
 import butterknife.BindView;
@@ -58,7 +52,6 @@ import retrofit2.Response;
 public class DetailsActivity extends AppCompatActivity {
     private static final String EXTRA_IMAGE = "extra_image";
     public static boolean isShowInfo;
-    public String user_id;
 
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
@@ -93,7 +86,7 @@ public class DetailsActivity extends AppCompatActivity {
     @BindView(R.id.txt_all_reviews_count)
     protected TextView mTxtAvgRatingCount;
 
-    @BindView(R.id.imgbtn_help)
+    @BindView(R.id.txt_ask_question)
     protected ImageButton mImgHelp;
 
     @BindView(R.id.expand_txt_description)
@@ -206,7 +199,7 @@ public class DetailsActivity extends AppCompatActivity {
                             if (product.getUser_product_info().getUser_prod_reviews() != null
                                     && product.getUser_product_info().getUser_prod_reviews().size() != 0) {
                                 userProdReviewArrayList = product.getUser_product_info().getUser_prod_reviews();
-                                mLayoutRentersReview.setVisibility(View.GONE);
+                                mLayoutRentersReview.setVisibility(View.VISIBLE);
                                 reviewsListAdapter = new ReviewsListAdapter(getApplicationContext(), userProdReviewArrayList);
                                 if (userProdReviewArrayList.size() > 0) {
                                     mTxtSeeAllReviews.setVisibility(View.VISIBLE);

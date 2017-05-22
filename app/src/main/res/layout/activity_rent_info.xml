@@ -126,7 +126,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:gravity="end"
-                            android:text="@string/return_msg"
+                            android:text="@string/return_word"
                             android:paddingRight="@dimen/common_dimens_10"
                             android:textSize="@dimen/text_size_16" />
                     </LinearLayout>
@@ -407,18 +407,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:orientation="horizontal"
             android:weightSum="1">
-
-           <!-- <Button
-                android:id="@+id/btn_total_price"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                android:background="@color/common_black"
-                android:padding="@dimen/common_dimens_10"
-                android:textColor="@color/common_white"
-                android:textSize="@dimen/text_size_16" />-->
 
             <Button
                 android:id="@+id/btn_proceed_to_pay"

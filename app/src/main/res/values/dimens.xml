@@ -67,4 +67,6 @@
     <dimen name="dimen_180dp">180dp</dimen>
     <dimen name="dimen_20sp">20sp</dimen>
     <dimen name="common_dimens_40">40dp</dimen>
+    <dimen name="common_dimens_24">24dp</dimen>
+    <dimen name="common_dimens_45">45dp</dimen>
 </resources>

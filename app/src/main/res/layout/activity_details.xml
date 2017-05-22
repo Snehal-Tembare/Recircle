@@ -173,13 +173,14 @@
                         android:layout_marginLeft="@dimen/common_dimens_10"
                         android:textSize="@dimen/text_size_16" />
 
-                    <ImageButton
-                        android:id="@+id/imgbtn_help"
-                        android:layout_width="@dimen/common_dimens_20"
-                        android:layout_height="@dimen/common_dimens_20"
+                    <TextView
+                        android:id="@+id/txt_ask_question"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/common_dimens_5"
-                        android:src="@drawable/help" />
+                        android:textColor="@color/colorPrimary"
+                        android:text="@string/ask_question"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -351,7 +352,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="@dimen/common_dimens_20"
-                        android:text="@string/return_msg"
+                        android:text="@string/return_word"
                         android:textColor="@color/text_color" />
 
                     <TextView

@@ -6,10 +6,43 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.example.synerzip.recircle_android.ui.RentItemSuccessActivity">
-    <TextView
+    <include layout="@layout/partial_toolbar"/>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Success \nFunctionality yet to complete"
-        android:gravity="center"/>
+        android:orientation="vertical"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_confirm_80" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_10dp"
+            android:gravity="center"
+            android:text="@string/item_request_success"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/text_size_18"
+            android:layout_margin="@dimen/common_dimens_20" />
+
+        <Button
+            android:id="@+id/btn_view_all_requests"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/view_all_requests"
+            android:background="@drawable/round_button_blue"
+            android:layout_gravity="center_horizontal"
+            android:padding="@dimen/common_dimens_10"
+            android:paddingLeft="@dimen/common_dimens_30"
+            android:paddingRight="@dimen/common_dimens_30"
+            android:textColor="@color/common_white"/>
+
+
+    </LinearLayout>
+
 
 </LinearLayout>

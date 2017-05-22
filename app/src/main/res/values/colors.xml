@@ -42,4 +42,5 @@
 
 
     <color name="colorForgotPwdText">#333333</color>
+    <color name="common_orange_color">#ff9800</color>
 </resources>
