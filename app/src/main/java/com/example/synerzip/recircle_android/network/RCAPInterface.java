@@ -1,6 +1,8 @@
 package com.example.synerzip.recircle_android.network;
 
 import com.example.synerzip.recircle_android.models.AllProductInfo;
+import com.example.synerzip.recircle_android.models.ChangePwdRequest;
+import com.example.synerzip.recircle_android.models.EditUserRequest;
 import com.example.synerzip.recircle_android.models.ForgotPwdRequest;
 import com.example.synerzip.recircle_android.models.ListAnItemRequest;
 import com.example.synerzip.recircle_android.models.LogInRequest;
@@ -138,5 +140,22 @@ public interface RCAPInterface {
 
     @POST(RCWebConstants.RC_RENT_ITEM)
     Call<RentItem> rentItem(@Header("Authorization") String token,@Body RentItem rentItem);
+
+    /**
+     * edit user details
+     * @param editUserRequest
+     * @return
+     */
+    @PUT(RCWebConstants.RC_EDIT_USER)
+    Call<User> editUser(@Body EditUserRequest editUserRequest);
+
+    /**
+     * Request foe change password
+     * @param token
+     * @param changePwdRequest
+     * @return
+     */
+    @PUT(RCWebConstants.RC_CHANGE_PWD)
+    Call<User> changePwd(@Header("Authorization") String token,@Body ChangePwdRequest changePwdRequest);
 
 }

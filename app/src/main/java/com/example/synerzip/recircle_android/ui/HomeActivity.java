@@ -201,7 +201,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 RCLog.showToast(HomeActivity.this, TAG);
                 break;
             case R.id.nav_items:
-                RCLog.showToast(HomeActivity.this, TAG);
+                startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
                 break;
             case R.id.nav_payments:
                 RCLog.showToast(HomeActivity.this, TAG);

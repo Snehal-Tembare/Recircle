@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:orientation="vertical">
+
+    <include layout="@layout/partial_toolbar" />
+
+    <LinearLayout
+        android:id="@+id/layout_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dimen_10dp">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_50dp"
+                android:layout_marginTop="@dimen/dimen_10dp"
+                android:hint="@string/credit_debit_card_no"
+                android:inputType="number"
+                android:padding="@dimen/dimen_10dp"
+                android:textSize="@dimen/dimen_14sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dimen_10dp">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_50dp"
+                android:layout_marginTop="@dimen/dimen_10dp"
+                android:hint="@string/expiration_date"
+                android:inputType="number"
+                android:padding="@dimen/dimen_10dp"
+                android:textSize="@dimen/dimen_14sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dimen_10dp">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_50dp"
+                android:layout_marginTop="@dimen/dimen_10dp"
+                android:hint="@string/name_of_card"
+                android:inputType="number"
+                android:padding="@dimen/dimen_10dp"
+                android:textSize="@dimen/dimen_14sp" />
+        </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout_text"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dimen_10dp"
+            android:layout_weight="0.5"
+            android:background="@color/colorTextBlue"
+            android:text="@string/cancel"
+            android:textColor="@color/common_white" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dimen_10dp"
+            android:layout_weight="0.5"
+            android:background="@color/colorTextBlue"
+            android:text="@string/add"
+            android:textColor="@color/common_white" />
+    </LinearLayout>
+
+</LinearLayout>

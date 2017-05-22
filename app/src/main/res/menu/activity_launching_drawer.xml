@@ -7,11 +7,12 @@
             android:id="@+id/nav_rentals"
             android:title="Rentals" />
         <item
+            android:visible="false"
             android:id="@+id/nav_payments"
             android:title="Payments" />
         <item
             android:id="@+id/nav_items"
-            android:title="Items" />
+            android:title="Settings" />
         <item
             android:id="@+id/nav_logIn_signUp"
             android:title="Log In/Sign Up" />

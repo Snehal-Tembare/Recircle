@@ -6,7 +6,7 @@ package com.example.synerzip.recircle_android.utilities;
  */
 public class RCWebConstants {
 
-    public static final String RC_BASE_URL = "http://1d8dae5b.ngrok.io";
+    public static final String RC_BASE_URL = "http://0760af7b.ngrok.io";
 
     public static final int RC_SUCCESS_CODE = 200;
 
@@ -43,5 +43,11 @@ public class RCWebConstants {
     public static final String RC_GET_OTP="/api/users/otp?";
 
     public static final String RC_GOOGLE_ZIPCODES="https://maps.googleapis.com/maps/api/geocode/json?";
+
+    public static final String RC_EDIT_USER="/api/users";
+
+    public static final String RC_CHANGE_PWD="/api/users/changePwd";
+
+    public static final String RC_GET_USER_DETAILS="/api/users/:userId";
 
 }

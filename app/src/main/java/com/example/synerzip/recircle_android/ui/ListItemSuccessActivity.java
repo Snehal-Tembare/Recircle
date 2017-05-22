@@ -70,14 +70,17 @@ public class ListItemSuccessActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+
             case android.R.id.home:
                 Intent intent = new Intent(ListItemSuccessActivity.this, HomeActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
                 return true;
+
             default:
                 return super.onOptionsItemSelected(item);
+
         }
     }
 }

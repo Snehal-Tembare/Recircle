@@ -58,9 +58,13 @@
         <activity android:name=".ui.RentInfoActivity" />
         <activity android:name=".ui.PaymentModeActivity" />
         <activity android:name=".ui.CreditCardActivity" />
-        <activity android:name=".ui.HomeActivity"/>
-        <activity android:name=".ui.RentItemSuccessActivity"></activity>
-        <activity android:name=".ui.RentItemSuccessActivity"></activity>
+        <activity android:name=".ui.HomeActivity" />
+        <activity android:name=".ui.RentItemSuccessActivity" />
+        <activity android:name=".ui.SettingsActivity" />
+        <activity android:name=".ui.EditProfileActivity"
+            android:exported="true"/>
+        <activity android:name=".ui.PaymentsActivity"/>
+        <activity android:name=".ui.BankAccActivity"/>
     </application>
 
 </manifest>

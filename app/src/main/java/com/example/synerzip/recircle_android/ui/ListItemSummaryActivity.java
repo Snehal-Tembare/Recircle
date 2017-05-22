@@ -139,8 +139,11 @@ public class ListItemSummaryActivity extends AppCompatActivity {
         unavailableDates = new ArrayList<>();
 
         listUploadItemImage = new ArrayList<>();
+
         unavailableDates = AdditionalDetailsActivity.selectedDates;
+
         int datesCount;
+
         datesCount = AdditionalDetailsActivity.daysCount;
         if (datesCount != 0) {
             mTxtDaysCount.setText(datesCount + " days");
@@ -178,7 +181,6 @@ public class ListItemSummaryActivity extends AppCompatActivity {
         mUserProdImages = new UserProdImages("https://s3.ap-south-1.amazonaws.com/recircleimages/1398934243000_1047081.jpg",
                 "2017-02-04T13:13:09.000Z");
         listUploadItemImage.add(mUserProdImages);
-
         uploadGalleryImages = UploadImgActivity.listUploadGalleryImage;
 
         final ListItemImageAdapter mListItemImageAdapter = new ListItemImageAdapter
