@@ -43,8 +43,8 @@ public class ZoomActivity extends AppCompatActivity {
     @BindView(R.id.view_pager)
     public ViewPager mViewPager;
 
-    @BindView(R.id.recycler_images)
-    public RecyclerView mReImages;
+    @BindView(R.id.recycler_view)
+    public RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,12 +72,12 @@ public class ZoomActivity extends AppCompatActivity {
 
                         mViewPager.setCurrentItem(position);
 
-                        View view = mReImages.getChildAt(position);
+                        View view = mRecyclerView.getChildAt(position);
 
                         view.setBackground(ContextCompat.getDrawable(ZoomActivity.this, R.drawable.selected_image_background));
 
                         for (int i = 0; i < userProdImagesArrayList.size(); i++) {
-                            view = mReImages.getChildAt(i);
+                            view = mRecyclerView.getChildAt(i);
                             if (i != position) {
                                 view.setBackground(ContextCompat.getDrawable(ZoomActivity.this, R.drawable.custom_imageview));
                             }
@@ -85,8 +85,8 @@ public class ZoomActivity extends AppCompatActivity {
                     }
                 });
 
-                mReImages.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-                mReImages.setAdapter(mImageAdapter);
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+                mRecyclerView.setAdapter(mImageAdapter);
 
                 mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                     @Override
@@ -95,12 +95,12 @@ public class ZoomActivity extends AppCompatActivity {
 
                     @Override
                     public void onPageSelected(int position) {
-                        View view = mReImages.getChildAt(position);
+                        View view = mRecyclerView.getChildAt(position);
 
                         view.setBackground(ContextCompat.getDrawable(ZoomActivity.this, R.drawable.selected_image_background));
 
                         for (int i = 0; i < userProdImagesArrayList.size(); i++) {
-                            view = mReImages.getChildAt(i);
+                            view = mRecyclerView.getChildAt(i);
                             if (i != mViewPager.getCurrentItem()) {
                                 view.setBackground(ContextCompat.getDrawable(ZoomActivity.this, R.drawable.custom_imageview));
                             }
@@ -124,16 +124,16 @@ public class ZoomActivity extends AppCompatActivity {
     @OnClick(R.id.img_previous)
     public void showPreviousImage() {
         if (mViewPager.getCurrentItem() > 0) {
-            mReImages.setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.VISIBLE);
 
             int position = mViewPager.getCurrentItem();
             mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
 
-            View view = mReImages.getChildAt(mViewPager.getCurrentItem());
+            View view = mRecyclerView.getChildAt(mViewPager.getCurrentItem());
             view.setBackground(ContextCompat.getDrawable(this, R.drawable.selected_image_background));
 
             for (int i = 0; i < userProdImagesArrayList.size(); i++) {
-                view = mReImages.getChildAt(i);
+                view = mRecyclerView.getChildAt(i);
                 if (i == position) {
                     view.setBackground(ContextCompat.getDrawable(this, R.drawable.custom_imageview));
                 }
@@ -148,16 +148,16 @@ public class ZoomActivity extends AppCompatActivity {
     @OnClick(R.id.img_next)
     public void showNextImage() {
         if (mViewPager.getCurrentItem() < mViewPager.getAdapter().getCount() - 1) {
-            mReImages.setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.VISIBLE);
             int position = mViewPager.getCurrentItem();
 
             mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
 
-            View view = mReImages.getChildAt(mViewPager.getCurrentItem());
+            View view = mRecyclerView.getChildAt(mViewPager.getCurrentItem());
             view.setBackground(ContextCompat.getDrawable(this, R.drawable.selected_image_background));
 
             for (int i = 0; i < userProdImagesArrayList.size(); i++) {
-                view = mReImages.getChildAt(i);
+                view = mRecyclerView.getChildAt(i);
                 if (i == position) {
                     view.setBackground(ContextCompat.getDrawable(this, R.drawable.custom_imageview));
                 }

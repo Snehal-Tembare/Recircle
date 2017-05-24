@@ -3,6 +3,7 @@ package com.example.synerzip.recircle_android.ui;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v4.app.ListFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -70,7 +71,7 @@ public class ListItemSummaryActivity extends AppCompatActivity {
     @BindView(R.id.txt_ten_days_disc)
     protected TextView mTxtDiscTenDays;
 
-    private String mItemDesc;
+    private String mItemDesc,mProductTitle;
 
     private int mItemPrice, mMinRental;
 
@@ -114,6 +115,8 @@ public class ListItemSummaryActivity extends AppCompatActivity {
 
     @BindView(R.id.txt_show_dates)
     protected TextView mTxtShowDates;
+
+    private ListAnItemRequest listAnItemRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,7 +163,6 @@ public class ListItemSummaryActivity extends AppCompatActivity {
         mZipcode = AdditionalDetailsActivity.mZipcode;
         fromAustin = AdditionalDetailsActivity.fromAustin;
 
-        mTxtProductTitle.setText(ListItemFragment.productTitle);
 
         mItemPrice = ListItemFragment.mItemPrice;
         mTxtItemPrice.setText("$ " + mItemPrice + "/day");
@@ -170,6 +172,13 @@ public class ListItemSummaryActivity extends AppCompatActivity {
         mItemDesc = AdditionalDetailsActivity.mItemDesc;
         mTxtItemDesc.setText(mItemDesc);
 
+        mProductTitle= ListItemFragment.mProductName;
+
+        if(productId.isEmpty()){
+            mTxtProductTitle.setText(ListItemFragment.mProductName);
+        }else {
+            mTxtProductTitle.setText(ListItemFragment.productTitle);
+        }
         //TODO product images should be taken from amazon s3 bucket ; yet to be done
         UserProdImages mUserProdImages;
         mUserProdImages = new UserProdImages("https://s3.ap-south-1.amazonaws.com/recircleimages/1398934243000_1047081.jpg",
@@ -208,8 +217,13 @@ public class ListItemSummaryActivity extends AppCompatActivity {
     private void getListAnItem() {
         mProgressBar.setVisibility(View.VISIBLE);
         mLinearLayout.setAlpha((float) 0.6);
-        ListAnItemRequest listAnItemRequest = new ListAnItemRequest(productId, mItemPrice, mMinRental,
-                mItemDesc, listDiscounts, listUploadItemImage, mItemAvailability, mZipcode, fromAustin);
+        if(productId.isEmpty()){
+            listAnItemRequest = new ListAnItemRequest(mProductTitle, mItemPrice, mMinRental,
+                    mItemDesc, listDiscounts, listUploadItemImage, mItemAvailability, mZipcode, fromAustin);
+        }else {
+            listAnItemRequest = new ListAnItemRequest(productId, mItemPrice, mMinRental,
+                    mItemDesc, listDiscounts, listUploadItemImage, mItemAvailability, mZipcode, fromAustin);
+        }
 
         service = ApiClient.getClient().create(RCAPInterface.class);
         Call<AllProductInfo> call = service.listAnItem("Bearer " + mAccessToken, listAnItemRequest);
@@ -314,11 +328,7 @@ public class ListItemSummaryActivity extends AppCompatActivity {
      */
     @OnClick(R.id.btn_confirm_item)
     public void btnConfirmItem(View view) {
-        if (isLoggedIn) {
             getListAnItem();
-        } else {
-            RCLog.showToast(ListItemSummaryActivity.this, getString(R.string.user_must_login));
-        }
     }
 
     /**

@@ -19,15 +19,16 @@ import java.util.ArrayList;
  * Created by Prajakta Patil on 10/3/17.
  * Copyright © 2017 Synerzip. All rights reserved
  */
+
 public class PopularItemsAdapter extends RecyclerView.Adapter<PopularItemsAdapter.ViewHolder> {
     private ArrayList<Products> popularProductsList;
     private Context mContext;
-    private OnItemClickListener onItemClikListner;
+    private OnItemClickListener onItemClickListener;
 
-    public PopularItemsAdapter(Context mContext, ArrayList<Products> popularProductsList, OnItemClickListener onItemClikListner) {
+    public PopularItemsAdapter(Context mContext, ArrayList<Products> popularProductsList, OnItemClickListener onItemClickListener) {
         this.mContext = mContext;
         this.popularProductsList = popularProductsList;
-        this.onItemClikListner = onItemClikListner;
+        this.onItemClickListener = onItemClickListener;
     }
 
     @Override
@@ -60,12 +61,17 @@ public class PopularItemsAdapter extends RecyclerView.Adapter<PopularItemsAdapte
         viewHolder.mTxtRenterName.setText(popularProducts.getUser_info().getFirst_name()
                 + " " + popularProducts.getUser_info().getLast_name());
 
-        viewHolder.bind(popularProductsList.get(position), onItemClikListner);
+        viewHolder.bind(popularProductsList.get(position), onItemClickListener);
     }
 
     @Override
     public int getItemCount() {
-        return 6;
+        if(popularProductsList.size()>6){
+            return 6;
+        }
+        else{
+            return popularProductsList.size();
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -94,6 +100,4 @@ public class PopularItemsAdapter extends RecyclerView.Adapter<PopularItemsAdapte
             });
         }
     }
-
-
 }

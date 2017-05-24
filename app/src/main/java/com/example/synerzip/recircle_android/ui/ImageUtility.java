@@ -10,8 +10,13 @@ import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+/**
+ * Created by Prajakta Patil on 18/5/17.
+ * Copyright © 2017 Synerzip. All rights reserved
+ */
 
-public class Utility {
+public class ImageUtility {
+    Context mContext;
     public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)

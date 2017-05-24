@@ -66,7 +66,12 @@ public class RecentItemsAdapter extends RecyclerView.Adapter<RecentItemsAdapter.
 
     @Override
     public int getItemCount() {
-        return 6;
+        if(productDetailsList.size()>6){
+            return 6;
+        }
+        else{
+            return productDetailsList.size();
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

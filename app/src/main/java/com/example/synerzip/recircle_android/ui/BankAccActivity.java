@@ -17,7 +17,10 @@ import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
+/**
+ * Created by Prajakta Patil on 22/5/17.
+ * Copyright © 2017 Synerzip. All rights reserved
+ */
 public class BankAccActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
@@ -39,8 +42,6 @@ public class BankAccActivity extends AppCompatActivity {
         mToolbar.setTitle(getString(R.string.settings));
         mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-//        mEditTxtDOB.setEnabled(false);
 
         mEditTxtDOB.setOnClickListener(new View.OnClickListener() {
             @Override

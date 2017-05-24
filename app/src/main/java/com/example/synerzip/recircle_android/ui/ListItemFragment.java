@@ -69,8 +69,6 @@ public class ListItemFragment extends Fragment {
 
     public static ArrayList<Discounts> listDiscounts;
 
-    private RCAPInterface service;
-
     private SearchUtility utility;
 
     private ArrayList<String> productItemList;
@@ -103,7 +101,7 @@ public class ListItemFragment extends Fragment {
 
     private double productPrice;
 
-    public static String productTitle;
+    public static String productTitle,mProductName;
 
     @BindView(R.id.txt_suggested_price)
     protected TextView mTxtSuggestedPrice;
@@ -163,10 +161,12 @@ public class ListItemFragment extends Fragment {
 
     @OnClick(R.id.btn_upload_img)
     public void btnUploadImg(View view) {
+        mProductName=mProductAutoComplete.getText().toString();
         submitForm();
         HideKeyboard.hideKeyBoard(getActivity());
         if (NetworkUtility.isNetworkAvailable(getActivity())) {
             if (getValues()) {
+
                 Intent intent = new Intent(getActivity(), UploadImgActivity.class);
                 startActivity(intent);
             } else {
@@ -206,8 +206,11 @@ public class ListItemFragment extends Fragment {
         super.onResume();
         productsCustomList = new ArrayList<>();
         productItemList = new ArrayList<>();
+        RCAPInterface service;
         service = ApiClient.getClient().create(RCAPInterface.class);
         utility.populateAutoCompleteData();
+
+
 
         ReadyCallback readyCallback = new ReadyCallback() {
             @Override
@@ -384,6 +387,7 @@ public class ListItemFragment extends Fragment {
      * @return
      */
     private boolean validateSearchItem() {
+
         if (mProductAutoComplete.getText().toString().trim().isEmpty()) {
             mInputLayoutSearchItem.setError(getString(R.string.validate_item_search));
             requestFocus(mProductAutoComplete);

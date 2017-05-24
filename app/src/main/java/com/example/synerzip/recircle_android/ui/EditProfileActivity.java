@@ -13,7 +13,6 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -29,7 +28,6 @@ import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
-import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -44,7 +42,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
+/**
+ * Created by Prajakta Patil on 17/4/17.
+ * Copyright © 2017 Synerzip. All rights reserved
+ */
 public class EditProfileActivity extends AppCompatActivity {
 
     @BindView(R.id.img_user_profile)
@@ -170,17 +171,28 @@ public class EditProfileActivity extends AppCompatActivity {
 
     }//end changePwdDialog()
 
+    /**
+     * cancel button to close activity
+     * @param view
+     */
     @OnClick(R.id.txt_cancel_edit_pro)
     public void txtCancel(View view) {
         finish();
     }
 
+    /**
+     * change user profile picture
+     * @param view
+     */
     @OnClick(R.id.img_user_profile)
     public void imgUserProfile(View view) {
         selectImage();
-
     }
 
+    /**
+     * change user password
+     * @param view
+     */
     @OnClick(R.id.txtChangePwd)
     public void txtChangePwd(View view) {
         changePwdDialog();
@@ -189,41 +201,43 @@ public class EditProfileActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
-            case Utility.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
+            case ImageUtility.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (userChoosenTask.equals("Take Photo"))
+                    if (userChoosenTask.equals(getString(R.string.take_photo)))
                         cameraIntent();
-                    else if (userChoosenTask.equals("Choose from Library"))
+                    else if (userChoosenTask.equals(getString(R.string.choose_from_gallery)))
                         galleryIntent();
                 } else {
-                    //code for deny
                 }
                 break;
         }
     }
 
+    /**
+     * select image from gallery or camera
+     */
     private void selectImage() {
-        final CharSequence[] items = {"Take Photo", "Choose from Library",
-                "Cancel"};
+        final CharSequence[] items = {getString(R.string.take_photo), getString(R.string.choose_from_gallery),
+                getString(R.string.cancel)};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(EditProfileActivity.this);
-        builder.setTitle("Add Photo!");
+        builder.setTitle(getString(R.string.add_photo));
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
-                boolean result = Utility.checkPermission(EditProfileActivity.this);
+                boolean result = ImageUtility.checkPermission(EditProfileActivity.this);
 
-                if (items[item].equals("Take Photo")) {
-                    userChoosenTask = "Take Photo";
+                if (items[item].equals(getString(R.string.take_photo))) {
+                    userChoosenTask = getString(R.string.take_photo);
                     if (result)
                         cameraIntent();
 
-                } else if (items[item].equals("Choose from Library")) {
-                    userChoosenTask = "Choose from Library";
+                } else if (items[item].equals(getString(R.string.choose_from_gallery))) {
+                    userChoosenTask = getString(R.string.choose_from_gallery);
                     if (result)
                         galleryIntent();
 
-                } else if (items[item].equals("Cancel")) {
+                } else if (items[item].equals(getString(R.string.cancel))) {
                     dialog.dismiss();
                 }
             }
@@ -275,7 +289,7 @@ public class EditProfileActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        //mImgUserProfile.setImageBitmap(thumbnail);
+        mImgUserProfile.setImageBitmap(thumbnail);
     }
 
     @SuppressWarnings("deprecation")

@@ -100,7 +100,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom"
         android:layout_marginTop="@dimen/dimen_10dp"
         android:background="@drawable/border_upload_image"
         android:text="@string/next"

@@ -82,7 +82,7 @@
                         android:src="@drawable/ic_previous_grey" />
 
                     <android.support.v7.widget.RecyclerView
-                        android:id="@+id/recycler_images"
+                        android:id="@+id/recycler_view"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.8" />
