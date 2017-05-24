@@ -75,6 +75,8 @@ public class LogInActivity extends AppCompatActivity {
 
     protected String mUserId, mUserEmail,mUserToken,mUserLastName,mUserFirstName,mAccessToken="";
 
+
+
     private static final String TAG = "LogInActivity";
 
 
@@ -136,6 +138,7 @@ public class LogInActivity extends AppCompatActivity {
                 if(response.isSuccessful()){
 
                         mUserId = response.body().getUser_id();
+                    Log.v("userid",mUserId);
                         mUserName = response.body().getEmail();
                         mUserToken = response.body().getToken();
                         mUserFirstName = response.body().getFirst_name();

@@ -295,10 +295,11 @@
     <string name="list_item_desc">itemDesc</string>
     <string name="list_new_item">+ List an item</string>
     <string name="discounts">discounts</string>
+
     <string name="list_unavail_days">listUnavailDays</string>
     <string name="zipcode">Zipcode</string>
     <string name="austin_check">austinCheck</string>
-    <string name="view_an_item">View an item</string>
+    <string name="view_an_item">View this item</string>
     <string name="thank_you_for_booking">Thank you for booking with us.</string>
     <string name="notify_req">We\'ll notify you when someone requests this item</string>
     <string name="list_item_success">Success! Your listing is live</string>
@@ -365,4 +366,5 @@
     <string name="current_pwd">Current Password</string>
     <string name="new_password">New Password</string>
     <string name="confirm_password">Confirm Password</string>
+    <string name="discounts_summary">Discounts</string>
 </resources>

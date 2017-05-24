@@ -10,10 +10,9 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,13 +21,15 @@ import android.widget.EditText;
 
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.ChangePwdRequest;
-import com.example.synerzip.recircle_android.models.LogInRequest;
 import com.example.synerzip.recircle_android.models.User;
+import com.example.synerzip.recircle_android.models.UserAccDetails;
+import com.example.synerzip.recircle_android.models.UserAddress;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -46,12 +47,41 @@ import retrofit2.Response;
 
 public class EditProfileActivity extends AppCompatActivity {
 
-    private int REQUEST_CAMERA = 0, SELECT_FILE = 1;
-    private Button btnSelect;
-    private String userChoosenTask;
 
-    @BindView(R.id.img_user_profile)
-    protected CircleImageView mImgUserProfile;
+    
+
+    @BindView(R.id.edit_user_first_name)
+    protected EditText mEditTxtFirstName;
+
+    @BindView(R.id.edit_user_last_name)
+    protected EditText mEditTxtLastName;
+
+    @BindView(R.id.edit_user_email)
+    protected EditText mEditTxtEmail;
+
+    @BindView(R.id.edit_user_mob)
+    protected EditText mEditTxtMob;
+
+    @BindView(R.id.edit_street_addr)
+    protected EditText mEditTxtStreetAddr;
+
+    @BindView(R.id.edit_city)
+    protected EditText mEditTxtCity;
+
+    @BindView(R.id.edit_state)
+    protected EditText mEditTxtState;
+
+    @BindView(R.id.edit_zipcode)
+    protected EditText mEditZipcode;
+
+    @BindView(R.id.switch_notification)
+    protected SwitchCompat mSwitchNotification;
+
+    private int REQUEST_CAMERA = 0, SELECT_FILE = 1;
+
+    private Button btnSelect;
+
+    private String userChoosenTask;
 
     private SharedPreferences sharedPreferences;
 
@@ -61,16 +91,20 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private boolean isLoggedIn;
 
-  /*  @BindView(R.id.progress_bar)
-    protected ProgressBar mProgressBar;
+    private String mUserId, mFirstName, mLastName, mEmail, mUserImage, mPaymentMethods;
 
-    @BindView(R.id.layout_change_pwd)
-    protected FrameLayout mLinearLayout;*/
+    private boolean mNotificationFlag, mMobVerification;
+
+    private UserAddress mUserAddress;
+
+    private UserAccDetails mAccDetails;
+
+    private long mUserMobNo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_profile_acttivity);
+        setContentView(R.layout.activity_edit_profile);
         ButterKnife.bind(this);
 
         //get data from shared preferences
@@ -78,7 +112,19 @@ public class EditProfileActivity extends AppCompatActivity {
         mAccessToken = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
         isLoggedIn = sharedPreferences.getBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
 
+    /*    mEditTxtFirstName.setText(SettingsActivity.mFirstName);
+        mEditTxtLastName.setText(SettingsActivity.mLastName);
+        mEditTxtEmail.setText(SettingsActivity.mEmail);
+        mEditTxtMob.setText(SettingsActivity.mMobNo);
+        Picasso.with(this).load(SettingsActivity.mUserImg).into(mImgUserProfile);*/
     }
+
+  /*  public void editProfileDetails() {
+        RootUserInfo rootUserInfo = new RootUserInfo(mUserId, mFirstName, mLastName, mEmail, mUserImage,
+                mNotificationFlag, mUserMobNo, mMobVerification, mUserAddress,
+                mPaymentMethods, mAccDetails);
+    }
+*/
 
     /**
      * Login again dialog
@@ -90,7 +136,7 @@ public class EditProfileActivity extends AppCompatActivity {
         final EditText mEditTxtOldPwd = (EditText) dialog.findViewById(R.id.edit_current_pwd_dialog);
         final EditText mEditTxtNewPwd = (EditText) dialog.findViewById(R.id.edit_new_pwd_dialog);
 
-        Button btnCancel=(Button)dialog.findViewById(R.id.btn_cancel);
+        Button btnCancel = (Button) dialog.findViewById(R.id.btn_cancel);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,14 +154,14 @@ public class EditProfileActivity extends AppCompatActivity {
                 ChangePwdRequest changePwdRequest = new ChangePwdRequest(mUserName, mUserPwd);
 
                 service = ApiClient.getClient().create(RCAPInterface.class);
-                Call<User> userCall = service.changePwd("Bearer " + mAccessToken,changePwdRequest);
+                Call<User> userCall = service.changePwd("Bearer " + mAccessToken, changePwdRequest);
                 userCall.enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
 
                        /* mProgressBar.setVisibility(View.GONE);
                         mLinearLayout.setAlpha((float) 1.0);*/
-                        Log.v("data",response.body()+"");
+                        Log.v("data", response.body() + "");
                         if (response.isSuccessful()) {
                             mAccessToken = response.body().getToken();
                             sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
@@ -155,7 +201,7 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.txtChangePwd)
-    public void txtChangePwd(View view){
+    public void txtChangePwd(View view) {
         changePwdDialog();
     }
 
@@ -248,7 +294,7 @@ public class EditProfileActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        mImgUserProfile.setImageBitmap(thumbnail);
+        //mImgUserProfile.setImageBitmap(thumbnail);
     }
 
     @SuppressWarnings("deprecation")
@@ -263,7 +309,7 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         }
 
-        mImgUserProfile.setImageBitmap(bm);
+        //mImgUserProfile.setImageBitmap(bm);
     }
 
     /**

@@ -122,7 +122,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dimen_40dp"
-                    android:text="@string/price_after_disc"
+                    android:text="@string/discounts_summary"
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/dimen_16sp"
                     android:textStyle="bold" />
@@ -179,24 +179,6 @@
                     android:layout_marginRight="@dimen/dimen_20dp"
                     android:layout_marginTop="@dimen/dimen_10dp"
                     android:background="@color/colorLightGrey" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dimen_40dp"
-                    android:text="@string/listing_days"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/dimen_16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_marginLeft="@dimen/dimen_40dp"
-
-                    android:id="@+id/txt_listing_days"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/dimen_16sp" />
 
                 <View
                     android:layout_width="match_parent"

@@ -106,9 +106,6 @@ public class ListItemSummaryActivity extends AppCompatActivity {
     @BindView(R.id.txt_product_title)
     protected TextView mTxtProductTitle;
 
-    @BindView(R.id.txt_listing_days)
-    protected TextView mTxtListingDay;
-
     @BindView(R.id.progress_bar)
     protected RelativeLayout mProgressBar;
 
@@ -162,9 +159,6 @@ public class ListItemSummaryActivity extends AppCompatActivity {
 
         mZipcode = AdditionalDetailsActivity.mZipcode;
         fromAustin = AdditionalDetailsActivity.fromAustin;
-
-        String currentDate = new SimpleDateFormat("MMM dd, yyyy").format(new Date());
-        mTxtListingDay.setText(currentDate);
 
         mTxtProductTitle.setText(ListItemFragment.productTitle);
 

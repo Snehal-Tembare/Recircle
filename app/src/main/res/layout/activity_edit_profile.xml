@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/frame_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_150dp"
+                android:background="@color/colorPrimary">
+
+                <ImageView
+                    android:id="@+id/txt_cancel_edit_pro"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dimen_20dp"
+                    android:gravity="start"
+                    android:src="@drawable/ic_close_white"
+                    android:text="@string/cancel"
+                    android:textSize="@dimen/dimen_15sp" />
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/img_user_profile"
+                        android:layout_width="@dimen/dimen_80dp"
+                        android:layout_height="@dimen/dimen_80dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_user"
+                        app:civ_border_color="@color/colorLightGrey"
+                        app:civ_border_width="@dimen/dimen_2dp"
+                        app:civ_fill_color="@color/common_white" />
+
+                    <ImageView
+                        android:id="@+id/btn_user_profile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|right"
+                        android:layout_marginBottom="@dimen/dimen_5dp"
+                        android:src="@drawable/ic_edit_photo" />
+
+
+                </FrameLayout>
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/dimen_10dp"
+                    android:layout_weight="0.5">
+
+                    <EditText
+                        android:id="@+id/edit_user_first_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dimen_50dp"
+                        android:layout_marginTop="@dimen/dimen_10dp"
+                        android:hint="@string/user_first_name"
+                        android:inputType="text"
+                        android:padding="@dimen/dimen_10dp"
+                        android:textSize="@dimen/dimen_16sp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/dimen_10dp"
+                    android:layout_weight="0.5">
+
+                    <EditText
+                        android:id="@+id/edit_user_last_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dimen_50dp"
+                        android:layout_marginTop="@dimen/dimen_10dp"
+                        android:hint="@string/user_last_name"
+                        android:inputType="text"
+                        android:padding="@dimen/dimen_10dp"
+                        android:textSize="@dimen/dimen_14sp" />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+            <android.support.design.widget.TextInputLayout
+
+                android:id="@+id/input_layout_rental_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/dimen_10dp">
+
+                <EditText
+                    android:id="@+id/edit_user_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_50dp"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:hint="@string/email_id"
+                    android:inputType="textEmailAddress"
+                    android:padding="@dimen/dimen_10dp"
+                    android:textSize="@dimen/dimen_16sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/dimen_10dp"
+                android:layout_marginTop="@dimen/dimen_10dp">
+
+                <EditText
+                    android:id="@+id/edit_user_mob"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_50dp"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:hint="@string/mobile_no"
+                    android:inputType="number"
+                    android:padding="@dimen/dimen_10dp"
+                    android:textSize="@dimen/dimen_16sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/dimen_10dp"
+                android:layout_marginTop="@dimen/dimen_10dp">
+
+                <EditText
+                    android:id="@+id/edit_street_addr"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_50dp"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:hint="@string/street_addr"
+                    android:padding="@dimen/dimen_10dp"
+                    android:textSize="@dimen/dimen_16sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/dimen_10dp"
+                android:layout_marginTop="@dimen/dimen_10dp">
+
+                <EditText
+                    android:id="@+id/edit_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_50dp"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:hint="@string/user_city"
+                    android:padding="@dimen/dimen_10dp"
+                    android:textSize="@dimen/dimen_16sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/dimen_10dp"
+                android:layout_marginTop="@dimen/dimen_10dp">
+
+                <EditText
+                    android:id="@+id/edit_state"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_50dp"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:hint="@string/state"
+                    android:padding="@dimen/dimen_10dp"
+                    android:textSize="@dimen/dimen_16sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/dimen_10dp"
+                android:layout_marginTop="@dimen/dimen_10dp">
+
+                <EditText
+                    android:id="@+id/edit_zipcode"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_50dp"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:hint="@string/zipcode"
+                    android:inputType="number"
+                    android:padding="@dimen/dimen_10dp"
+                    android:textSize="@dimen/dimen_16sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_60dp"
+                android:layout_margin="@dimen/dimen_10dp"
+                app:cardElevation="@dimen/dimen_5dp">
+
+                <TextView
+                    android:id="@+id/switch_notification"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="@dimen/dimen_10dp"
+                    android:text="@string/text_notification"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/dimen_16sp" />
+
+                <android.support.v7.widget.SwitchCompat
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center" />
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/txtChangePwd"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_margin="@dimen/dimen_10dp"
+                android:layout_marginTop="@dimen/dimen_10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dimen_10dp"
+                    android:text="@string/change_pwd"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/dimen_16sp" />
+
+            </android.support.v7.widget.CardView>
+
+            <Button
+                android:id="@+id/btn_save_user_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginTop="@dimen/dimen_10dp"
+                android:background="@color/colorTextBlue"
+                android:text="@string/submit"
+                android:textColor="@color/common_white" />
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>
