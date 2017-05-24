@@ -18,6 +18,8 @@ import android.support.v7.app.AlertDialog;
 public class ImageUtility {
     Context mContext;
     public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
+    public static final String STR_PERMISSION = "Permission necessary";
+    public static final String STR_EXTERNAL_STORAGE = "External storage permission is necessary";
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public static boolean checkPermission(final Context context)
@@ -29,8 +31,8 @@ public class ImageUtility {
                 if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
                     AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
                     alertBuilder.setCancelable(true);
-                    alertBuilder.setTitle("Permission necessary");
-                    alertBuilder.setMessage("External storage permission is necessary");
+                    alertBuilder.setTitle(STR_PERMISSION);
+                    alertBuilder.setMessage(STR_EXTERNAL_STORAGE);
                     alertBuilder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
                         public void onClick(DialogInterface dialog, int which) {
