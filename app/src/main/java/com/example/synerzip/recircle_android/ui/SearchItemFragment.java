@@ -368,7 +368,6 @@ public class SearchItemFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        DetailsActivity.isBackPressed = false;
 
         productsCustomList = new ArrayList<>();
 

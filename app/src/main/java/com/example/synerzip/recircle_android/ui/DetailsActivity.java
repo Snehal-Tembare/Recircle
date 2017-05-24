@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -57,13 +56,8 @@ import retrofit2.Response;
  */
 
 public class DetailsActivity extends AppCompatActivity {
-
     private static final String EXTRA_IMAGE = "extra_image";
-
-    public static boolean isBackPressed = false;
-
     public static boolean isShowInfo;
-
     public String user_id;
 
     @BindView(R.id.toolbar)
@@ -158,6 +152,7 @@ public class DetailsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         init();
     }
+
 
     /**
      * Initialize views

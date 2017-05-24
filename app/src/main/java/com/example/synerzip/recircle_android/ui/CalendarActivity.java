@@ -39,16 +39,13 @@ import static com.squareup.timessquare.CalendarPickerView.SelectionMode.RANGE;
 public class CalendarActivity extends AppCompatActivity {
 
     private static final String TAG = "CalendarActivity";
-
     public static ArrayList<Date> selectedDates;
-
     public ArrayList<Date> localselectedDates;
 
     private ArrayList<UserProductUnAvailability> userProductUnAvailabilities;
-
     private Bundle bundle;
-
     private Products product;
+
 
     public static boolean isDateSelected = false;
 
@@ -81,44 +78,6 @@ public class CalendarActivity extends AppCompatActivity {
         Calendar nextYear = Calendar.getInstance();
         nextYear.add(Calendar.YEAR, 1);
         Date today = new Date();
-        bundle = getIntent().getExtras();
-
-        if (bundle != null) {
-            userProductUnAvailabilities = bundle.getParcelableArrayList(getString(R.string.unavail_dates));
-            product = bundle.getParcelable(getString(R.string.product));
-            if (userProductUnAvailabilities != null && userProductUnAvailabilities.size() != 0) {
-
-                final ArrayList<Date> dateArray = new ArrayList<>();
-
-                for (UserProductUnAvailability unAvailability : userProductUnAvailabilities) {
-
-                    Log.v("onDateSelected", userProductUnAvailabilities.get(0).getUnavai_from_date() + "ListItemCalendarActivity");
-
-                    DateFormat dateFormat = new SimpleDateFormat(getString(R.string.calendar_date_format));
-
-                    Date parsedDate = null;
-                    try {
-                        parsedDate = dateFormat.parse(unAvailability.getUnavai_from_date());
-                        dateArray.add(parsedDate);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                mPickerView.setDateSelectableFilter(new CalendarPickerView.DateSelectableFilter() {
-                    @Override
-                    public boolean isDateSelectable(Date date) {
-                        for (int i = 0; i < dateArray.size(); i++) {
-                            if (dateArray.contains(date)) {
-                                return false;
-                            }
-                            return true;
-                        }
-                        return true;
-                    }
-                });
-            }
-        }
         bundle = getIntent().getExtras();
 
         //-----------------------
@@ -280,7 +239,7 @@ public class CalendarActivity extends AppCompatActivity {
     public void btnSave(View view) {
 
         if (fromDate != null && toDate != null) {
-            Intent intent = new Intent(CalendarActivity.this, HomeActivity.class);
+            Intent intent = new Intent(CalendarActivity.this, SearchItemFragment.class);
             intent.putExtra(getString(R.string.from_date), fromDate.toString());
             intent.putExtra(getString(R.string.to_date), toDate.toString());
             intent.putExtra(getString(R.string.selected_dates_list), selectedDates);
