@@ -609,6 +609,7 @@ public class SearchActivity extends AppCompatActivity
                 break;
             case R.id.nav_rentals:
                 RCLog.showToast(SearchActivity.this, TAG);
+                startActivity(new Intent(this,AllRequestsActivity.class));
                 break;
         }
 

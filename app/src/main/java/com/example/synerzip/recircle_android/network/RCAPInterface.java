@@ -4,6 +4,7 @@ import com.example.synerzip.recircle_android.models.AllProductInfo;
 import com.example.synerzip.recircle_android.models.ForgotPwdRequest;
 import com.example.synerzip.recircle_android.models.ListAnItemRequest;
 import com.example.synerzip.recircle_android.models.LogInRequest;
+import com.example.synerzip.recircle_android.models.OrderDetails;
 import com.example.synerzip.recircle_android.models.Products;
 import com.example.synerzip.recircle_android.models.RentItem;
 import com.example.synerzip.recircle_android.models.RootObject;
@@ -138,5 +139,13 @@ public interface RCAPInterface {
 
     @POST(RCWebConstants.RC_RENT_ITEM)
     Call<RentItem> rentItem(@Header("Authorization") String token,@Body RentItem rentItem);
+
+    /**
+     * Get all order details
+     *
+     * @return
+     */
+    @GET(RCWebConstants.RC_ORDER_DETAILS)
+    Call<OrderDetails> getOrderDetails(@Header("Authorization") String token);
 
 }

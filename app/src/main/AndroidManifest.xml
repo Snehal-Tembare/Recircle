@@ -25,7 +25,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDKRoU-pFYaIddvtr7TvoCq_vk1iTwmgUo" />
 
-        <activity android:name=".ui.AllRequestsActivity">
+        <activity android:name=".ui.SplashActivity">
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -52,7 +52,7 @@
         <activity android:name=".ui.PaymentModeActivity" />
         <activity android:name=".ui.CreditCardActivity" />
         <activity android:name=".ui.RentItemSuccessActivity" />
-        <!--<activity android:name=".ui.AllRequestsActivity"/>-->
+        <activity android:name=".ui.AllRequestsActivity"/>
     </application>
 
 </manifest>

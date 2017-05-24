@@ -46,4 +46,6 @@ public class RCWebConstants {
 
     public static final String RC_GOOGLE_ZIPCODES="https://maps.googleapis.com/maps/api/geocode/json?";
 
+    public static final String RC_ORDER_DETAILS="/api/products/userProd/OrderDetails";
+
 }

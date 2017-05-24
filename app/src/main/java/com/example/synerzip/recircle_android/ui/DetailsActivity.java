@@ -18,7 +18,6 @@ import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -87,7 +86,7 @@ public class DetailsActivity extends AppCompatActivity {
     protected TextView mTxtAvgRatingCount;
 
     @BindView(R.id.txt_ask_question)
-    protected ImageButton mImgHelp;
+    protected TextView mTxtAskQuestion;
 
     @BindView(R.id.expand_txt_description)
     protected ExpandableTextView mTxtDecscriptionDetail;
@@ -340,7 +339,7 @@ public class DetailsActivity extends AppCompatActivity {
                     }
                 });
 
-        mImgHelp.setOnClickListener(new View.OnClickListener()
+        mTxtAskQuestion.setOnClickListener(new View.OnClickListener()
 
         {
             @Override

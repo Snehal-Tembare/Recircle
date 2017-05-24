@@ -179,7 +179,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/common_dimens_5"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/colorTextBlue"
                         android:text="@string/ask_question"/>
                 </LinearLayout>
 
