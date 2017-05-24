@@ -7,6 +7,9 @@ import android.content.SharedPreferences;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.app.Dialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,6 +25,7 @@ import android.widget.TextView;
 import com.craftman.cardform.Card;
 import com.craftman.cardform.CardForm;
 import com.craftman.cardform.OnPayBtnClickListner;
+import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.example.synerzip.recircle_android.R;
@@ -44,6 +48,11 @@ import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import butterknife.OnClick;
 
 import butterknife.OnClick;
@@ -131,6 +140,24 @@ CreditCardActivity extends AppCompatActivity implements OnPayBtnClickListner {
         }
         mTxtPaymentAmount.setVisibility(View.GONE);
         service = ApiClient.getClient().create(RCAPInterface.class);
+        mTxtPaymentAmount.setVisibility(View.GONE);
+
+//        awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
+        service = ApiClient.getClient().create(RCAPInterface.class);
+
+        //get data from shared preferences
+        sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
+        isLoggedIn = sharedPreferences.getBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
+        mAccessToken = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
+        looged_user_id = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_USERID, user_id);
+
+//       awesomeValidation.addValidation(CreditCardActivity.this, R.id.expiry_date, EXPIRARY_DATE_PATTERN, R.string.expiry_date_error);
+        mBundle = getIntent().getExtras();
+        if (mBundle != null) {
+            user_id = mBundle.getString(getString(R.string.user_id));
+            mBtnPay.setBackgroundColor(ContextCompat.getColor(this, R.color.colorRedSecondary));
+            mBtnPay.setText("Pay $" + String.valueOf(mBundle.getInt(getString(R.string.total))));
+        }
 
         //get data from shared preferences
         sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
@@ -145,6 +172,11 @@ CreditCardActivity extends AppCompatActivity implements OnPayBtnClickListner {
             mBtnPay.setText("Pay $" + String.valueOf(mBundle.getInt(getString(R.string.total))));
         }
 
+
+    }
+
+    @Override
+    public void onClick(Card card) {
 
     }
 
@@ -222,11 +254,6 @@ CreditCardActivity extends AppCompatActivity implements OnPayBtnClickListner {
             RCLog.showToast(CreditCardActivity.this, getString(R.string.user_must_login));
             logInDialog();
         }
-    }
-
-    @Override
-    public void onClick(Card card) {
-
     }
 
     /**

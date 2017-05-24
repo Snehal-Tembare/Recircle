@@ -27,6 +27,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+//TODO Functionality yet to be comleted
+
 public class SettingsActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
@@ -34,7 +36,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private RCAPInterface service;
 
-    private String mUserId,mAccessToken;
+    private String mUserId, mAccessToken;
 
     @BindView(R.id.txt_user_mob)
     protected TextView mTxtUserMob;
@@ -48,7 +50,7 @@ public class SettingsActivity extends AppCompatActivity {
     @BindView(R.id.img_user_pro)
     protected CircleImageView mImgUserProofile;
 
-    public static String mFirstName,mLastName,mUserImg,mMobNo,mEmail;
+    public static String mFirstName, mLastName, mUserImg, mMobNo, mEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,22 +63,22 @@ public class SettingsActivity extends AppCompatActivity {
         mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        SharedPreferences sharedPreferences=getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME,MODE_PRIVATE);
-        mUserId=sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_USERID,mUserId);
-        mAccessToken=sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN,mAccessToken);
+        SharedPreferences sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
+        mUserId = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_USERID, mUserId);
+        mAccessToken = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
         getUserDetails();
     }
 
     /**
      * get user details
      */
-    public void getUserDetails(){
-        service= ApiClient.getClient().create(RCAPInterface.class);
-        Call<RootUserInfo> userCall=service.getUserDetails("Bearer " + mAccessToken,mUserId);
+    public void getUserDetails() {
+        service = ApiClient.getClient().create(RCAPInterface.class);
+        Call<RootUserInfo> userCall = service.getUserDetails("Bearer " + mAccessToken, mUserId);
         userCall.enqueue(new Callback<RootUserInfo>() {
             @Override
             public void onResponse(Call<RootUserInfo> call, Response<RootUserInfo> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     mFirstName = response.body().getFirst_name();
                     mLastName = response.body().getLast_name();
                     mEmail = response.body().getEmail();
@@ -87,8 +89,8 @@ public class SettingsActivity extends AppCompatActivity {
                     mTxtUserEmail.setText(mEmail);
                     mTxtUserMob.setText(mMobNo);
                     Picasso.with(SettingsActivity.this).load(mUserImg).into(mImgUserProofile);
-                }else {
-                    RCLog.showToast(SettingsActivity.this,"Response is null");
+                } else {
+                    RCLog.showToast(SettingsActivity.this, "Response is null");
                 }
             }
 
@@ -101,6 +103,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     /**
      * edit profile button
+     *
      * @param view
      */
     @OnClick(R.id.btn_edit_profile)
@@ -110,6 +113,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     /**
      * cardview for payments method
+     *
      * @param view
      */
     @OnClick(R.id.card_payments)
@@ -119,6 +123,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     /**
      * cardview for add bank acc
+     *
      * @param view
      */
     @OnClick(R.id.card_bank_acc)

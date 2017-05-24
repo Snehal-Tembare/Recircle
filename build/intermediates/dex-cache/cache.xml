@@ -3,21 +3,21 @@
 
     <item
         is-multidex="true"
+        jar="/home/synerzip/Documents/AndroidStudioProjects/Recircle_android/Recircle/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="e6c49d2fd73503919c38026586faa5f9d36efb72">
+        <dex dex="/home/synerzip/Documents/AndroidStudioProjects/Recircle_android/Recircle/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_55b92074eb1675d0ec6eb9b0687306d5ac9f6c91/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
         jar="/home/synerzip/Documents/AndroidStudioProjects/Recircle_android/Recircle/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
         sha1="caff8e51a24901cfc9cd7e1cf83d84f4cb0c103b">
         <dex dex="/home/synerzip/Documents/AndroidStudioProjects/Recircle_android/Recircle/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_7435b73b853cfed7f060ac462199568d450e4e16/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/synerzip/Documents/AndroidStudioProjects/Recircle_android/Recircle/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="a4b987f96fdac41b606c1bdac1de7e56279d5f6e">
-        <dex dex="/home/synerzip/Documents/AndroidStudioProjects/Recircle_android/Recircle/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_55b92074eb1675d0ec6eb9b0687306d5ac9f6c91/classes.dex" />
     </item>
 
 </items>

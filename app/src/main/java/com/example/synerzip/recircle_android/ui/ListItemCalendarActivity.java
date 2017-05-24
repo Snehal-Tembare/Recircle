@@ -107,7 +107,9 @@ public class ListItemCalendarActivity extends AppCompatActivity {
             public void onDateUnselected(Date date) {
                 selectedDates.remove(date);
                 DateFormat newDateFormat = new SimpleDateFormat(getString(R.string.calendar_date_format));
+                Log.v("Date", date.toString());
                 String dateString = newDateFormat.format(date);
+                Log.v("Date", dateString);
                 datesList.remove(dateString);
 
                 List<CalendarCellDecorator> decoratorList = new ArrayList<>();

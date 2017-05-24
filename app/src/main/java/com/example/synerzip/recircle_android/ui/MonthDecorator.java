@@ -40,5 +40,5 @@ public class MonthDecorator implements CalendarCellDecorator {
                 calendarCellView.setBackgroundResource(0);
             }
         }
-    }
+        }
 }

@@ -2,6 +2,8 @@ package com.example.synerzip.recircle_android.network;
 
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
 
+import com.example.synerzip.recircle_android.utilities.RCWebConstants;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;

@@ -47,8 +47,8 @@ import retrofit2.Response;
 
 public class EditProfileActivity extends AppCompatActivity {
 
-
-    
+    @BindView(R.id.img_user_profile)
+    protected CircleImageView mImgUserProfile;
 
     @BindView(R.id.edit_user_first_name)
     protected EditText mEditTxtFirstName;
@@ -112,19 +112,7 @@ public class EditProfileActivity extends AppCompatActivity {
         mAccessToken = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
         isLoggedIn = sharedPreferences.getBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
 
-    /*    mEditTxtFirstName.setText(SettingsActivity.mFirstName);
-        mEditTxtLastName.setText(SettingsActivity.mLastName);
-        mEditTxtEmail.setText(SettingsActivity.mEmail);
-        mEditTxtMob.setText(SettingsActivity.mMobNo);
-        Picasso.with(this).load(SettingsActivity.mUserImg).into(mImgUserProfile);*/
     }
-
-  /*  public void editProfileDetails() {
-        RootUserInfo rootUserInfo = new RootUserInfo(mUserId, mFirstName, mLastName, mEmail, mUserImage,
-                mNotificationFlag, mUserMobNo, mMobVerification, mUserAddress,
-                mPaymentMethods, mAccDetails);
-    }
-*/
 
     /**
      * Login again dialog
@@ -147,8 +135,6 @@ public class EditProfileActivity extends AppCompatActivity {
         btnChangePwd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              /*  mProgressBar.setVisibility(View.VISIBLE);
-                mLinearLayout.setAlpha((float) 0.6);*/
                 final String mUserName = mEditTxtOldPwd.getText().toString();
                 final String mUserPwd = mEditTxtNewPwd.getText().toString();
                 ChangePwdRequest changePwdRequest = new ChangePwdRequest(mUserName, mUserPwd);
@@ -158,10 +144,6 @@ public class EditProfileActivity extends AppCompatActivity {
                 userCall.enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
-
-                       /* mProgressBar.setVisibility(View.GONE);
-                        mLinearLayout.setAlpha((float) 1.0);*/
-                        Log.v("data", response.body() + "");
                         if (response.isSuccessful()) {
                             mAccessToken = response.body().getToken();
                             sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
@@ -178,8 +160,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<User> call, Throwable t) {
-                      /*  mProgressBar.setVisibility(View.GONE);
-                        mLinearLayout.setAlpha((float) 1.0);*/
+
                     }
                 });
             }
@@ -309,7 +290,7 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         }
 
-        //mImgUserProfile.setImageBitmap(bm);
+        mImgUserProfile.setImageBitmap(bm);
     }
 
     /**

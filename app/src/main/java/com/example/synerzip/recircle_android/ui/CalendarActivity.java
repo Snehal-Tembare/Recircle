@@ -119,6 +119,45 @@ public class CalendarActivity extends AppCompatActivity {
                 });
             }
         }
+        bundle = getIntent().getExtras();
+
+        //-----------------------
+        if (bundle != null) {
+            userProductUnAvailabilities = bundle.getParcelableArrayList(getString(R.string.unavail_dates));
+            product = bundle.getParcelable(getString(R.string.product));
+            if (userProductUnAvailabilities != null && userProductUnAvailabilities.size() != 0) {
+
+                final ArrayList<Date> dateArray = new ArrayList<>();
+
+                for (UserProductUnAvailability unAvailability : userProductUnAvailabilities) {
+
+                    Log.v("onDateSelected", userProductUnAvailabilities.get(0).getUnavai_from_date() + "ListItemCalendarActivity");
+
+                    DateFormat dateFormat = new SimpleDateFormat(getString(R.string.calendar_date_format));
+
+                    Date parsedDate = null;
+                    try {
+                        parsedDate = dateFormat.parse(unAvailability.getUnavai_from_date());
+                        dateArray.add(parsedDate);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                mPickerView.setDateSelectableFilter(new CalendarPickerView.DateSelectableFilter() {
+                    @Override
+                    public boolean isDateSelectable(Date date) {
+                        for (int i = 0; i < dateArray.size(); i++) {
+                            if (dateArray.contains(date)) {
+                                return false;
+                            }
+                            return true;
+                        }
+                        return true;
+                    }
+                });
+            }
+        }
 
         mPickerView.init(today, nextYear.getTime()).withSelectedDate(today).inMode(RANGE);
         mPickerView.init(today, nextYear.getTime()).inMode(RANGE);
@@ -252,13 +291,22 @@ public class CalendarActivity extends AppCompatActivity {
             selectedDates.clear();
             if (localselectedDates != null && localselectedDates.size() != 0) {
                 selectedDates.addAll(localselectedDates);
-
-                if (RentInfoActivity.isDateEdited) {
-                    RentInfoActivity.isDateChanged = true;
-                }
-                finish();
             }
-
+            if (RentInfoActivity.isDateEdited) {
+                RentInfoActivity.isDateChanged = true;
+            }
+            if (DetailsActivity.isShowInfo) {
+                Intent infoIntent = new Intent(this, RentInfoActivity.class);
+                infoIntent.putExtra(getString(R.string.from_date), fromDate.toString());
+                infoIntent.putExtra(getString(R.string.to_date), toDate.toString());
+                infoIntent.putExtra(getString(R.string.selected_dates_list), selectedDates);
+                infoIntent.putExtra(getString(R.string.product), product);
+                startActivity(infoIntent);
+                DetailsActivity.isShowInfo = false;
+            } else {
+                setResult(RESULT_OK, intent);
+            }
+            finish();
         } else {
             RCLog.showToast(CalendarActivity.this, getString(R.string.error_dates));
         }
