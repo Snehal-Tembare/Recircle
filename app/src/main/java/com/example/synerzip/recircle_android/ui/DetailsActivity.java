@@ -27,7 +27,6 @@ import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.Products;
-import com.example.synerzip.recircle_android.models.RentItem;
 import com.example.synerzip.recircle_android.models.UserProdImages;
 import com.example.synerzip.recircle_android.models.UserProdReview;
 import com.example.synerzip.recircle_android.models.UserProductUnAvailability;
@@ -35,12 +34,7 @@ import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.squareup.picasso.Picasso;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 import at.blogc.android.views.ExpandableTextView;
 import butterknife.BindView;
@@ -66,7 +60,7 @@ public class DetailsActivity extends AppCompatActivity {
     @BindView(R.id.img_main_image)
     protected ImageView mImgMain;
 
-    @BindView(R.id.recycler_images)
+    @BindView(R.id.recycler_view)
     protected RecyclerView mRecyclerImages;
 
     @BindView(R.id.img_user)

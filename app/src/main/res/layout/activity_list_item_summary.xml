@@ -13,14 +13,13 @@
         android:animateLayoutChanges="true">
 
         <ScrollView
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <LinearLayout
                 android:id="@+id/layout_list_item_summary"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -32,7 +31,7 @@
 
                     <TextView
                         android:id="@+id/txt_product_title"
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/dimen_0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.8"
                         android:textColor="@color/colorPrimary"
@@ -41,175 +40,205 @@
 
                     <ImageView
                         android:id="@+id/img_edit"
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/dimen_0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_5dp"
                         android:layout_weight="0.2"
-                        android:onClick="imgEdit"
-                        android:src="@drawable/ic_edit" />
+                        android:src="@drawable/ic_edit_25" />
                 </LinearLayout>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycler_view_images"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
+                    android:layout_height="@dimen/dimen_100dp"
                     android:layout_margin="@dimen/dimen_10dp" />
 
-                <TextView
+                <View
                     android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_1dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/common_dimens_10"
+                    android:layout_marginLeft="@dimen/dimen_20dp"
+                    android:layout_marginRight="@dimen/dimen_20dp"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:background="@color/colorLightGrey" />
+
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawablePadding="@dimen/dimen_30dp"
-                    android:paddingLeft="@dimen/dimen_20dp"
+                    android:layout_marginLeft="@dimen/dimen_40dp"
                     android:text="@string/daily_rental_price"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/dimen_14sp"
+                    android:textSize="@dimen/dimen_16sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/txt_item_price"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawablePadding="@dimen/dimen_30dp"
-                    android:paddingLeft="@dimen/dimen_20dp"
+                    android:layout_marginLeft="@dimen/dimen_40dp"
+                    android:gravity="start"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/dimen_14sp" />
+                    android:textSize="@dimen/dimen_16sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_1dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/common_dimens_10"
+                    android:layout_marginLeft="@dimen/dimen_20dp"
+                    android:layout_marginRight="@dimen/dimen_20dp"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:background="@color/colorLightGrey" />
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawablePadding="@dimen/dimen_30dp"
-                    android:paddingLeft="@dimen/dimen_20dp"
+                    android:layout_marginLeft="@dimen/dimen_40dp"
                     android:text="@string/min_rental_days"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/dimen_14sp"
+                    android:textSize="@dimen/dimen_16sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/txt_item_rental"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawablePadding="@dimen/dimen_30dp"
-                    android:paddingLeft="@dimen/dimen_20dp"
+                    android:layout_marginLeft="@dimen/dimen_40dp"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/dimen_14sp" />
+                    android:textSize="@dimen/dimen_16sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_1dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/common_dimens_10"
+                    android:layout_marginLeft="@dimen/dimen_20dp"
+                    android:layout_marginRight="@dimen/dimen_20dp"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:background="@color/colorLightGrey" />
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawablePadding="@dimen/dimen_30dp"
-                    android:paddingLeft="@dimen/dimen_20dp"
-                    android:text="@string/price_after_disc"
+                    android:layout_marginLeft="@dimen/dimen_40dp"
+                    android:text="@string/discounts_summary"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/dimen_14sp"
+                    android:textSize="@dimen/dimen_16sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/txt_five_days_disc"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawablePadding="@dimen/dimen_30dp"
-                    android:paddingLeft="@dimen/dimen_20dp"
+                    android:layout_marginLeft="@dimen/dimen_40dp"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/dimen_14sp" />
+                    android:textSize="@dimen/dimen_16sp" />
 
                 <TextView
                     android:id="@+id/txt_ten_days_disc"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawablePadding="@dimen/dimen_30dp"
-                    android:paddingLeft="@dimen/dimen_20dp"
+                    android:layout_marginLeft="@dimen/dimen_40dp"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/dimen_14sp" />
+                    android:textSize="@dimen/dimen_16sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_1dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/common_dimens_10"
+                    android:layout_marginLeft="@dimen/dimen_20dp"
+                    android:layout_marginRight="@dimen/dimen_20dp"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:background="@color/colorLightGrey" />
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawablePadding="@dimen/dimen_30dp"
-                    android:paddingLeft="@dimen/dimen_20dp"
+                    android:layout_marginLeft="@dimen/dimen_40dp"
                     android:text="@string/desc"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/dimen_14sp"
+                    android:textSize="@dimen/dimen_16sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/txt_item_desc"
-                    android:layout_width="match_parent"
+                    android:layout_width="@dimen/dimen_280dp"
                     android:layout_height="wrap_content"
-                    android:drawablePadding="@dimen/dimen_30dp"
-                    android:paddingLeft="@dimen/dimen_20dp"
-                    android:paddingRight="@dimen/dimen_20dp"
+                    android:layout_marginLeft="@dimen/dimen_40dp"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/dimen_14sp" />
+                    android:textSize="@dimen/dimen_16sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_1dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/common_dimens_10"
+                    android:layout_marginLeft="@dimen/dimen_20dp"
+                    android:layout_marginRight="@dimen/dimen_20dp"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:background="@color/colorLightGrey" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_1dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/common_dimens_10"
+                    android:layout_marginLeft="@dimen/dimen_20dp"
+                    android:layout_marginRight="@dimen/dimen_20dp"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:background="@color/colorLightGrey" />
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="@dimen/dimen_30dp"
-                    android:paddingLeft="@dimen/dimen_20dp"
-                    android:text="@string/listing_days"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/dimen_14sp"
-                    android:textStyle="bold" />
+                    android:layout_marginLeft="@dimen/dimen_40dp"
 
-                <TextView
-                    android:id="@+id/txt_listing_days"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawablePadding="@dimen/dimen_30dp"
-                    android:paddingLeft="@dimen/dimen_20dp"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/dimen_14sp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="@dimen/dimen_30dp"
-                    android:paddingLeft="@dimen/dimen_20dp"
                     android:text="@string/unavail_days"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/dimen_14sp"
+                    android:textSize="@dimen/dimen_16sp"
                     android:textStyle="bold" />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="@dimen/dimen_280dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingLeft="@dimen/dimen_20dp">
+                    android:layout_marginLeft="@dimen/dimen_40dp"
+                    android:orientation="horizontal">
 
                     <TextView
 
                         android:id="@+id/txt_days_count"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="@dimen/dimen_14sp" />
+                        android:textSize="@dimen/dimen_16sp" />
 
                     <TextView
                         android:id="@+id/txt_show_dates"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dimen_10dp"
-                        android:onClick="txtShowDates"
                         android:text="@string/show_dates"
                         android:textColor="@color/colorTextBlue"
-                        android:textSize="@dimen/dimen_14sp" />
+                        android:textSize="@dimen/dimen_16sp" />
                 </LinearLayout>
-
-                <Button
-                    android:id="@+id/btn_confirm_item"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="@dimen/dimen_20dp"
-                    android:layout_marginTop="@dimen/common_dimens_20"
-                    android:background="@drawable/round_button_blue"
-                    android:onClick="btnConfirmItem"
-                    android:padding="@dimen/dimen_10dp"
-                    android:text="@string/confirm_item"
-                    android:textAllCaps="false"
-                    android:textColor="@color/common_white"
-                    android:textSize="@dimen/text_size_16" />
             </LinearLayout>
         </ScrollView>
+
+        <Button
+
+            android:id="@+id/btn_confirm_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="@dimen/common_dimens_20"
+            android:background="@drawable/border_upload_image"
+            android:padding="@dimen/dimen_10dp"
+            android:text="@string/confirm_item"
+            android:textAllCaps="false"
+            android:textColor="@color/common_white"
+            android:textSize="@dimen/text_size_16" />
 
         <include
             android:id="@+id/progress_bar"
@@ -219,4 +248,5 @@
     </FrameLayout>
 
     <include layout="@layout/partial_toolbar" />
+
 </LinearLayout>

@@ -1,21 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <resources>
+
     <color name="colorPrimary">#2C3140</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#1A84C1</color>
     <color name="colorHomeBackground">#f1f1f1</color>
     <color name="common_white">#ffffff</color>
     <color name="colorWhite">#ffffff</color>
-    <color name="colortext">#282828</color>
+    <color name="colorText">#282828</color>
+    <color name="colorGrey">#363333</color>
+    <color name="colorBlack">#000000</color>
     <color name="colorTextBlue">#1A84C1</color>
     <color name="colorRatingBar">#1A84C1</color>
     <color name="colorRoundBtn">#337ab7</color>
     <color name="colorCardView">#B1BCBE</color>
     <color name="layout_background_color">#c1cdcd</color>
+    <color name="colorLightGrey">#c1c9c2</color>
 
     <color name="colorRed">#f00</color>
     <color name="colorRedSecondary">#e53935</color>
     <color name="colorSaveBack">#6b6e79</color>
+    <color name="colorTransparent">#00000000</color>
+    <color name="colorForgotPwdText">#333333</color>
 
     <!--Calendar Picker View-->
     <color name="calendar_highlighted_day_bg">#e2c5c5</color>
@@ -34,12 +41,10 @@
     <color name="selected_img_border_color">#01579b</color>
     <color name="view_color">#eeeeee</color>
     <color name="common_text_color">#212121</color>
-    <!--<color name="layout_background_color">#e8e8e8</color>-->
     <color name="text_color">#333</color>
     <color name="text_color_dark">#222</color>
     <color name="background_color">#f5f5f5</color>
+    <color name="colorUploadImage">#e53935</color>
     <color name="background_color_dark">#e0e0e0</color>
 
-
-    <color name="colorForgotPwdText">#333333</color>
 </resources>

@@ -41,7 +41,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dimen_10dp"
                         android:gravity="start"
-                        android:onClick="txtCancel"
                         android:src="@drawable/ic_close_white"
                         android:text="@string/cancel"
                         android:textColor="@color/colorRed"
@@ -54,7 +53,6 @@
                         android:layout_gravity="end"
                         android:layout_marginRight="@dimen/dimen_10dp"
                         android:gravity="end"
-                        android:onClick="txtReset"
                         android:text="@string/reset"
                         android:textColor="@color/colorWhite"
                         android:textSize="@dimen/dimen_15sp" />
@@ -114,8 +112,7 @@
                 android:layout_gravity="bottom"
                 android:layout_margin="@dimen/dimen_10dp"
                 android:background="@color/colorWhite"
-                android:onClick="btnSave"
-                android:text="Save"
+                android:text="@string/save"
                 android:textColor="@color/calendar_inactive_month_bg" />
 
         </LinearLayout>

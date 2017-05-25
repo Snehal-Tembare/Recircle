@@ -56,13 +56,13 @@
     <string name="search_item">Search for an item to rent *</string>
     <string name="daily_price">Daily Rental Price *</string>
     <string name="enter_price">Daily Rental Price ($/per day)*</string>
-    <string name="min_rental">Minimum Rental *</string>
+    <string name="min_rental">Minimum Rent Days *</string>
     <string name="discount">Discounts</string>
     <string name="offer_discount">Offer a 30% discount for 5 day rentals.</string>
     <string name="offer_discount_days">Offer 40% discount for 10 day rentals.</string>
     <string name="item_desc">Item descripton *</string>
     <string name="add_desc">Add description about your item *</string>
-    <string name="calendar_availability">Adjust calendar of availability</string>
+    <string name="calendar_availability">Set unavailable dates</string>
     <string name="something_went_wrong">Something went wrong...Please try again</string>
     <string name="optional">(optional)</string>
     <string name="upload_photos">Upload Photos (At least 1) *</string>
@@ -110,7 +110,7 @@
     <string name="logout">Logout</string>
     <string name="err_credentials">User credentials are wrong</string>
     <string name="please_try_again">Please try again</string>
-    <string name="logged_in_as">Logged in as :</string>
+    <string name="logged_in_as">Logged in as : </string>
     <string name="calendar_days_selected">You have selected </string>
     <string name="calendar_days"> days as unavailable</string>
     <string name="choose">Choose</string>
@@ -206,7 +206,7 @@
         <item>78783</item>
         <item>78799</item>
     </string-array>
-    <string name="note_hint">Include note with rental</string>
+    <string name="note_hint">Include note with renter</string>
     <string name="total">Total</string>
     <string name="request_this_item">Request this Item</string>
     <string name="description">Description</string>
@@ -285,7 +285,7 @@
 
     <string name="suggested_price">Suggested Price($/day)</string>
     <string name="proceed">Proceed</string>
-    <string name="confirm_item"><![CDATA[Confirm & List]]></string>
+    <string name="confirm_item">List this item >></string>
     <string name="unavail_dates">unavailableDates</string>
     <string name="unavail_dates_count">unavailDatesCount</string>
     <string name="item_price">itemPrice</string>
@@ -293,20 +293,20 @@
     <string name="upload_image">uploadImageList</string>
     <string name="uplaod_image_gallery">uploadGalleryImages</string>
     <string name="list_item_desc">itemDesc</string>
-    <!--<string name="product_title">productTitle</string>-->
     <string name="list_new_item">+ List an item</string>
     <string name="discounts">discounts</string>
+
     <string name="list_unavail_days">listUnavailDays</string>
-    <string name="zipcode">zipcode</string>
+    <string name="zipcode">Zipcode</string>
     <string name="austin_check">austinCheck</string>
-    <string name="view_an_item">View an item</string>
+    <string name="view_an_item">View this item</string>
     <string name="thank_you_for_booking">Thank you for booking with us.</string>
     <string name="notify_req">We\'ll notify you when someone requests this item</string>
     <string name="list_item_success">Success! Your listing is live</string>
     <string name="disc_five_days">discFiveDays</string>
     <string name="disc_ten_days">discTenDays</string>
-    <string name="five_days">\(30% discount)</string>
-    <string name="ten_days">(40% discount)</string>
+    <string name="five_days">30% discount for 5 days : </string>
+    <string name="ten_days">40% discount for 10 days : </string>
     <string name="disc_five">5 days $</string>
     <string name="disc_ten">10 days $</string>
     <string name="show_dates">Show Dates</string>
@@ -317,10 +317,57 @@
     <string name="min_rental_days">Minimal Rental Days</string>
     <string name="daily_rental_price">Daily Rental price</string>
     <string name="rent_item_at">Rent Item at $</string>
+    <string name="next"><![CDATA[Next >>]]></string>
+    <string name="upload_img">Upload at least one image</string>
+    <string name="upload_img_msg">Let\'s upload some product images now !</string>
+    <string name="send_code">Send Code</string>
+    <string name="dates_not_selected">Dates are not selected</string>
+    <string name="log_in_again">Please login again.</string>
+    <string name="save">Save</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tab_search">Search An Item</string>
+    <string name="tab_list">List An Item</string>
+    <string name="name_of_card">Name of card *</string>
+    <string name="expiration_date">Expiration Date</string>
+    <string name="credit_debit_card_no">Credit/debit card number *</string>
+    <string name="email_id">Email</string>
+    <string name="mobile_no">Mobile</string>
+    <string name="street_addr">Street Address</string>
+    <string name="user_city">City</string>
+    <string name="state">State</string>
+    <string name="text_notification">Text Notification</string>
+    <string name="date_of_birth">Date of birth *</string>
+    <string name="ssn">SSN *</string>
+    <string name="business_type">Business Type *</string>
+    <string name="acc_no">Account No *</string>
+    <string name="confirm_acc_no">Confirm Account Number *</string>
+    <string name="acc_holder_name">Account Holder Name *</string>
+    <string name="routing_no">Routing Number *</string>
+    <string name="add">Add</string>
+    <string name="save_and_update">Save and update</string>
+    <string name="settings">Settings</string>
+    <string name="edit">EDIT</string>
+    <string name="payments">Payments</string>
+    <string name="add_bank_acc">Add Bank Account</string>
+    <string name="business">Business</string>
+    <string name="individual">Individual</string>
+    <string name="change_pwd">Change Password</string>
+    <string name="user_last_name">Last Name</string>
+    <string name="user_first_name">First Name</string>
+    <string name="current_pwd">Current Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="discounts_summary">Discounts</string>
     <string name="invalid_date">This date is not available</string>
     <string name="expiry_date_error">Correct expiry date is required</string>
     <string name="enter_valid_data">Enter valid data</string>
     <string name="item_requested_successfully">Item Requested Successfully</string>
     <string name="user_id">user_id</string>
     <string name="rent_warning_msg">Warning! You can not rent your own item.</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="choose_from_gallery">Choose from Library</string>
+    <string name="add_photo">Add Photo!</string>
 </resources>

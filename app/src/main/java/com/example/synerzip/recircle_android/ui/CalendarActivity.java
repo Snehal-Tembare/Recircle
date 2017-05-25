@@ -239,7 +239,7 @@ public class CalendarActivity extends AppCompatActivity {
     public void btnSave(View view) {
 
         if (fromDate != null && toDate != null) {
-            Intent intent = new Intent(CalendarActivity.this, SearchActivity.class);
+            Intent intent = new Intent(CalendarActivity.this, SearchItemFragment.class);
             intent.putExtra(getString(R.string.from_date), fromDate.toString());
             intent.putExtra(getString(R.string.to_date), toDate.toString());
             intent.putExtra(getString(R.string.selected_dates_list), selectedDates);

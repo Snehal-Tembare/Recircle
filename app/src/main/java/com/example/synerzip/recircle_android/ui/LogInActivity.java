@@ -75,6 +75,8 @@ public class LogInActivity extends AppCompatActivity {
 
     protected String mUserId, mUserEmail,mUserToken,mUserLastName,mUserFirstName,mAccessToken="";
 
+
+
     private static final String TAG = "LogInActivity";
 
 
@@ -136,6 +138,7 @@ public class LogInActivity extends AppCompatActivity {
                 if(response.isSuccessful()){
 
                         mUserId = response.body().getUser_id();
+                    Log.v("userid",mUserId);
                         mUserName = response.body().getEmail();
                         mUserToken = response.body().getToken();
                         mUserFirstName = response.body().getFirst_name();
@@ -146,7 +149,7 @@ public class LogInActivity extends AppCompatActivity {
                             null!=mUserFirstName && null!=mUserLastName && null!=mAccessToken) {
 
                         saveUserData();
-                        Intent intent = new Intent(LogInActivity.this, SearchActivity.class);
+                        Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
                         startActivity(intent);
                     }else{
                         RCLog.showToast(LogInActivity.this, getString(R.string.please_try_again));

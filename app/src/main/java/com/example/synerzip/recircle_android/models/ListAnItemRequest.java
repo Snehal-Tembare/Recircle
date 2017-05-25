@@ -1,7 +1,5 @@
 package com.example.synerzip.recircle_android.models;
 
-import com.example.synerzip.recircle_android.ui.ListAnItemActivity;
-
 import java.util.ArrayList;
 
 /**
