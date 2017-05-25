@@ -18,6 +18,7 @@ import lombok.Setter;
 @Setter
 
 public class OrderDetails implements Parcelable{
+
     private ArrayList<UserRequests> userRequests;
     private ArrayList<UserRentings> userRentings;
 
@@ -45,7 +46,7 @@ public class OrderDetails implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-//        dest.writeParcelable(userRequests);
-//        dest.writeParcelable(userRentings);
+        dest.writeList(userRequests);
+        dest.writeList(userRentings);
     }
 }

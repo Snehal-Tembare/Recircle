@@ -87,6 +87,5 @@ dependencies {
     compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
     //numeric slider
     compile 'org.adw.library:discrete-seekbar:1.0.1'
-
     compile 'com.braintreepayments:card-form:3.0.5'
 }

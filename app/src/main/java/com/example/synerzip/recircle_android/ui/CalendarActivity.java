@@ -245,27 +245,28 @@ public class CalendarActivity extends AppCompatActivity {
             intent.putExtra(getString(R.string.selected_dates_list), selectedDates);
             if (fromDate.equals(toDate)) {
                 RCLog.showToast(getApplicationContext(), getString(R.string.date_validation_code));
-            }
-
-            selectedDates.clear();
-            if (localselectedDates != null && localselectedDates.size() != 0) {
-                selectedDates.addAll(localselectedDates);
-            }
-            if (RentInfoActivity.isDateEdited) {
-                RentInfoActivity.isDateChanged = true;
-            }
-            if (DetailsActivity.isShowInfo) {
-                Intent infoIntent = new Intent(this, RentInfoActivity.class);
-                infoIntent.putExtra(getString(R.string.from_date), fromDate.toString());
-                infoIntent.putExtra(getString(R.string.to_date), toDate.toString());
-                infoIntent.putExtra(getString(R.string.selected_dates_list), selectedDates);
-                infoIntent.putExtra(getString(R.string.product), product);
-                startActivity(infoIntent);
-                DetailsActivity.isShowInfo = false;
             } else {
-                setResult(RESULT_OK, intent);
+
+                selectedDates.clear();
+                if (localselectedDates != null && localselectedDates.size() != 0) {
+                    selectedDates.addAll(localselectedDates);
+                }
+                if (RentInfoActivity.isDateEdited) {
+                    RentInfoActivity.isDateChanged = true;
+                }
+                if (DetailsActivity.isShowInfo) {
+                    Intent infoIntent = new Intent(this, RentInfoActivity.class);
+                    infoIntent.putExtra(getString(R.string.from_date), fromDate.toString());
+                    infoIntent.putExtra(getString(R.string.to_date), toDate.toString());
+                    infoIntent.putExtra(getString(R.string.selected_dates_list), selectedDates);
+                    infoIntent.putExtra(getString(R.string.product), product);
+                    startActivity(infoIntent);
+                    DetailsActivity.isShowInfo = false;
+                } else {
+                    setResult(RESULT_OK, intent);
+                }
+                finish();
             }
-            finish();
         } else {
             RCLog.showToast(CalendarActivity.this, getString(R.string.error_dates));
         }

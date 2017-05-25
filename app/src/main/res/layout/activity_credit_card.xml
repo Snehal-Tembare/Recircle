@@ -22,6 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/name_on_card"
+                android:layout_marginTop="@dimen/common_dimens_20"
                 android:layout_marginLeft="@dimen/common_dimens_24"
                 android:layout_marginRight="@dimen/common_dimens_24"/>
 

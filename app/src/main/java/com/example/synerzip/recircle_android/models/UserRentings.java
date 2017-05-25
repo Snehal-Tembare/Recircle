@@ -23,7 +23,7 @@ public class UserRentings implements Parcelable {
     private String status;
     private String updated_at;
     private OrderPaymentDetail order_payment_detail;
-    private Object userReview;
+    private UserReview userReview;
     private User user;
     private UserProdMsg user_prod_msg;
     private String user_product_id;

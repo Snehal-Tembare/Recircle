@@ -52,7 +52,8 @@
         <activity android:name=".ui.PaymentModeActivity" />
         <activity android:name=".ui.CreditCardActivity" />
         <activity android:name=".ui.RentItemSuccessActivity" />
-        <activity android:name=".ui.AllRequestsActivity"/>
+        <activity android:name=".ui.AllRequestsActivity" />
+        <activity android:name=".ui.MyProfileActivity"></activity>
     </application>
 
 </manifest>

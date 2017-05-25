@@ -62,7 +62,7 @@ public class UploadImageAdapter extends RecyclerView.Adapter<UploadImageAdapter.
                 @Override
                 public void onClick(View v) {
                     if (v.getId() == imgItemCancel.getId()) {
-                        String itemLabel = mListUserProdImages.get(getPosition());
+                        String itemLabel = mListUserProdImages.get(getAdapterPosition());
                         mListUserProdImages.remove(itemLabel);
                         notifyItemRemoved(getAdapterPosition());
                         notifyItemRangeChanged(getAdapterPosition(), mListUserProdImages.size());

@@ -333,4 +333,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="ask_question">Ask Question?</string>
+    <string name="my_profile">My Profile</string>
+    <string name="user_requests_to_me">user_requests_to_me</string>
+    <string name="user_requests_from_me">user_requests_from_me</string>
 </resources>

@@ -22,4 +22,8 @@ public class Product {
     //manufacturer name + product title
     private String product_manufacturer_title;
 
+    private  ProductDetail productDetail;
+
+    private ProductManufacturer product_manufacturer;
+
 }

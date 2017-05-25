@@ -39,6 +39,7 @@ public class RentItemSuccessActivity extends AppCompatActivity {
     @OnClick(R.id.btn_view_all_requests)
     public void viewAllReqests(){
         startActivity(new Intent(this,AllRequestsActivity.class));
+        finish();
     }
 
     @Override

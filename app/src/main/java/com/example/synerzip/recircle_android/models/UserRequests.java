@@ -16,7 +16,38 @@ import lombok.Setter;
 
 public class UserRequests implements Parcelable{
 
+    private String user_prod_order_id;
+    private String renter_id;
+    private String date_on_order;
+    private String order_from_date;
+    private String order_to_date;
+    private String status;
+    private String updated_at;
+    private OrderPaymentDetail order_payment_detail;
+    private User user;
+    private UserProdMsg user_prod_msg;
+    private String user_product_id;
+    private String product_id;
+    private Integer price_per_day;
+    private Integer product_avg_rating;
+    private Product product;
+
     protected UserRequests(Parcel in) {
+        user_prod_order_id=in.readString();
+        renter_id=in.readString();
+        date_on_order=in.readString();
+        order_from_date=in.readString();
+        order_to_date=in.readString();
+        status=in.readString();
+        updated_at=in.readString();
+        order_payment_detail=in.readParcelable(OrderPaymentDetail.class.getClassLoader());
+        user=in.readParcelable(User.class.getClassLoader());
+        user_prod_msg=in.readParcelable(UserProdMsg.class.getClassLoader());
+        user_product_id=in.readString();
+        product_id=in.readString();
+        price_per_day=in.readInt();
+        product_avg_rating=in.readInt();
+        product=in.readParcelable(Product.class.getClassLoader());
     }
 
     public static final Creator<UserRequests> CREATOR = new Creator<UserRequests>() {
@@ -38,5 +69,18 @@ public class UserRequests implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(user_prod_order_id);
+        dest.writeString(renter_id);
+        dest.writeString(date_on_order);
+        dest.writeString(order_from_date);
+        dest.writeString(order_to_date);
+        dest.writeString(status);
+        dest.writeString(status);
+        dest.writeParcelable(order_payment_detail,flags);
+        dest.writeString(user_product_id);
+        dest.writeString(product_id);
+        dest.writeParcelable(user_prod_msg,flags);
+        dest.writeInt(price_per_day);
+        dest.writeInt(product_avg_rating);
     }
 }

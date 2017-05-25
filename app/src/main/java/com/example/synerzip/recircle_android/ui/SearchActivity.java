@@ -1,6 +1,7 @@
 package com.example.synerzip.recircle_android.ui;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -34,16 +36,19 @@ import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.AllProductInfo;
+import com.example.synerzip.recircle_android.models.LogInRequest;
 import com.example.synerzip.recircle_android.models.Product;
 import com.example.synerzip.recircle_android.models.Products;
 import com.example.synerzip.recircle_android.models.ProductsData;
 import com.example.synerzip.recircle_android.models.SearchProduct;
+import com.example.synerzip.recircle_android.models.User;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.utilities.HideKeyboard;
 import com.example.synerzip.recircle_android.utilities.NetworkUtility;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
+import com.example.synerzip.recircle_android.utilities.RCWebConstants;
 import com.example.synerzip.recircle_android.utilities.SearchUtility;
 
 import java.text.DateFormat;
@@ -173,11 +178,16 @@ public class SearchActivity extends AppCompatActivity
     @BindView(R.id.progress_bar)
     protected RelativeLayout mProgressBar;
 
-    private SharedPreferences sharedPreferences;
+    @BindView(R.id.parent_layout)
+    protected LinearLayout mLinearLayout;
 
-    private boolean isLoggedIn;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+
+    private boolean isLoggedIn=false;
 
     private String mUserFirstName = "";
+    private String mAccessToken;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -198,7 +208,9 @@ public class SearchActivity extends AppCompatActivity
 
         //get data from shared preferences
         sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
+        editor = sharedPreferences.edit();
         isLoggedIn = sharedPreferences.getBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
+        mAccessToken = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, "");
         mUserFirstName = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_FIRST_USERNAME, mUserFirstName);
 
         //navigation drawer layout
@@ -608,8 +620,12 @@ public class SearchActivity extends AppCompatActivity
                 RCLog.showToast(SearchActivity.this, TAG);
                 break;
             case R.id.nav_rentals:
-                RCLog.showToast(SearchActivity.this, TAG);
-                startActivity(new Intent(this,AllRequestsActivity.class));
+                if (isLoggedIn) {
+                    startActivity(new Intent(this, AllRequestsActivity.class));
+                } else {
+                    RCLog.showToast(SearchActivity.this, getString(R.string.user_must_login));
+                    logInDialog();
+                }
                 break;
         }
 
@@ -617,6 +633,62 @@ public class SearchActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    private void logInDialog() {
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.log_in_again_dialog);
+        dialog.setTitle(getString(R.string.log_in));
+        final EditText mEditTxtUserName = (EditText) dialog.findViewById(R.id.edit_login_email_dialog);
+        final EditText mEditTxtPwd = (EditText) dialog.findViewById(R.id.edit_login_pwd_dialog);
+
+        Button btnLogin = (Button) dialog.findViewById(R.id.btn_user_log_in_dialog);
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mProgressBar.setVisibility(View.VISIBLE);
+                mLinearLayout.setAlpha((float) 0.6);
+
+                final String mUserName = mEditTxtUserName.getText().toString();
+                final String mUserPwd = mEditTxtPwd.getText().toString();
+                LogInRequest logInRequest = new LogInRequest(mUserName, mUserPwd);
+
+                service = ApiClient.getClient().create(RCAPInterface.class);
+                Call<User> userCall = service.userLogIn(logInRequest);
+                userCall.enqueue(new Callback<User>() {
+                    @Override
+                    public void onResponse(Call<User> call, Response<User> response) {
+
+                        mProgressBar.setVisibility(View.GONE);
+                        mLinearLayout.setAlpha((float) 1.0);
+
+                        if (response.isSuccessful()) {
+                            mAccessToken = response.body().getToken();
+                            sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
+                            editor.putBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, true);
+                            editor.apply();
+                            isLoggedIn = true;
+                            dialog.dismiss();
+                        } else {
+                            if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
+                                RCLog.showToast(SearchActivity.this, getString(R.string.err_credentials));
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
+                        mProgressBar.setVisibility(View.GONE);
+                        mLinearLayout.setAlpha((float) 1.0);
+                    }
+                });
+            }
+        });
+
+        dialog.show();
+    }
+
 
     /**
      * clears Application data
@@ -651,6 +723,15 @@ public class SearchActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+        editor.putBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        editor.putBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
+        editor.clear();
+        editor.apply();
     }
 }
 
