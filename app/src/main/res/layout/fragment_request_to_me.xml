@@ -9,16 +9,25 @@
        android:layout_height="match_parent"
        android:orientation="vertical">
        <TextView
+           android:id="@+id/txt_no_requests"
            android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:text="RequestTome"
+           android:layout_height="match_parent"
+           android:text="@string/no_pending_requests"
+           android:gravity="center"
+           android:visibility="gone"
            android:textStyle="bold"
            android:textSize="@dimen/common_dimens_20"/>
        <android.support.v7.widget.RecyclerView
-           android:id="@+id/requests_to_me"
+           android:id="@+id/recycler_requests"
            android:layout_width="match_parent"
            android:layout_height="match_parent"/>
 
    </LinearLayout>
+
+    <include
+        android:id="@+id/progress_bar"
+        layout="@layout/progress_bar_layout"
+        android:animateLayoutChanges="true"
+        android:visibility="gone" />
 
 </FrameLayout>

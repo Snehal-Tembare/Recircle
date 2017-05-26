@@ -50,7 +50,6 @@
         android:layout_marginRight="@dimen/dimen_60dp"
         android:layout_marginTop="@dimen/dimen_20dp"
         android:background="@drawable/round_button_blue"
-        android:onClick="btnSendOtp"
         android:text="@string/send_otp"
         android:textAllCaps="false"
         android:textColor="@color/common_white" />

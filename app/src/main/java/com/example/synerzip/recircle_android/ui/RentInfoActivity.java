@@ -154,6 +154,7 @@ public class RentInfoActivity extends AppCompatActivity {
                 mTxtOwnerName.setText(mProduct.getUser_info().getFirst_name() + " " + mProduct.getUser_info().getLast_name());
                 dayCount = calculateDayCount(mBundle.getString(getString(R.string.from_date)),
                         mBundle.getString(getString(R.string.to_date)));
+
                 mTxtFromDate.setText(formatedFromDate);
                 mTxtToDate.setText(formatedToDate);
 
@@ -192,12 +193,12 @@ public class RentInfoActivity extends AppCompatActivity {
      * Calculate selected no of days
      */
 
-    private int calculateDayCount(String from, String to) {
+    public int calculateDayCount(String from, String to) {
 
         DateFormat formatter = new SimpleDateFormat(getString(R.string.date_format));
         try {
-            fromDate = formatter.parse(from.toString());
-            toDate = formatter.parse(to.toString());
+            fromDate = formatter.parse(from);
+            toDate = formatter.parse(to);
         } catch (ParseException e) {
             e.printStackTrace();
         }

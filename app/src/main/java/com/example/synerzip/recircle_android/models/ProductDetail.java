@@ -12,7 +12,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-class ProductDetail implements Parcelable {
+class ProductDetail implements Parcelable  {
     private String product_image_url;
 
     ProductDetail(Parcel in) {

@@ -19,13 +19,23 @@ import lombok.Setter;
 
 public class AllProductInfo implements Parcelable {
 
+    private String message;
+
+    private String user_product_id;
+
     private ArrayList<Products> popularProducts;
 
     private ArrayList<Products> productDetails;
-
+    /**
+     * constructor for AllProductInfo
+     *
+     * @param in
+     */
     public AllProductInfo(Parcel in) {
         popularProducts = in.createTypedArrayList(Products.CREATOR);
         productDetails = in.createTypedArrayList(Products.CREATOR);
+        message = in.readString();
+        user_product_id = in.readString();
     }
 
     public static final Creator<AllProductInfo> CREATOR = new Creator<AllProductInfo>() {
@@ -49,5 +59,7 @@ public class AllProductInfo implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeTypedList(popularProducts);
         dest.writeTypedList(productDetails);
+        dest.writeString(message);
+        dest.writeString(user_product_id);
     }
 }

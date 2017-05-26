@@ -129,7 +129,7 @@ public class SignUpActivity extends AppCompatActivity {
                 mScrollView.setAlpha((float) 1.0);
 
                 if (response.body() != null) {
-                    startActivity(new Intent(SignUpActivity.this, SearchActivity.class));
+                    startActivity(new Intent(SignUpActivity.this, HomeActivity.class));
                 }
             }
 

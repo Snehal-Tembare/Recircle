@@ -57,7 +57,7 @@
                     android:textSize="@dimen/text_size_16" />
 
                 <TextView
-                    android:id="@+id/txt_request"
+                    android:id="@+id/txt_request_label"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="Requested on Apr 20,2017,7:30:00PM" />
@@ -91,7 +91,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/txt_item_name"
+                    android:id="@+id/txt_item_title"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="@dimen/common_dimens_2"
@@ -103,7 +103,7 @@
 
 
                 <TextView
-                    android:id="@+id/txt_from_date"
+                    android:id="@+id/txt_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/common_dimens_2"
@@ -123,6 +123,7 @@
 
 
                 <TextView
+                    android:id="@+id/txt_price"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="@dimen/common_dimens_2"
@@ -135,11 +136,13 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layout_buttons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="end"
             android:background="@color/colorWhite"
-            android:layout_marginRight="@dimen/common_dimens_5">
+            android:layout_marginRight="@dimen/common_dimens_5"
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="@dimen/common_dimens_40"
@@ -162,6 +165,7 @@
             android:layout_height="wrap_content"
             android:gravity="end">
             <TextView
+                android:id="@+id/txt_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Time to Respond: 21 May,2017 7:30:00pm"

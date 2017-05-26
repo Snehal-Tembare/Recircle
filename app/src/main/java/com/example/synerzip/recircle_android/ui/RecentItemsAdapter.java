@@ -32,7 +32,7 @@ public class RecentItemsAdapter extends RecyclerView.Adapter<RecentItemsAdapter.
 
     @Override
     public RecentItemsAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recent_prod_row_layout, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recent_prod_row, viewGroup, false);
         return new ViewHolder(view);
     }
 
@@ -47,12 +47,13 @@ public class RecentItemsAdapter extends RecyclerView.Adapter<RecentItemsAdapter.
                 .into(viewHolder.mImageView);
 
         if (null != productDetails.getUser_product_info().getProduct_avg_rating() &&
-                Float.parseFloat(productDetails.getUser_product_info().getProduct_avg_rating()) != 0) {
+                productDetails.getUser_product_info().getUser_prod_reviews()!=null &&
+                productDetails.getUser_product_info().getUser_prod_reviews().size() != 0) {
             viewHolder.mRatingBar.setRating(Float.parseFloat(productDetails.getUser_product_info().getProduct_avg_rating()));
-            viewHolder.mTxtProductRating.setText("(" + productDetails.getUser_product_info().getProduct_avg_rating() + ")");
+            viewHolder.mTxtProductReviews.setText("(" + productDetails.getUser_product_info().getUser_prod_reviews().size() + ")");
         } else {
             viewHolder.mRatingBar.setVisibility(View.GONE);
-            viewHolder.mTxtProductRating.setVisibility(View.GONE);
+            viewHolder.mTxtProductReviews.setVisibility(View.GONE);
         }
 
         viewHolder.mTxtProductTitle.setText(productDetails.getProduct_info().getProduct_title());
@@ -61,19 +62,21 @@ public class RecentItemsAdapter extends RecyclerView.Adapter<RecentItemsAdapter.
                 + " " + productDetails.getUser_info().getLast_name());
 
         viewHolder.bind(productDetailsList.get(position), onItemClickListener);
-
-
     }
 
     @Override
     public int getItemCount() {
-        return productDetailsList.size();
+        if(productDetailsList.size()>6){
+            return 6;
+        }
+        else{
+            return productDetailsList.size();
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-
-        private TextView mTxtProductTitle, mTxtProductPrice, mTxtProductRating, mTxtRenterName;
+        private TextView mTxtProductTitle, mTxtProductPrice, mTxtProductReviews, mTxtRenterName;
         ImageView mImageView;
         RatingBar mRatingBar;
 
@@ -83,7 +86,7 @@ public class RecentItemsAdapter extends RecyclerView.Adapter<RecentItemsAdapter.
             mImageView = (ImageView) view.findViewById(R.id.img_recent_product);
             mTxtProductTitle = (TextView) view.findViewById(R.id.txtProductTitle);
             mTxtProductPrice = (TextView) view.findViewById(R.id.txtProductPrice);
-            mTxtProductRating = (TextView) view.findViewById(R.id.txtRating);
+            mTxtProductReviews = (TextView) view.findViewById(R.id.txtReviews);
             mTxtRenterName = (TextView) view.findViewById(R.id.txtRenterName);
         }
 

@@ -39,7 +39,7 @@ public class ListCalendarSummaryActivity extends AppCompatActivity {
     @BindView(R.id.txt_reset)
     protected TextView mTxtReset;
 
-    private ArrayList<Date> unavailableDates;
+    public static ArrayList<Date> unavailableDates;
 
     @BindView(R.id.btn_save)
     protected Button mBtnSave;
@@ -51,7 +51,7 @@ public class ListCalendarSummaryActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         unavailableDates = new ArrayList<>();
-        unavailableDates = (ArrayList<Date>) getIntent().getSerializableExtra(getString(R.string.unavail_dates));
+        unavailableDates = AdditionalDetailsActivity.selectedDates;
 
         mTxtFromDate.setVisibility(View.GONE);
         mTxtToDate.setVisibility(View.GONE);
@@ -63,8 +63,14 @@ public class ListCalendarSummaryActivity extends AppCompatActivity {
         Date today = new Date();
 
         mPickerView.init(today, calendar.getTime());
-        mPickerView.highlightDates(unavailableDates);
-
+        if (unavailableDates != null && !unavailableDates.isEmpty()) {
+            for(Date date:unavailableDates) {
+                List<CalendarCellDecorator> decoratorList = new ArrayList<>();
+                decoratorList.add(new MonthDecorator(ListCalendarSummaryActivity.this, date, null));
+                mPickerView.setDecorators(decoratorList);
+            }
+            mPickerView.highlightDates(unavailableDates);
+        }
     }
 
     /**

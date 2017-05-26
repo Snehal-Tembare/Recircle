@@ -3,6 +3,8 @@ package com.example.synerzip.recircle_android.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +19,7 @@ import lombok.Setter;
 public class UserRequests implements Parcelable{
 
     private String user_prod_order_id;
+    private String request_id;
     private String renter_id;
     private String date_on_order;
     private String order_from_date;
@@ -26,14 +29,17 @@ public class UserRequests implements Parcelable{
     private OrderPaymentDetail order_payment_detail;
     private User user;
     private UserProdMsg user_prod_msg;
+
     private String user_product_id;
+    private ArrayList<UserProdImages> user_prod_images;
     private String product_id;
     private Integer price_per_day;
     private Integer product_avg_rating;
-    private Product product;
+    private Prod product;
 
     protected UserRequests(Parcel in) {
         user_prod_order_id=in.readString();
+        request_id=in.readString();
         renter_id=in.readString();
         date_on_order=in.readString();
         order_from_date=in.readString();
@@ -70,6 +76,7 @@ public class UserRequests implements Parcelable{
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(user_prod_order_id);
+        dest.writeString(request_id);
         dest.writeString(renter_id);
         dest.writeString(date_on_order);
         dest.writeString(order_from_date);

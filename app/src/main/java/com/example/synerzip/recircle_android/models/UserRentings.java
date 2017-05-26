@@ -14,9 +14,10 @@ import lombok.Setter;
 @Getter
 @Setter
 
-public class UserRentings implements Parcelable {
+public class UserRentings implements Parcelable{
 
     private String user_prod_order_id;
+    private String request_id;
     private String date_on_order;
     private String order_from_date;
     private String order_to_date;
@@ -30,11 +31,12 @@ public class UserRentings implements Parcelable {
     private String product_id;
     private Integer price_per_day;
     private Integer product_avg_rating;
-    private Product product;
-
+    private Prod product;
+    private UserProdImages user_prod_images;
 
     protected UserRentings(Parcel in) {
         user_prod_order_id = in.readString();
+        request_id = in.readString();
         date_on_order = in.readString();
         order_from_date = in.readString();
         order_to_date = in.readString();
@@ -42,6 +44,7 @@ public class UserRentings implements Parcelable {
         updated_at = in.readString();
         user = in.readParcelable(User.class.getClassLoader());
         user_prod_msg = in.readParcelable(UserProdMsg.class.getClassLoader());
+        user_prod_images = in.readParcelable(UserProdImages.class.getClassLoader());
         user_product_id = in.readString();
         product_id = in.readString();
     }
@@ -66,6 +69,7 @@ public class UserRentings implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(user_prod_order_id);
+        dest.writeString(request_id);
         dest.writeString(date_on_order);
         dest.writeString(order_from_date);
         dest.writeString(order_to_date);
@@ -73,6 +77,7 @@ public class UserRentings implements Parcelable {
         dest.writeString(updated_at);
         dest.writeParcelable(user, flags);
         dest.writeParcelable(user_prod_msg, flags);
+        dest.writeParcelable(user_prod_images, flags);
         dest.writeString(user_product_id);
         dest.writeString(product_id);
     }

@@ -58,7 +58,7 @@ public class DetailsActivity extends AppCompatActivity {
     @BindView(R.id.img_main_image)
     protected ImageView mImgMain;
 
-    @BindView(R.id.recycler_images)
+    @BindView(R.id.recycler_view)
     protected RecyclerView mRecyclerImages;
 
     @BindView(R.id.img_user)

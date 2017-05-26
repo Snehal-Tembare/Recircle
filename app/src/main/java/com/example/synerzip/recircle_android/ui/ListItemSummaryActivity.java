@@ -3,7 +3,7 @@ package com.example.synerzip.recircle_android.ui;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.Image;
+import android.support.v4.app.ListFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -25,7 +24,6 @@ import com.example.synerzip.recircle_android.models.AllProductInfo;
 import com.example.synerzip.recircle_android.models.Discounts;
 import com.example.synerzip.recircle_android.models.ListAnItemRequest;
 import com.example.synerzip.recircle_android.models.LogInRequest;
-import com.example.synerzip.recircle_android.models.SearchProduct;
 import com.example.synerzip.recircle_android.models.User;
 import com.example.synerzip.recircle_android.models.UserProdImages;
 import com.example.synerzip.recircle_android.models.UserProductUnAvailability;
@@ -34,7 +32,6 @@ import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
-import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -60,19 +57,27 @@ public class ListItemSummaryActivity extends AppCompatActivity {
 
     private String mAccessToken;
 
+    private boolean isLoggedIn;
+
     private RCAPInterface service;
 
     private String productId = "";
 
-    private String mItemDesc;
+    private ArrayList<Discounts> listDiscounts;
+
+    @BindView(R.id.txt_five_days_disc)
+    protected TextView mTxtDiscFiveDays;
+
+    @BindView(R.id.txt_ten_days_disc)
+    protected TextView mTxtDiscTenDays;
+
+    private String mItemDesc,mProductTitle;
 
     private int mItemPrice, mMinRental;
 
     private long mZipcode;
 
     private int fromAustin;
-
-    private ArrayList<Discounts> listDiscounts;
 
     private ArrayList<UserProdImages> listUploadItemImage;
     private ArrayList<UserProductUnAvailability> mItemAvailability;
@@ -102,15 +107,6 @@ public class ListItemSummaryActivity extends AppCompatActivity {
     @BindView(R.id.txt_product_title)
     protected TextView mTxtProductTitle;
 
-    @BindView(R.id.txt_listing_days)
-    protected TextView mTxtListingDay;
-
-    @BindView(R.id.txt_five_days_disc)
-    protected TextView mTxtDiscFiveDays;
-
-    @BindView(R.id.txt_ten_days_disc)
-    protected TextView mTxtDiscTenDays;
-
     @BindView(R.id.progress_bar)
     protected RelativeLayout mProgressBar;
 
@@ -119,6 +115,8 @@ public class ListItemSummaryActivity extends AppCompatActivity {
 
     @BindView(R.id.txt_show_dates)
     protected TextView mTxtShowDates;
+
+    private ListAnItemRequest listAnItemRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,45 +134,57 @@ public class ListItemSummaryActivity extends AppCompatActivity {
         //get data from shared preferences
         sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
         mAccessToken = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
+        isLoggedIn = sharedPreferences.getBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
+
         unavailableDates = new ArrayList<>();
 
-        unavailableDates = (ArrayList<Date>) getIntent().getSerializableExtra(getString(R.string.unavail_dates));
+        listUploadItemImage = new ArrayList<>();
+
+        unavailableDates = AdditionalDetailsActivity.selectedDates;
+
         int datesCount;
-        datesCount = getIntent().getIntExtra(getString(R.string.unavail_dates_count), 0);
+
+        datesCount = AdditionalDetailsActivity.daysCount;
         if (datesCount != 0) {
             mTxtDaysCount.setText(datesCount + " days");
         } else {
-            mTxtDaysCount.setText("Dates are not selected");
+            mTxtDaysCount.setText(getString(R.string.dates_not_selected));
             mTxtShowDates.setVisibility(View.GONE);
         }
 
-        productId = getIntent().getStringExtra(getString(R.string.product_id));
-        listDiscounts = getIntent().getParcelableArrayListExtra(getString(R.string.discounts));
-        double discFiveDays, discTenDays;
-        discFiveDays = getIntent().getDoubleExtra(getString(R.string.disc_five_days), 0);
-        discTenDays = getIntent().getDoubleExtra(getString(R.string.disc_ten_days), 0);
+        productId = ListItemFragment.productId;
+        listDiscounts = ListItemFragment.listDiscounts;
 
-        mTxtDiscFiveDays.setText(getString(R.string.disc_five) + " " + String.valueOf(discFiveDays) + " " + getString(R.string.five_days));
-        mTxtDiscTenDays.setText(getString(R.string.disc_ten) + " " + String.valueOf(discTenDays) + " " + getString(R.string.ten_days));
+        //TODO changes needed for ListAnItem api for discount ; the functionality should be dynamic
+        mTxtDiscFiveDays.setText(getString(R.string.five_days) + "$ " + String.valueOf(ListItemFragment.discFiveDays));
+        mTxtDiscTenDays.setText(getString(R.string.ten_days) + "$ " + String.valueOf(ListItemFragment.discTenDays));
+        mItemAvailability = AdditionalDetailsActivity.mItemAvailability;
 
-        mItemAvailability = getIntent().getParcelableArrayListExtra(getString(R.string.list_unavail_days));
+        mZipcode = AdditionalDetailsActivity.mZipcode;
+        fromAustin = AdditionalDetailsActivity.fromAustin;
 
-        mZipcode = getIntent().getLongExtra(getString(R.string.zipcode), 0);
-        fromAustin = getIntent().getIntExtra(getString(R.string.austin_check), 0);
 
-        String currentDate = new SimpleDateFormat("MMM dd, yyyy").format(new Date());
-        mTxtListingDay.setText(currentDate);
-
-        mTxtProductTitle.setText(getIntent().getStringExtra(getString(R.string.product_title)));
-        mItemPrice = getIntent().getIntExtra(getString(R.string.item_price), 0);
+        mItemPrice = ListItemFragment.mItemPrice;
         mTxtItemPrice.setText("$ " + mItemPrice + "/day");
-        mMinRental = getIntent().getIntExtra(getString(R.string.item_min_rental), 0);
+        mMinRental = ListItemFragment.mMinRental;
         mTxtItemRental.setText(mMinRental + " days");
 
-        mItemDesc = getIntent().getStringExtra(getString(R.string.list_item_desc));
+        mItemDesc = AdditionalDetailsActivity.mItemDesc;
         mTxtItemDesc.setText(mItemDesc);
-        listUploadItemImage = (ArrayList<UserProdImages>) getIntent().getSerializableExtra(getString(R.string.upload_image));
-        uploadGalleryImages = (ArrayList<String>) getIntent().getSerializableExtra(getString(R.string.uplaod_image_gallery));
+
+        mProductTitle= ListItemFragment.mProductName;
+
+        if(productId.isEmpty()){
+            mTxtProductTitle.setText(ListItemFragment.mProductName);
+        }else {
+            mTxtProductTitle.setText(ListItemFragment.productTitle);
+        }
+        //TODO product images should be taken from amazon s3 bucket ; yet to be done
+        UserProdImages mUserProdImages;
+        mUserProdImages = new UserProdImages("https://s3.ap-south-1.amazonaws.com/recircleimages/1398934243000_1047081.jpg",
+                "2017-02-04T13:13:09.000Z");
+        listUploadItemImage.add(mUserProdImages);
+        uploadGalleryImages = UploadImgActivity.listUploadGalleryImage;
 
         final ListItemImageAdapter mListItemImageAdapter = new ListItemImageAdapter
                 (ListItemSummaryActivity.this, selectedImgPosition, uploadGalleryImages,
@@ -191,7 +201,6 @@ public class ListItemSummaryActivity extends AppCompatActivity {
                                         view.setBackground(ContextCompat.getDrawable(ListItemSummaryActivity.this, R.drawable.custom_imageview));
                                     }
                                 }
-
                                 selectedImgPosition = position;
                                 mLayoutManager.scrollToPosition(position);
                             }
@@ -200,8 +209,6 @@ public class ListItemSummaryActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(ListItemSummaryActivity.this, LinearLayoutManager.HORIZONTAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mListItemImageAdapter);
-
-
     }
 
     /**
@@ -210,8 +217,13 @@ public class ListItemSummaryActivity extends AppCompatActivity {
     private void getListAnItem() {
         mProgressBar.setVisibility(View.VISIBLE);
         mLinearLayout.setAlpha((float) 0.6);
-        ListAnItemRequest listAnItemRequest = new ListAnItemRequest(productId, mItemPrice, mMinRental,
-                mItemDesc, listDiscounts, listUploadItemImage, mItemAvailability, mZipcode, fromAustin);
+        if(productId.isEmpty()){
+            listAnItemRequest = new ListAnItemRequest(mProductTitle, mItemPrice, mMinRental,
+                    mItemDesc, listDiscounts, listUploadItemImage, mItemAvailability, mZipcode, fromAustin);
+        }else {
+            listAnItemRequest = new ListAnItemRequest(productId, mItemPrice, mMinRental,
+                    mItemDesc, listDiscounts, listUploadItemImage, mItemAvailability, mZipcode, fromAustin);
+        }
 
         service = ApiClient.getClient().create(RCAPInterface.class);
         Call<AllProductInfo> call = service.listAnItem("Bearer " + mAccessToken, listAnItemRequest);
@@ -223,8 +235,9 @@ public class ListItemSummaryActivity extends AppCompatActivity {
                 mLinearLayout.setAlpha((float) 1.0);
                 if (response.isSuccessful()) {
                     RCLog.showToast(ListItemSummaryActivity.this, getString(R.string.item_added));
-                    Intent intent = new Intent(ListItemSummaryActivity.this, ListedItemActivity.class);
-                    intent.putExtra(getString(R.string.product_id), productId);
+                    Intent intent = new Intent(ListItemSummaryActivity.this, ListItemSuccessActivity.class);
+                    String userProductId = response.body().getUser_product_id();
+                    intent.putExtra(getString(R.string.product_id), userProductId);
                     startActivity(intent);
                 } else {
                     if (response.code() == RCWebConstants.RC_ERROR_CODE_BAD_REQUEST) {
@@ -249,7 +262,7 @@ public class ListItemSummaryActivity extends AppCompatActivity {
     private void logInDialog() {
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.log_in_again_dialog);
-        dialog.setTitle(getString(R.string.log_in));
+        dialog.setTitle(getString(R.string.log_in_again));
         final EditText mEditTxtUserName = (EditText) dialog.findViewById(R.id.edit_login_email_dialog);
         final EditText mEditTxtPwd = (EditText) dialog.findViewById(R.id.edit_login_pwd_dialog);
 
@@ -315,8 +328,7 @@ public class ListItemSummaryActivity extends AppCompatActivity {
      */
     @OnClick(R.id.btn_confirm_item)
     public void btnConfirmItem(View view) {
-        getListAnItem();
-
+            getListAnItem();
     }
 
     /**
@@ -327,7 +339,6 @@ public class ListItemSummaryActivity extends AppCompatActivity {
     @OnClick(R.id.txt_show_dates)
     public void txtShowDates(View view) {
         Intent intent = new Intent(ListItemSummaryActivity.this, ListCalendarSummaryActivity.class);
-        intent.putExtra(getString(R.string.unavail_dates), unavailableDates);
         startActivity(intent);
     }
 

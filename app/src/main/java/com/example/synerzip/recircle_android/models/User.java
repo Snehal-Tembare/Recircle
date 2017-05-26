@@ -51,7 +51,6 @@ public class User implements Parcelable {
         token = in.readString();
         email = in.readString();
         user_mob_no = in.readLong();
-
     }
 
     @Override

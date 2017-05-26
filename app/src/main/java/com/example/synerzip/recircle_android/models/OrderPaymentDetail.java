@@ -30,6 +30,18 @@ public class OrderPaymentDetail implements Parcelable {
 
     }
 
+    public static final Creator<OrderPaymentDetail> CREATOR = new Creator<OrderPaymentDetail>() {
+        @Override
+        public OrderPaymentDetail createFromParcel(Parcel in) {
+            return new OrderPaymentDetail(in);
+        }
+
+        @Override
+        public OrderPaymentDetail[] newArray(int size) {
+            return new OrderPaymentDetail[size];
+        }
+    };
+
     @Override
     public int describeContents() {
         return 0;
