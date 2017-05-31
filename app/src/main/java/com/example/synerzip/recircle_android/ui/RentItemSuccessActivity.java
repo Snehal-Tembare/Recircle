@@ -4,17 +4,24 @@ import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.example.synerzip.recircle_android.R;
+import com.example.synerzip.recircle_android.ui.rentals.AllRequestsActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * Created by Snehal Tembare on 15/5/17.
+ * Copyright © 2017 Synerzip. All rights reserved
+ */
+
 public class RentItemSuccessActivity extends AppCompatActivity {
+//    public static boolean isViewAllRequest=false;
+
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
 
@@ -38,6 +45,7 @@ public class RentItemSuccessActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_view_all_requests)
     public void viewAllReqests(){
+//        isViewAllRequest=true;
         startActivity(new Intent(this,AllRequestsActivity.class));
         finish();
     }
@@ -46,7 +54,6 @@ public class RentItemSuccessActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             Intent intent=new Intent(this,HomeActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         }
         return true;
@@ -56,7 +63,6 @@ public class RentItemSuccessActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent intent=new Intent(this,HomeActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
 }

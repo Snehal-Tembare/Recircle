@@ -73,7 +73,6 @@ public class CreditCardActivity extends AppCompatActivity {
     @BindView(R.id.progress_bar)
     protected RelativeLayout mProgressBar;
 
-
     @BindView(R.id.card_form)
     CardForm cardForm;
 
@@ -103,21 +102,19 @@ public class CreditCardActivity extends AppCompatActivity {
         mBundle = getIntent().getExtras();
         if (mBundle != null) {
             user_id = mBundle.getString(getString(R.string.user_id));
-            mBtnPay.setBackgroundColor(ContextCompat.getColor(this, R.color.colorRedSecondary));
+//            mBtnPay.setBackgroundColor(ContextCompat.getColor(this, R.color.colorRedSecondary));
             mBtnPay.setText("Pay $" + String.valueOf(mBundle.getInt(getString(R.string.total))));
         }
 
 
         cardForm.cardRequired(true)
                 .expirationRequired(true)
-                .cvvRequired(true)
+                .cvvRequired(false)
                 .actionLabel("Purchase")
                 .setup(this);
 
         cardForm.findViewById(R.id.bt_card_form_card_number_icon).setVisibility(View.GONE);
         cardForm.findViewById(R.id.bt_card_form_card_number_icon).setVisibility(View.GONE);
-
-
     }
 
     @OnClick(R.id.btn_pay)
@@ -171,6 +168,7 @@ public class CreditCardActivity extends AppCompatActivity {
                                 if (response.isSuccessful()) {
                                     RCLog.showToast(CreditCardActivity.this, getString(R.string.item_requested_successfully));
                                     Intent intent = new Intent(CreditCardActivity.this, RentItemSuccessActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                                     startActivity(intent);
                                     finish();
                                 } else {
@@ -187,6 +185,7 @@ public class CreditCardActivity extends AppCompatActivity {
                             public void onFailure(Call<RentItem> call, Throwable t) {
                                 RCLog.showToast(CreditCardActivity.this, getString(R.string.item_request_faild));
                                 mProgressBar.setVisibility(View.GONE);
+                                mLinearLayout.setAlpha((float) 1.0);
                             }
                         });
                     }

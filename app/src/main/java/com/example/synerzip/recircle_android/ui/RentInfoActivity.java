@@ -310,6 +310,7 @@ public class RentInfoActivity extends AppCompatActivity {
             mRentItem.setProtection_plan_fee(protectionPlanFee);
         } else {
             mRentItem.setProtection_plan(0);
+            mRentItem.setProtection_plan_fee(0);
         }
 
         Intent intentPayMode = new Intent(this, PaymentModeActivity.class);

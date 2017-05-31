@@ -1,7 +1,6 @@
-package com.example.synerzip.recircle_android.ui;
+package com.example.synerzip.recircle_android.ui.rentals;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,10 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.example.synerzip.recircle_android.R;
@@ -25,17 +21,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import com.example.synerzip.recircle_android.models.OrderDetails;
 import com.example.synerzip.recircle_android.models.UserRentings;
 import com.example.synerzip.recircle_android.models.UserRequests;
-import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
-import com.example.synerzip.recircle_android.utilities.RCAppConstants;
-import com.example.synerzip.recircle_android.utilities.RCLog;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.example.synerzip.recircle_android.ui.HomeActivity;
 
 /**
  * Created by Snehal Tembare on 19/5/17.
@@ -48,6 +37,10 @@ public class AllRequestsActivity extends AppCompatActivity implements
     private ArrayList<UserRequests> userRequestsArrayList;
     public ArrayList<UserRentings> userRentingsArrayList;
     private ViewPagerAdapter adapter;
+
+    private RCAPInterface service;
+    private String mUserId;
+    private String mAccessToken;
 
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
@@ -79,6 +72,38 @@ public class AllRequestsActivity extends AppCompatActivity implements
 
         setUpViewPager(mViewPager);
         mTabLayout.setupWithViewPager(mViewPager);
+
+       /* SharedPreferences sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
+        mUserId = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_USERID, mUserId);
+        mAccessToken = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
+
+        service = ApiClient.getClient().create(RCAPInterface.class);
+        Call<OrderDetails> call = service.getOrderDetails("Bearer " + mAccessToken);
+        mProgressBar.setVisibility(View.VISIBLE);
+
+        call.enqueue(new Callback<OrderDetails>() {
+            @Override
+            public void onResponse(Call<OrderDetails> call, Response<OrderDetails> response) {
+                Log.v(TAG, "before isSuccessful");
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        if (response.body().getUserRentings() != null) {
+                            Log.v(TAG, " " + response.body().getUserRentings().get(0).getProduct().getProduct_title());
+                        }
+                    }
+                } else if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
+                    Log.v(TAG, "RC_ERROR_UNAUTHORISED");
+                } else if (response.code() == RCWebConstants.RC_ERROR_CODE_FORBIDDEN) {
+                    Log.v(TAG, "RC_ERROR_CODE_FORBIDDEN");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OrderDetails> call, Throwable t) {
+                Log.v(TAG, "onFailure");
+
+            }
+        });*/
 
     }
 

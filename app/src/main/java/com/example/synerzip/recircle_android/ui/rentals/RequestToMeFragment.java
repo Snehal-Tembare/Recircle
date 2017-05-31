@@ -1,8 +1,7 @@
-package com.example.synerzip.recircle_android.ui;
+package com.example.synerzip.recircle_android.ui.rentals;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
@@ -22,10 +20,10 @@ import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
+import com.example.synerzip.recircle_android.utilities.RCWebConstants;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,11 +51,13 @@ public class RequestToMeFragment extends Fragment {
 
     protected TextView mTxtNoReuests;
 
-   public RequestToMeFragment(){}
+    public RequestToMeFragment() {
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.v(TAG,"onCreate");
+        Log.v(TAG, "onCreate");
     }
 
     @Override
@@ -67,14 +67,15 @@ public class RequestToMeFragment extends Fragment {
         ButterKnife.bind(getActivity());
 
         // Inflate the layout for this fragment
-        Log.v(TAG,"onCreateView");
+        Log.v(TAG, "onCreateView");
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
         mUserId = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_USERID, mUserId);
         mAccessToken = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
 
         service = ApiClient.getClient().create(RCAPInterface.class);
         Call<OrderDetails> call = service.getOrderDetails("Bearer " + mAccessToken);
-        ((AllRequestsActivity)getActivity()).mProgressBar.setVisibility(View.VISIBLE);
+        ((AllRequestsActivity) getActivity()).mProgressBar.setVisibility(View.VISIBLE);
+
         call.enqueue(new Callback<OrderDetails>() {
             @Override
             public void onResponse(Call<OrderDetails> call, Response<OrderDetails> response) {
@@ -83,27 +84,36 @@ public class RequestToMeFragment extends Fragment {
                     if (response.body() != null
                             && response.body().getUserRequests() != null
                             && response.body().getUserRequests().size() != 0) {
-                        ((AllRequestsActivity)getActivity()).mProgressBar.setVisibility(View.GONE);
+                        ((AllRequestsActivity) getActivity()).mProgressBar.setVisibility(View.GONE);
                         userRequestsArrayList = response.body().getUserRequests();
-                        if (userRequestsArrayList!=null && userRequestsArrayList.size()!=0){
-                            Log.v(TAG,"Title"+userRequestsArrayList.get(0).getProduct().getProduct_title());
+                        if (userRequestsArrayList != null && userRequestsArrayList.size() != 0) {
+                            Log.v(TAG, "Title" + userRequestsArrayList.get(0).getProduct().getProduct_title());
                         }
-                    }else {
+                    } else {
                         mTxtNoReuests.setVisibility(View.VISIBLE);
+                        ((AllRequestsActivity) getActivity()).mProgressBar.setVisibility(View.GONE);
                     }
 
                     if (response.body().getUserRentings() != null
                             && response.body().getUserRentings().size() != 0) {
-                        ((AllRequestsActivity)getActivity()).mProgressBar.setVisibility(View.GONE);
+                        ((AllRequestsActivity) getActivity()).mProgressBar.setVisibility(View.GONE);
                         userRentingsArrayList = response.body().getUserRentings();
-                        if (userRentingsArrayList!=null && userRentingsArrayList.size()!=0){
-                            Log.v(TAG,"Title"+userRentingsArrayList.get(0).getProduct().getProduct_title());
+                        if (userRentingsArrayList != null && userRentingsArrayList.size() != 0) {
+                            Log.v(TAG, "Title" + userRentingsArrayList.get(0).getProduct().getProduct_title());
                             onFragmentInteractionListener.sendDataToActivity(userRentingsArrayList);
                         }
                     }
                     Log.v(TAG, "after isSuccessful");
-
+                } else if (response.code() != RCWebConstants.RC_ERROR_CODE_FORBIDDEN) {
+                    ((AllRequestsActivity) getActivity()).mProgressBar.setVisibility(View.GONE);
+                    RCLog.showToast(getActivity(), getString(R.string.something_went_wrong));
+                    //TODO
+                    //loginDialog();
+                } else if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
+                    ((AllRequestsActivity) getActivity()).mProgressBar.setVisibility(View.GONE);
+                    RCLog.showToast(getActivity(), getString(R.string.session_expired));
                 } else {
+                    ((AllRequestsActivity) getActivity()).mProgressBar.setVisibility(View.GONE);
                     RCLog.showToast(getActivity(), getString(R.string.something_went_wrong));
                 }
             }
@@ -119,14 +129,14 @@ public class RequestToMeFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        onFragmentInteractionListener= (OnFragmentInteractionListener) getActivity();
+        onFragmentInteractionListener = (OnFragmentInteractionListener) getActivity();
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mTxtNoReuests= (TextView) view.findViewById(R.id.txt_no_requests);
+        mTxtNoReuests = (TextView) view.findViewById(R.id.txt_no_requests);
     }
 
     public interface OnFragmentInteractionListener {

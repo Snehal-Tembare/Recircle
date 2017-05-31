@@ -121,7 +121,6 @@ dependencies {
     compile 'org.adw.library:discrete-seekbar:1.0.1'
 
     //CreditCard
-    compile 'com.craftman.cardform:cardform:0.0.2'
     compile 'com.braintreepayments:card-form:3.0.5'
 
     compile 'com.android.support:support-v4:25.3.1'

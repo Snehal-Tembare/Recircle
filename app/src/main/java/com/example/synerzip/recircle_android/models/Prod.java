@@ -21,13 +21,10 @@ public class Prod implements Parcelable {
 
     private  ProductDetail product_detail;
 
-    private ProductManufacturer product_manufacturer;
-
     protected Prod(Parcel in) {
         product_title = in.readString();
         product_manufacturer_id = in.readString();
         product_detail = in.readParcelable(ProductDetail.class.getClassLoader());
-        product_manufacturer = in.readParcelable(ProductManufacturer.class.getClassLoader());
     }
 
     public static final Creator<Prod> CREATOR = new Creator<Prod>() {
@@ -52,6 +49,5 @@ public class Prod implements Parcelable {
         dest.writeString(product_title);
         dest.writeString(product_manufacturer_id);
         dest.writeParcelable(product_detail, flags);
-        dest.writeParcelable(product_manufacturer, flags);
     }
 }

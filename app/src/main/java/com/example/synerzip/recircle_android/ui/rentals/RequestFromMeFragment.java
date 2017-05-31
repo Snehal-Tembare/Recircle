@@ -1,7 +1,5 @@
-package com.example.synerzip.recircle_android.ui;
+package com.example.synerzip.recircle_android.ui.rentals;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,8 +15,6 @@ import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.UserRentings;
 
 import java.util.ArrayList;
-
-import butterknife.BindView;
 
 
 /**

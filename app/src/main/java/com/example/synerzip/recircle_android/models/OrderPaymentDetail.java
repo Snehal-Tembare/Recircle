@@ -17,7 +17,7 @@ public class OrderPaymentDetail implements Parcelable {
     private Integer payment_total;
     private Integer payment_discount;
     private Integer service_fee;
-    private Object protection_plan_fee;
+    private Integer protection_plan_fee;
     private Integer final_payment;
     private Boolean protection_plan;
 
@@ -26,6 +26,7 @@ public class OrderPaymentDetail implements Parcelable {
         payment_discount = in.readInt();
         service_fee = in.readInt();
         final_payment = in.readInt();
+        protection_plan_fee = in.readInt();
         protection_plan = in.readByte() != 0;
 
     }
@@ -53,6 +54,7 @@ public class OrderPaymentDetail implements Parcelable {
         dest.writeInt(payment_discount);
         dest.writeInt(service_fee);
         dest.writeInt(final_payment);
+        dest.writeInt(protection_plan_fee);
         dest.writeByte((byte) (protection_plan ? 1 : 0));
 
     }
