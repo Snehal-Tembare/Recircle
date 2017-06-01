@@ -385,4 +385,6 @@
     <string name="session_expired">Session Expired Please Log in to Continue</string>
     <string name="cvv">CVV</string>
     <string name="dd_mm_yyyy_hh_mm">dd MMM yyyy HH:mm</string>
+    <string name="rentings">rentings</string>
+    <string name="renquests">renquests</string>
 </resources>

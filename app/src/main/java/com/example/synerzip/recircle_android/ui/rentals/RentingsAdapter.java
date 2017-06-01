@@ -157,7 +157,6 @@ public class RentingsAdapter extends RecyclerView.Adapter<RentingsAdapter.ViewHo
 
         public ViewHolder(View itemView) {
             super(itemView);
-
             mImgUser = (CircularImageView) itemView.findViewById(R.id.img_user);
             mTxtUserName = (TextView) itemView.findViewById(R.id.txt_user_name);
             mTxtRequestId = (TextView) itemView.findViewById(R.id.txt_request_id);
@@ -168,6 +167,8 @@ public class RentingsAdapter extends RecyclerView.Adapter<RentingsAdapter.ViewHo
             mTxtDayCount = (TextView) itemView.findViewById(R.id.txt_days);
             mTxtPrice = (TextView) itemView.findViewById(R.id.txt_price);
             mTxtStatus = (TextView) itemView.findViewById(R.id.txt_status);
+
+            itemView.findViewById(R.id.layout_buttons).setVisibility(View.GONE);
         }
     }
 

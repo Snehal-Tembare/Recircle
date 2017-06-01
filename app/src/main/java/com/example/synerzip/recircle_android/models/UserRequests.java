@@ -35,7 +35,7 @@ public class UserRequests implements Parcelable{
     private String product_id;
     private Integer price_per_day;
     private Integer product_avg_rating;
-    private Prod product;
+    private Product product;
 
     protected UserRequests(Parcel in) {
         user_prod_order_id=in.readString();

@@ -157,7 +157,7 @@
             android:layout_marginRight="@dimen/common_dimens_5"
             android:background="@color/colorWhite"
             android:gravity="end"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <ImageView
                 android:layout_width="@dimen/common_dimens_40"
