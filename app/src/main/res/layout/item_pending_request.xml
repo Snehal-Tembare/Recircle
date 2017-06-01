@@ -4,19 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    app:cardCornerRadius="@dimen/common_dimens_10">
+    app:cardCornerRadius="@dimen/common_dimens_10"
+    android:layout_marginBottom="@dimen/common_dimens_10">
 
     <LinearLayout
         android:id="@+id/one"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/common_dimens_5">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/background_color_dark"
+            android:background="@color/user_details_background_color"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:weightSum="1"
@@ -36,7 +36,7 @@
                     android:layout_marginBottom="@dimen/common_dimens_5"
                     android:layout_marginLeft="@dimen/common_dimens_5"
                     android:layout_marginTop="@dimen/common_dimens_5"
-                    android:src="@drawable/ownerimage"
+                    android:src="@drawable/ic_user"
                     app:border="false"
                     app:border_color="@color/common_white"
                     app:border_width="@dimen/dimen_1dp"
@@ -53,7 +53,6 @@
                     android:id="@+id/txt_user_name"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="Snehal Tembare"
                     android:textSize="@dimen/text_size_16"
                     android:textStyle="bold" />
 
@@ -62,14 +61,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="@dimen/common_dimens_2"
-                    android:text="Request Id:2324435423"
                     android:textSize="@dimen/text_size_16" />
 
                 <TextView
                     android:id="@+id/txt_request_label"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="Requested on" />
+                    android:layout_height="match_parent" />
             </LinearLayout>
 
 
@@ -97,8 +94,8 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/common_dimens_5"
                     android:layout_marginRight="@dimen/common_dimens_5"
-                    android:layout_marginTop="@dimen/common_dimens_5"
-                    android:src="@drawable/ic_camera" />
+                    android:src="@drawable/ic_camera"
+                    android:layout_marginTop="@dimen/common_dimens_5" />
             </LinearLayout>
 
             <LinearLayout
@@ -114,7 +111,6 @@
                     android:layout_margin="@dimen/common_dimens_2"
                     android:layout_marginBottom="@dimen/common_dimens_2"
                     android:layout_marginTop="@dimen/common_dimens_5"
-                    android:text="EOS 5D Mark III"
                     android:textSize="@dimen/text_size_16"
                     android:textStyle="bold" />
 
@@ -124,7 +120,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/common_dimens_2"
-                    android:text="31 May-2Jun 2017"
                     android:textSize="@dimen/text_size_16" />
 
                 <TextView
@@ -132,7 +127,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/common_dimens_2"
-                    android:text="2 days"
                     android:textSize="@dimen/text_size_16"
                     android:textStyle="bold" />
 
@@ -143,7 +137,6 @@
                     android:layout_height="match_parent"
                     android:layout_margin="@dimen/common_dimens_2"
                     android:layout_marginBottom="@dimen/common_dimens_2"
-                    android:text="$200"
                     android:textSize="@dimen/text_size_16"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -160,6 +153,7 @@
             android:visibility="visible">
 
             <ImageView
+                android:id="@+id/img_approve"
                 android:layout_width="@dimen/common_dimens_40"
                 android:layout_height="@dimen/dimen_40dp"
                 android:layout_marginRight="@dimen/common_dimens_5"
@@ -167,6 +161,7 @@
                 android:src="@drawable/ic_check" />
 
             <ImageView
+                android:id="@+id/img_decline"
                 android:layout_width="@dimen/common_dimens_40"
                 android:layout_height="@dimen/dimen_40dp"
                 android:padding="@dimen/common_dimens_5"
@@ -185,7 +180,7 @@
                 android:id="@+id/txt_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#bebebe"
+                android:background="@color/status_color"
                 android:gravity="end"
                 android:padding="@dimen/common_dimens_5"
                 android:textColor="@color/common_black"

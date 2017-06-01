@@ -222,7 +222,7 @@
     <string name="image_urls_array">image_urls_array</string>
     <string name="url">url</string>
     <string name="date_validation_code">Select atleast one day</string>
-    <string name="days">day(s)</string>
+    <string name="days">days</string>
     <string name="pick_up">Pick up</string>
     <string name="return_msg">Return</string>
     <string name="store_location">Store Location</string>
@@ -384,7 +384,11 @@
     <string name="no_pending_requests">You Haven’t Received Any Requests Yet</string>
     <string name="session_expired">Session Expired Please Log in to Continue</string>
     <string name="cvv">CVV</string>
-    <string name="dd_mm_yyyy_hh_mm">dd MMM yyyy HH:mm</string>
+    <string name="dd_mm_yyyy_hh_mm">dd MMM yyyy K:mma</string>
     <string name="rentings">rentings</string>
     <string name="renquests">renquests</string>
+    <string name="requested_on">Requested on: </string>
+    <string name="time_to_respond">Time To Respond </string>
+    <string name="request_expired">Request Expired</string>
+    <string name="per_day">/day</string>
 </resources>

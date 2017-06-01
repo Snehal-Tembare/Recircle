@@ -50,7 +50,8 @@ public class RentingsAdapter extends RecyclerView.Adapter<RentingsAdapter.ViewHo
 
         if (userRentings.getUser_prod_images() != null) {
             if (userRentings.getUser_prod_images().getUser_prod_image_url() != null) {
-                Picasso.with(mContext).load(userRentings.getUser_prod_images().getUser_prod_image_url())
+                Picasso.with(mContext).load(userRentings.getUser_prod_images().
+                        getUser_prod_image_url())
                         .into(holder.mImgUser);
             }
         }
@@ -63,6 +64,8 @@ public class RentingsAdapter extends RecyclerView.Adapter<RentingsAdapter.ViewHo
 
         if (userRentings.getRequest_id() != null) {
             holder.mTxtRequestId.setText(userRentings.getRequest_id());
+        }else {
+            holder.mTxtRequestId.setText(mContext.getString(R.string.request_expired));
         }
 
         DateFormat formatter = new SimpleDateFormat(mContext.getString(R.string.ddd_mm));
@@ -79,7 +82,8 @@ public class RentingsAdapter extends RecyclerView.Adapter<RentingsAdapter.ViewHo
             fromDate = formatter.parse(orderFromDate);
             toDate = formatter.parse(orderToDate);
 
-            holder.mTxtRequestLabel.setText("Requested on: " + simpleDateFormat.format(onDate));
+            holder.mTxtRequestLabel.setText(mContext.getString(R.string.requested_on) +
+                    " "+simpleDateFormat.format(onDate));
 
 
         } catch (ParseException e) {
@@ -116,20 +120,22 @@ public class RentingsAdapter extends RecyclerView.Adapter<RentingsAdapter.ViewHo
 
         if (userRentings.getUser_prod_images() != null) {
             if (userRentings.getUser_prod_images().getUser_prod_image_url() != null) {
-                Picasso.with(mContext).load(userRentings.getUser_prod_images().getUser_prod_image_url())
+                Picasso.with(mContext).load(userRentings.getUser_prod_images()
+                        .getUser_prod_image_url())
                         .into(holder.mImgItem);
             }
         }
 
-
+        //Calculate no of days
         long diff = toDate.getTime() - fromDate.getTime();
         dayCount = (int) diff / (24 * 60 * 60 * 1000);
 
-        holder.mTxtDayCount.setText(dayCount + " days");
+        holder.mTxtDayCount.setText(dayCount + " "+mContext.getString(R.string.days));
 
         holder.mTxtItemTitle.setText(userRentings.getProduct().getProduct_title());
 
-        holder.mTxtPrice.setText(String.valueOf("$" + userRentings.getPrice_per_day() + "/day"));
+        holder.mTxtPrice.setText(String.valueOf("$" + userRentings.getPrice_per_day()
+                + mContext.getString(R.string.per_day)));
 
         //To make first letter of status capital
         String status = userRentings.getStatus().substring(0, 1).toUpperCase() + userRentings.getStatus().substring(1);

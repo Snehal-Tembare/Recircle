@@ -43,8 +43,7 @@ import com.example.synerzip.recircle_android.utilities.RCWebConstants;
  * Copyright © 2017 Synerzip. All rights reserved
  */
 
-public class AllRequestsActivity extends AppCompatActivity implements
-        RequestFromMeFragment.RequestFromInterface {
+public class AllRequestsActivity extends AppCompatActivity{
     private static final String TAG = "AllRequestsActivity";
     public ArrayList<UserRequests> userRequestsArrayList;
     public ArrayList<UserRentings> userRentingsArrayList;
@@ -106,27 +105,25 @@ public class AllRequestsActivity extends AppCompatActivity implements
                                 && response.body().getUserRequests().size() != 0) {
                             userRequestsArrayList = response.body().getUserRequests();
                             Log.v(TAG, " " + response.body().getUserRequests().get(0).getProduct().getProduct_title());
-                            requestToMeFragment.refresh(userRequestsArrayList);
+                            requestToMeFragment.communicateWithActivity(userRequestsArrayList);
                             mProgressBar.setVisibility(View.GONE);
                         }
                         if (response.body().getUserRentings() != null
                                 && response.body().getUserRentings().size() != 0) {
                             userRentingsArrayList = response.body().getUserRentings();
                             Log.v(TAG, " " + response.body().getUserRentings().get(0).getProduct().getProduct_title());
-                            requestFromMeFragment.refresh(userRentingsArrayList);
+                            requestFromMeFragment.communicateWithActivity(userRentingsArrayList);
                             mProgressBar.setVisibility(View.GONE);
                         }
 
 
                     }
-                }else if (response.code() != RCWebConstants.RC_ERROR_CODE_FORBIDDEN) {
+                }else if (response.code() != RCWebConstants.RC_ERROR_CODE_FORBIDDEN ||
+                        response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
                     mProgressBar.setVisibility(View.GONE);
                     RCLog.showToast(getApplicationContext(), getString(R.string.something_went_wrong));
                     //TODO
                     //loginDialog();
-                } else if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
-                    mProgressBar.setVisibility(View.GONE);
-                    RCLog.showToast(getApplicationContext(), getString(R.string.session_expired));
                 } else {
                     mProgressBar.setVisibility(View.GONE);
                     RCLog.showToast(getApplicationContext(), getString(R.string.something_went_wrong));
@@ -145,15 +142,10 @@ public class AllRequestsActivity extends AppCompatActivity implements
     }
 
     private void setUpViewPager(ViewPager upViewPager) {
+
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-//        Bundle bundle=new Bundle();
-//        bundle.putParcelableArrayList(getString(R.string.renquests),userRequestsArrayList);
-//        requestToMeFragment.setArguments(bundle);
         adapter.addFragment(requestToMeFragment, getString(R.string.user_requests_to_me));
-
-//        bundle.putParcelableArrayList(getString(R.string.rentings),userRentingsArrayList);
-//        requestFromMeFragment.setArguments(bundle);
         adapter.addFragment(requestFromMeFragment, getString(R.string.user_requests_from_me));
 
         mViewPager.setAdapter(adapter);
@@ -174,11 +166,6 @@ public class AllRequestsActivity extends AppCompatActivity implements
         super.onBackPressed();
         startActivity(new Intent(this, HomeActivity.class));
         finish();
-    }
-
-    @Override
-    public void sendData(ArrayList<UserRentings> userRentingsArrayList) {
-
     }
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {

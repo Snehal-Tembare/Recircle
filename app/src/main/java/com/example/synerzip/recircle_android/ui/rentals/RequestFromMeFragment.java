@@ -33,11 +33,10 @@ public class RequestFromMeFragment extends Fragment {
     private TextView mTxtNoRentings;
     private RecyclerView mRecyclerRentings;
 
-    private RequestFromInterface anInterface;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.v(TAG, "onCreate");
     }
 
     @Override
@@ -45,7 +44,6 @@ public class RequestFromMeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_request_from_me, container, false);
-//        userRentingsArrayList = getArguments().getParcelableArrayList(getActivity().getString(R.string.rentings));
         return view;
     }
 
@@ -54,37 +52,7 @@ public class RequestFromMeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mTxtNoRentings = (TextView) view.findViewById(R.id.txt_no_requests);
         mRecyclerRentings = (RecyclerView) view.findViewById(R.id.recycler_renting);
-
-      /*  if (userRentingsArrayList != null && userRentingsArrayList.size() != 0) {
-            Log.v(TAG, "Title" + userRentingsArrayList.get(0).getProduct().getProduct_title());
-            adapter = new RentingsAdapter(getActivity(), userRentingsArrayList);
-            mRecyclerRentings.setLayoutManager(new LinearLayoutManager(getActivity()));
-            mRecyclerRentings.setAdapter(adapter);
-        } else {
-            mTxtNoRentings.setVisibility(View.VISIBLE);
-        }*/
     }
-
-     @Override
-     public void setUserVisibleHint(boolean isVisibleToUser) {
-         super.setUserVisibleHint(isVisibleToUser);
-         Log.v(TAG, "setUserVisibleHint" + isVisibleToUser);
-    /*     if (isVisibleToUser) {
-
-                 if (((AllRequestsActivity)getActivity()).userRentingsArrayList != null
-                         && ((AllRequestsActivity)getActivity()).userRentingsArrayList.size()!=0) {
-                     userRentingsArrayList=((AllRequestsActivity)getActivity()).userRentingsArrayList;
-                     if (userRentingsArrayList!=null && userRentingsArrayList.size()!=0) {
-                         Log.v(TAG, "Title" + userRentingsArrayList.get(0).getProduct().getProduct_title());
-                         adapter = new RentingsAdapter(getActivity(), userRentingsArrayList);
-                         mRecyclerRentings.setLayoutManager(new LinearLayoutManager(getActivity()));
-                         mRecyclerRentings.setAdapter(adapter);
-                     }}else {
-                 mTxtNoRentings.setVisibility(View.VISIBLE);
-             }
-         }*/
-     }
-
 
     @Override
     public void onResume() {
@@ -92,20 +60,10 @@ public class RequestFromMeFragment extends Fragment {
 
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        anInterface= (RequestFromInterface) context;
-
-    }
-
-    public void refresh(ArrayList<UserRentings> userRequestsArrayList) {
-        RCLog.showToast(getActivity(), TAG + "Called");
+    public void communicateWithActivity(ArrayList<UserRentings> userRequestsArrayList) {
         this.userRentingsArrayList = userRequestsArrayList;
 
         if (userRentingsArrayList != null && userRentingsArrayList.size() != 0) {
-            Log.v(TAG, "Title" + userRequestsArrayList.get(0).getProduct().getProduct_title());
             adapter = new RentingsAdapter(getActivity(), userRentingsArrayList);
             mRecyclerRentings.setLayoutManager(new LinearLayoutManager(getActivity()));
             mRecyclerRentings.setAdapter(adapter);
@@ -113,9 +71,5 @@ public class RequestFromMeFragment extends Fragment {
             mTxtNoRentings.setVisibility(View.VISIBLE);
         }
 
-    }
-
-    public interface RequestFromInterface{
-        void sendData(ArrayList<UserRentings> userRentingsArrayList);
     }
 }
