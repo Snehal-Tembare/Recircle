@@ -60,7 +60,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     private SharedPreferences sharedPreferences;
 
-    private boolean isLoggedIn=false;
+    private boolean isLoggedIn;
 
     private String mUserFirstName = "";
 
@@ -227,7 +227,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         SharedPreferences sharedPreferences = getApplicationContext().
                 getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
         editor.clear();
         editor.commit();
         editor.apply();
@@ -237,7 +236,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     protected void onResume() {
         super.onResume();
         isLoggedIn = sharedPreferences.getBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
-        
+
         Menu menu = mNavigationView.getMenu();
         MenuItem nav_loggedInAs = menu.findItem(R.id.nav_loggedInAs);
 

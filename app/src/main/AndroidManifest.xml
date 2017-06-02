@@ -58,14 +58,14 @@
         <activity android:name=".ui.RentInfoActivity" />
         <activity android:name=".ui.PaymentModeActivity" />
         <activity android:name=".ui.CreditCardActivity" />
-        <activity android:name=".ui.RentItemSuccessActivity" />
-        <activity android:name=".ui.rentals.AllRequestsActivity" />
-        <activity android:name=".ui.MyProfileActivity"></activity>
         <activity android:name=".ui.HomeActivity" />
+        <activity android:name=".ui.RentItemSuccessActivity" />
         <activity android:name=".ui.SettingsActivity" />
         <activity android:name=".ui.EditProfileActivity" />
         <activity android:name=".ui.PaymentsActivity" />
         <activity android:name=".ui.BankAccActivity" />
+        <activity android:name=".ui.rentals.AllRequestsActivity" />
+        <activity android:name=".ui.MyProfileActivity"></activity>
     </application>
 
 </manifest>
