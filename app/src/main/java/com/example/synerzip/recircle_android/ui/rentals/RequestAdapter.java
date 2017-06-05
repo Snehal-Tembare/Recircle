@@ -1,8 +1,9 @@
 package com.example.synerzip.recircle_android.ui.rentals;
 
-import android.app.Dialog;
+import android.app.AlertDialog;
 import android.content.Context;
-import android.media.Image;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
-import com.example.synerzip.recircle_android.models.UserRentings;
 import com.example.synerzip.recircle_android.models.UserRequests;
 import com.pkmmte.view.CircularImageView;
 import com.squareup.picasso.Picasso;
@@ -37,9 +37,9 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
     private String formatedToDate;
     private int dayCount;
 
-    RequestAdapter(Context context, ArrayList<UserRequests> userRequestsArrayList){
-        mContext=context;
-        this.userRequestsArrayList=userRequestsArrayList;
+    RequestAdapter(Context context, ArrayList<UserRequests> userRequestsArrayList) {
+        mContext = context;
+        this.userRequestsArrayList = userRequestsArrayList;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
         UserRequests userRequest = userRequestsArrayList.get(position);
 
 
-        if (userRequest.getUser()!= null) {
+        if (userRequest.getUser() != null) {
             if (userRequest.getUser().getUser_image_url() != null) {
                 Picasso.with(mContext).load(userRequest.getUser().getUser_image_url())
                         .placeholder(R.drawable.ic_user)
@@ -69,7 +69,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
 
         if (userRequest.getRequest_id() != null) {
             holder.mTxtRequestId.setText(userRequest.getRequest_id());
-        }else {
+        } else {
             holder.mTxtRequestId.setText(mContext.getString(R.string.request_expired));
         }
 
@@ -91,10 +91,10 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
                     + simpleDateFormat.format(onDate));
 
             //Adding 24hours in Request Time
-            Calendar calendar=new GregorianCalendar();
+            Calendar calendar = new GregorianCalendar();
             calendar.setTime(onDate);
             calendar.add(Calendar.HOUR_OF_DAY, 24);
-            holder.mTxtStatus.setText(mContext.getString(R.string.time_to_respond)+" "+
+            holder.mTxtStatus.setText(mContext.getString(R.string.time_to_respond) + " " +
                     simpleDateFormat.format(calendar.getTime()));
 
         } catch (ParseException e) {
@@ -130,9 +130,11 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
         holder.mTxtDate.setText(formatedFromDate + "-" + formatedToDate);
 
         if (userRequest.getUser_prod_images() != null) {
-            if (userRequest.getProduct().getProduct_detail().getProduct_image_url() != null) {
-                Picasso.with(mContext).load(userRequest.getProduct().getProduct_detail()
-                                .getProduct_image_url()).placeholder(R.drawable.ic_camera)
+            if (userRequest.getUser_prod_images() != null
+                    && userRequest.getUser_prod_images().size() != 0) {
+                Picasso.with(mContext).load(userRequest.getUser_prod_images()
+                        .get(position).getUser_prod_image_url())
+                        .placeholder(R.drawable.ic_camera)
                         .into(holder.mImgItem);
             }
         }
@@ -140,7 +142,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
         long diff = toDate.getTime() - fromDate.getTime();
         dayCount = (int) diff / (24 * 60 * 60 * 1000);
 
-        holder.mTxtDayCount.setText(dayCount + " "+mContext.getString(R.string.days));
+        holder.mTxtDayCount.setText(dayCount + " " + mContext.getString(R.string.days));
 
         holder.mTxtItemTitle.setText(userRequest.getProduct().getProduct_title());
 
@@ -151,10 +153,9 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
         holder.mImgApprove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Dialog dialog=new Dialog(mContext);
-                dialog.setTitle("Approve Request");
+                AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
+                dialog.setView(R.layout.approve_dialog);
                 dialog.show();
-
             }
         });
 

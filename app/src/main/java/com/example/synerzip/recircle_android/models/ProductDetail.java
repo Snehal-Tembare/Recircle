@@ -12,15 +12,16 @@ import lombok.Setter;
 
 @Getter
 @Setter
-class ProductDetail implements Parcelable  {
+
+public class ProductDetail implements Parcelable  {
 
     private String product_image_url;
 
-    private ProductManufacturer product_manufacturer;
+    private double product_price;
 
     ProductDetail(Parcel in) {
         product_image_url = in.readString();
-        product_manufacturer = in.readParcelable(ProductManufacturer.class.getClassLoader());
+        product_price = in.readDouble();
     }
 
     public static final Creator<ProductDetail> CREATOR = new Creator<ProductDetail>() {
@@ -43,7 +44,6 @@ class ProductDetail implements Parcelable  {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(product_image_url);
-        dest.writeParcelable(product_manufacturer, flags);
-
+        dest.writeDouble(product_price);
     }
 }

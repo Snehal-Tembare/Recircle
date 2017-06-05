@@ -36,6 +36,7 @@ public class UserRequests implements Parcelable{
     private Integer price_per_day;
     private Integer product_avg_rating;
     private Product product;
+    private String user_prod_cancel_order;
 
     protected UserRequests(Parcel in) {
         user_prod_order_id=in.readString();
@@ -54,6 +55,7 @@ public class UserRequests implements Parcelable{
         price_per_day=in.readInt();
         product_avg_rating=in.readInt();
         product=in.readParcelable(Product.class.getClassLoader());
+        user_prod_cancel_order=in.readString();
     }
 
     public static final Creator<UserRequests> CREATOR = new Creator<UserRequests>() {
@@ -86,6 +88,7 @@ public class UserRequests implements Parcelable{
         dest.writeParcelable(order_payment_detail,flags);
         dest.writeString(user_product_id);
         dest.writeString(product_id);
+        dest.writeString(user_prod_cancel_order);
         dest.writeParcelable(user_prod_msg,flags);
         dest.writeInt(price_per_day);
         dest.writeInt(product_avg_rating);

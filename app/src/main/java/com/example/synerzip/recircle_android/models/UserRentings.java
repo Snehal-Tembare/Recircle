@@ -31,7 +31,7 @@ public class UserRentings implements Parcelable{
     private String product_id;
     private Integer price_per_day;
     private Integer product_avg_rating;
-    private Prod product;
+    private Product product;
     private UserProdImages user_prod_images;
 
     protected UserRentings(Parcel in) {
@@ -45,6 +45,7 @@ public class UserRentings implements Parcelable{
         user = in.readParcelable(User.class.getClassLoader());
         user_prod_msg = in.readParcelable(UserProdMsg.class.getClassLoader());
         user_prod_images = in.readParcelable(UserProdImages.class.getClassLoader());
+        product = in.readParcelable(Product.class.getClassLoader());
         user_product_id = in.readString();
         product_id = in.readString();
     }
@@ -78,6 +79,7 @@ public class UserRentings implements Parcelable{
         dest.writeParcelable(user, flags);
         dest.writeParcelable(user_prod_msg, flags);
         dest.writeParcelable(user_prod_images, flags);
+        dest.writeParcelable(product, flags);
         dest.writeString(user_product_id);
         dest.writeString(product_id);
     }

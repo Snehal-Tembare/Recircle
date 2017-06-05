@@ -391,4 +391,9 @@
     <string name="time_to_respond">Time To Respond </string>
     <string name="request_expired">Request Expired</string>
     <string name="per_day">/day</string>
+    <string name="purchase">Purchase</string>
+    <string name="additional_comments">Additional Comments(Optional)</string>
+    <string name="write_msg">Write a Message</string>
+    <string name="approve">Approve</string>
+    <string name="confirm_and_approve">Confirm and Approve</string>
 </resources>

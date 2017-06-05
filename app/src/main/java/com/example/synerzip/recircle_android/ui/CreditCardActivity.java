@@ -102,7 +102,6 @@ public class CreditCardActivity extends AppCompatActivity {
         mBundle = getIntent().getExtras();
         if (mBundle != null) {
             user_id = mBundle.getString(getString(R.string.user_id));
-//            mBtnPay.setBackgroundColor(ContextCompat.getColor(this, R.color.colorRedSecondary));
             mBtnPay.setText("Pay $" + String.valueOf(mBundle.getInt(getString(R.string.total))));
         }
 
@@ -110,7 +109,7 @@ public class CreditCardActivity extends AppCompatActivity {
         cardForm.cardRequired(true)
                 .expirationRequired(true)
                 .cvvRequired(false)
-                .actionLabel("Purchase")
+                .actionLabel(getString(R.string.purchase))
                 .setup(this);
 
         cardForm.findViewById(R.id.bt_card_form_card_number_icon).setVisibility(View.GONE);

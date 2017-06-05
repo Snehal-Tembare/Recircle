@@ -133,7 +133,8 @@ public class AllRequestsActivity extends AppCompatActivity{
             @Override
             public void onFailure(Call<OrderDetails> call, Throwable t) {
                 Log.v(TAG, "onFailure");
-
+                mProgressBar.setVisibility(View.GONE);
+                RCLog.showToast(getApplicationContext(), getString(R.string.something_went_wrong));
             }
         });
 
