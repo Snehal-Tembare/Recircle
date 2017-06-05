@@ -149,13 +149,15 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
         holder.mTxtPrice.setText(String.valueOf("$" + userRequest.getPrice_per_day()
                 + mContext.getString(R.string.per_day)));
 
-        //TODO
+        TODO:
         holder.mImgApprove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
                 dialog.setView(R.layout.approve_dialog);
+                dialog.setCancelable(true);
                 dialog.show();
+
             }
         });
 
