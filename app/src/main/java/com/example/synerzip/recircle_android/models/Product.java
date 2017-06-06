@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import lombok.Getter;
 import lombok.Setter;
 
+
 /**
  * Created by Prajakta Patil on 17/3/17.
  * Copyright © 2017 Synerzip. All rights reserved
@@ -12,7 +13,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Product {
-
     private String product_id;
     private String product_title;
     private AutoCompleteProductDetail product_detail;

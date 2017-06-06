@@ -7,6 +7,7 @@ import java.util.ArrayList;
  * Copyright © 2017 Synerzip. All rights reserved
  */
 public class ListAnItemRequest {
+//    private String product_title;
     private String product_id;
     private int price_per_day;
     private int min_rental_day;
@@ -19,7 +20,6 @@ public class ListAnItemRequest {
 
     /**
      * constructor for ListAnItemRequest
-     *
      * @param product_id
      * @param price_per_day
      * @param min_rental_day
@@ -30,7 +30,8 @@ public class ListAnItemRequest {
      * @param user_product_zipcode
      * @param fromAustin
      */
-    public ListAnItemRequest(String product_id,
+    public ListAnItemRequest(/*String product_title,*/
+                             String product_id,
                              int price_per_day,
                              int min_rental_day,
                              String user_prod_desc,
@@ -39,6 +40,7 @@ public class ListAnItemRequest {
                              ArrayList<UserProductUnAvailability> user_prod_unavailability,
                              long user_product_zipcode,
                              int fromAustin) {
+      /*  this.product_title = product_title;*/
         this.product_id = product_id;
         this.price_per_day = price_per_day;
         this.min_rental_day = min_rental_day;
@@ -48,6 +50,5 @@ public class ListAnItemRequest {
         this.user_prod_unavailability = user_prod_unavailability;
         this.user_product_zipcode = user_product_zipcode;
         this.fromAustin = fromAustin;
-
     }
 }

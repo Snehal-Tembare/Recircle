@@ -101,7 +101,7 @@ public class ListItemFragment extends Fragment {
 
     private double productPrice;
 
-    public static String productTitle,mProductName;
+    public static String productTitle, mProductName;
 
     @BindView(R.id.txt_suggested_price)
     protected TextView mTxtSuggestedPrice;
@@ -161,7 +161,7 @@ public class ListItemFragment extends Fragment {
 
     @OnClick(R.id.btn_upload_img)
     public void btnUploadImg(View view) {
-        mProductName=mProductAutoComplete.getText().toString();
+        mProductName = mProductAutoComplete.getText().toString();
         submitForm();
         HideKeyboard.hideKeyBoard(getActivity());
         if (NetworkUtility.isNetworkAvailable(getActivity())) {
@@ -209,7 +209,6 @@ public class ListItemFragment extends Fragment {
         RCAPInterface service;
         service = ApiClient.getClient().create(RCAPInterface.class);
         utility.populateAutoCompleteData();
-
 
 
         ReadyCallback readyCallback = new ReadyCallback() {

@@ -74,4 +74,6 @@
     <dimen name="dimen_3dp">3dp</dimen>
     <dimen name="dimen_280dp">280dp</dimen>
     <dimen name="dimen_2dp">2dp</dimen>
+    <dimen name="dimen_10sp">10sp</dimen>
+    <dimen name="dimen_12sp">12sp</dimen>
 </resources>

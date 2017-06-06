@@ -6,36 +6,39 @@
 
     <include layout="@layout/partial_toolbar" />
 
+    <!--TODO layout is not completely designed-->
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <LinearLayout
-            android:layout_marginTop="@dimen/dimen_10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dimen_10dp"
             android:orientation="vertical">
 
             <TextView
-                android:layout_margin="@dimen/dimen_5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dimen_5dp"
                 android:text="@string/date_of_birth"
                 android:textSize="@dimen/dimen_16sp" />
-                <EditText
-                    android:editable="false"
-                    android:layout_margin="@dimen/dimen_5dp"
-                    android:id="@+id/edit_date_of_birth"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="dd-mm-yyyy"
-                    android:textSize="@dimen/dimen_16sp" />
+
+            <EditText
+                android:id="@+id/edit_date_of_birth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dimen_5dp"
+                android:editable="false"
+                android:hint="dd-mm-yyyy"
+                android:textSize="@dimen/dimen_16sp" />
 
             <android.support.design.widget.TextInputLayout
-                android:layout_margin="@dimen/dimen_5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_margin="@dimen/dimen_5dp"
                 android:layout_marginTop="@dimen/dimen_10dp">
 
                 <EditText
@@ -50,10 +53,10 @@
 
 
             <TextView
-                android:layout_margin="@dimen/dimen_5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_margin="@dimen/dimen_5dp"
                 android:layout_marginTop="@dimen/dimen_10dp"
                 android:inputType="number"
                 android:text="@string/business_type"
@@ -66,25 +69,27 @@
 
                 <RadioButton
 
-                    android:textColor="@color/colorPrimary"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/dimen_60dp"
-                    android:text="@string/business" />
+                    android:text="@string/business"
+                    android:textColor="@color/colorPrimary" />
 
                 <RadioButton
-                    android:textColor="@color/colorPrimary"
-
                     android:layout_width="match_parent"
+
                     android:layout_height="wrap_content"
-                    android:text="@string/individual" />
+                    android:text="@string/individual"
+                    android:textColor="@color/colorPrimary" />
             </LinearLayout>
+
             <View
-                android:layout_margin="@dimen/dimen_5dp"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_1dp"
                 android:layout_gravity="center"
+                android:layout_margin="@dimen/dimen_5dp"
                 android:background="@color/colorLightGrey" />
+
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -153,6 +158,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dimen_10dp"
                 android:orientation="horizontal"
                 android:weightSum="1">
 

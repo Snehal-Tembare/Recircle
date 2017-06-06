@@ -71,12 +71,12 @@
     <string name="email">Email *</string>
     <string name="password">Password *</string>
     <string name="mobile">Mobile *</string>
-    <string name="verification_code">Verification Code *</string>
+    <string name="verification_code">Enter Verification code</string>
     <string name="sign_up">Sign Up</string>
     <string name="have_an_acc">Have an account ?</string>
-    <string name="log_in">Log In</string>
-    <string name="dont_have_an_acc">Dont\'t have an accout ?</string>
-    <string name="create_acc">Create Account</string>
+    <string name="log_in">Sign In</string>
+    <string name="dont_have_an_acc">Dont\'t have an account ?</string>
+    <string name="create_acc">Create New Account</string>
     <string name="enter_first_name">Enter first name</string>
     <string name="enter_last_name">Enter last name</string>
     <string name="enter_email">Enter email</string>
@@ -359,7 +359,7 @@
     <string name="user_first_name">First Name</string>
     <string name="current_pwd">Current Password</string>
     <string name="new_password">New Password</string>
-    <string name="confirm_password">Confirm Password</string>
+    <string name="confirm_password">Confirm New Password</string>
     <string name="discounts_summary">Discounts</string>
     <string name="invalid_date">This date is not available</string>
     <string name="expiry_date_error">Correct expiry date is required</string>
@@ -370,4 +370,12 @@
     <string name="take_photo">Take Photo</string>
     <string name="choose_from_gallery">Choose from Library</string>
     <string name="add_photo">Add Photo!</string>
+    <string name="title_activity_ex">Ex</string>
+    <string name="validate_first_name">Enter first name</string>
+    <string name="validate_last_name">Enter last name</string>
+    <string name="validate_enter_mob_no">Enter mobile no.</string>
+    <string name="update">Update</string>
+    <string name="verify">Verify</string>
+    <string name="ask">Ask</string>
+    <string name="ask_que">Ask a question</string>
 </resources>

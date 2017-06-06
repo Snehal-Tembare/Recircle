@@ -79,10 +79,6 @@ public class SearchItemFragment extends Fragment {
 
     private ArrayList<Products> productDetailsList;
 
-    private PopularItemsAdapter mPopularItemsAdapter;
-
-    private RecentItemsAdapter mRecentItemsAdapter;
-
     @BindView(R.id.cardRecyclerViewRecent)
     protected RecyclerView mRecyclerViewRecent;
 
@@ -333,6 +329,8 @@ public class SearchItemFragment extends Fragment {
      * bind values to adapter
      */
     private void bindData() {
+        RecentItemsAdapter mRecentItemsAdapter;
+        PopularItemsAdapter mPopularItemsAdapter;
         mRecentItemsAdapter = new RecentItemsAdapter(getActivity(), productDetailsList, new OnItemClickListener() {
             @Override
             public void onItemClick(Products product) {
@@ -486,6 +484,6 @@ public class SearchItemFragment extends Fragment {
             utility.search(productId, manufacturerId, query, mFromDate, mToDate);
         }
 
-    }//end callSearchApi()
+    }//end call(SearchApi()
 
 }

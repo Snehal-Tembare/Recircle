@@ -8,44 +8,57 @@
 
     <include layout="@layout/partial_toolbar" />
 
-    <android.support.v4.widget.DrawerLayout
-        android:id="@+id/drawer_layout"
+    <FrameLayout
+        android:id="@+id/frame_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:openDrawer="end">
+        android:animateLayoutChanges="true">
 
-        <android.support.design.widget.NavigationView
-            android:id="@+id/nav_view"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="left"
-            android:fitsSystemWindows="true"
-            android:visibility="visible"
-            app:menu="@menu/activity_launching_drawer" />
-
-        <LinearLayout
+        <android.support.v4.widget.DrawerLayout
+            android:id="@+id/drawer_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            tools:openDrawer="start">
 
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tab_layout"
+            <android.support.design.widget.NavigationView
+                android:id="@+id/nav_view"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:fitsSystemWindows="true"
+                android:visibility="visible"
+                app:headerLayout="@layout/nav_header"
+                app:menu="@menu/activity_launching_drawer" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:tabBackground="@color/colorPrimary"
-                app:tabGravity="fill"
-                app:tabMaxWidth="@dimen/dimen_0dp"
-                app:tabMode="fixed"
-                app:tabSelectedTextColor="@color/colorWhite"
-                app:tabTextColor="@color/colorLightGrey" />
+                android:orientation="vertical">
 
-            <android.support.v4.view.ViewPager
-                android:id="@+id/view_pager"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_0dp"
-                android:layout_weight="1" />
-        </LinearLayout>
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/tab_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:tabBackground="@color/colorPrimary"
+                    app:tabGravity="fill"
+                    app:tabMaxWidth="@dimen/dimen_0dp"
+                    app:tabMode="fixed"
+                    app:tabSelectedTextColor="@color/colorWhite"
+                    app:tabTextColor="@color/colorLightGrey" />
 
-    </android.support.v4.widget.DrawerLayout>
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/view_pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_0dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
 
+        </android.support.v4.widget.DrawerLayout>
+
+        <include
+            android:id="@+id/progress_bar_home"
+            layout="@layout/progress_bar_layout"
+            android:animateLayoutChanges="true"
+            android:visibility="gone" />
+    </FrameLayout>
 </LinearLayout>

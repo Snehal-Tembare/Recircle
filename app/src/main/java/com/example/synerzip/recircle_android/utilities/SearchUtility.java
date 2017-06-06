@@ -1,9 +1,7 @@
 package com.example.synerzip.recircle_android.utilities;
 
-import android.util.Log;
-
 import com.example.synerzip.recircle_android.models.ProductsData;
-import com.example.synerzip.recircle_android.models.RootObject;
+import com.example.synerzip.recircle_android.models.RootProductsData;
 import com.example.synerzip.recircle_android.models.SearchProduct;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
@@ -42,12 +40,13 @@ public class SearchUtility {
             call.enqueue(new Callback<SearchProduct>() {
                 @Override
                 public void onResponse(Call<SearchProduct> call, Response<SearchProduct> response) {
-                    if (response.isSuccessful()){
-                    if (null != response && response.code() == RCWebConstants.RC_SUCCESS_CODE
-                            && null != response.body()) {
-                        sd = response.body();
-                        callback.searchProductResult(sd);
-                    } }else {
+                    if (response.isSuccessful()) {
+                        if (null != response && response.code() == RCWebConstants.RC_SUCCESS_CODE
+                                && null != response.body()) {
+                            sd = response.body();
+                            callback.searchProductResult(sd);
+                        }
+                    } else {
                         callback.searchProductResult(new SearchProduct());
                     }
                 }
@@ -65,20 +64,20 @@ public class SearchUtility {
 
         service = ApiClient.getClient().create(RCAPInterface.class);
 
-        Call<RootObject> call = service.productNames();
+        Call<RootProductsData> call = service.productNames();
 
-        call.enqueue(new Callback<RootObject>() {
+        call.enqueue(new Callback<RootProductsData>() {
             @Override
-            public void onResponse(Call<RootObject> call, Response<RootObject> response) {
+            public void onResponse(Call<RootProductsData> call, Response<RootProductsData> response) {
                 if (response.isSuccessful()) {
                     if (null != response && null != response.body()
-                            && response.body().getProductsData()!=null
-                            && response.body().getProductsData().size()!=0) {
+                            && response.body().getProductsData() != null
+                            && response.body().getProductsData().size() != 0) {
 
                         productsDataList = response.body().getProductsData();
 
-                    callback.allItemsResult(productsDataList);
-                } else {
+                        callback.allItemsResult(productsDataList);
+                    } else {
                         callback.allItemsResult(productsDataList);
                     }
                 } else {
@@ -87,7 +86,7 @@ public class SearchUtility {
             }
 
             @Override
-            public void onFailure(Call<RootObject> call, Throwable t) {
+            public void onFailure(Call<RootProductsData> call, Throwable t) {
             }
         });
 

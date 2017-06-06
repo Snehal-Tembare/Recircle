@@ -33,14 +33,12 @@ public class RootUserInfo implements Parcelable {
 
     private UserAddress userAddress;
 
-    private ArrayList<Object> user_payment_methods;
-
     private UserAccDetails user_acc_details;
 
     public RootUserInfo(String user_id, String first_name, String last_name,
                         String email, String user_image_url, boolean notification_flag,
                         long user_mob_no, boolean mobile_verified, UserAddress userAddress,
-                        ArrayList<Object> user_payment_methods, UserAccDetails user_acc_details) {
+                        UserAccDetails user_acc_details) {
 
         this.user_id = user_id;
         this.first_name = first_name;
@@ -51,7 +49,6 @@ public class RootUserInfo implements Parcelable {
         this.user_mob_no = user_mob_no;
         this.mobile_verified = mobile_verified;
         this.userAddress = userAddress;
-        this.user_payment_methods = user_payment_methods;
         this.user_acc_details = user_acc_details;
     }
 
