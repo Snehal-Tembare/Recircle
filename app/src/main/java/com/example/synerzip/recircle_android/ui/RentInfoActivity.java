@@ -148,7 +148,9 @@ public class RentInfoActivity extends AppCompatActivity {
                 mTxtManufaturerName.setText(mProduct.getProduct_info().getProduct_manufacturer_name());
                 mTxtPrice.setText("$" + mProduct.getUser_product_info().getPrice_per_day() + "/day");
 
-                Picasso.with(this).load(mProduct.getProduct_info().getProduct_image_url()).into(mImgProduct);
+                Picasso.with(this).load(mProduct.getProduct_info()
+                        .getProduct_image_url().getUser_prod_image_url())
+                        .into(mImgProduct);
                 Picasso.with(this).load(mProduct.getUser_info().getUser_image_url()).into(mImgOwner);
 
                 mTxtOwnerName.setText(mProduct.getUser_info().getFirst_name() + " " + mProduct.getUser_info().getLast_name());

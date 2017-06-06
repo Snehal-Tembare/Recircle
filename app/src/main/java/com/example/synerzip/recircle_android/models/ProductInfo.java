@@ -20,7 +20,7 @@ public class ProductInfo implements Parcelable {
 
     private String product_manufacturer_id;
 
-    private String product_image_url;
+    private UserProdImages product_image_url;
 
     private String product_model_id;
 
@@ -39,7 +39,7 @@ public class ProductInfo implements Parcelable {
     protected ProductInfo(Parcel in) {
         product_manufacturer_name = in.readString();
         product_manufacturer_id = in.readString();
-        product_image_url = in.readString();
+        product_image_url = in.readParcelable(UserProdImages.class.getClassLoader());
         product_model_id = in.readString();
         product_title = in.readString();
         product_category_name = in.readString();
@@ -70,7 +70,7 @@ public class ProductInfo implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(product_manufacturer_name);
         dest.writeString(product_manufacturer_id);
-        dest.writeString(product_image_url);
+        dest.writeParcelable(product_image_url, flags);
         dest.writeString(product_model_id);
         dest.writeString(product_title);
         dest.writeString(product_category_name);
