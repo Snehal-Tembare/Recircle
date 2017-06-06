@@ -1,7 +1,5 @@
 package com.example.synerzip.recircle_android.ui.rentals;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,23 +12,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
-import com.example.synerzip.recircle_android.models.OrderDetails;
-import com.example.synerzip.recircle_android.models.UserRentings;
 import com.example.synerzip.recircle_android.models.UserRequests;
-import com.example.synerzip.recircle_android.network.ApiClient;
-import com.example.synerzip.recircle_android.network.RCAPInterface;
-import com.example.synerzip.recircle_android.utilities.RCAppConstants;
-import com.example.synerzip.recircle_android.utilities.RCLog;
-import com.example.synerzip.recircle_android.utilities.RCWebConstants;
 
 import java.util.ArrayList;
-
-import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by Snehal Tembare on 22/5/17.
