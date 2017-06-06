@@ -26,7 +26,7 @@ public class RentItem implements Parcelable {
     private int final_payment;
     private int protection_plan;
 
-    public RentItem(){};
+    public RentItem(){}
 
     protected RentItem(Parcel in) {
         user_product_id = in.readString();

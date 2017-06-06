@@ -51,17 +51,18 @@
                             android:textColor="@color/common_black"
                             android:textSize="@dimen/text_size_20"
                             android:textStyle="bold" />
+
                         <TextView
                             android:id="@+id/txt_manufaturer_name"
                             android:layout_width="match_parent"
-                            android:paddingLeft="@dimen/common_dimens_5"
-                            android:paddingBottom="@dimen/common_dimens_5"
                             android:layout_height="wrap_content"
+                            android:paddingBottom="@dimen/common_dimens_5"
+                            android:paddingLeft="@dimen/common_dimens_5"
                             android:textColor="@color/common_black" />
 
-                        <RelativeLayout
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                            android:layout_height="wrap_content">
 
                             <com.pkmmte.view.CircularImageView
                                 android:id="@+id/img_owner"
@@ -70,18 +71,17 @@
                                 app:border="false"
                                 app:border_color="@color/common_white"
                                 app:border_width="@dimen/dimen_1dp"
-                                app:shadow="true"
-                                android:layout_toLeftOf="@+id/txt_owner_name"/>
+                                app:shadow="true" />
 
                             <TextView
                                 android:id="@+id/txt_owner_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
+                                android:layout_alignParentRight="true"
                                 android:layout_marginLeft="@dimen/common_dimens_5"
-                                android:gravity="center_vertical"
-                                android:layout_alignParentRight="true"/>
-                        </RelativeLayout>
+                                android:gravity="center_vertical" />
+                        </LinearLayout>
+
                     </LinearLayout>
 
                 </LinearLayout>
@@ -100,13 +100,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/background_color_dark"
+                        android:drawableRight="@drawable/ic_edit_30"
                         android:padding="@dimen/common_dimens_5"
+                        android:paddingRight="@dimen/common_dimens_5"
                         android:text="@string/selected_dates"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/text_size_14"
-                        android:textStyle="bold"
-                        android:paddingRight="@dimen/common_dimens_5"
-                        android:drawableRight="@drawable/ic_edit_30"/>
+                        android:textStyle="bold" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -126,8 +126,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:gravity="end"
-                            android:text="@string/return_msg"
                             android:paddingRight="@dimen/common_dimens_10"
+                            android:text="@string/return_word"
                             android:textSize="@dimen/text_size_16" />
                     </LinearLayout>
 
@@ -141,8 +141,8 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.45"
-                            android:textColor="@color/text_color"
                             android:paddingLeft="@dimen/common_dimens_5"
+                            android:textColor="@color/text_color"
                             android:textSize="@dimen/text_size_16"
                             android:textStyle="bold" />
 
@@ -164,9 +164,9 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.45"
                             android:gravity="end"
+                            android:paddingRight="@dimen/common_dimens_10"
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/text_size_16"
-                            android:paddingRight="@dimen/common_dimens_10"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -197,8 +197,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.35"
                             android:gravity="end"
-                            android:text="@string/return_time"
                             android:paddingRight="@dimen/common_dimens_10"
+                            android:text="@string/return_time"
                             android:textSize="@dimen/text_size_16" />
                     </LinearLayout>
                 </LinearLayout>
@@ -306,9 +306,9 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/common_dimens_2"
-                        android:background="@color/view_color"
+                        android:layout_marginBottom="@dimen/common_dimens_2"
                         android:layout_marginTop="@dimen/common_dimens_2"
-                        android:layout_marginBottom="@dimen/common_dimens_2"/>
+                        android:background="@color/view_color" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -332,20 +332,19 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:padding="@dimen/common_dimens_5"
-                            android:textStyle="bold"
                             android:textColor="@color/text_color"
-                            android:textSize="@dimen/text_size_16" />
+                            android:textSize="@dimen/text_size_16"
+                            android:textStyle="bold" />
 
                     </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dimen_1dp"
-                        android:background="@color/background_color_dark"
+                        android:layout_marginBottom="@dimen/common_dimens_5"
                         android:layout_marginTop="@dimen/common_dimens_5"
-                        android:layout_marginBottom="@dimen/common_dimens_5" />
+                        android:background="@color/background_color_dark" />
                 </LinearLayout>
-
 
 
                 <LinearLayout
@@ -407,18 +406,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:orientation="horizontal"
             android:weightSum="1">
-
-           <!-- <Button
-                android:id="@+id/btn_total_price"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                android:background="@color/common_black"
-                android:padding="@dimen/common_dimens_10"
-                android:textColor="@color/common_white"
-                android:textSize="@dimen/text_size_16" />-->
 
             <Button
                 android:id="@+id/btn_proceed_to_pay"

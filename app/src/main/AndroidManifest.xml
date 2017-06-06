@@ -64,6 +64,8 @@
         <activity android:name=".ui.EditProfileActivity" />
         <activity android:name=".ui.PaymentsActivity" />
         <activity android:name=".ui.BankAccActivity" />
+        <activity android:name=".ui.rentals.AllRequestsActivity" />
+        <activity android:name=".ui.MyProfileActivity"></activity>
     </application>
 
 </manifest>

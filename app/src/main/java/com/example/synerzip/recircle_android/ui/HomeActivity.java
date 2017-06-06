@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.synerzip.recircle_android.R;
+import com.example.synerzip.recircle_android.ui.rentals.AllRequestsActivity;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 
@@ -38,7 +39,7 @@ import butterknife.ButterKnife;
  */
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String TAG = "SearchFragment";
+    private static final String TAG = "HomeActivity";
 
     @BindView(R.id.drawer_layout)
     protected DrawerLayout mDrawerLayout;
@@ -207,7 +208,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 RCLog.showToast(HomeActivity.this, TAG);
                 break;
             case R.id.nav_rentals:
-                RCLog.showToast(HomeActivity.this, TAG);
+                if (isLoggedIn){
+                    startActivity(new Intent(this,AllRequestsActivity.class));
+                }
                 break;
         }
 
@@ -220,11 +223,35 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
      * clears Application data
      */
     private void clearData() {
+
         SharedPreferences sharedPreferences = getApplicationContext().
                 getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.commit();
+        editor.apply();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isLoggedIn = sharedPreferences.getBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
+
+        Menu menu = mNavigationView.getMenu();
+        MenuItem nav_loggedInAs = menu.findItem(R.id.nav_loggedInAs);
+
+        if (isLoggedIn) {
+            menu.removeItem(R.id.nav_logIn_signUp);
+            nav_loggedInAs.setVisible(true);
+            nav_loggedInAs.setTitle(getString(R.string.logged_in_as) + mUserFirstName);
+        } else {
+            menu.removeItem(R.id.nav_messages);
+            menu.removeItem(R.id.nav_rentals);
+            menu.removeItem(R.id.nav_items);
+            menu.removeItem(R.id.nav_payments);
+            menu.removeItem(R.id.nav_logout);
+            menu.removeItem(R.id.nav_loggedInAs);
+        }
     }
 
     @Override

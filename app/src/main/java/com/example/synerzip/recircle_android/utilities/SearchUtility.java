@@ -1,7 +1,5 @@
 package com.example.synerzip.recircle_android.utilities;
 
-import android.util.Log;
-
 import com.example.synerzip.recircle_android.models.ProductsData;
 import com.example.synerzip.recircle_android.models.RootObject;
 import com.example.synerzip.recircle_android.models.SearchProduct;

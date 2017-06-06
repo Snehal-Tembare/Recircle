@@ -49,6 +49,8 @@ public class RentInfoActivity extends AppCompatActivity {
     private int subTotal;
     private int percentage;
     private int forDays;
+    private int protectionPlanFee;
+    private int serviceFee;
     public static RentItem mRentItem;
 
     private String user_id;
@@ -152,6 +154,7 @@ public class RentInfoActivity extends AppCompatActivity {
                 mTxtOwnerName.setText(mProduct.getUser_info().getFirst_name() + " " + mProduct.getUser_info().getLast_name());
                 dayCount = calculateDayCount(mBundle.getString(getString(R.string.from_date)),
                         mBundle.getString(getString(R.string.to_date)));
+
                 mTxtFromDate.setText(formatedFromDate);
                 mTxtToDate.setText(formatedToDate);
 
@@ -190,12 +193,12 @@ public class RentInfoActivity extends AppCompatActivity {
      * Calculate selected no of days
      */
 
-    private int calculateDayCount(String from, String to) {
+    public int calculateDayCount(String from, String to) {
 
         DateFormat formatter = new SimpleDateFormat(getString(R.string.date_format));
         try {
-            fromDate = formatter.parse(from.toString());
-            toDate = formatter.parse(to.toString());
+            fromDate = formatter.parse(from);
+            toDate = formatter.parse(to);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -241,6 +244,9 @@ public class RentInfoActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (mProduct != null) {
+            serviceFee= (int) (subTotal*(0.8));
+            protectionPlanFee= (int) (Integer.parseInt(mProduct.getUser_product_info().getPrice_per_day()) *0.1);
+
             //Calculate discount
             if (mProduct.getUser_product_info().getUser_product_discounts() != null
                     && mProduct.getUser_product_info().getUser_product_discounts().size() > 0) {
@@ -295,16 +301,16 @@ public class RentInfoActivity extends AppCompatActivity {
     public void showPaymentModes() {
 
         mRentItem.setUser_msg(mEdtUserMsg.getText().toString());
-        mRentItem.setPayment_total(subTotal);
-        mRentItem.setPayment_discount(discount);
-        mRentItem.setService_fee(10);
-        mRentItem.setProtection_plan_fee(2);
+
+        mRentItem.setService_fee(serviceFee);
         mRentItem.setFinal_payment(finalTotal);
 
         if (mChckProtectionPlan.isChecked()) {
             mRentItem.setProtection_plan(1);
+            mRentItem.setProtection_plan_fee(protectionPlanFee);
         } else {
             mRentItem.setProtection_plan(0);
+            mRentItem.setProtection_plan_fee(0);
         }
 
         Intent intentPayMode = new Intent(this, PaymentModeActivity.class);
