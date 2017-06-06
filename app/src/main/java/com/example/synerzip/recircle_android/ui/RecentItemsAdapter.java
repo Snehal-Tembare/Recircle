@@ -42,7 +42,7 @@ public class RecentItemsAdapter extends RecyclerView.Adapter<RecentItemsAdapter.
         Products productDetails = productDetailsList.get(position);
 
         Picasso.with(mContext)
-                .load(productDetails.getProduct_info().getProduct_image_url())
+                .load(productDetails.getProduct_info().getProduct_image_url().getUser_prod_image_url())
                 .placeholder(R.mipmap.ic_item)
                 .into(viewHolder.mImageView);
 
