@@ -98,7 +98,7 @@
     <string name="validate_mob_no">Enter 10 digit mobile number</string>
     <string name="validate_pwd">Enter at least 8 characters</string>
     <string name="validate_email">Enter a valid email</string>
-    <string name="reset_pwd">Reset password</string>
+    <string name="dialog_forgot_pwd">Forgot password</string>
     <string name="validate_item_search">Enter item to search</string>
     <string name="validate_min_rental_days">Minimum rental day(s) are required</string>
     <string name="validate_item_desc">Enter item description</string>
@@ -110,7 +110,6 @@
     <string name="logout">Logout</string>
     <string name="err_credentials">User credentials are wrong</string>
     <string name="please_try_again">Please try again</string>
-    <string name="logged_in_as">Logged in as : </string>
     <string name="calendar_days_selected">You have selected </string>
     <string name="calendar_days"> days as unavailable</string>
     <string name="choose">Choose</string>
@@ -221,7 +220,7 @@
     <string name="selected_image_position">selected_image_position</string>
     <string name="image_urls_array">image_urls_array</string>
     <string name="url">url</string>
-    <string name="date_validation_code">Select atleast one day</string>
+    <string name="date_validation_code">Select at least one day</string>
     <string name="days">days</string>
     <string name="pick_up">Pick up</string>
     <string name="return_msg">Return</string>
@@ -397,4 +396,10 @@
     <string name="write_msg">Write a Message</string>
     <string name="approve">Approve</string>
     <string name="confirm_and_approve">Confirm and Approve</string>
+    <string name="toolbar_msgs">Messages</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tab_msgs_owner">Messages from owner</string>
+    <string name="tab_msgs_renter">Messages from renter</string>
 </resources>

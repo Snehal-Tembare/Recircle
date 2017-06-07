@@ -89,7 +89,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/dimen_40dp"
                             android:hint="@string/mobile"
-                            android:inputType="numberDecimal" />
+                            android:inputType="number" />
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -154,7 +154,7 @@
                         android:layout_height="wrap_content">
 
                         <EditText
-                            android:inputType="numberDecimal"
+                            android:inputType="number"
                             android:id="@+id/edit_otp"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/dimen_40dp"

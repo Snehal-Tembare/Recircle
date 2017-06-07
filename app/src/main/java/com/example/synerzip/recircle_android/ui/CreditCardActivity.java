@@ -1,13 +1,11 @@
 package com.example.synerzip.recircle_android.ui;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -18,25 +16,15 @@ import android.widget.RelativeLayout;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.LogInRequest;
-import com.example.synerzip.recircle_android.models.RentItem;
 import com.example.synerzip.recircle_android.models.User;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
-import com.example.synerzip.recircle_android.utilities.HideKeyboard;
-import com.example.synerzip.recircle_android.utilities.NetworkUtility;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

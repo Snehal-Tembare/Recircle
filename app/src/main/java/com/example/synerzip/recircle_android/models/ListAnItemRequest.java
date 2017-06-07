@@ -6,6 +6,9 @@ import java.util.ArrayList;
  * Created by Prajakta Patil on 7/4/17.
  * Copyright © 2017 Synerzip. All rights reserved
  */
+
+//TODO product_title parameter is not completed
+
 public class ListAnItemRequest {
 //    private String product_title;
     private String product_id;

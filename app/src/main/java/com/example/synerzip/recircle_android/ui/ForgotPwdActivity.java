@@ -38,7 +38,7 @@ import retrofit2.Response;
  * Copyright © 2016 Synerzip. All rights reserved
  */
 public class ForgotPwdActivity extends AppCompatActivity {
-    RCAPInterface service;
+    private RCAPInterface service;
 
     @BindView(R.id.input_layout_forgot_pwd_email)
     protected TextInputLayout mInputLayoutEmail;

@@ -12,7 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -73,7 +72,7 @@ public class LogInActivity extends AppCompatActivity {
     @BindView(R.id.linear_layout)
     protected LinearLayout mLinearLayout;
 
-    protected String mUserId, mUserEmail, mUserToken, mUserLastName, mUserFirstName, mUserImage, mAccessToken = "";
+    protected String mUserId, mUserEmail,mUserLastName, mUserFirstName, mUserImage, mAccessToken = "";
 
     private long mUserMobNo;
 
@@ -136,14 +135,13 @@ public class LogInActivity extends AppCompatActivity {
 
                     mUserId = response.body().getUser_id();
                     mUserName = response.body().getEmail();
-                    mUserToken = response.body().getToken();
                     mUserFirstName = response.body().getFirst_name();
                     mUserLastName = response.body().getLast_name();
                     mAccessToken = response.body().getToken();
                     mUserImage = response.body().getUser_image_url();
                     mUserMobNo = response.body().getUser_mob_no();
 
-                    if (null != mUserId && null != mUserName && null != mUserToken &&
+                    if (null != mUserId && null != mUserName &&
                             null != mUserFirstName && null != mUserLastName && null != mAccessToken) {
                         saveUserData();
                         Intent intent = new Intent(LogInActivity.this,
@@ -187,7 +185,7 @@ public class LogInActivity extends AppCompatActivity {
 
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.forgot_pwd_dialog);
-        dialog.setTitle(getString(R.string.reset_pwd));
+        dialog.setTitle(getString(R.string.dialog_forgot_pwd));
 
         final EditText mEditTxtEmail = (EditText) dialog.findViewById(R.id.edit_forgot_pwd_otp_email);
         mEditTxtEmail.getText().toString();
@@ -348,7 +346,7 @@ public class LogInActivity extends AppCompatActivity {
 
         try {
             String encryptedPassword = AESEncryptionDecryption.encrypt(android_id, mPassword);
-            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mUserToken);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
             editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_USERID, mUserId);
             editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_PASSWORD, encryptedPassword);
             editor.putBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, true);

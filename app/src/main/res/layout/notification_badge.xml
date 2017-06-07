@@ -4,12 +4,11 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:clickable="true"
     android:gravity="center"
     android:orientation="vertical">
 
     <RelativeLayout
-        android:id="@+id/badge_layout1"
+        android:id="@+id/msg_badge_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
@@ -25,7 +24,6 @@
 
         </RelativeLayout>
 
-        <!--TODO text is hardcoded-->
         <TextView
             android:id="@+id/txt_notification_count"
             android:layout_width="wrap_content"
@@ -36,6 +34,4 @@
             android:textSize="@dimen/dimen_10sp"
             android:textStyle="bold" />
     </RelativeLayout>
-
-
 </RelativeLayout>
