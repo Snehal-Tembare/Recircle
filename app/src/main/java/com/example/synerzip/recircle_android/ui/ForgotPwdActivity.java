@@ -105,7 +105,6 @@ public class ForgotPwdActivity extends AppCompatActivity {
             mEmail = mEditEmail.getText().toString();
             mOtp = Integer.parseInt(mEditOtp.getText().toString());
             mNewPwd = mEditNewPwd.getText().toString();
-
             getForgotPwd();
 
         } else {
@@ -119,7 +118,6 @@ public class ForgotPwdActivity extends AppCompatActivity {
      * api call to reset passward
      */
     public void getForgotPwd() {
-
         ForgotPwdRequest forgotPwdRequest = new ForgotPwdRequest(mOtp, mEmail, mNewPwd);
         service = ApiClient.getClient().create(RCAPInterface.class);
         Call<User> call = service.forgotPassword(forgotPwdRequest);
@@ -128,7 +126,7 @@ public class ForgotPwdActivity extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 mProgressBar.setVisibility(View.GONE);
                 mLinearLayout.setAlpha((float) 1.0);
-                if (response.body() != null) {
+                if (response.isSuccessful()) {
                     startActivity(new Intent(ForgotPwdActivity.this, LogInActivity.class));
                 }
             }
@@ -170,7 +168,6 @@ public class ForgotPwdActivity extends AppCompatActivity {
                 mLinearLayout.setAlpha((float) 1.0);
             }
         });
-
     }
 
     /**
@@ -189,6 +186,9 @@ public class ForgotPwdActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * TextInputLayout TextWatcher class
+     */
     private class RCTextWatcher implements TextWatcher {
 
         private View view;
@@ -239,6 +239,7 @@ public class ForgotPwdActivity extends AppCompatActivity {
 
         return true;
     }
+
     private static boolean isValidEmail(String email) {
         return !TextUtils.isEmpty(email) && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
@@ -248,6 +249,7 @@ public class ForgotPwdActivity extends AppCompatActivity {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
+
     /**
      * validate password
      *
@@ -281,7 +283,6 @@ public class ForgotPwdActivity extends AppCompatActivity {
 
         return true;
     }
-
 
 
     /**

@@ -8,12 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.example.synerzip.recircle_android.R;
@@ -48,24 +48,27 @@ import retrofit2.Response;
 public class CreditCardActivity extends AppCompatActivity {
 
     private static final String EXPIRARY_DATE_PATTERN = "^(0[1-9]|1[0-2])\\/?([0-9]{4}|[0-9]{2})$";
+
     private static final String TAG = "CreditCardActivity";
+
     private Bundle mBundle;
+
     private AwesomeValidation awesomeValidation;
+
     private SharedPreferences sharedPreferences;
+
     private boolean isLoggedIn;
+
     private String mAccessToken;
+
     private RCAPInterface service;
+
     private String user_id;
+
     private String looged_user_id;
 
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
-
-    @BindView(R.id.btn_pay)
-    protected Button mBtnPay;
-
-    @BindView(R.id.payment_amount)
-    protected TextView mTxtPaymentAmount;
 
     @BindView(R.id.parent_layout)
     protected LinearLayout mLinearLayout;
@@ -88,9 +91,6 @@ public class CreditCardActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getString(R.string.card_details));
         mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
 
-        mTxtPaymentAmount.setVisibility(View.GONE);
-
-//        awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
         service = ApiClient.getClient().create(RCAPInterface.class);
 
         //get data from shared preferences
@@ -99,21 +99,27 @@ public class CreditCardActivity extends AppCompatActivity {
         mAccessToken = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
         looged_user_id = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_USERID, user_id);
 
-//       awesomeValidation.addValidation(CreditCardActivity.this, R.id.expiry_date, EXPIRARY_DATE_PATTERN, R.string.expiry_date_error);
         mBundle = getIntent().getExtras();
         if (mBundle != null) {
             user_id = mBundle.getString(getString(R.string.user_id));
-            mBtnPay.setBackgroundColor(ContextCompat.getColor(this, R.color.colorRedSecondary));
-            mBtnPay.setText("Pay $" + String.valueOf(mBundle.getInt(getString(R.string.total))));
+//            mBtnPay.setText("Pay $" + String.valueOf(mBundle.getInt(getString(R.string.total))));
         }
 
+       /* cardForm.cardRequired(true)
+                .expirationRequired(true)
+                .cvvRequired(false)
+                .actionLabel(getString(R.string.purchase))
+                .setup(this);
 
+        cardForm.findViewById(R.id.bt_card_form_card_number_icon).setVisibility(View.GONE);
+        cardForm.findViewById(R.id.bt_card_form_card_number_icon).setVisibility(View.GONE);*/
     }
 
-    @OnClick(R.id.btn_pay)
+   /* @OnClick(R.id.btn_pay)
     public void validateFields() {
         if (isLoggedIn) {
             if (!user_id.equalsIgnoreCase(looged_user_id)) {
+                if (cardForm.isValid()){
                     HideKeyboard.hideKeyBoard(CreditCardActivity.this);
                     if (NetworkUtility.isNetworkAvailable(this)) {
 
@@ -158,12 +164,14 @@ public class CreditCardActivity extends AppCompatActivity {
                                 mLinearLayout.setAlpha((float) 1.0);
 
                                 if (response.isSuccessful()) {
-                                    RCLog.showToast(CreditCardActivity.this, getString(R.string.item_added));
+                                    RCLog.showToast(CreditCardActivity.this, getString(R.string.item_requested_successfully));
                                     Intent intent = new Intent(CreditCardActivity.this, RentItemSuccessActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                                     startActivity(intent);
+                                    finish();
                                 } else {
                                     if (response.code() == RCWebConstants.RC_ERROR_CODE_BAD_REQUEST) {
-                                        RCLog.showToast(CreditCardActivity.this, getString(R.string.product_creation_failed));
+                                        RCLog.showToast(CreditCardActivity.this, getString(R.string.item_request_faild));
                                     } else {
                                         RCLog.showToast(CreditCardActivity.this, getString(R.string.user_not_authenticated));
                                         logInDialog();
@@ -173,17 +181,37 @@ public class CreditCardActivity extends AppCompatActivity {
 
                             @Override
                             public void onFailure(Call<RentItem> call, Throwable t) {
-                                RCLog.showToast(CreditCardActivity.this, getString(R.string.product_creation_failed));
+                                RCLog.showToast(CreditCardActivity.this, getString(R.string.item_request_faild));
+                                mProgressBar.setVisibility(View.GONE);
+                                mLinearLayout.setAlpha((float) 1.0);
                             }
                         });
                     }
+                }else {
+                    RCLog.showToast(this, getString(R.string.enter_proper_card_details));
+                }
             } else {
                 RCLog.showToast(this, getString(R.string.rent_warning_msg));
+                mProgressBar.setVisibility(View.GONE);
             }
         } else {
             RCLog.showToast(CreditCardActivity.this, getString(R.string.user_must_login));
             logInDialog();
         }
+    }*/
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId()==android.R.id.home){
+            finish();
+        }
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 
     /**

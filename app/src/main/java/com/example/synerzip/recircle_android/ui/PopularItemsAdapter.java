@@ -43,7 +43,8 @@ public class PopularItemsAdapter extends RecyclerView.Adapter<PopularItemsAdapte
         Products popularProducts = popularProductsList.get(position);
         Picasso.with(mContext)
                 .load(popularProducts.getProduct_info()
-                        .getProduct_image_url())
+                        .getProduct_image_url()
+                        .getUser_prod_image_url())
                 .placeholder(R.mipmap.ic_item)
                 .into(viewHolder.mImageView);
         if (null != popularProducts.getUser_product_info().getProduct_avg_rating() &&

@@ -18,7 +18,6 @@ import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -52,7 +51,6 @@ import retrofit2.Response;
 public class DetailsActivity extends AppCompatActivity {
     private static final String EXTRA_IMAGE = "extra_image";
     public static boolean isShowInfo;
-    public String user_id;
 
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
@@ -87,8 +85,8 @@ public class DetailsActivity extends AppCompatActivity {
     @BindView(R.id.txt_all_reviews_count)
     protected TextView mTxtAvgRatingCount;
 
-    @BindView(R.id.imgbtn_help)
-    protected ImageButton mImgHelp;
+    @BindView(R.id.txt_ask_question)
+    protected TextView mTxtAskQuestion;
 
     @BindView(R.id.expand_txt_description)
     protected ExpandableTextView mTxtDecscriptionDetail;
@@ -200,7 +198,7 @@ public class DetailsActivity extends AppCompatActivity {
                             if (product.getUser_product_info().getUser_prod_reviews() != null
                                     && product.getUser_product_info().getUser_prod_reviews().size() != 0) {
                                 userProdReviewArrayList = product.getUser_product_info().getUser_prod_reviews();
-                                mLayoutRentersReview.setVisibility(View.GONE);
+                                mLayoutRentersReview.setVisibility(View.VISIBLE);
                                 reviewsListAdapter = new ReviewsListAdapter(getApplicationContext(), userProdReviewArrayList);
                                 if (userProdReviewArrayList.size() > 0) {
                                     mTxtSeeAllReviews.setVisibility(View.VISIBLE);
@@ -341,7 +339,7 @@ public class DetailsActivity extends AppCompatActivity {
                     }
                 });
 
-        mImgHelp.setOnClickListener(new View.OnClickListener()
+        mTxtAskQuestion.setOnClickListener(new View.OnClickListener()
 
         {
             @Override

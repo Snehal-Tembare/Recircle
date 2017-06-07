@@ -45,7 +45,7 @@
     <string name="date_format">E MMM dd HH:mm:ss Z yyyy</string>
     <string name="month_format">MMM</string>
     <string name="day_format">EEE</string>
-    <string name="ddd_mm">EEE MMM dd 00:00:00 EDT yyyy</string>
+    <string name="ddd_mm">yyyy-MM-dd\'T\'HH:mm:ss.SSS\'Z\'</string>
     <string name="error_dates">Enter dates to be saved</string>
     <string name="list_an_item_title">Go ahead and list something. We’ve got you covered.</string>
     <string name="agreement">By listing an item, I agree to the Recircle <b>Terms and Agreements.</b></string>
@@ -222,7 +222,7 @@
     <string name="image_urls_array">image_urls_array</string>
     <string name="url">url</string>
     <string name="date_validation_code">Select atleast one day</string>
-    <string name="days">day(s)</string>
+    <string name="days">days</string>
     <string name="pick_up">Pick up</string>
     <string name="return_msg">Return</string>
     <string name="store_location">Store Location</string>
@@ -249,7 +249,6 @@
     <string name="calendar_date_format">yyyy-MM-dd\'T\'HH:mm:ss.SSS\'Z\'</string>
     <string name="product_not_created">Product creation unsuccessful</string>
     <string name="mandatory_dates">Mandatory fields should not be empty</string>
-
     <string name="all_reviews_list">all_reviews_list</string>
     <string name="all_reviews">All Reviews</string>
     <string name="see_all_reviews">See All reviews</string>
@@ -281,8 +280,6 @@
     <string name="card_details">Card Details</string>
     <string name="name_on_card">Name On Card</string>
     <string name="pay">Pay</string>
-
-
     <string name="suggested_price">Suggested Price($/day)</string>
     <string name="proceed">Proceed</string>
     <string name="confirm_item">List this item >></string>
@@ -295,7 +292,6 @@
     <string name="list_item_desc">itemDesc</string>
     <string name="list_new_item">+ List an item</string>
     <string name="discounts">discounts</string>
-
     <string name="list_unavail_days">listUnavailDays</string>
     <string name="zipcode">Zipcode</string>
     <string name="austin_check">austinCheck</string>
@@ -325,9 +321,6 @@
     <string name="log_in_again">Please login again.</string>
     <string name="save">Save</string>
     <string name="section_format">Hello World from section: %1$d</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="tab_search">Search An Item</string>
     <string name="tab_list">List An Item</string>
     <string name="name_of_card">Name of card *</string>
@@ -378,4 +371,30 @@
     <string name="verify">Verify</string>
     <string name="ask">Ask</string>
     <string name="ask_que">Ask a question</string>
+    <string name="ask_question">Ask Question?</string>
+    <string name="return_word">Return</string>
+    <string name="item_request_success">Item Request Successfully</string>
+    <string name="view_all_requests">View All Requests</string>
+    <string name="rentals">Rentals</string>
+    <string name="user_requests_to_me">Request to me</string>
+    <string name="user_requests_from_me">Request from me</string>
+    <string name="enter_proper_card_details">Enter proper card details</string>
+    <string name="item_request_faild">Item Request Failed</string>
+    <string name="rent_item">Rent Item</string>
+    <string name="my_profile">My Profile</string>
+    <string name="no_pending_requests">You Haven’t Received Any Requests Yet</string>
+    <string name="session_expired">Session Expired Please Log in to Continue</string>
+    <string name="cvv">CVV</string>
+    <string name="dd_mm_yyyy_hh_mm">dd MMM yyyy K:mma</string>
+    <string name="rentings">rentings</string>
+    <string name="renquests">renquests</string>
+    <string name="requested_on">Requested on: </string>
+    <string name="time_to_respond">Time To Respond </string>
+    <string name="request_expired">Request Expired</string>
+    <string name="per_day">/day</string>
+    <string name="purchase">Purchase</string>
+    <string name="additional_comments">Additional Comments(Optional)</string>
+    <string name="write_msg">Write a Message</string>
+    <string name="approve">Approve</string>
+    <string name="confirm_and_approve">Confirm and Approve</string>
 </resources>

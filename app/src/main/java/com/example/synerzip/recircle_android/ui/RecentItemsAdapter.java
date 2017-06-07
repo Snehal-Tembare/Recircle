@@ -40,11 +40,12 @@ public class RecentItemsAdapter extends RecyclerView.Adapter<RecentItemsAdapter.
     public void onBindViewHolder(RecentItemsAdapter.ViewHolder viewHolder, int position) {
 
         Products productDetails = productDetailsList.get(position);
-
-        Picasso.with(mContext)
-                .load(productDetails.getProduct_info().getProduct_image_url())
-                .placeholder(R.mipmap.ic_item)
-                .into(viewHolder.mImageView);
+if(!productDetails.getProduct_info().getProduct_image_url().getUser_prod_image_url().isEmpty()) {
+    Picasso.with(mContext)
+            .load(productDetails.getProduct_info().getProduct_image_url().getUser_prod_image_url())
+            .placeholder(R.mipmap.ic_item)
+            .into(viewHolder.mImageView);
+}
 
         if (null != productDetails.getUser_product_info().getProduct_avg_rating() &&
                 productDetails.getUser_product_info().getUser_prod_reviews() != null &&

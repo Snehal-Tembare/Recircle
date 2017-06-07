@@ -75,7 +75,9 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".ui.Messages.UserQueAnsActivity"></activity>
+        <activity android:name=".ui.messages.UserQueAnsActivity"/>
+        <activity android:name=".ui.rentals.AllRequestsActivity" />
+        <activity android:name=".ui.MyProfileActivity"/>
     </application>
 
 </manifest>

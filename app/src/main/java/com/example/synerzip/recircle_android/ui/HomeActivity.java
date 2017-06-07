@@ -31,10 +31,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
-import com.example.synerzip.recircle_android.models.UserMessages.RootMessageInfo;
+import com.example.synerzip.recircle_android.models.user_messages.RootMessageInfo;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
-import com.example.synerzip.recircle_android.ui.Messages.UserQueAnsActivity;
+import com.example.synerzip.recircle_android.ui.messages.UserQueAnsActivity;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 
@@ -186,13 +186,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -215,7 +208,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu) {
        getMenuInflater().inflate(R.menu.menu_main, menu);
         MenuItem item = menu.findItem(R.id.action_messages);
         MenuItemCompat.setActionView(item, R.layout.notification_badge);
@@ -236,7 +229,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                RCLog.showToast(HomeActivity.this, "menu msgs clicked");
                 startActivity(new Intent(HomeActivity.this, UserQueAnsActivity.class));
                 return true;
             }
@@ -344,8 +336,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
+        editor.commit();
     }
-
 
     /**
      * navigation drawer back button

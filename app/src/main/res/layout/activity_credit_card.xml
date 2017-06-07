@@ -14,19 +14,58 @@
         android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <com.craftman.cardform.CardForm
-                android:id="@+id/card_form"
-                android:layout_marginTop="@dimen/common_dimens_5"
+            <EditText
+                android:id="@+id/txt_name_on_card"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="wrap_content"
+                android:hint="@string/name_on_card"
+                android:textSize="@dimen/text_size_16"
+                android:layout_marginTop="@dimen/common_dimens_20"
+                android:layout_marginLeft="@dimen/common_dimens_24"
+                android:layout_marginRight="@dimen/common_dimens_24"/>
+
+            <EditText
+                android:id="@+id/txt_cvv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/cvv"
+                android:inputType="numberPassword"
+                android:textSize="@dimen/text_size_16"
+                android:layout_marginTop="@dimen/common_dimens_20"
+                android:layout_marginLeft="@dimen/common_dimens_24"
+                android:layout_marginRight="@dimen/common_dimens_24"/>
+
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="bottom|end"
+            android:weightSum="1">
+            <Button
+                android:id="@+id/btn_pay"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/colorRedSecondary"
+                android:padding="@dimen/common_dimens_10"
+                android:text="@string/proceed_to_pay"
+                android:textColor="@color/common_white"
+                android:textSize="@dimen/text_size_16" />
+        </LinearLayout>
+
+
+
         <include
             android:id="@+id/progress_bar"
             layout="@layout/progress_bar_layout"
             android:animateLayoutChanges="true"
             android:visibility="gone" />
+
     </FrameLayout>
 
 

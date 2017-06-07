@@ -15,7 +15,7 @@ import lombok.Setter;
 public class User implements Parcelable {
     private String first_name;
     private String last_name;
-    private String user_image_url;
+        private String user_image_url;
     private String message;
     private String user_id;
     private String token;
