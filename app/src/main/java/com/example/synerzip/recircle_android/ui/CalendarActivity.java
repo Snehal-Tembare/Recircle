@@ -38,14 +38,15 @@ import static com.squareup.timessquare.CalendarPickerView.SelectionMode.RANGE;
  */
 public class CalendarActivity extends AppCompatActivity {
 
-    private static final String TAG = "CalendarActivity";
     public static ArrayList<Date> selectedDates;
+
     public ArrayList<Date> localselectedDates;
 
     private ArrayList<UserProductUnAvailability> userProductUnAvailabilities;
-    private Bundle bundle;
-    private Products product;
 
+    private Bundle bundle;
+
+    private Products product;
 
     public static boolean isDateSelected = false;
 
@@ -80,7 +81,6 @@ public class CalendarActivity extends AppCompatActivity {
         Date today = new Date();
         bundle = getIntent().getExtras();
 
-        //-----------------------
         if (bundle != null) {
             userProductUnAvailabilities = bundle.getParcelableArrayList(getString(R.string.unavail_dates));
             product = bundle.getParcelable(getString(R.string.product));

@@ -1,13 +1,11 @@
 package com.example.synerzip.recircle_android.ui;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -16,28 +14,17 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
-import com.braintreepayments.cardform.view.CardForm;
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.LogInRequest;
-import com.example.synerzip.recircle_android.models.RentItem;
 import com.example.synerzip.recircle_android.models.User;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
-import com.example.synerzip.recircle_android.utilities.HideKeyboard;
-import com.example.synerzip.recircle_android.utilities.NetworkUtility;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,30 +36,33 @@ import retrofit2.Response;
 public class CreditCardActivity extends AppCompatActivity {
 
     private static final String EXPIRARY_DATE_PATTERN = "^(0[1-9]|1[0-2])\\/?([0-9]{4}|[0-9]{2})$";
+
     private static final String TAG = "CreditCardActivity";
+
     private Bundle mBundle;
+
     private AwesomeValidation awesomeValidation;
+
     private SharedPreferences sharedPreferences;
+
     private boolean isLoggedIn;
+
     private String mAccessToken;
+
     private RCAPInterface service;
+
     private String user_id;
+
     private String looged_user_id;
 
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
-
-    @BindView(R.id.btn_pay)
-    protected Button mBtnPay;
 
     @BindView(R.id.parent_layout)
     protected LinearLayout mLinearLayout;
 
     @BindView(R.id.progress_bar)
     protected RelativeLayout mProgressBar;
-
-    @BindView(R.id.card_form)
-    CardForm cardForm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,21 +90,20 @@ public class CreditCardActivity extends AppCompatActivity {
         mBundle = getIntent().getExtras();
         if (mBundle != null) {
             user_id = mBundle.getString(getString(R.string.user_id));
-            mBtnPay.setText("Pay $" + String.valueOf(mBundle.getInt(getString(R.string.total))));
+//            mBtnPay.setText("Pay $" + String.valueOf(mBundle.getInt(getString(R.string.total))));
         }
 
-
-        cardForm.cardRequired(true)
+       /* cardForm.cardRequired(true)
                 .expirationRequired(true)
                 .cvvRequired(false)
                 .actionLabel(getString(R.string.purchase))
                 .setup(this);
 
         cardForm.findViewById(R.id.bt_card_form_card_number_icon).setVisibility(View.GONE);
-        cardForm.findViewById(R.id.bt_card_form_card_number_icon).setVisibility(View.GONE);
+        cardForm.findViewById(R.id.bt_card_form_card_number_icon).setVisibility(View.GONE);*/
     }
 
-    @OnClick(R.id.btn_pay)
+   /* @OnClick(R.id.btn_pay)
     public void validateFields() {
         if (isLoggedIn) {
             if (!user_id.equalsIgnoreCase(looged_user_id)) {
@@ -197,7 +186,7 @@ public class CreditCardActivity extends AppCompatActivity {
             RCLog.showToast(CreditCardActivity.this, getString(R.string.user_must_login));
             logInDialog();
         }
-    }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

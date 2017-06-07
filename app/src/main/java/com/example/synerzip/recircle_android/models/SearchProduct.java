@@ -20,7 +20,7 @@ public class SearchProduct implements Parcelable {
     private ArrayList<Products> products;
 
     protected SearchProduct(Parcel in) {
-        this.products = new ArrayList<Products>();
+        this.products = new ArrayList<>();
 
         in.readTypedList(products, Products.CREATOR);
     }

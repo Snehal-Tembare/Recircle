@@ -41,20 +41,22 @@ public class PopularItemsAdapter extends RecyclerView.Adapter<PopularItemsAdapte
     public void onBindViewHolder(PopularItemsAdapter.ViewHolder viewHolder, int position) {
 
         Products popularProducts = popularProductsList.get(position);
-        Picasso.with(mContext)
-                .load(popularProducts.getProduct_info()
-                        .getProduct_image_url()
-                        .getUser_prod_image_url())
-                .placeholder(R.mipmap.ic_item)
-                .into(viewHolder.mImageView);
+
+        if (popularProducts.getUser_product_info().getUser_prod_images().size() != 0 &&
+                popularProducts.getUser_product_info().getUser_prod_images().get(position).getUser_prod_image_url() != null) {
+            Picasso.with(mContext)
+                    .load(popularProducts.getUser_product_info()
+                            .getUser_prod_images().get(position)
+                            .getUser_prod_image_url())
+                    .placeholder(R.mipmap.ic_item)
+                    .into(viewHolder.mImageView);
+        }
         if (null != popularProducts.getUser_product_info().getProduct_avg_rating() &&
-                 popularProducts.getUser_product_info().getUser_prod_reviews()!=null
-                &&  popularProducts.getUser_product_info().getUser_prod_reviews().size() != 0) {
+                popularProducts.getUser_product_info().getUser_prod_reviews() != null
+                && popularProducts.getUser_product_info().getUser_prod_reviews().size() != 0) {
             viewHolder.mRatingBar.setRating(Float.parseFloat(popularProducts.getUser_product_info().getProduct_avg_rating()));
-            viewHolder.mTxtProductReviews.setText("(" + popularProducts.getUser_product_info().getUser_prod_reviews().size() + ")");
         } else {
             viewHolder.mRatingBar.setVisibility(View.GONE);
-            viewHolder.mTxtProductReviews.setVisibility(View.GONE);
         }
 
         viewHolder.mTxtProductTitle.setText(popularProducts.getProduct_info().getProduct_title());
@@ -67,18 +69,15 @@ public class PopularItemsAdapter extends RecyclerView.Adapter<PopularItemsAdapte
 
     @Override
     public int getItemCount() {
-        if(popularProductsList.size()>6){
+        if (popularProductsList.size() > 6) {
             return 6;
-        }
-        else{
+        } else {
             return popularProductsList.size();
         }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-
-
-        private TextView mTxtProductTitle, mTxtProductPrice, mTxtProductReviews, mTxtRenterName;
+        private TextView mTxtProductTitle, mTxtProductPrice, mTxtRenterName;
         private ImageView mImageView;
         private RatingBar mRatingBar;
 
@@ -88,7 +87,6 @@ public class PopularItemsAdapter extends RecyclerView.Adapter<PopularItemsAdapte
             mImageView = (ImageView) view.findViewById(R.id.imgPopularProduct);
             mTxtProductTitle = (TextView) view.findViewById(R.id.txtPopProductTitle);
             mTxtProductPrice = (TextView) view.findViewById(R.id.txtPopProductPrice);
-            mTxtProductReviews = (TextView) view.findViewById(R.id.txtPopReviews);
             mTxtRenterName = (TextView) view.findViewById(R.id.txtPopRenterName);
         }
 

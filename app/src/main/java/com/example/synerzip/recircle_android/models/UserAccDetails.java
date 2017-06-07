@@ -22,9 +22,31 @@ public class UserAccDetails {
 
     private int routing_number;
 
-    private Date DOB;
+    private String DOB;
 
     private int ssn;
 
     private String business_type;
+
+    /**
+     * constructor for UserAccDetails
+     * @param user_acc_details_id
+     * @param acc_number
+     * @param acc_holder_name
+     * @param routing_number
+     * @param DOB
+     * @param ssn
+     * @param business_type
+     */
+    public UserAccDetails(String user_acc_details_id, int acc_number,
+                          String acc_holder_name, int routing_number,
+                          String DOB, int ssn, String business_type) {
+        this.user_acc_details_id = user_acc_details_id;
+        this.acc_number = acc_number;
+        this.acc_holder_name = acc_holder_name;
+        this.routing_number = routing_number;
+        this.DOB = DOB;
+        this.ssn = ssn;
+        this.business_type = business_type;
+    }
 }

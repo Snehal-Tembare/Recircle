@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/partial_toolbar" />
+
+    <!--TODO yet to be completed-->
+
+    <FrameLayout
+        android:id="@+id/frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:src="@drawable/ic_nav_user"
+                    android:id="@+id/img_user_profile"
+                    android:layout_width="@dimen/dimen_60dp"
+                    android:layout_height="@dimen/dimen_60dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/dimen_10dp"
+                    app:civ_border_color="@color/colorLightGrey"
+                    app:civ_border_width="@dimen/dimen_2dp"
+                    app:civ_fill_color="@color/common_white" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:padding="@dimen/common_dimens_10">
+
+                    <TextView
+                        android:text="Abhijit Bongarde"
+                        android:id="@+id/txt_user_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/dimen_1dp"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/text_size_16" />
+
+                    <TextView
+                        android:id="@+id/txt_product_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/dimen_1dp"
+                        android:text="Sony DSLR D3300"
+                        android:textColor="@color/text_color"
+                        android:textSize="@dimen/text_size_14" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/common_dimens_10"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/edit_txt_ask_que"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/common_dimens_100"
+                    android:layout_marginTop="@dimen/common_dimens_5"
+                    android:background="@drawable/border_edit_txt"
+                    android:gravity="top|left"
+                    android:hint="@string/ask_que"
+                    android:padding="@dimen/dimen_10sp"
+                    android:textSize="@dimen/text_size_14" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_ask"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/common_dimens_10"
+                android:background="@drawable/round_button_blue"
+                android:paddingLeft="@dimen/common_dimens_20"
+                android:paddingRight="@dimen/common_dimens_20"
+                android:text="@string/ask"
+                android:textColor="@color/common_white" />
+
+        </LinearLayout>
+
+        <include
+            android:id="@+id/progress_bar"
+            layout="@layout/progress_bar_layout"
+            android:animateLayoutChanges="true"
+            android:visibility="gone" />
+    </FrameLayout>
+
+</LinearLayout>

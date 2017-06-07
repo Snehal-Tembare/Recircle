@@ -12,15 +12,16 @@ public class ForgotPwdRequest {
 
     /**
      * constructor fo ForgotPwdRequest
+     *
      * @param otp
      * @param user_name
      * @param new_password
      */
     public ForgotPwdRequest(int otp,
                             String user_name,
-                            String new_password){
-        this.otp=otp;
-        this.user_name=user_name;
-        this.new_password=new_password;
+                            String new_password) {
+        this.otp = otp;
+        this.user_name = user_name;
+        this.new_password = new_password;
     }
 }

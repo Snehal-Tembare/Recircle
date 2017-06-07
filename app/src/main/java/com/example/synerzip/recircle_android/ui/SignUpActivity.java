@@ -1,11 +1,17 @@
 package com.example.synerzip.recircle_android.ui;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.telephony.SmsManager;
+import android.telephony.SmsMessage;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -13,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -80,8 +87,8 @@ public class SignUpActivity extends AppCompatActivity {
     @BindView(R.id.input_layout_signup_mob_no)
     protected TextInputLayout mInputLayoutMobNo;
 
-    @BindView(R.id.input_layout_signup_verification_code)
-    protected TextInputLayout mInputLayoutVerificationCode;
+    @BindView(R.id.input_layout_signup_otp)
+    protected TextInputLayout mInputLayoutOtp;
 
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
@@ -94,6 +101,12 @@ public class SignUpActivity extends AppCompatActivity {
 
     @BindView(R.id.layout_scrollView)
     protected ScrollView mScrollView;
+
+    @BindView(R.id.progress_bar_otp)
+    protected ProgressBar mProgressBarOtp;
+
+    @BindView(R.id.txt_resend_code)
+    protected TextView mTxtResendOtp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,7 +125,58 @@ public class SignUpActivity extends AppCompatActivity {
         mEditPassword.addTextChangedListener(new RCTextWatcher(mEditPassword));
         mEditMobNo.addTextChangedListener(new RCTextWatcher(mEditMobNo));
         mEditVerificationCode.addTextChangedListener(new RCTextWatcher(mEditVerificationCode));
+    }//end onCreate()
+
+    /**
+     * Broadcast receiver for detecting otp
+     */
+    public static class IncomingSms extends BroadcastReceiver {
+        final SmsManager sms = SmsManager.getDefault();
+        public IncomingSms() { }
+
+        public void onReceive(Context context, Intent intent) {
+
+            final Bundle bundle = intent.getExtras();
+            try {
+                if (bundle != null) {
+                    final Object[] objects = (Object[]) bundle.get("pdus");
+                    for (int i = 0; i < objects.length; i++) {
+                        SmsMessage currentMessage = SmsMessage.createFromPdu((byte[]) objects[i]);
+                        String phoneNumber = currentMessage.getDisplayOriginatingAddress();
+                        String senderNum = phoneNumber;
+                        String message = currentMessage.getDisplayMessageBody().split(":")[1];
+                        message = message.substring(0, message.length());
+
+                        Intent myIntent = new Intent("otp");
+                        myIntent.putExtra("message",message);
+                        LocalBroadcastManager.getInstance(context).sendBroadcast(myIntent);
+                    }
+                }
+
+            } catch (Exception e) {
+            }
+        }
+    }//end IncomingSms()
+    @Override
+    public void onResume() {
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, new IntentFilter("otp"));
+        super.onResume();
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
+    }
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equalsIgnoreCase("otp")) {
+                final String message = intent.getStringExtra("message");
+                mEditVerificationCode.setText(message);
+            }
+        }
+    };
 
     /**
      * api call for user sign up
@@ -159,8 +223,23 @@ public class SignUpActivity extends AppCompatActivity {
             mEmail = mEditEmail.getText().toString();
             mPassword = mEditPassword.getText().toString();
             mUserMobNo = Long.parseLong(mEditMobNo.getText().toString());
+           if(!mEditVerificationCode.getText().toString().isEmpty()) {
+                try {
+                    mVerficationCode = Integer.parseInt(mEditVerificationCode.getText().toString());
+                }catch (NumberFormatException e){
 
-            mVerficationCode = Integer.parseInt(mEditVerificationCode.getText().toString());
+                }
+            }
+             BroadcastReceiver receiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    if (intent.getAction().equalsIgnoreCase("otp")) {
+                        final String message = intent.getStringExtra("message");
+                        mEditVerificationCode.setText(message);
+                    }
+                }
+            };
+
             getUserSignUp();
         } else {
             mProgressBar.setVisibility(View.GONE);
@@ -186,15 +265,14 @@ public class SignUpActivity extends AppCompatActivity {
      */
     @OnClick(R.id.txt_send_code)
     public void btnSendCode(View view) {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mScrollView.setAlpha((float) 0.6);
-        getVerificationCode();
+        mProgressBarOtp.setVisibility(View.VISIBLE);
+        getOtp();
     }
 
     /**
      * api call for verification code
      */
-    private void getVerificationCode() {
+    private void getOtp() {
         mEmail = mEditEmail.getText().toString();
         mUserMobNo = Long.parseLong(mEditMobNo.getText().toString());
 
@@ -203,15 +281,17 @@ public class SignUpActivity extends AppCompatActivity {
         userCall.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                mProgressBar.setVisibility(View.GONE);
-                mScrollView.setAlpha((float) 1.0);
+                mProgressBarOtp.setVisibility(View.GONE);
+                mTxtResendOtp.setVisibility(View.VISIBLE);
+                mTxtSendOtp.setVisibility(View.GONE);
                 RCLog.showToast(SignUpActivity.this, getString(R.string.toast_send_otp));
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                mProgressBar.setVisibility(View.GONE);
-                mScrollView.setAlpha((float) 1.0);
+                mProgressBarOtp.setVisibility(View.GONE);
+                mTxtResendOtp.setVisibility(View.VISIBLE);
+                mTxtResendOtp.setVisibility(View.GONE);
             }
         });
 
@@ -235,7 +315,7 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
-        if (!validateVerificationCode()) {
+        if (!validateOtp()) {
             return;
         }
 
@@ -281,7 +361,7 @@ public class SignUpActivity extends AppCompatActivity {
                     break;
 
                 case R.id.edit_otp:
-                    validateVerificationCode();
+                    validateOtp();
                     break;
             }
         }
@@ -369,13 +449,13 @@ public class SignUpActivity extends AppCompatActivity {
      * validate verification code
      * @return
      */
-    private boolean validateVerificationCode() {
+    private boolean validateOtp() {
         if (mEditVerificationCode.getText().toString().trim().isEmpty() || mEditVerificationCode.length() < 6) {
-            mInputLayoutVerificationCode.setError(getString(R.string.validate_otp));
+            mInputLayoutOtp.setError(getString(R.string.validate_otp));
             requestFocus(mEditVerificationCode);
             return false;
         } else {
-            mInputLayoutVerificationCode.setErrorEnabled(false);
+            mInputLayoutOtp.setErrorEnabled(false);
         }
 
         return true;

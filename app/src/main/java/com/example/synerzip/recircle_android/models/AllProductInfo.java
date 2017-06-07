@@ -26,6 +26,7 @@ public class AllProductInfo implements Parcelable {
     private ArrayList<Products> popularProducts;
 
     private ArrayList<Products> productDetails;
+
     /**
      * constructor for AllProductInfo
      *

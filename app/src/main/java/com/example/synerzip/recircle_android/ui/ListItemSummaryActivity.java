@@ -68,7 +68,7 @@ public class ListItemSummaryActivity extends AppCompatActivity {
     @BindView(R.id.txt_ten_days_disc)
     protected TextView mTxtDiscTenDays;
 
-    private String mItemDesc,mProductTitle;
+    private String mItemDesc, mProductTitle;
 
     private int mItemPrice, mMinRental;
 
@@ -77,6 +77,7 @@ public class ListItemSummaryActivity extends AppCompatActivity {
     private int fromAustin;
 
     private ArrayList<UserProdImages> listUploadItemImage;
+
     private ArrayList<UserProductUnAvailability> mItemAvailability;
 
     private ArrayList<Date> unavailableDates;
@@ -96,6 +97,7 @@ public class ListItemSummaryActivity extends AppCompatActivity {
     protected RecyclerView mRecyclerView;
 
     private int selectedImgPosition = 0;
+
     private LinearLayoutManager mLayoutManager;
 
     @BindView(R.id.txt_item_desc)
@@ -113,11 +115,11 @@ public class ListItemSummaryActivity extends AppCompatActivity {
     @BindView(R.id.txt_show_dates)
     protected TextView mTxtShowDates;
 
-    private ListAnItemRequest listAnItemRequest;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_list_item_summary);
         ButterKnife.bind(this);
 
@@ -160,7 +162,6 @@ public class ListItemSummaryActivity extends AppCompatActivity {
         mZipcode = AdditionalDetailsActivity.mZipcode;
         fromAustin = AdditionalDetailsActivity.fromAustin;
 
-
         mItemPrice = ListItemFragment.mItemPrice;
         mTxtItemPrice.setText("$ " + mItemPrice + "/day");
         mMinRental = ListItemFragment.mMinRental;
@@ -169,15 +170,17 @@ public class ListItemSummaryActivity extends AppCompatActivity {
         mItemDesc = AdditionalDetailsActivity.mItemDesc;
         mTxtItemDesc.setText(mItemDesc);
 
-        mProductTitle= ListItemFragment.mProductName;
+        mProductTitle = ListItemFragment.mProductName;
 
-        if(productId.isEmpty()){
+        if (productId.isEmpty()) {
             mTxtProductTitle.setText(ListItemFragment.mProductName);
-        }else {
+        } else {
             mTxtProductTitle.setText(ListItemFragment.productTitle);
         }
         //TODO product images should be taken from amazon s3 bucket ; yet to be done
+
         UserProdImages mUserProdImages;
+
         mUserProdImages = new UserProdImages("https://s3.ap-south-1.amazonaws.com/recircleimages/1398934243000_1047081.jpg",
                 "2017-02-04T13:13:09.000Z");
         listUploadItemImage.add(mUserProdImages);
@@ -212,16 +215,19 @@ public class ListItemSummaryActivity extends AppCompatActivity {
      * api call for list an item
      */
     private void getListAnItem() {
+        ListAnItemRequest listAnItemRequest;
         mProgressBar.setVisibility(View.VISIBLE);
         mLinearLayout.setAlpha((float) 0.6);
-        if(productId.isEmpty()){
-            listAnItemRequest = new ListAnItemRequest(mProductTitle, mItemPrice, mMinRental,
+      /*  if (productId.isEmpty()) {
+            listAnItemRequest = new ListAnItemRequest(mProductTitle, null, mItemPrice, mMinRental,
                     mItemDesc, listDiscounts, listUploadItemImage, mItemAvailability, mZipcode, fromAustin);
-        }else {
+        } else {
             listAnItemRequest = new ListAnItemRequest(productId, mItemPrice, mMinRental,
                     mItemDesc, listDiscounts, listUploadItemImage, mItemAvailability, mZipcode, fromAustin);
         }
-
+*/
+        listAnItemRequest = new ListAnItemRequest(productId, mItemPrice, mMinRental,
+                mItemDesc, listDiscounts, listUploadItemImage, mItemAvailability, mZipcode, fromAustin);
         service = ApiClient.getClient().create(RCAPInterface.class);
         Call<AllProductInfo> call = service.listAnItem("Bearer " + mAccessToken, listAnItemRequest);
         call.enqueue(new Callback<AllProductInfo>() {
@@ -325,7 +331,7 @@ public class ListItemSummaryActivity extends AppCompatActivity {
      */
     @OnClick(R.id.btn_confirm_item)
     public void btnConfirmItem(View view) {
-            getListAnItem();
+        getListAnItem();
     }
 
     /**
