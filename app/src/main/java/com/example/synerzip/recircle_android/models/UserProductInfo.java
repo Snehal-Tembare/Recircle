@@ -18,23 +18,28 @@ import lombok.Setter;
 
 public class UserProductInfo implements Parcelable {
 
+    private String user_product_id;
+
     private String product_id;
 
+    private String price_per_day;
+
+    private String user_prod_desc;
+
+    private String created_at;
+
+    private String product_avg_rating;
+
+    private ArrayList<UserProdImages> user_prod_images;
+
+    //For Custom Products
     private String avai_to_date;
 
     private String avai_from_date;
 
-    private String product_avg_rating;
+    private String min_rental_days;
 
-    private String created_at;
-
-    private ArrayList<UserProdImages> user_prod_images;
-
-    private String user_prod_desc;
-
-    private String price_per_day;
-
-    private String user_product_id;
+    private String user_product_zipcode;
 
     private ArrayList<UserProdReview> user_prod_reviews;
 
@@ -51,6 +56,8 @@ public class UserProductInfo implements Parcelable {
         user_prod_desc = in.readString();
         price_per_day = in.readString();
         user_product_id = in.readString();
+        min_rental_days = in.readString();
+        user_product_zipcode = in.readString();
         user_prod_reviews = in.readArrayList(UserProdReview.class.getClassLoader());
         user_prod_unavailability = in.readArrayList(UserProductUnAvailability.class.getClassLoader());
         user_product_discounts = in.readArrayList(UserProductDiscount.class.getClassLoader());
@@ -82,6 +89,8 @@ public class UserProductInfo implements Parcelable {
         dest.writeString(created_at);
         dest.writeString(user_prod_desc);
         dest.writeString(price_per_day);
+        dest.writeString(min_rental_days);
+        dest.writeString(user_product_zipcode);
         dest.writeString(user_product_id);
         dest.writeList(user_prod_reviews);
         dest.writeList(user_prod_unavailability);

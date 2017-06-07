@@ -19,6 +19,7 @@
             android:layout_margin="@dimen/common_dimens_5"
             android:layout_marginBottom="@dimen/common_dimens_5">
             <com.pkmmte.view.CircularImageView
+                android:id="@+id/img"
                 android:layout_width="@dimen/common_dimens_40"
                 android:layout_height="@dimen/common_dimens_40"
                 app:border="false"
@@ -26,17 +27,37 @@
                 app:border_color="@color/common_white"
                 app:border_width="@dimen/dimen_1dp" />
             <TextView
+                android:id="@+id/txt_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Snehal Tembare"
                 android:textSize="@dimen/text_size_18"
                 android:textStyle="bold"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <RatingBar
+                    android:id="@+id/rating_bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="?android:attr/ratingBarStyleSmall"/>
+                <TextView
+                    android:id="@+id/txt_no_of_reviews"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(20)"/>
+            </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_1dp"
-                android:background="@color/view_color"
-                android:layout_marginTop="@dimen/common_dimens_5"
-                android:layout_marginBottom="@dimen/common_dimens_5"/>
+                android:background="@color/status_color"
+                android:layout_margin="@dimen/common_dimens_5" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_items"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
         </LinearLayout>
 
 

@@ -121,7 +121,7 @@ public class AllRequestsActivity extends AppCompatActivity{
                 }else if (response.code() != RCWebConstants.RC_ERROR_CODE_FORBIDDEN ||
                         response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
                     mProgressBar.setVisibility(View.GONE);
-                    RCLog.showToast(getApplicationContext(), getString(R.string.something_went_wrong));
+                    RCLog.showToast(getApplicationContext(), getString(R.string.session_expired));
                     //TODO
                     //loginDialog();
                 } else {

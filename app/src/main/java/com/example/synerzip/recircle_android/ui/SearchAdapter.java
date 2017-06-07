@@ -46,9 +46,14 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         Products product = productsArrayList.get(position);
         holder.productName.setText(product.getProduct_info().getProduct_title());
         holder.pricePerDay.setText("$" + product.getUser_product_info().getPrice_per_day() + "/day");
-        Picasso.with(mContext)
-                .load(product.getProduct_info().getProduct_image_url().getUser_prod_image_url())
-                .into(holder.imgProduct);
+
+        if (product.getUser_product_info().getUser_prod_images().get(position).getUser_prod_image_url() != null
+                && product.getUser_product_info().getUser_prod_images().size() != 0) {
+            Picasso.with(mContext)
+                    .load(product.getUser_product_info().getUser_prod_images().get(position).getUser_prod_image_url())
+                    .into(holder.imgProduct);
+        }
+
         holder.ownerName.setText(product.getUser_info().getFirst_name() + " "
                 + product.getUser_info().getLast_name());
         holder.ratings.setRating(Float.parseFloat(product.getUser_product_info()
@@ -98,7 +103,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             ratings = (RatingBar) itemView.findViewById(R.id.ratingbar);
         }
 
-         void bind(final Products products, final OnItemClickListener onItemClickListener) {
+        void bind(final Products products, final OnItemClickListener onItemClickListener) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

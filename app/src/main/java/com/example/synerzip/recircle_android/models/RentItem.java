@@ -25,6 +25,7 @@ public class RentItem implements Parcelable {
     private int protection_plan_fee;
     private int final_payment;
     private int protection_plan;
+    private int pre_auth_fee;
 
     public RentItem(){}
 
@@ -40,6 +41,7 @@ public class RentItem implements Parcelable {
         protection_plan_fee = in.readInt();
         final_payment = in.readInt();
         protection_plan = in.readInt();
+        pre_auth_fee = in.readInt();
     }
 
     public static final Creator<RentItem> CREATOR = new Creator<RentItem>() {
@@ -96,5 +98,6 @@ public class RentItem implements Parcelable {
         dest.writeInt(protection_plan_fee);
         dest.writeInt(final_payment);
         dest.writeInt(protection_plan);
+        dest.writeInt(pre_auth_fee);
     }
 }

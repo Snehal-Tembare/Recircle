@@ -26,7 +26,7 @@ public class UserInfo implements Parcelable{
 
     private String email;
 
-    private ArrayList<UserAddresses> user_addresses;
+    private ArrayList<UserAddresses> user_address;
 
     private String last_name;
 

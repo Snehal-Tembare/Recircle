@@ -219,7 +219,9 @@ public class DetailsActivity extends AppCompatActivity {
                                     @Override
                                     public void onImageClick(int position, UserProdImages userProdImages) {
 
-                                        Picasso.with(DetailsActivity.this).load(userProdImages.getUser_prod_image_url()).into(mImgMain);
+                                        Picasso.with(DetailsActivity.this)
+                                                .load(userProdImages.getUser_prod_image_url())
+                                                .into(mImgMain);
 
                                         View view = mRecyclerImages.getChildAt(position);
 
@@ -254,8 +256,9 @@ public class DetailsActivity extends AppCompatActivity {
 
                             mCollapsibleLayout.setTitle(product.getProduct_info().getProduct_title());
 
-                            Picasso.with(getApplicationContext()).load(product.getUser_info()
-                                    .getUser_image_url()).into(mImgUser);
+                                Picasso.with(getApplicationContext())
+                                        .load(product.getUser_info().getUser_image_url())
+                                        .placeholder(R.drawable.ic_user).into(mImgUser);
 
                             mTxtUserName.setText(product.getUser_info().getFirst_name() + " "
                                     + product.getUser_info().getLast_name());
@@ -290,13 +293,10 @@ public class DetailsActivity extends AppCompatActivity {
                             }
 
                             if (product.getUser_product_info().getUser_prod_images() != null
-                                    && !product.getUser_product_info().getUser_prod_images().isEmpty()) {
+                                    && product.getUser_product_info().getUser_prod_images().size() != 0) {
                                 Picasso.with(getApplicationContext())
                                         .load(product.getUser_product_info().getUser_prod_images().get(0).getUser_prod_image_url())
                                         .into(mImgMain);
-                                if (product.getUser_product_info().getUser_prod_images().size() == 1) {
-
-                                }
                             }
                         }
                     }

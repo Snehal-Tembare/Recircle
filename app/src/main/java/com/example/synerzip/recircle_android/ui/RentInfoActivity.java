@@ -9,8 +9,10 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
@@ -51,9 +53,17 @@ public class RentInfoActivity extends AppCompatActivity {
     private int forDays;
     private int protectionPlanFee;
     private int serviceFee;
+    private int preAuthFee;
     public static RentItem mRentItem;
 
     private String user_id;
+
+    private Products mProduct;
+    private Bundle mBundle;
+    private Date fromDate;
+    private Date toDate;
+    private ArrayList<UserProductUnAvailability> userProductUnAvailabilities;
+    private int dayCount;
 
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
@@ -103,13 +113,21 @@ public class RentInfoActivity extends AppCompatActivity {
     @BindView(R.id.check_protection_plan)
     protected CheckBox mChckProtectionPlan;
 
-    private Products mProduct;
-    private Bundle mBundle;
-    private Date fromDate;
-    private Date toDate;
-    private ArrayList<UserProductUnAvailability> userProductUnAvailabilities;
-    private int dayCount;
 
+    @BindView(R.id.txt_service_fee)
+    protected TextView mTxtServiceFee;
+
+    @BindView(R.id.txt_pre_auth_fee)
+    protected TextView mTxtPreAuthFee;
+
+    @BindView(R.id.txt_protection_fee)
+    protected TextView mTxtProtectionFee;
+
+    @BindView(R.id.protection_layout)
+    protected LinearLayout mProtectionLayout;
+
+    @BindView(R.id.pre_auth_layout)
+    protected LinearLayout mPreAuthLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,66 +147,9 @@ public class RentInfoActivity extends AppCompatActivity {
         mBundle = getIntent().getExtras();
 
         if (mBundle != null) {
-
-            mProduct = mBundle.getParcelable(getString(R.string.product));
-            userProductUnAvailabilities = mBundle.getParcelableArrayList(getString(R.string.unavail_dates));
-
-
-            if (mProduct != null) {
-                mRentItem = new RentItem();
-                mRentItem.setUser_product_id(mProduct.getUser_product_info().getUser_product_id());
-                mRentItem.setOrder_from_date(mBundle.getString(getString(R.string.from_date)));
-                mRentItem.setOrder_to_date(mBundle.getString(getString(R.string.to_date)));
-                if (mProduct.getUser_info().getUser_id() != null) {
-                    user_id = mProduct.getUser_info().getUser_id();
-                }
-
-                mTxtTitle.setText(mProduct.getProduct_info().getProduct_title());
-
-                mTxtManufaturerName.setText(mProduct.getProduct_info().getProduct_manufacturer_name());
-                mTxtPrice.setText("$" + mProduct.getUser_product_info().getPrice_per_day() + "/day");
-
-                Picasso.with(this).load(mProduct.getProduct_info()
-                        .getProduct_image_url().getUser_prod_image_url())
-                        .into(mImgProduct);
-                Picasso.with(this).load(mProduct.getUser_info().getUser_image_url()).into(mImgOwner);
-
-                mTxtOwnerName.setText(mProduct.getUser_info().getFirst_name() + " " + mProduct.getUser_info().getLast_name());
-                dayCount = calculateDayCount(mBundle.getString(getString(R.string.from_date)),
-                        mBundle.getString(getString(R.string.to_date)));
-
-                mTxtFromDate.setText(formatedFromDate);
-                mTxtToDate.setText(formatedToDate);
-
-                subTotal = dayCount * Integer.parseInt(mProduct.getUser_product_info().getPrice_per_day());
-                finalTotal = subTotal;
-                mTxtDays.setText(String.valueOf(dayCount) + " " + getString(R.string.days));
-                mTxtSubTotal.setText("$" + String.valueOf(subTotal));
-            }
+            dayCount = calculateDayCount(mBundle.getString(getString(R.string.from_date)),
+                    mBundle.getString(getString(R.string.to_date)));
         }
-
-        //It handles edit dates functionality
-        mTxtSelectedDates.setOnTouchListener(new View.OnTouchListener() {
-            final int DRAWABLE_RIGHT = 2;
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if (event.getRawX() >= (mTxtSelectedDates.getRight() - mTxtSelectedDates.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        Intent intent = new Intent(RentInfoActivity.this, CalendarActivity.class);
-                        intent.putExtra(getString(R.string.from_date), mBundle.getString(getString(R.string.from_date)));
-                        intent.putExtra(getString(R.string.to_date), mBundle.getString(getString(R.string.to_date)));
-                        intent.putExtra(getString(R.string.selected_dates_list), CalendarActivity.selectedDates);
-                        if (userProductUnAvailabilities != null && userProductUnAvailabilities.size() != 0) {
-                            intent.putParcelableArrayListExtra(getString(R.string.unavail_dates), userProductUnAvailabilities);
-                        }
-                        isDateEdited = true;
-                        startActivityForResult(intent, REQUEST_CODE);
-                    }
-                }
-                return true;
-            }
-        });
     }
 
     /**
@@ -230,13 +191,14 @@ public class RentInfoActivity extends AppCompatActivity {
 
                 dayCount = calculateDayCount(from, to);
 
-                subTotal = Math.abs(dayCount) * Integer.parseInt(mProduct.getUser_product_info().getPrice_per_day());
-                finalTotal = subTotal;
-                discount = 0;
-
-                mTxtFromDate.setText(formatedFromDate);
-                mTxtToDate.setText(formatedToDate);
-                mTxtDays.setText(String.valueOf(dayCount) + " " + getString(R.string.days));
+//                subTotal = Math.abs(dayCount) * Integer.parseInt(mProduct.getUser_product_info().getPrice_per_day());
+//                serviceFee = (int) Math.round(subTotal * (0.08));
+//                finalTotal = subTotal + serviceFee;
+//                discount = 0;
+//
+//                mTxtFromDate.setText(formatedFromDate);
+//                mTxtToDate.setText(formatedToDate);
+//                mTxtDays.setText(String.valueOf(dayCount) + " " + getString(R.string.days));
             }
         }
     }
@@ -245,24 +207,127 @@ public class RentInfoActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (mProduct != null) {
-            serviceFee= (int) (subTotal*(0.8));
-            protectionPlanFee= (int) (Integer.parseInt(mProduct.getUser_product_info().getPrice_per_day()) *0.1);
 
-            //Calculate discount
-            if (mProduct.getUser_product_info().getUser_product_discounts() != null
-                    && mProduct.getUser_product_info().getUser_product_discounts().size() > 0) {
+        if (mBundle != null) {
 
-                for (int i = 0; i < mProduct.getUser_product_info().getUser_product_discounts().size(); i++) {
-                    if (mProduct.getUser_product_info().getUser_product_discounts().get(i).getIsActive() != null
-                            && dayCount >= mProduct.getUser_product_info().getUser_product_discounts().get(i).getDiscount_for_days()
-                            && !mProduct.getUser_product_info().getUser_product_discounts().get(i).getIsActive()) {
-                        discount = subTotal * mProduct.getUser_product_info().getUser_product_discounts().get(i).getPercentage() / 100;
-                        finalTotal = subTotal - discount;
-                        percentage = mProduct.getUser_product_info().getUser_product_discounts().get(i).getPercentage();
-                        forDays = mProduct.getUser_product_info().getUser_product_discounts().get(i).getDiscount_for_days();
-                    }
+            mProduct = mBundle.getParcelable(getString(R.string.product));
+            userProductUnAvailabilities = mBundle.getParcelableArrayList(getString(R.string.unavail_dates));
+
+
+            if (mProduct != null) {
+
+                mRentItem = new RentItem();
+                mRentItem.setUser_product_id(mProduct.getUser_product_info().getUser_product_id());
+                mRentItem.setOrder_from_date(mBundle.getString(getString(R.string.from_date)));
+                mRentItem.setOrder_to_date(mBundle.getString(getString(R.string.to_date)));
+
+                //Products data
+                if (mProduct.getUser_info().getUser_id() != null) {
+                    user_id = mProduct.getUser_info().getUser_id();
                 }
+
+                mTxtTitle.setText(mProduct.getProduct_info().getProduct_title());
+
+                mTxtManufaturerName.setText(mProduct.getProduct_info().getProduct_manufacturer_name());
+                mTxtPrice.setText("$" + mProduct.getUser_product_info().getPrice_per_day() + "/day");
+
+                if (mProduct.getUser_product_info().getUser_prod_images() != null
+                        && mProduct.getUser_product_info().getUser_prod_images().size() != 0 &&
+                        mProduct.getUser_product_info().getUser_prod_images().get(0).getUser_prod_image_url() != null) {
+                    Picasso.with(this).load(mProduct.getUser_product_info()
+                            .getUser_prod_images().get(0).getUser_prod_image_url())
+                            .into(mImgProduct);
+                }
+
+                if (mProduct.getUser_info().getUser_image_url() != null) {
+                    Picasso.with(this).load(mProduct.getUser_info().getUser_image_url())
+                            .into(mImgOwner);
+                }
+
+                mTxtOwnerName.setText(mProduct.getUser_info().getFirst_name() + " " + mProduct.getUser_info().getLast_name());
+
+                mTxtFromDate.setText(formatedFromDate);
+                mTxtToDate.setText(formatedToDate);
+
+                subTotal = Math.abs(dayCount) * Integer.parseInt(mProduct.getUser_product_info().getPrice_per_day());
+                serviceFee = (int) Math.round(subTotal * (0.08));
+                finalTotal = subTotal + serviceFee;
+
+                //Calculate fees
+                protectionPlanFee = (int) (Integer.parseInt(mProduct.getUser_product_info().getPrice_per_day()) * 0.01);
+                preAuthFee = (int) (Integer.parseInt(mProduct.getUser_product_info().getPrice_per_day()) * 0.25);
+
+                //Calculate discount
+                if (mProduct.getUser_product_info().getUser_product_discounts() != null
+                        && mProduct.getUser_product_info().getUser_product_discounts().size() > 0) {
+
+                    for (int i = 0; i < mProduct.getUser_product_info().getUser_product_discounts().size(); i++) {
+                        if (mProduct.getUser_product_info().getUser_product_discounts().get(i).getIsActive() != null
+                                && dayCount >= mProduct.getUser_product_info().getUser_product_discounts().get(i).getDiscount_for_days()
+                                && !mProduct.getUser_product_info().getUser_product_discounts().get(i).getIsActive()) {
+                            discount = subTotal * mProduct.getUser_product_info().getUser_product_discounts().get(i).getPercentage() / 100;
+                            finalTotal = subTotal - discount + protectionPlanFee + serviceFee + preAuthFee;
+                            percentage = mProduct.getUser_product_info().getUser_product_discounts().get(i).getPercentage();
+                            forDays = mProduct.getUser_product_info().getUser_product_discounts().get(i).getDiscount_for_days();
+                        }
+                    }
+
+                   /* if (discount == 0) {
+                        mTxtDiscounts.setText("$0.0");
+                        mTxtSubTotal.setText("$" + String.valueOf(subTotal));
+                        mTxtTotal.setText("$" + String.valueOf(finalTotal));
+                    } else {
+                        mTxtDiscounts.setText("$" + discount + " (" + percentage + "% for " + forDays + " " + getString(R.string.days) + ")");
+                        mTxtSubTotal.setText("$" + String.valueOf(subTotal));
+                        mTxtTotal.setText("$" + String.valueOf(finalTotal));
+                    }*/
+                }
+                /*else {
+                    mTxtDiscounts.setText("$0.0");
+                    mTxtTotal.setText("$" + String.valueOf(subTotal));
+                }*/
+
+                //It handles edit dates functionality
+                mTxtSelectedDates.setOnTouchListener(new View.OnTouchListener() {
+                    final int DRAWABLE_RIGHT = 2;
+
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        if (event.getAction() == MotionEvent.ACTION_UP) {
+                            if (event.getRawX() >= (mTxtSelectedDates.getRight() - mTxtSelectedDates.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                                Intent intent = new Intent(RentInfoActivity.this, CalendarActivity.class);
+                                intent.putExtra(getString(R.string.from_date), mBundle.getString(getString(R.string.from_date)));
+                                intent.putExtra(getString(R.string.to_date), mBundle.getString(getString(R.string.to_date)));
+                                intent.putExtra(getString(R.string.selected_dates_list), CalendarActivity.selectedDates);
+                                if (userProductUnAvailabilities != null && userProductUnAvailabilities.size() != 0) {
+                                    intent.putParcelableArrayListExtra(getString(R.string.unavail_dates), userProductUnAvailabilities);
+                                }
+                                isDateEdited = true;
+                                startActivityForResult(intent, REQUEST_CODE);
+                            }
+                        }
+                        return true;
+                    }
+                });
+
+                mChckProtectionPlan.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (isChecked) {
+                            mProtectionLayout.setVisibility(View.VISIBLE);
+                            mPreAuthLayout.setVisibility(View.GONE);
+
+                            finalTotal = (subTotal - discount) + protectionPlanFee + serviceFee;
+                            mTxtTotal.setText("$" + String.valueOf(finalTotal));
+                        } else {
+                            mProtectionLayout.setVisibility(View.GONE);
+                            mPreAuthLayout.setVisibility(View.VISIBLE);
+                            finalTotal = (subTotal - discount) +serviceFee;
+                            mTxtTotal.setText("$" + String.valueOf(finalTotal));
+                            mTxtPreAuthFee.setText(String.valueOf(preAuthFee));
+                        }
+                    }
+                });
 
                 if (discount == 0) {
                     mTxtDiscounts.setText("$0.0");
@@ -273,11 +338,15 @@ public class RentInfoActivity extends AppCompatActivity {
                     mTxtSubTotal.setText("$" + String.valueOf(subTotal));
                     mTxtTotal.setText("$" + String.valueOf(finalTotal));
                 }
-            } else {
-                mTxtDiscounts.setText("$0.0");
-                mTxtTotal.setText("$" + String.valueOf(subTotal));
+
+                mTxtDays.setText(String.valueOf(dayCount) + " " + getString(R.string.days));
+                mTxtSubTotal.setText("$" + String.valueOf(subTotal));
+                mTxtServiceFee.setText(String.valueOf(serviceFee));
+                mTxtProtectionFee.setText(String.valueOf(protectionPlanFee));
+
             }
         }
+
     }
 
     @Override
@@ -313,6 +382,7 @@ public class RentInfoActivity extends AppCompatActivity {
         } else {
             mRentItem.setProtection_plan(0);
             mRentItem.setProtection_plan_fee(0);
+            mRentItem.setPre_auth_fee(preAuthFee);
         }
 
         Intent intentPayMode = new Intent(this, PaymentModeActivity.class);

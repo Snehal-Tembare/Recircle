@@ -2,12 +2,12 @@ package com.example.synerzip.recircle_android.ui.rentals;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,6 +36,8 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
     private String formatedFromDate;
     private String formatedToDate;
     private int dayCount;
+private Date onDate = null;
+
 
     RequestAdapter(Context context, ArrayList<UserRequests> userRequestsArrayList) {
         mContext = context;
@@ -50,7 +52,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        UserRequests userRequest = userRequestsArrayList.get(position);
+        final UserRequests userRequest = userRequestsArrayList.get(position);
 
 
         if (userRequest.getUser() != null) {
@@ -74,7 +76,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
         }
 
         DateFormat formatter = new SimpleDateFormat(mContext.getString(R.string.ddd_mm));
-        DateFormat simpleDateFormat = new SimpleDateFormat(mContext.getString(R.string.dd_mm_yyyy_hh_mm));
+        final DateFormat simpleDateFormat = new SimpleDateFormat(mContext.getString(R.string.dd_mm_yyyy_hh_mm));
         Date fromDate = null;
         Date toDate = null;
 
@@ -83,12 +85,12 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
             String orderFromDate = userRequest.getOrder_from_date().toString();
             String orderToDate = userRequest.getOrder_to_date().toString();
 
-            Date onDate = formatter.parse(orderOnDate);
+            onDate = formatter.parse(orderOnDate);
             fromDate = formatter.parse(orderFromDate);
             toDate = formatter.parse(orderToDate);
 
             holder.mTxtRequestLabel.setText(mContext.getString(R.string.requested_on)
-                    + simpleDateFormat.format(onDate));
+                    +" "+ simpleDateFormat.format(onDate));
 
             //Adding 24hours in Request Time
             Calendar calendar = new GregorianCalendar();
@@ -150,13 +152,43 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
                 + mContext.getString(R.string.per_day)));
 
         TODO:
+        //Dialog for approve request
         holder.mImgApprove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
-                dialog.setView(R.layout.approve_dialog);
+                LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View view = inflater.inflate(R.layout.approve_dialog, null);
+                dialog.setView(view);
                 dialog.setCancelable(true);
                 dialog.show();
+
+                TextView mTxtUserName = (TextView) view.findViewById(R.id.txt_requesters_name);
+                TextView mTxtItemName = (TextView) view.findViewById(R.id.txt_item_name);
+                TextView mTxtRequestedOn = (TextView) view.findViewById(R.id.txt_requested_on);
+                CircularImageView mImgRequestres = (CircularImageView) view.findViewById(R.id.img_requesters);
+                EditText mEdtMsg = (EditText) view.findViewById(R.id.edt_msg_to_requester);
+                Button mBtnApprove = (Button) view.findViewById(R.id.btn_approve);
+
+
+                if (userRequest != null) {
+                    if (userRequest.getUser() != null) {
+                        if (userRequest.getUser().getUser_image_url() != null) {
+                            Picasso.with(mContext).load(userRequest.getUser().getUser_image_url())
+                                    .placeholder(R.drawable.ic_user)
+                                    .into(mImgRequestres);
+                        }
+                        mTxtItemName.setText(userRequest.getProduct().getProduct_title());
+                    }
+
+                    if (userRequest.getUser() != null) {
+                        mTxtUserName.setText(userRequest.getUser().getFirst_name() + " "
+                                + userRequest.getUser().getLast_name());
+                    }
+
+                    mTxtRequestedOn.setText(mContext.getString(R.string.requested_on)+
+                            " "+ simpleDateFormat.format(onDate));
+                }
 
             }
         });
