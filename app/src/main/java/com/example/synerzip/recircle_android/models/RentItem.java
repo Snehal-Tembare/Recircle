@@ -22,7 +22,7 @@ public class RentItem implements Parcelable {
     private int payment_total;
     private int payment_discount;
     private int service_fee;
-    private int protection_plan_fee;
+    private double protection_plan_fee;
     private int final_payment;
     private int protection_plan;
     private int pre_auth_fee;
@@ -95,7 +95,7 @@ public class RentItem implements Parcelable {
         dest.writeInt(payment_total);
         dest.writeInt(payment_discount);
         dest.writeInt(service_fee);
-        dest.writeInt(protection_plan_fee);
+        dest.writeDouble(protection_plan_fee);
         dest.writeInt(final_payment);
         dest.writeInt(protection_plan);
         dest.writeInt(pre_auth_fee);

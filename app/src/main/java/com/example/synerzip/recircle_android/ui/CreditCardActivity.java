@@ -133,8 +133,8 @@ public class CreditCardActivity extends AppCompatActivity {
                                 String orderFromDate = dateFormat.format(fromDate);
                                 String orderToDate = dateFormat.format(toDate);
 
-                                RentInfoActivity.mRentItem.setOrder_from_date(orderFromDate);
-                                RentInfoActivity.mRentItem.setOrder_to_date(orderToDate);
+//                                RentInfoActivity.mRentItem.setOrder_from_date(orderFromDate);
+//                                RentInfoActivity.mRentItem.setOrder_to_date(orderToDate);
                                 Log.v(TAG, "From Date" + orderFromDate);
                                 Log.v(TAG, "To Date" + orderToDate);
 
@@ -144,7 +144,7 @@ public class CreditCardActivity extends AppCompatActivity {
 
                                 RentInfoActivity.mRentItem.setDate_on_order(dateOnOrder);
 
-                                Log.v("CreditCardActivity", "UserId" + RentInfoActivity.mRentItem.getUser_product_id());
+                               // Log.v("CreditCardActivity", "UserId" + RentInfoActivity.mRentItem.getUser_product_id());
                             }
 
 

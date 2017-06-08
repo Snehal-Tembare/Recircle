@@ -54,4 +54,6 @@ public class RCWebConstants {
 
     public static final String RC_EDIT_CREDIT_CARD="/api/stripe/:userPaymentMethodId";
 
+    public static final String RC_ACTION_ON_USER_REQUEST="/api/user_message/:userProdMsgId";
+
 }

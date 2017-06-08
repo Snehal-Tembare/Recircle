@@ -19,6 +19,7 @@ import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.Products;
 import com.example.synerzip.recircle_android.models.RentItem;
 import com.example.synerzip.recircle_android.models.UserProductUnAvailability;
+import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.pkmmte.view.CircularImageView;
 import com.squareup.picasso.Picasso;
 
@@ -48,10 +49,11 @@ public class RentInfoActivity extends AppCompatActivity {
     public String formatedToDate;
     private int discount = 0;
     private int finalTotal = 0;
-    private int subTotal;
+    private int subTotal = 0;
+    private int total = 0;
     private int percentage;
     private int forDays;
-    private int protectionPlanFee;
+    private double protectionPlanFee;
     private int serviceFee;
     private int preAuthFee;
     public static RentItem mRentItem;
@@ -190,15 +192,6 @@ public class RentInfoActivity extends AppCompatActivity {
                 String to = data.getStringExtra(getString(R.string.to_date));
 
                 dayCount = calculateDayCount(from, to);
-
-//                subTotal = Math.abs(dayCount) * Integer.parseInt(mProduct.getUser_product_info().getPrice_per_day());
-//                serviceFee = (int) Math.round(subTotal * (0.08));
-//                finalTotal = subTotal + serviceFee;
-//                discount = 0;
-//
-//                mTxtFromDate.setText(formatedFromDate);
-//                mTxtToDate.setText(formatedToDate);
-//                mTxtDays.setText(String.valueOf(dayCount) + " " + getString(R.string.days));
             }
         }
     }
@@ -218,8 +211,22 @@ public class RentInfoActivity extends AppCompatActivity {
 
                 mRentItem = new RentItem();
                 mRentItem.setUser_product_id(mProduct.getUser_product_info().getUser_product_id());
-                mRentItem.setOrder_from_date(mBundle.getString(getString(R.string.from_date)));
-                mRentItem.setOrder_to_date(mBundle.getString(getString(R.string.to_date)));
+
+                String from = mBundle.getString(getString(R.string.from_date));
+                String to = mBundle.getString(getString(R.string.to_date));
+
+                DateFormat formatter = new SimpleDateFormat(getString(R.string.date_format));
+                DateFormat simpleDateFormat = new SimpleDateFormat(getString(R.string.ddd_mm));
+                try {
+                    fromDate = formatter.parse(from.toString());
+                    toDate = formatter.parse(to.toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                mRentItem.setOrder_from_date(simpleDateFormat.format(fromDate));
+                mRentItem.setOrder_to_date(simpleDateFormat.format(toDate));
+
 
                 //Products data
                 if (mProduct.getUser_info().getUser_id() != null) {
@@ -254,7 +261,7 @@ public class RentInfoActivity extends AppCompatActivity {
                 finalTotal = subTotal + serviceFee;
 
                 //Calculate fees
-                protectionPlanFee = (int) (Integer.parseInt(mProduct.getUser_product_info().getPrice_per_day()) * 0.01);
+                protectionPlanFee = (double) (Integer.parseInt(mProduct.getUser_product_info().getPrice_per_day()) * 0.01);
                 preAuthFee = (int) (Integer.parseInt(mProduct.getUser_product_info().getPrice_per_day()) * 0.25);
 
                 //Calculate discount
@@ -264,28 +271,16 @@ public class RentInfoActivity extends AppCompatActivity {
                     for (int i = 0; i < mProduct.getUser_product_info().getUser_product_discounts().size(); i++) {
                         if (mProduct.getUser_product_info().getUser_product_discounts().get(i).getIsActive() != null
                                 && dayCount >= mProduct.getUser_product_info().getUser_product_discounts().get(i).getDiscount_for_days()
-                                && !mProduct.getUser_product_info().getUser_product_discounts().get(i).getIsActive()) {
+                                && mProduct.getUser_product_info().getUser_product_discounts().get(i).getIsActive()) {
                             discount = subTotal * mProduct.getUser_product_info().getUser_product_discounts().get(i).getPercentage() / 100;
-                            finalTotal = subTotal - discount + protectionPlanFee + serviceFee + preAuthFee;
+                            total = subTotal - discount;
+                            finalTotal = (int) (total + protectionPlanFee + serviceFee);
                             percentage = mProduct.getUser_product_info().getUser_product_discounts().get(i).getPercentage();
                             forDays = mProduct.getUser_product_info().getUser_product_discounts().get(i).getDiscount_for_days();
                         }
                     }
-
-                   /* if (discount == 0) {
-                        mTxtDiscounts.setText("$0.0");
-                        mTxtSubTotal.setText("$" + String.valueOf(subTotal));
-                        mTxtTotal.setText("$" + String.valueOf(finalTotal));
-                    } else {
-                        mTxtDiscounts.setText("$" + discount + " (" + percentage + "% for " + forDays + " " + getString(R.string.days) + ")");
-                        mTxtSubTotal.setText("$" + String.valueOf(subTotal));
-                        mTxtTotal.setText("$" + String.valueOf(finalTotal));
-                    }*/
                 }
-                /*else {
-                    mTxtDiscounts.setText("$0.0");
-                    mTxtTotal.setText("$" + String.valueOf(subTotal));
-                }*/
+
 
                 //It handles edit dates functionality
                 mTxtSelectedDates.setOnTouchListener(new View.OnTouchListener() {
@@ -317,14 +312,14 @@ public class RentInfoActivity extends AppCompatActivity {
                             mProtectionLayout.setVisibility(View.VISIBLE);
                             mPreAuthLayout.setVisibility(View.GONE);
 
-                            finalTotal = (subTotal - discount) + protectionPlanFee + serviceFee;
+                            finalTotal = (int) (total + protectionPlanFee + serviceFee);
                             mTxtTotal.setText("$" + String.valueOf(finalTotal));
                         } else {
                             mProtectionLayout.setVisibility(View.GONE);
                             mPreAuthLayout.setVisibility(View.VISIBLE);
-                            finalTotal = (subTotal - discount) +serviceFee;
+                            finalTotal = total + serviceFee;
                             mTxtTotal.setText("$" + String.valueOf(finalTotal));
-                            mTxtPreAuthFee.setText(String.valueOf(preAuthFee));
+                            mTxtPreAuthFee.setText("$" + String.valueOf(preAuthFee));
                         }
                     }
                 });
@@ -341,8 +336,9 @@ public class RentInfoActivity extends AppCompatActivity {
 
                 mTxtDays.setText(String.valueOf(dayCount) + " " + getString(R.string.days));
                 mTxtSubTotal.setText("$" + String.valueOf(subTotal));
-                mTxtServiceFee.setText(String.valueOf(serviceFee));
-                mTxtProtectionFee.setText(String.valueOf(protectionPlanFee));
+                mTxtServiceFee.setText("$" + String.valueOf(serviceFee));
+                mTxtProtectionFee.setText("$" + String.valueOf(protectionPlanFee));
+                mTxtPreAuthFee.setText("$" + String.valueOf(preAuthFee));
 
             }
         }
@@ -385,9 +381,15 @@ public class RentInfoActivity extends AppCompatActivity {
             mRentItem.setPre_auth_fee(preAuthFee);
         }
 
-        Intent intentPayMode = new Intent(this, PaymentModeActivity.class);
+        //Waiting for stripe integration
+       /* Intent intentPayMode = new Intent(this, PaymentModeActivity.class);
         intentPayMode.putExtra(getString(R.string.total), finalTotal);
         intentPayMode.putExtra(getString(R.string.user_id), user_id);
-        startActivity(intentPayMode);
+        startActivity(intentPayMode);*/
+
+        startActivity(new Intent(this, RentItemSuccessActivity.class));
+        RCLog.showToast(this, getString(R.string.item_requested_successfully));
+
+
     }
 }
