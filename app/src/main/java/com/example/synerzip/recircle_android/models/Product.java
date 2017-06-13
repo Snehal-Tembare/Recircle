@@ -3,6 +3,9 @@ package com.example.synerzip.recircle_android.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 
 import lombok.Getter;

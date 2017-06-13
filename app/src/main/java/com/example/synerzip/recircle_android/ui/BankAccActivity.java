@@ -17,6 +17,7 @@ import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
 /**
  * Created by Prajakta Patil on 22/5/17.
  * Copyright © 2017 Synerzip. All rights reserved

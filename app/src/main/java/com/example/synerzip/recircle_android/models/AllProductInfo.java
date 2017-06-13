@@ -19,13 +19,15 @@ import lombok.Setter;
 
 public class AllProductInfo implements Parcelable {
 
+    private ArrayList<Products> popularProducts;
+
+    private ArrayList<Products> productDetails;
+
     private String message;
 
     private String user_product_id;
 
-    private ArrayList<Products> popularProducts;
 
-    private ArrayList<Products> productDetails;
     /**
      * constructor for AllProductInfo
      *

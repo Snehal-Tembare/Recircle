@@ -23,7 +23,7 @@
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="false"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_recircle_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:supportsRtl="true"
@@ -55,17 +55,30 @@
         <activity android:name=".ui.UploadImgActivity" />
         <activity android:name=".ui.AdditionalDetailsActivity" />
         <activity android:name=".ui.AllReviewsActivity" />
-        <activity android:name=".ui.RentInfoActivity" />
-        <activity android:name=".ui.PaymentModeActivity" />
-        <activity android:name=".ui.CreditCardActivity" />
+        <activity android:name=".ui.rentitem.RentInfoActivity" />
+        <activity android:name=".ui.rentitem.PaymentModeActivity" />
+        <activity android:name=".ui.rentitem.CreditCardActivity" />
         <activity android:name=".ui.HomeActivity" />
-        <activity android:name=".ui.RentItemSuccessActivity" />
+        <activity android:name=".ui.rentitem.RentItemSuccessActivity" />
         <activity android:name=".ui.SettingsActivity" />
         <activity android:name=".ui.EditProfileActivity" />
         <activity android:name=".ui.PaymentsActivity" />
         <activity android:name=".ui.BankAccActivity" />
+
+        <receiver
+            android:name=".ui.SignUpActivity$IncomingSms"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+                <action android:name="com.example.app.START_SERVICE" />
+                <action android:name="com.example.app.STOP_SERVICE" />
+            </intent-filter>
+        </receiver>
+
+        <activity android:name=".ui.messages.UserQueAnsActivity" />
         <activity android:name=".ui.rentals.AllRequestsActivity" />
-        <activity android:name=".ui.MyProfileActivity"></activity>
+        <activity android:name=".ui.MyProfileActivity" />
+        <activity android:name=".ui.messages.AllMessagesActivity"></activity>
     </application>
 
 </manifest>

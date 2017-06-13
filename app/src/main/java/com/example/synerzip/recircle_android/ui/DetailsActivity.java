@@ -31,6 +31,7 @@ import com.example.synerzip.recircle_android.models.UserProdReview;
 import com.example.synerzip.recircle_android.models.UserProductUnAvailability;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
+import com.example.synerzip.recircle_android.ui.rentitem.RentInfoActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

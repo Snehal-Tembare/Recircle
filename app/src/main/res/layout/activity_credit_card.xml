@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.synerzip.recircle_android.ui.CreditCardActivity">
+    tools:context="com.example.synerzip.recircle_android.ui.rentitem.CreditCardActivity">
 
     <include layout="@layout/partial_toolbar" />
 
@@ -27,11 +27,6 @@
                 android:layout_marginLeft="@dimen/common_dimens_24"
                 android:layout_marginRight="@dimen/common_dimens_24"/>
 
-            <com.braintreepayments.cardform.view.CardForm
-                android:id="@+id/card_form"
-                android:layout_marginTop="@dimen/common_dimens_5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
             <EditText
                 android:id="@+id/txt_cvv"
                 android:layout_width="match_parent"

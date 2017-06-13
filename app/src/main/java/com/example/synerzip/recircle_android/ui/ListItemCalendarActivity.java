@@ -126,7 +126,6 @@ public class ListItemCalendarActivity extends AppCompatActivity {
      * @param view
      */
     @OnClick(R.id.btn_save)
-
     public void btnCalendarSave(View view) {
         if (!datesList.isEmpty() && datesList.size() != 0) {
             Intent intent = new Intent(ListItemCalendarActivity.this, HomeActivity.class);

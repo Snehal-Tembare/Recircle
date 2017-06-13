@@ -12,19 +12,16 @@ import android.widget.TextView;
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.Products;
 import com.example.synerzip.recircle_android.models.UserProductUnAvailability;
+import com.example.synerzip.recircle_android.ui.rentitem.RentInfoActivity;
 import com.example.synerzip.recircle_android.utilities.RCLog;
-import com.squareup.timessquare.CalendarCellDecorator;
 import com.squareup.timessquare.CalendarPickerView;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,14 +35,15 @@ import static com.squareup.timessquare.CalendarPickerView.SelectionMode.RANGE;
  */
 public class CalendarActivity extends AppCompatActivity {
 
-    private static final String TAG = "CalendarActivity";
     public static ArrayList<Date> selectedDates;
+
     public ArrayList<Date> localselectedDates;
 
     private ArrayList<UserProductUnAvailability> userProductUnAvailabilities;
-    private Bundle bundle;
-    private Products product;
 
+    private Bundle bundle;
+
+    private Products product;
 
     public static boolean isDateSelected = false;
 
@@ -80,7 +78,6 @@ public class CalendarActivity extends AppCompatActivity {
         Date today = new Date();
         bundle = getIntent().getExtras();
 
-        //-----------------------
         if (bundle != null) {
             userProductUnAvailabilities = bundle.getParcelableArrayList(getString(R.string.unavail_dates));
             product = bundle.getParcelable(getString(R.string.product));

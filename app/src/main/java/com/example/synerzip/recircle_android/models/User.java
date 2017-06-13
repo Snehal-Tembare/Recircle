@@ -3,6 +3,8 @@ package com.example.synerzip.recircle_android.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,12 +17,16 @@ import lombok.Setter;
 public class User implements Parcelable {
     private String first_name;
     private String last_name;
-        private String user_image_url;
+    private String user_image_url;
     private String message;
     private String user_id;
     private String token;
     private String email;
     private long user_mob_no;
+
+    //user profile
+    private String user_avg_rating;
+    private ArrayList<UserProductDetails> userProductDetails;
 
     /**
      * creator object for user
@@ -51,6 +57,8 @@ public class User implements Parcelable {
         token = in.readString();
         email = in.readString();
         user_mob_no = in.readLong();
+        user_avg_rating = in.readString();
+        userProductDetails = in.createTypedArrayList(UserProductDetails.CREATOR);
     }
 
     @Override
@@ -68,5 +76,7 @@ public class User implements Parcelable {
         dest.writeString(token);
         dest.writeString(user_id);
         dest.writeLong(user_mob_no);
+        dest.writeString(user_avg_rating);
+        dest.writeTypedList(userProductDetails);
     }
 }

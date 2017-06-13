@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
-import com.example.synerzip.recircle_android.models.UserRequests;
+import com.example.synerzip.recircle_android.models.rentals.UserRequests;
 
 import java.util.ArrayList;
 
@@ -27,7 +27,7 @@ public class RequestToMeFragment extends Fragment {
     private ArrayList<UserRequests> userRequestsArrayList;
 
     private RequestAdapter adapter;
-    protected TextView mTxtNoReuests;
+    public TextView mTxtNoReuests;
 
     protected RecyclerView mRecyclerRequests;
 
@@ -60,12 +60,20 @@ public class RequestToMeFragment extends Fragment {
         this.userRequestsArrayList = userRentingsArrayList;
 
         if (userRequestsArrayList != null && userRequestsArrayList.size() != 0) {
+            ((AllRequestsActivity)getActivity()).mProgressBar.setVisibility(View.GONE);
             adapter = new RequestAdapter(getActivity(), userRequestsArrayList);
+            adapter.notifyDataSetChanged();
             mRecyclerRequests.setLayoutManager(new LinearLayoutManager(getActivity()));
             mRecyclerRequests.setAdapter(adapter);
+
         } else {
+            ((AllRequestsActivity)getActivity()).mProgressBar.setVisibility(View.GONE);
             mTxtNoReuests.setVisibility(View.VISIBLE);
         }
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 }

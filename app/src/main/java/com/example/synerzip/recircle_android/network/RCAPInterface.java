@@ -2,20 +2,25 @@ package com.example.synerzip.recircle_android.network;
 
 import com.example.synerzip.recircle_android.models.AllProductInfo;
 import com.example.synerzip.recircle_android.models.ChangePwdRequest;
-import com.example.synerzip.recircle_android.models.CreditCardRequest;
 import com.example.synerzip.recircle_android.models.ForgotPwdRequest;
 import com.example.synerzip.recircle_android.models.ListAnItemRequest;
 import com.example.synerzip.recircle_android.models.LogInRequest;
-import com.example.synerzip.recircle_android.models.OrderDetails;
+import com.example.synerzip.recircle_android.models.rentals.CancelOrder;
+import com.example.synerzip.recircle_android.models.rentals.OrderDetails;
 import com.example.synerzip.recircle_android.models.Products;
 import com.example.synerzip.recircle_android.models.RentItem;
-import com.example.synerzip.recircle_android.models.RootObject;
+import com.example.synerzip.recircle_android.models.RootProductsData;
 import com.example.synerzip.recircle_android.models.RootUserInfo;
 import com.example.synerzip.recircle_android.models.SearchProduct;
 import com.example.synerzip.recircle_android.models.SignUpRequest;
 import com.example.synerzip.recircle_android.models.User;
+import com.example.synerzip.recircle_android.models.rentals.UserRequest;
+import com.example.synerzip.recircle_android.models.user_messages.RootMessageInfo;
+import com.example.synerzip.recircle_android.models.user_messages.UserAskQueRequest;
 import com.example.synerzip.recircle_android.models.ZipcodeRoot;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
+
+import java.net.UnknownServiceException;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -32,6 +37,7 @@ import retrofit2.http.Query;
  */
 
 public interface RCAPInterface {
+
     /**
      * Get all products details
      */
@@ -56,7 +62,7 @@ public interface RCAPInterface {
      * Get all product names
      */
     @GET(RCWebConstants.RC_PRODUCT_NAMES)
-    Call<RootObject> productNames();
+    Call<RootProductsData> productNames();
 
     /**
      * user sign up
@@ -133,7 +139,7 @@ public interface RCAPInterface {
      * @param userDetailsRequest
      */
     @PUT(RCWebConstants.RC_EDIT_USER)
-    Call<RootUserInfo> editUser(@Body RootUserInfo userDetailsRequest);
+    Call<RootUserInfo> editUser(@Header("Authorization") String token,@Body RootUserInfo userDetailsRequest);
 
     /**
      * Request for change password
@@ -153,18 +159,6 @@ public interface RCAPInterface {
     @GET(RCWebConstants.RC_GET_USER_DETAILS)
     Call<RootUserInfo> getUserDetails(@Header("Authorization") String token,
                                       @Path("userId") String userId);
-
-    /**
-     * edit user card details
-     *
-     * @param token
-     * @param creditCardRequest
-     */
-
-    @PUT(RCWebConstants.RC_EDIT_CREDIT_CARD)
-    Call editCreditCard(@Header("Authorization") String token,
-                        @Body CreditCardRequest creditCardRequest);
-
     /**
      * Request for Rent and Item
      *
@@ -176,9 +170,59 @@ public interface RCAPInterface {
                             @Body RentItem rentItem);
 
     /**
-     * Get order details
+     * otp to verify user mobile number
+     * @param token
+     * @return
      */
+    @GET(RCWebConstants.RC_VERIFY_EDIT_MOB_NO)
+    Call<RootUserInfo> verifyUserMobNo(@Header("Authorization") String token);
 
+    /**
+     * get user message
+     * @param token
+     * @return
+     */
+    @GET(RCWebConstants.RC_USER_MESSAGE)
+    Call<RootMessageInfo> getUserMessage(@Header("Authorization") String token);
+
+    /**
+     * get user question and answer
+     * @param token
+     * @return
+     */
+    @POST(RCWebConstants.RC_USER_QUE_ANS)
+    Call<RootMessageInfo> getUserQueAns(@Header("Authorization") String token,
+                                        @Body UserAskQueRequest userAskQueRequest);
+
+    /**
+     *  Get order details
+     * @param token
+     * @return
+     */
     @GET(RCWebConstants.RC_ORDER_DETAILS)
     Call<OrderDetails> getOrderDetails(@Header("Authorization") String token);
+
+    /**
+     *  Action on user Request
+     * @param token
+     * @return
+     */
+    @PUT(RCWebConstants.RC_ACTION_ON_USER_REQUEST)
+    Call<UserRequest> actionOnRequest(@Path("userProdMsgId") String userProdMsgId,
+                                      @Header("Authorization") String token,
+                                     @Body UserRequest userRequest);
+
+    /**
+     *  Get user product profile
+     * @param userId
+     */
+    @GET(RCWebConstants.RC_GET_USER_PRODUCT_PROFILE)
+    Call<User> getUserProfile(@Path("userId") String userId);
+
+    /**
+     *  Cancel order
+     * @param cancelOrder
+     */
+    @PUT(RCWebConstants.RC_CANCEL_ORDER)
+    Call<CancelOrder> cancelOrder(@Body CancelOrder cancelOrder);
 }

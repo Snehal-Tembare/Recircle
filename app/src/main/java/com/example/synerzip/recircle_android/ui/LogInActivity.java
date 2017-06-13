@@ -12,7 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -73,12 +72,9 @@ public class LogInActivity extends AppCompatActivity {
     @BindView(R.id.linear_layout)
     protected LinearLayout mLinearLayout;
 
-    protected String mUserId, mUserEmail,mUserToken,mUserLastName,mUserFirstName,mAccessToken="";
+    protected String mUserId, mUserEmail,mUserLastName, mUserFirstName, mUserImage, mAccessToken = "";
 
-
-
-    private static final String TAG = "LogInActivity";
-
+    private long mUserMobNo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,26 +131,26 @@ public class LogInActivity extends AppCompatActivity {
                 mProgressBar.setVisibility(View.GONE);
                 mLinearLayout.setAlpha((float) 1.0);
 
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
 
-                        mUserId = response.body().getUser_id();
-                    Log.v("userid",mUserId);
-                        mUserName = response.body().getEmail();
-                        mUserToken = response.body().getToken();
-                        mUserFirstName = response.body().getFirst_name();
-                        mUserLastName = response.body().getLast_name();
-                        mAccessToken=response.body().getToken();
-                        Log.v(TAG,mAccessToken);
-                    if(null!=mUserId && null!=mUserName && null!=mUserToken &&
-                            null!=mUserFirstName && null!=mUserLastName && null!=mAccessToken) {
+                    mUserId = response.body().getUser_id();
+                    mUserName = response.body().getEmail();
+                    mUserFirstName = response.body().getFirst_name();
+                    mUserLastName = response.body().getLast_name();
+                    mAccessToken = response.body().getToken();
+                    mUserImage = response.body().getUser_image_url();
+                    mUserMobNo = response.body().getUser_mob_no();
 
+                    if (null != mUserId && null != mUserName &&
+                            null != mUserFirstName && null != mUserLastName && null != mAccessToken) {
                         saveUserData();
-                        Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
+                        Intent intent = new Intent(LogInActivity.this,
+                                HomeActivity.class);
                         startActivity(intent);
-                    }else{
+                    } else {
                         RCLog.showToast(LogInActivity.this, getString(R.string.please_try_again));
                     }
-                }else {
+                } else {
                     if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
                         RCLog.showToast(LogInActivity.this, getString(R.string.err_credentials));
                     }
@@ -189,7 +185,7 @@ public class LogInActivity extends AppCompatActivity {
 
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.forgot_pwd_dialog);
-        dialog.setTitle(getString(R.string.reset_pwd));
+        dialog.setTitle(getString(R.string.dialog_forgot_pwd));
 
         final EditText mEditTxtEmail = (EditText) dialog.findViewById(R.id.edit_forgot_pwd_otp_email);
         mEditTxtEmail.getText().toString();
@@ -213,9 +209,9 @@ public class LogInActivity extends AppCompatActivity {
                         RCLog.showToast(getApplicationContext(), getString(R.string.toast_send_otp));
                         dialog.dismiss();
                         if (response.isSuccessful()) {
-                            if(null!=mEmail) {
+                            if (null != mEmail) {
                                 startActivity(new Intent(LogInActivity.this, ForgotPwdActivity.class));
-                            }else {
+                            } else {
                                 RCLog.showToast(LogInActivity.this, getString(R.string.please_try_again));
                             }
                         }
@@ -242,9 +238,9 @@ public class LogInActivity extends AppCompatActivity {
             return;
         }
 
-        if (!validatePassword()) {
-            return;
-        }
+//        if (!validatePassword()) {
+//            return;
+//        }
     }
 
     /**
@@ -254,7 +250,6 @@ public class LogInActivity extends AppCompatActivity {
      */
     private boolean validateEmail() {
         String email = mEditLogInEmail.getText().toString().trim();
-
         if (email.isEmpty() || !isValidEmail(email)) {
             mInputLayoutEmail.setError(getString(R.string.validate_email));
             requestFocus(mEditLogInEmail);
@@ -322,6 +317,7 @@ public class LogInActivity extends AppCompatActivity {
 
     /**
      * action bar back button
+     *
      * @param item
      * @return
      */
@@ -336,8 +332,9 @@ public class LogInActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
     /**
-     * saves user password in encrypted format in Shared Preferences
+     * saves user details in Shared Preferences
      */
     private void saveUserData() {
 
@@ -349,13 +346,14 @@ public class LogInActivity extends AppCompatActivity {
 
         try {
             String encryptedPassword = AESEncryptionDecryption.encrypt(android_id, mPassword);
-            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mUserToken);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
             editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_USERID, mUserId);
             editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_PASSWORD, encryptedPassword);
             editor.putBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, true);
-            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USERNAME,mUserEmail);
-            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_FIRST_USERNAME,mUserFirstName);
-
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USERNAME, mUserEmail);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_FIRST_USERNAME, mUserFirstName);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_IMAGE, mUserImage);
+            editor.putLong(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_MOB_NO, mUserMobNo);
             editor.apply();
 
         } catch (Exception e) {

@@ -6,7 +6,8 @@ package com.example.synerzip.recircle_android.utilities;
  */
 public class RCWebConstants {
 
-    public static final String RC_BASE_URL = "http://fe6804cd.ngrok.io";
+    public static final String RC_BASE_URL = "http://f697c101.ngrok.io";
+//    public static final String RC_BASE_URL = "http://134f6614.ngrok.io";
 
     public static final int RC_SUCCESS_CODE = 200;
 
@@ -34,26 +35,38 @@ public class RCWebConstants {
 
     public static final String RC_RENT_ITEM = "/api/products/rentItem";
 
-    public static final String RC_USER_SIGN_UP="/api/users";
+    public static final String RC_USER_SIGN_UP = "/api/users";
 
-    public static final String RC_USER_LOG_IN="/api/users/signin";
+    public static final String RC_USER_LOG_IN = "/api/users/signin";
 
-    public static final String RC_FORGOT_PWD ="/api/users/forgotPwd";
+    public static final String RC_FORGOT_PWD = "/api/users/forgotPwd";
 
-    public static final String RC_GET_OTP="/api/users/otp?";
+    public static final String RC_GET_OTP = "/api/users/otp?";
 
-    public static final String RC_GOOGLE_ZIPCODES="https://maps.googleapis.com/maps/api/geocode/json?";
+    public static final String RC_GOOGLE_ZIPCODES = "https://maps.googleapis.com/maps/api/geocode/json?";
 
     public static final String RC_ORDER_DETAILS = "/api/products/userProd/OrderDetails";
 
-    public static final String RC_EDIT_USER="/api/users";
+    public static final String RC_EDIT_USER = "/api/users";
 
-    public static final String RC_CHANGE_PWD="/api/users/changePwd";
+    public static final String RC_CHANGE_PWD = "/api/users/changePwd";
 
-    public static final String RC_GET_USER_DETAILS="/api/users/{userId}";
+    public static final String RC_GET_USER_DETAILS = "/api/users/{userId}";
 
-    public static final String RC_EDIT_CREDIT_CARD="/api/stripe/:userPaymentMethodId";
+    public static final String RC_EDIT_CREDIT_CARD = "/api/stripe/:userPaymentMethodId";
 
-    public static final String RC_ACTION_ON_USER_REQUEST="/api/user_message/:userProdMsgId";
+    public static final String RC_VERIFY_EDIT_MOB_NO = "/api/users/{otp}";
+
+    public static final String RC_GET_ALL_USER_MESSAGES = "/api/user_message/{userProdMsgId}";
+
+    public static final String RC_USER_MESSAGE = "/api/user_message";
+
+    public static final String RC_USER_QUE_ANS = "/api/user_message";
+
+    public static final String RC_ACTION_ON_USER_REQUEST="/api/user_message/{userProdMsgId}";
+
+    public static final String RC_GET_USER_PRODUCT_PROFILE="/api/products/userProducts/{userId}";
+
+    public static final String RC_CANCEL_ORDER="/api/products/cancelOrder";
 
 }

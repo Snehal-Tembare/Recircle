@@ -13,7 +13,7 @@
             android:id="@+id/txt_no_requests"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/no_pending_requests"
+            android:text="@string/no_pending_rentings"
             android:gravity="center"
             android:visibility="gone"
             android:textStyle="bold"
@@ -24,11 +24,5 @@
             android:layout_height="match_parent"/>
 
     </LinearLayout>
-
-    <!--<include
-        android:id="@+id/progress_bar"
-        layout="@layout/progress_bar_layout"
-        android:animateLayoutChanges="true"
-        android:visibility="gone" />-->
 
 </LinearLayout>

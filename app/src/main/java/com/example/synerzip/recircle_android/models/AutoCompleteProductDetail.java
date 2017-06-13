@@ -4,7 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Created by synerzip on 21/4/17.
+ * Created by Prajakta Patil on 21/4/17.
+ * Copyright © 2017 Synerzip. All rights reserved
  */
 @Getter
 @Setter
