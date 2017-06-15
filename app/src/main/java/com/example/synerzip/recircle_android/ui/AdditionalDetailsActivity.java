@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
+import com.example.synerzip.recircle_android.models.Products;
 import com.example.synerzip.recircle_android.models.UserProductUnAvailability;
 import com.example.synerzip.recircle_android.models.ZipcodeRoot;
 import com.example.synerzip.recircle_android.network.ApiClient;
@@ -67,6 +68,7 @@ public class AdditionalDetailsActivity extends AppCompatActivity {
 
     @BindView(R.id.edit_enter_zip)
     protected EditText mEditTxtZipcode;
+    private Products product;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +81,33 @@ public class AdditionalDetailsActivity extends AppCompatActivity {
         mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
         selectedDates = new ArrayList<>();
         mItemAvailability = new ArrayList<>();
+
+        if (MyProfileActivity.isItemEdit) {
+            Bundle bundle = getIntent().getExtras();
+            if (bundle != null) {
+                product = bundle.getParcelable(getString(R.string.product));
+                if (product != null) {
+                    mEditTxtItemDesc.setText(product.getUser_product_info().getUser_prod_desc());
+                    mEditTxtZipcode.setText(product.getUser_product_info().getUser_product_zipcode());
+
+                    //TODO:UnAvailable dates functionality
+                    ArrayList<UserProductUnAvailability> unavailableDates;
+                    unavailableDates = product.getUser_product_info().getUser_prod_unavailability();
+
+                    for (UserProductUnAvailability date : unavailableDates) {
+                        userProductUnAvailability = new UserProductUnAvailability(date.getUnavai_from_date(), date.getUnavai_to_date());
+                        mItemAvailability.add(userProductUnAvailability);
+                    }
+                    daysCount =unavailableDates.size() ;
+                    if (daysCount != 0) {
+                        mTxtDaysOfAvailability.setVisibility(View.VISIBLE);
+                        mTxtDaysOfAvailability.setText(getString(R.string.calendar_days_selected) + " " +
+                                daysCount + " " + getString(R.string.calendar_days));
+                    }
+
+                }
+            }
+        }
 
     }
 

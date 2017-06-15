@@ -58,9 +58,10 @@ public class UserProductInfo implements Parcelable {
         user_product_id = in.readString();
         min_rental_days = in.readString();
         user_product_zipcode = in.readString();
-        user_prod_reviews = in.readArrayList(UserProdReview.class.getClassLoader());
-        user_prod_unavailability = in.readArrayList(UserProductUnAvailability.class.getClassLoader());
-        user_product_discounts = in.readArrayList(UserProductDiscount.class.getClassLoader());
+        user_prod_reviews = in.createTypedArrayList(UserProdReview.CREATOR);
+        user_prod_unavailability = in.createTypedArrayList(UserProductUnAvailability.CREATOR);
+        user_product_discounts = in.createTypedArrayList(UserProductDiscount.CREATOR);
+        user_prod_images=in.createTypedArrayList(UserProdImages.CREATOR);
     }
 
     public static final Creator<UserProductInfo> CREATOR = new Creator<UserProductInfo>() {
@@ -92,8 +93,9 @@ public class UserProductInfo implements Parcelable {
         dest.writeString(min_rental_days);
         dest.writeString(user_product_zipcode);
         dest.writeString(user_product_id);
-        dest.writeList(user_prod_reviews);
-        dest.writeList(user_prod_unavailability);
-        dest.writeList(user_product_discounts);
+        dest.writeTypedList(user_prod_reviews);
+        dest.writeTypedList(user_prod_unavailability);
+        dest.writeTypedList(user_product_discounts);
+        dest.writeTypedList(user_prod_images);
     }
 }

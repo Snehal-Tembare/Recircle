@@ -6,6 +6,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +22,10 @@ import android.widget.TextView;
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.Discounts;
 import com.example.synerzip.recircle_android.models.Product;
+import com.example.synerzip.recircle_android.models.Products;
 import com.example.synerzip.recircle_android.models.ProductsData;
 import com.example.synerzip.recircle_android.models.SearchProduct;
+import com.example.synerzip.recircle_android.models.UserProductDiscount;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.utilities.HideKeyboard;
@@ -38,6 +41,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Prajakta Patil on 15/5/17.
@@ -79,9 +85,13 @@ public class ListItemFragment extends Fragment {
 
     private SearchProduct searchProduct;
 
+    private RCAPInterface service;
+
     private String manufacturerId = "";
 
     public static String productId = "";
+
+    private Products product;
 
     @BindView(R.id.checkbox_discount_five_days)
     protected CheckBox mDiscountForFiveDay;
@@ -122,6 +132,8 @@ public class ListItemFragment extends Fragment {
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
+
+
         utility = new SearchUtility();
         mProductAutoComplete.setSingleLine();
 
@@ -150,6 +162,50 @@ public class ListItemFragment extends Fragment {
                 }
             }
         });
+
+        //Populate data to edit
+        if (MyProfileActivity.isItemEdit){
+            Log.v("ListItemFragment**",getArguments().getString(getString(R.string.product_id)));
+            service=ApiClient.getClient().create(RCAPInterface.class);
+
+            Call<Products> call=service.getProductDetailsByID(getArguments().getString(getString(R.string.product_id)));
+            call.enqueue(new Callback<Products>() {
+                @Override
+                public void onResponse(Call<Products> call, Response<Products> response) {
+                    if (response.isSuccessful()){
+                        if (response.body()!=null){
+                            product=response.body();
+                            if (product!=null){
+                                mProductAutoComplete.setText(product.getProduct_info().getProduct_title());
+                                mEditTxtEnterPrice.setText(product.getUser_product_info().getPrice_per_day());
+                                mEditMinRental.setText(product.getUser_product_info().getMin_rental_days());
+
+                                ArrayList<UserProductDiscount> productDiscountArrayList=product.getUser_product_info().getUser_product_discounts();
+                                if(productDiscountArrayList.size()!=0){
+                                    for (int i=0;i<productDiscountArrayList.size();i++){
+                                        if (productDiscountArrayList.get(i).getDiscount_for_days()==5){
+                                            mDiscountForFiveDay.setChecked(true);
+                                        }else if (productDiscountArrayList.get(i).getDiscount_for_days()==10){
+                                            mDiscountForTenDay.setChecked(true);
+                                        }
+                                    }
+
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Products> call, Throwable t) {
+
+                }
+            });
+
+
+        }
+
         return view;
 
     }//end onCreateView()
@@ -161,8 +217,10 @@ public class ListItemFragment extends Fragment {
         HideKeyboard.hideKeyBoard(getActivity());
         if (NetworkUtility.isNetworkAvailable(getActivity())) {
             if (getValues()) {
-
                 Intent intent = new Intent(getActivity(), UploadImgActivity.class);
+                if (MyProfileActivity.isItemEdit){
+                    intent.putExtra(getString(R.string.product),product);
+                }
                 startActivity(intent);
             } else {
                 RCLog.showToast(getActivity(), getString(R.string.mandatory_dates));

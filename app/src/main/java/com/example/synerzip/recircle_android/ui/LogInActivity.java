@@ -238,9 +238,9 @@ public class LogInActivity extends AppCompatActivity {
             return;
         }
 
-//        if (!validatePassword()) {
-//            return;
-//        }
+        if (!validatePassword()) {
+            return;
+        }
     }
 
     /**

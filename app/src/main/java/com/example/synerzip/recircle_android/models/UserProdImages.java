@@ -20,7 +20,7 @@ public class UserProdImages implements Parcelable{
     private String created_at;
 
     public UserProdImages(String user_prod_image_url, String created_at) {
-        this.user_prod_image_id = user_prod_image_url;
+//        this.user_prod_image_id = user_prod_image_url;
         this.user_prod_image_url = user_prod_image_url;
         this.created_at = created_at;
     }

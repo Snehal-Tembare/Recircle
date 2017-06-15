@@ -416,4 +416,6 @@
     <string name="enter_message">Please enter message</string>
     <string name="order_cancelled">Order Cancelled</string>
     <string name="confirm_and_cancel">Confirm and Cancel</string>
+    <string name="edit_item">edit_item</string>
+    <string name="user_product_id">user_product_id</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.example.synerzip.recircle_android.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,11 +44,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ItemAdapter.ViewHolder holder, int position) {
 
-        UserProductDetails productDetails = productDetailsList.get(position);
+        final UserProductDetails productDetails = productDetailsList.get(position);
 
         if (productDetails.getUser_prod_images().size() != 0 &&
-                productDetails.getUser_prod_images().get(0).getUser_prod_image_url() != null)
-        {
+                productDetails.getUser_prod_images().get(0).getUser_prod_image_url() != null) {
             Picasso.with(mContext)
                     .load(productDetails.getUser_prod_images().get(0).getUser_prod_image_url())
                     .placeholder(R.mipmap.ic_item)
@@ -61,12 +61,17 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         }
 
         holder.mTxtProductTitle.setText(productDetails.getProduct_title());
-        holder.mTxtProductPrice.setText("$" + productDetails.getPrice_per_day() + "/"+mContext.getString(R.string.day));
+        holder.mTxtProductPrice.setText("$" + productDetails.getPrice_per_day() + "/" + mContext.getString(R.string.day));
 
         holder.mImgEditItemDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RCLog.showToast(mContext,"Edit");
+                RCLog.showToast(mContext, "Edit");
+                MyProfileActivity.isItemEdit = true;
+                Intent intent = new Intent((mContext), HomeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(mContext.getString(R.string.product_id), productDetails.getUser_product_id());
+                mContext.startActivity(intent);
             }
         });
 
@@ -96,7 +101,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             mTxtProductTitle = (TextView) view.findViewById(R.id.txtProductTitle);
             mTxtProductPrice = (TextView) view.findViewById(R.id.txtProductPrice);
             view.findViewById(R.id.txtRenterName).setVisibility(View.GONE);
-            mImgEditItemDetails= (ImageView) view.findViewById(R.id.img_edit_item);
+            mImgEditItemDetails = (ImageView) view.findViewById(R.id.img_edit_item);
             mImgEditItemDetails.setVisibility(View.VISIBLE);
         }
 

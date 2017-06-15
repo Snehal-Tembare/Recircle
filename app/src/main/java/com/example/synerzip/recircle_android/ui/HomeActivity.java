@@ -67,6 +67,7 @@ public class HomeActivity extends AppCompatActivity
 
     @BindView(R.id.tab_layout)
     protected TabLayout mTabLayout;
+    protected ListItemFragment listItemFragment;
 
     private PagerAdapter mPagerAdapter;
 
@@ -103,15 +104,24 @@ public class HomeActivity extends AppCompatActivity
         mProgressBar.setVisibility(View.VISIBLE);
         mFrameLayout.setAlpha((float) 0.6);
 
+        listItemFragment=new ListItemFragment();
+
         mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
         mPagerAdapter.addFragment(new SearchItemFragment(), getString(R.string.tab_search));
-        mPagerAdapter.addFragment(new ListItemFragment(), getString(R.string.tab_list));
+        mPagerAdapter.addFragment(listItemFragment, getString(R.string.tab_list));
         mViewPager.setAdapter(mPagerAdapter);
 
         mTabLayout.setupWithViewPager(mViewPager);
         mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
 
+        //Edit product details
+        if (MyProfileActivity.isItemEdit){
+            mViewPager.setCurrentItem(1);
+            Bundle bundle=getIntent().getExtras();
+//            String user_prod_id=bundle.getString(getString(R.string.product_id));
+            listItemFragment.setArguments(bundle);
+        }
         //get data from shared preferences
         sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
         isLoggedIn = sharedPreferences.getBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
@@ -196,52 +206,64 @@ public class HomeActivity extends AppCompatActivity
                     mDrawerLayout.openDrawer(Gravity.RIGHT);
                 }
                 break;
-
             case R.id.action_messages:
-                RCLog.showToast(HomeActivity.this, "menu msgs clicked");
-                startActivity(new Intent(HomeActivity.this, UserQueAnsActivity.class));
                 break;
-
             case R.id.action_rentals:
-                startActivity(new Intent(HomeActivity.this, AllRequestsActivity.class));
+                startActivity(new Intent(HomeActivity.this,AllRequestsActivity.class));
                 break;
-
             default:
                 break;
         }
 
-        return true;
+        return super.onOptionsItemSelected(item);
+
     }
    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
        getMenuInflater().inflate(R.menu.menu_main, menu);
+       MenuItem item = menu.findItem(R.id.action_messages);
+       MenuItemCompat.setActionView(menu.findItem(R.id.action_messages), R.layout.notification_badge);
+       RelativeLayout notificationCount = (RelativeLayout) item.getActionView();
+       TextView mTxtMsgCount = (TextView) notificationCount.findViewById(R.id.txt_notification_count);
+       mTxtMsgCount.setText(String.valueOf(mProdRelatedMsgs));
 
-        MenuItem item = menu.findItem(R.id.action_messages);
-        MenuItemCompat.setActionView(item, R.layout.notification_badge);
-        RelativeLayout notificationCount = (RelativeLayout) MenuItemCompat.getActionView(item);
-        TextView mTxtMsgCount = (TextView) notificationCount.findViewById(R.id.txt_notification_count);
-        mTxtMsgCount.setText(String.valueOf(mProdRelatedMsgs));
+       // ActivityCompat.invalidateOptionsMenu(HomeActivity.this);
 
-        ActivityCompat.invalidateOptionsMenu(HomeActivity.this);
+       MenuItem menuItemMsgs = menu.findItem(R.id.action_messages);
+       MenuItem menuItemRentals = menu.findItem(R.id.action_rentals);
 
-        MenuItem menuItemMsgs=menu.findItem(R.id.action_messages);
-        MenuItem menuItemRentals=menu.findItem(R.id.action_rentals);
+       if (isLoggedIn) {
+           menuItemMsgs.setVisible(true);
+           menuItemRentals.setVisible(true);
+       }
 
-        if(isLoggedIn){
-            menuItemMsgs.setVisible(true);
-            menuItemRentals.setVisible(true);
-        }
+       mTxtMsgCount.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+//               startActivity(new Intent(HomeActivity.this, AllMessagesActivity.class));
+           }
+       });
 
-        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                startActivity(new Intent(HomeActivity.this, UserQueAnsActivity.class));
-                return true;
-            }
-        });
+       final MenuItem itemNotification = menu.findItem(R.id.action_messages);
+       View actionViewNotification = MenuItemCompat.getActionView(itemNotification);
+       actionViewNotification.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               onOptionsItemSelected(itemNotification);
 
-        return super.onPrepareOptionsMenu(menu);
-    }
+           }
+       });
+       final MenuItem itemRentals = menu.findItem(R.id.action_rentals);
+       View actionRentals = MenuItemCompat.getActionView(itemNotification);
+       actionRentals.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               onOptionsItemSelected(itemRentals);
+           }
+       });
+       return true;
+
+   }
     /**
      * PagerAdapter Class
      */
@@ -318,8 +340,8 @@ public class HomeActivity extends AppCompatActivity
 
             case R.id.nav_payments:
                 RCLog.showToast(HomeActivity.this, TAG);
-                startActivity(new Intent(HomeActivity.this, AllRequestsActivity.class));
-//                startActivity(new Intent(HomeActivity.this, MyProfileActivity.class));
+//                startActivity(new Intent(HomeActivity.this, AllRequestsActivity.class));
+                startActivity(new Intent(HomeActivity.this, MyProfileActivity.class));
                 break;
 
             case R.id.nav_faq:

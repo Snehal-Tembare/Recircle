@@ -46,6 +46,7 @@ public class MyProfileActivity extends AppCompatActivity {
     private String user_id;
     private SharedPreferences sharedPreferences;
     private ArrayList<UserProductDetails> userProductDetailsList;
+    public static boolean isItemEdit;
 
 
     @BindView(R.id.toolbar)
@@ -159,21 +160,7 @@ public class MyProfileActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-       /* adapter = new ItemAdapter(getApplicationContext(), userProductDetailsList, new OnItemClickListener() {
-            @Override
-            public void onProductClick(UserProductDetails userProductDetails) {
-                Log.v(TAG, "onProductClick");
-                Intent intent = new Intent(MyProfileActivity.this, DetailsActivity.class);
-                if (userProductDetails.getUser_product_id() != null) {
-                    intent.putExtra(getString(R.string.product_id), userProductDetails.getUser_product_id());
-                }
-                startActivity(intent);
-            }
-        });
-
-        mRecyclerItems.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
-        mRecyclerItems.setAdapter(adapter);*/
-    }
+         }
 
     /**
      * OnClick of home button
@@ -182,6 +169,7 @@ public class MyProfileActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            isItemEdit=false;
             finish();
         }
         return true;
@@ -189,5 +177,11 @@ public class MyProfileActivity extends AppCompatActivity {
 
     public interface OnItemClickListener {
         void onProductClick(UserProductDetails userProductDetails);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        isItemEdit=false;
     }
 }
