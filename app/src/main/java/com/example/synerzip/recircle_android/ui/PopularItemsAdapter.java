@@ -41,12 +41,11 @@ public class PopularItemsAdapter extends RecyclerView.Adapter<PopularItemsAdapte
     public void onBindViewHolder(PopularItemsAdapter.ViewHolder viewHolder, int position) {
 
         Products popularProducts = popularProductsList.get(position);
-
         if (popularProducts.getUser_product_info().getUser_prod_images().size() != 0 &&
-                popularProducts.getUser_product_info().getUser_prod_images().get(position).getUser_prod_image_url() != null) {
+                popularProducts.getUser_product_info().getUser_prod_images().get(0).getUser_prod_image_url() != null) {
             Picasso.with(mContext)
                     .load(popularProducts.getUser_product_info()
-                            .getUser_prod_images().get(position)
+                            .getUser_prod_images().get(0)
                             .getUser_prod_image_url())
                     .placeholder(R.mipmap.ic_item)
                     .into(viewHolder.mImageView);

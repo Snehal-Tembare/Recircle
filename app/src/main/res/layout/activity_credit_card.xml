@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.synerzip.recircle_android.ui.CreditCardActivity">
+    tools:context="com.example.synerzip.recircle_android.ui.rentitem.CreditCardActivity">
 
     <include layout="@layout/partial_toolbar" />
 

@@ -77,5 +77,4 @@
     <dimen name="dimen_10sp">10sp</dimen>
     <dimen name="dimen_12sp">12sp</dimen>
     <dimen name="common_dimens_24">24dp</dimen>
-    <dimen name="common_dimens_35">35dp</dimen>
 </resources>

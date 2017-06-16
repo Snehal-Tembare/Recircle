@@ -16,30 +16,31 @@ import lombok.Setter;
 
 public class ProductInfo implements Parcelable {
 
+    private String product_manufacturer_id;
+
     private String product_manufacturer_name;
 
-    private String product_manufacturer_id;
+    private String product_category_id;
+
+    private String product_category_name;
+
+    private String product_category_description;
+
+    private String product_title;
+
+    private String product_description;
+
+    private String product_price;
+
 
     private UserProdImages product_image_url;
 
     private String product_model_id;
 
-    private String product_title;
-
-    private String product_category_name;
-
-    private String product_price;
-
-    private String product_category_description;
-
-    private String product_category_id;
-
-    private String product_description;
-
     protected ProductInfo(Parcel in) {
         product_manufacturer_name = in.readString();
         product_manufacturer_id = in.readString();
-        product_image_url = in.readParcelable(UserProdImages.class.getClassLoader());
+//        product_image_url = in.readParcelable(UserProdImages.class.getClassLoader());
         product_model_id = in.readString();
         product_title = in.readString();
         product_category_name = in.readString();
@@ -70,7 +71,7 @@ public class ProductInfo implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(product_manufacturer_name);
         dest.writeString(product_manufacturer_id);
-        dest.writeParcelable(product_image_url, flags);
+//        dest.writeParcelable(product_image_url, flags);
         dest.writeString(product_model_id);
         dest.writeString(product_title);
         dest.writeString(product_category_name);

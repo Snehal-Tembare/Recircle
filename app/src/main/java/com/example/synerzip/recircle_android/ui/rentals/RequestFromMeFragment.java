@@ -1,6 +1,5 @@
 package com.example.synerzip.recircle_android.ui.rentals;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,9 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
-import com.example.synerzip.recircle_android.models.UserRentings;
-import com.example.synerzip.recircle_android.models.UserRequests;
-import com.example.synerzip.recircle_android.utilities.RCLog;
+import com.example.synerzip.recircle_android.models.rentals.UserRentings;
 
 import java.util.ArrayList;
 
@@ -30,7 +27,7 @@ public class RequestFromMeFragment extends Fragment {
     public ArrayList<UserRentings> userRentingsArrayList;
     private RentingsAdapter adapter;
 
-    private TextView mTxtNoRentings;
+    public TextView mTxtNoRentings;
     private RecyclerView mRecyclerRentings;
 
     @Override
@@ -64,10 +61,12 @@ public class RequestFromMeFragment extends Fragment {
         this.userRentingsArrayList = userRequestsArrayList;
 
         if (userRentingsArrayList != null && userRentingsArrayList.size() != 0) {
+            ((AllRequestsActivity)getActivity()).mProgressBar.setVisibility(View.GONE);
             adapter = new RentingsAdapter(getActivity(), userRentingsArrayList);
             mRecyclerRentings.setLayoutManager(new LinearLayoutManager(getActivity()));
             mRecyclerRentings.setAdapter(adapter);
         } else {
+            ((AllRequestsActivity)getActivity()).mProgressBar.setVisibility(View.GONE);
             mTxtNoRentings.setVisibility(View.VISIBLE);
         }
 

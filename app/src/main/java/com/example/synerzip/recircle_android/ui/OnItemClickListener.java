@@ -1,5 +1,6 @@
 package com.example.synerzip.recircle_android.ui;
 import com.example.synerzip.recircle_android.models.Products;
+import com.example.synerzip.recircle_android.models.UserProductDetails;
 
 /**
  * Created by Snehal Tembare on 3/4/17.

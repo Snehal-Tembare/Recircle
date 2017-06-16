@@ -42,10 +42,19 @@ public class RecentItemsAdapter extends RecyclerView.Adapter<RecentItemsAdapter.
         Products productDetails = productDetailsList.get(position);
 
         if (productDetails.getUser_product_info().getUser_prod_images().size() != 0 &&
-                productDetails.getUser_product_info().getUser_prod_images().get(position).getUser_prod_image_url() != null)
+                productDetails.getUser_product_info().getUser_prod_images().get(0).getUser_prod_image_url() != null)
         {
             Picasso.with(mContext)
-                    .load(productDetails.getUser_product_info().getUser_prod_images().get(position).getUser_prod_image_url())
+                    .load(productDetails.getUser_product_info().getUser_prod_images().get(0).getUser_prod_image_url())
+                    .placeholder(R.mipmap.ic_item)
+                    .into(viewHolder.mImageView);
+        }
+
+        if (productDetails.getUser_product_info().getUser_prod_images().size() != 0 &&
+                productDetails.getUser_product_info().getUser_prod_images().get(0).getUser_prod_image_url() != null)
+        {
+            Picasso.with(mContext)
+                    .load(productDetails.getUser_product_info().getUser_prod_images().get(0).getUser_prod_image_url())
                     .placeholder(R.mipmap.ic_item)
                     .into(viewHolder.mImageView);
         }

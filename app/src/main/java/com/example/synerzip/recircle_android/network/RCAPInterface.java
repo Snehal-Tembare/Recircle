@@ -5,7 +5,8 @@ import com.example.synerzip.recircle_android.models.ChangePwdRequest;
 import com.example.synerzip.recircle_android.models.ForgotPwdRequest;
 import com.example.synerzip.recircle_android.models.ListAnItemRequest;
 import com.example.synerzip.recircle_android.models.LogInRequest;
-import com.example.synerzip.recircle_android.models.OrderDetails;
+import com.example.synerzip.recircle_android.models.rentals.CancelOrder;
+import com.example.synerzip.recircle_android.models.rentals.OrderDetails;
 import com.example.synerzip.recircle_android.models.Products;
 import com.example.synerzip.recircle_android.models.RentItem;
 import com.example.synerzip.recircle_android.models.RootProductsData;
@@ -13,10 +14,13 @@ import com.example.synerzip.recircle_android.models.RootUserInfo;
 import com.example.synerzip.recircle_android.models.SearchProduct;
 import com.example.synerzip.recircle_android.models.SignUpRequest;
 import com.example.synerzip.recircle_android.models.User;
+import com.example.synerzip.recircle_android.models.rentals.UserRequest;
 import com.example.synerzip.recircle_android.models.user_messages.RootMessageInfo;
 import com.example.synerzip.recircle_android.models.user_messages.UserAskQueRequest;
 import com.example.synerzip.recircle_android.models.ZipcodeRoot;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
+
+import java.net.UnknownServiceException;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -197,4 +201,28 @@ public interface RCAPInterface {
      */
     @GET(RCWebConstants.RC_ORDER_DETAILS)
     Call<OrderDetails> getOrderDetails(@Header("Authorization") String token);
+
+    /**
+     *  Action on user Request
+     * @param token
+     * @return
+     */
+    @PUT(RCWebConstants.RC_ACTION_ON_USER_REQUEST)
+    Call<UserRequest> actionOnRequest(@Path("userProdMsgId") String userProdMsgId,
+                                      @Header("Authorization") String token,
+                                     @Body UserRequest userRequest);
+
+    /**
+     *  Get user product profile
+     * @param userId
+     */
+    @GET(RCWebConstants.RC_GET_USER_PRODUCT_PROFILE)
+    Call<User> getUserProfile(@Path("userId") String userId);
+
+    /**
+     *  Cancel order
+     * @param cancelOrder
+     */
+    @PUT(RCWebConstants.RC_CANCEL_ORDER)
+    Call<CancelOrder> cancelOrder(@Body CancelOrder cancelOrder);
 }

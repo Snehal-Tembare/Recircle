@@ -34,6 +34,7 @@ import com.example.synerzip.recircle_android.models.user_messages.RootMessageInf
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.ui.messages.UserQueAnsActivity;
+import com.example.synerzip.recircle_android.ui.rentals.AllRequestsActivity;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 
@@ -50,7 +51,8 @@ import retrofit2.Response;
  * Created by Prajakta Patil on 15/5/17.
  * Copyright © 2017 Synerzip. All rights reserved
  */
-public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class HomeActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "SearchFragment";
 
@@ -65,6 +67,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     @BindView(R.id.tab_layout)
     protected TabLayout mTabLayout;
+    protected ListItemFragment listItemFragment;
 
     private PagerAdapter mPagerAdapter;
 
@@ -101,15 +104,24 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         mProgressBar.setVisibility(View.VISIBLE);
         mFrameLayout.setAlpha((float) 0.6);
 
+        listItemFragment=new ListItemFragment();
+
         mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
         mPagerAdapter.addFragment(new SearchItemFragment(), getString(R.string.tab_search));
-        mPagerAdapter.addFragment(new ListItemFragment(), getString(R.string.tab_list));
+        mPagerAdapter.addFragment(listItemFragment, getString(R.string.tab_list));
         mViewPager.setAdapter(mPagerAdapter);
 
         mTabLayout.setupWithViewPager(mViewPager);
         mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
 
+        //Edit product details
+        if (MyProfileActivity.isItemEdit){
+            mViewPager.setCurrentItem(1);
+            Bundle bundle=getIntent().getExtras();
+//            String user_prod_id=bundle.getString(getString(R.string.product_id));
+            listItemFragment.setArguments(bundle);
+        }
         //get data from shared preferences
         sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
         isLoggedIn = sharedPreferences.getBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
@@ -194,47 +206,64 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     mDrawerLayout.openDrawer(Gravity.RIGHT);
                 }
                 break;
-
             case R.id.action_messages:
-                RCLog.showToast(HomeActivity.this, "menu msgs clicked");
-                startActivity(new Intent(HomeActivity.this, UserQueAnsActivity.class));
                 break;
-
+            case R.id.action_rentals:
+                startActivity(new Intent(HomeActivity.this,AllRequestsActivity.class));
+                break;
             default:
                 break;
         }
 
-        return true;
+        return super.onOptionsItemSelected(item);
+
     }
    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
        getMenuInflater().inflate(R.menu.menu_main, menu);
-        MenuItem item = menu.findItem(R.id.action_messages);
-        MenuItemCompat.setActionView(item, R.layout.notification_badge);
-        RelativeLayout notificationCount = (RelativeLayout) MenuItemCompat.getActionView(item);
-        TextView mTxtMsgCount = (TextView) notificationCount.findViewById(R.id.txt_notification_count);
-        mTxtMsgCount.setText(String.valueOf(mProdRelatedMsgs));
+       MenuItem item = menu.findItem(R.id.action_messages);
+       MenuItemCompat.setActionView(menu.findItem(R.id.action_messages), R.layout.notification_badge);
+       RelativeLayout notificationCount = (RelativeLayout) item.getActionView();
+       TextView mTxtMsgCount = (TextView) notificationCount.findViewById(R.id.txt_notification_count);
+       mTxtMsgCount.setText(String.valueOf(mProdRelatedMsgs));
 
-        ActivityCompat.invalidateOptionsMenu(HomeActivity.this);
+       // ActivityCompat.invalidateOptionsMenu(HomeActivity.this);
 
-        MenuItem menuItemMsgs=menu.findItem(R.id.action_messages);
-        MenuItem menuItemRentals=menu.findItem(R.id.action_rentals);
+       MenuItem menuItemMsgs = menu.findItem(R.id.action_messages);
+       MenuItem menuItemRentals = menu.findItem(R.id.action_rentals);
 
-        if(isLoggedIn){
-            menuItemMsgs.setVisible(true);
-            menuItemRentals.setVisible(true);
-        }
+       if (isLoggedIn) {
+           menuItemMsgs.setVisible(true);
+           menuItemRentals.setVisible(true);
+       }
 
-        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                startActivity(new Intent(HomeActivity.this, UserQueAnsActivity.class));
-                return true;
-            }
-        });
+       mTxtMsgCount.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+//               startActivity(new Intent(HomeActivity.this, AllMessagesActivity.class));
+           }
+       });
 
-        return super.onPrepareOptionsMenu(menu);
-    }
+       final MenuItem itemNotification = menu.findItem(R.id.action_messages);
+       View actionViewNotification = MenuItemCompat.getActionView(itemNotification);
+       actionViewNotification.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               onOptionsItemSelected(itemNotification);
+
+           }
+       });
+       final MenuItem itemRentals = menu.findItem(R.id.action_rentals);
+       View actionRentals = MenuItemCompat.getActionView(itemNotification);
+       actionRentals.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               onOptionsItemSelected(itemRentals);
+           }
+       });
+       return true;
+
+   }
     /**
      * PagerAdapter Class
      */
@@ -311,6 +340,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
             case R.id.nav_payments:
                 RCLog.showToast(HomeActivity.this, TAG);
+//                startActivity(new Intent(HomeActivity.this, AllRequestsActivity.class));
+                startActivity(new Intent(HomeActivity.this, MyProfileActivity.class));
                 break;
 
             case R.id.nav_faq:
@@ -334,7 +365,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
-        editor.apply();
         editor.commit();
     }
 

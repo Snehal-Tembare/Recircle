@@ -15,12 +15,9 @@ import lombok.Setter;
 
 public class ProductDetail implements Parcelable  {
 
-    private String product_image_url;
-
     private double product_price;
 
     ProductDetail(Parcel in) {
-        product_image_url = in.readString();
         product_price = in.readDouble();
     }
 
@@ -43,7 +40,6 @@ public class ProductDetail implements Parcelable  {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(product_image_url);
         dest.writeDouble(product_price);
     }
 }

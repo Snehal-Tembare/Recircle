@@ -21,10 +21,11 @@ public class RentItem implements Parcelable {
     private String user_msg;
     private int payment_total;
     private int payment_discount;
-    private int service_fee;
-    private int protection_plan_fee;
+    private double service_fee;
+    private double protection_plan_fee;
     private int final_payment;
     private int protection_plan;
+    private int pre_auth_fee;
 
     public RentItem(){}
 
@@ -36,10 +37,11 @@ public class RentItem implements Parcelable {
         user_msg = in.readString();
         payment_total = in.readInt();
         payment_discount = in.readInt();
-        service_fee = in.readInt();
-        protection_plan_fee = in.readInt();
+        service_fee = in.readDouble();
+        protection_plan_fee = in.readDouble();
         final_payment = in.readInt();
         protection_plan = in.readInt();
+        pre_auth_fee = in.readInt();
     }
 
     public static final Creator<RentItem> CREATOR = new Creator<RentItem>() {
@@ -92,9 +94,10 @@ public class RentItem implements Parcelable {
         dest.writeString(user_msg);
         dest.writeInt(payment_total);
         dest.writeInt(payment_discount);
-        dest.writeInt(service_fee);
-        dest.writeInt(protection_plan_fee);
+        dest.writeDouble(service_fee);
+        dest.writeDouble(protection_plan_fee);
         dest.writeInt(final_payment);
         dest.writeInt(protection_plan);
+        dest.writeInt(pre_auth_fee);
     }
 }

@@ -12,19 +12,16 @@ import android.widget.TextView;
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.Products;
 import com.example.synerzip.recircle_android.models.UserProductUnAvailability;
+import com.example.synerzip.recircle_android.ui.rentitem.RentInfoActivity;
 import com.example.synerzip.recircle_android.utilities.RCLog;
-import com.squareup.timessquare.CalendarCellDecorator;
 import com.squareup.timessquare.CalendarPickerView;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
