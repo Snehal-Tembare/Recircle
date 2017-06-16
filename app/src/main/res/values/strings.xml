@@ -400,6 +400,11 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="tab_msgs_owner">Messages from owner</string>
-    <string name="tab_msgs_renter">Messages from renter</string>
+    <string name="tab_msgs_owner">from owner</string>
+    <string name="tab_msgs_renter">from renter</string>
+    <string name="search_hint">Search by name</string>
+    <string name="field_not_empty">Fiels should not be empty</string>
+    <string name="que_success">Question submitted successfully !</string>
+    <string name="msg_sent">Message sent !</string>
+    <string name="renter_name">renter_name</string>
 </resources>

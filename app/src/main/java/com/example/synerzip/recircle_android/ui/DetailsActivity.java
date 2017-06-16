@@ -31,6 +31,8 @@ import com.example.synerzip.recircle_android.models.UserProdReview;
 import com.example.synerzip.recircle_android.models.UserProductUnAvailability;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
+import com.example.synerzip.recircle_android.ui.messages.AllMessagesActivity;
+import com.example.synerzip.recircle_android.ui.messages.UserQueAnsActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -344,12 +346,15 @@ public class DetailsActivity extends AppCompatActivity {
         {
             @Override
             public void onClick(View v) {
-                Dialog loginDialog = new Dialog(DetailsActivity.this);
+                /*Dialog loginDialog = new Dialog(DetailsActivity.this);
                 loginDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 loginDialog.setContentView(R.layout.activity_log_in);
                 Toolbar toolbar = (Toolbar) loginDialog.findViewById(R.id.toolbar);
                 toolbar.setVisibility(View.GONE);
-                loginDialog.show();
+                loginDialog.show();*/
+                startActivity(new Intent(DetailsActivity.this, UserQueAnsActivity.class)
+                        .putExtra(getString(R.string.product_id),productId)
+                .putExtra(getString(R.string.product_title),product.getProduct_info().getProduct_title()));
             }
         });
 

@@ -13,6 +13,7 @@ import com.example.synerzip.recircle_android.models.RootUserInfo;
 import com.example.synerzip.recircle_android.models.SearchProduct;
 import com.example.synerzip.recircle_android.models.SignUpRequest;
 import com.example.synerzip.recircle_android.models.User;
+import com.example.synerzip.recircle_android.models.user_messages.UserAskQueResponse;
 import com.example.synerzip.recircle_android.models.user_messages.RootMessageInfo;
 import com.example.synerzip.recircle_android.models.user_messages.UserAskQueRequest;
 import com.example.synerzip.recircle_android.models.ZipcodeRoot;
@@ -48,7 +49,7 @@ public interface RCAPInterface {
      * @param searchText
      */
     @GET(RCWebConstants.RC_SEARCH_PRODUCT)
-    Call<SearchProduct> searchProduct(@Query("productId") String productId,
+    Call<SearchProduct> searchProduct(@Query("userProductMsgId") String productId,
                                       @Query("manufacturerId") String manufacturerId,
                                       @Query("searchText") String searchText,
                                       @Query("searchFromDate") String fromDate,
@@ -189,6 +190,16 @@ public interface RCAPInterface {
     @POST(RCWebConstants.RC_USER_QUE_ANS)
     Call<RootMessageInfo> getUserQueAns(@Header("Authorization") String token,
                                         @Body UserAskQueRequest userAskQueRequest);
+
+    /**
+     * api call to reply to user
+     * @param token
+     * @param userAskQueResponse
+     * @return
+     */
+    @POST(RCWebConstants.RC_USER_QUE_ANS)
+    Call<RootMessageInfo> getMsgResponse(@Header("Authorization") String token,
+                                         @Body UserAskQueResponse userAskQueResponse);
 
     /**
      *  Get order details

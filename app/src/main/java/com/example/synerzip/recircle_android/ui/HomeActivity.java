@@ -21,6 +21,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,7 +34,9 @@ import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.user_messages.RootMessageInfo;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
-import com.example.synerzip.recircle_android.ui.messages.UserQueAnsActivity;
+import com.example.synerzip.recircle_android.ui.messages.AllMessagesActivity;
+import com.example.synerzip.recircle_android.ui.messages.OwnerMsgFragment;
+import com.example.synerzip.recircle_android.ui.rentals.AllRequestsActivity;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 
@@ -79,6 +82,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     private RCAPInterface service;
 
+    private RootMessageInfo rootMessageInfo;
+
     private int mProdRelatedMsgs;
 
     @BindView(R.id.progress_bar_home)
@@ -86,6 +91,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     @BindView(R.id.frame_layout)
     protected FrameLayout mFrameLayout;
+
+    private boolean isOwnerMsgs,isRenterMsgs;
+
+    private int renterMsgsCount,ownerMsgsCount;
+
+    private OwnerMsgFragment ownerMsgFragment;
+
+    public static ArrayList<String> mOwnerNameList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +110,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+
+        ownerMsgFragment=new OwnerMsgFragment();
 
         mProgressBar.setVisibility(View.VISIBLE);
         mFrameLayout.setAlpha((float) 0.6);
@@ -113,9 +128,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         //get data from shared preferences
         sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
         isLoggedIn = sharedPreferences.getBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
-        mUserFirstName = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_FIRST_USERNAME, mUserFirstName);
-        mUserLastName = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_FIRST_USERNAME, mUserLastName);
-        mUserEmail = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_FIRST_USERNAME, mUserEmail);
+        mUserFirstName = sharedPreferences.getString(
+                RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_FIRST_USERNAME, mUserFirstName);
+        mUserLastName = sharedPreferences.getString(
+                RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_FIRST_USERNAME, mUserLastName);
+        mUserEmail = sharedPreferences.getString(
+                RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_FIRST_USERNAME, mUserEmail);
         mUserImage = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_IMAGE, mUserImage);
         mAccessToken = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
 
@@ -150,7 +168,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             menu.removeItem(R.id.nav_logout);
             menu.removeItem(R.id.nav_faq);
         }
-
+mOwnerNameList=new ArrayList<>();
     }//end onCreate()
 
     @Override
@@ -172,7 +190,31 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 mProgressBar.setVisibility(View.GONE);
                 mFrameLayout.setAlpha((float) 1.0);
                 if (response.isSuccessful()) {
+                    rootMessageInfo=response.body();
+                //    ownerMsgFragment.getMessageDetails(rootMessageInfo);
+                    for(int i=0;i<response.body().getOwnerProdRelatedMsgs().size();i++) {
+                        mOwnerNameList.add(response.body().getOwnerProdRelatedMsgs().get(i).getUser().getFirst_name()
+                        +response.body().getOwnerProdRelatedMsgs().get(i).getUser().getLast_name()) ;
+                    Log.v("msgs_owner_names",mOwnerNameList+"");
+
+                    }
                     mProdRelatedMsgs = response.body().getOwnerProdRelatedMsgs().size();
+                    isOwnerMsgs =response.body().getOwnerProdRelatedMsgs().get(0).is_read();
+                    Log.v("msgs_owner",response.body().getOwnerProdRelatedMsgs().get(0).is_read()+"");
+                    isRenterMsgs =response.body().getOwnerRequestMsgs().get(0).is_read();
+                    Log.v("msgs_owner",response.body().getOwnerRequestMsgs().get(0).is_read()+"");
+
+                    if(!isOwnerMsgs){
+                        ownerMsgsCount=response.body().getOwnerProdRelatedMsgs().size();
+                        Log.v("msgs_owner",ownerMsgsCount+"");
+                    }
+                    if(!isRenterMsgs){
+                        renterMsgsCount=response.body().getOwnerRequestMsgs().size();
+                        Log.v("msgs_renter",renterMsgsCount+"");
+                    }
+                    mProdRelatedMsgs=ownerMsgsCount + renterMsgsCount;
+                    Log.v("msgs_total",mProdRelatedMsgs+"");
+
                 }
             }
 
@@ -194,47 +236,68 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     mDrawerLayout.openDrawer(Gravity.RIGHT);
                 }
                 break;
-
             case R.id.action_messages:
-                RCLog.showToast(HomeActivity.this, "menu msgs clicked");
-                startActivity(new Intent(HomeActivity.this, UserQueAnsActivity.class));
-                break;
+                Intent intent=new Intent(HomeActivity.this,AllMessagesActivity.class);
+                intent.putExtra("msg_object",rootMessageInfo);
+                startActivity(intent);
 
+                break;
+            case R.id.action_rentals:
+                startActivity(new Intent(HomeActivity.this,AllRequestsActivity.class));
+                break;
             default:
                 break;
         }
 
-        return true;
+        return super.onOptionsItemSelected(item);
     }
-   @Override
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-       getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         MenuItem item = menu.findItem(R.id.action_messages);
-        MenuItemCompat.setActionView(item, R.layout.notification_badge);
-        RelativeLayout notificationCount = (RelativeLayout) MenuItemCompat.getActionView(item);
+        MenuItemCompat.setActionView(menu.findItem(R.id.action_messages), R.layout.notification_badge);
+        RelativeLayout notificationCount = (RelativeLayout) item.getActionView();
         TextView mTxtMsgCount = (TextView) notificationCount.findViewById(R.id.txt_notification_count);
         mTxtMsgCount.setText(String.valueOf(mProdRelatedMsgs));
 
-        ActivityCompat.invalidateOptionsMenu(HomeActivity.this);
+      //  ActivityCompat.invalidateOptionsMenu(HomeActivity.this);
 
-        MenuItem menuItemMsgs=menu.findItem(R.id.action_messages);
-        MenuItem menuItemRentals=menu.findItem(R.id.action_rentals);
+        MenuItem menuItemMsgs = menu.findItem(R.id.action_messages);
+        MenuItem menuItemRentals = menu.findItem(R.id.action_rentals);
 
-        if(isLoggedIn){
+        if (isLoggedIn) {
             menuItemMsgs.setVisible(true);
             menuItemRentals.setVisible(true);
         }
 
-        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+        mTxtMsgCount.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                startActivity(new Intent(HomeActivity.this, UserQueAnsActivity.class));
-                return true;
+            public void onClick(View v) {
+                startActivity(new Intent(HomeActivity.this, AllMessagesActivity.class));
             }
         });
 
-        return super.onPrepareOptionsMenu(menu);
+        final MenuItem itemNotification = menu.findItem(R.id.action_messages);
+        View actionViewNotification = MenuItemCompat.getActionView(itemNotification);
+        actionViewNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onOptionsItemSelected(itemNotification);
+
+            }
+        });
+        final MenuItem itemRentals = menu.findItem(R.id.action_rentals);
+        View actionRentals = MenuItemCompat.getActionView(itemNotification);
+        actionRentals.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onOptionsItemSelected(itemRentals);
+            }
+        });
+        return true;
     }
+
     /**
      * PagerAdapter Class
      */
@@ -301,23 +364,27 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     }
                 });
                 alertDialog.show();
+                clearData();
                 break;
             }
-            //TODO functionality yet to be completed for below menu items
 
             case R.id.nav_settings:
                 startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
                 break;
 
             case R.id.nav_payments:
-                RCLog.showToast(HomeActivity.this, TAG);
+                startActivity(new Intent(HomeActivity.this,AllMessagesActivity.class));
                 break;
 
             case R.id.nav_faq:
                 String helpUrl = "http://recirkle.com/#/help";
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(helpUrl));
-                startActivity(i);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(helpUrl));
+                startActivity(intent);
+                break;
+            case R.id.nav_msgs:
+
+                startActivity(new Intent(HomeActivity.this,AllMessagesActivity.class));
                 break;
         }
 

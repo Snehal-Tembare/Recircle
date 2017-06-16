@@ -78,7 +78,20 @@
         <activity android:name=".ui.messages.UserQueAnsActivity" />
         <activity android:name=".ui.rentals.AllRequestsActivity" />
         <activity android:name=".ui.MyProfileActivity" />
-        <activity android:name=".ui.messages.AllMessagesActivity"></activity>
+        <activity
+            android:name=".ui.messages.AllMessagesActivity"
+            android:label="Messages">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+        <activity android:name=".ui.messages.ChatActivity" />
     </application>
 
 </manifest>

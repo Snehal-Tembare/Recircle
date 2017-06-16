@@ -218,11 +218,11 @@ public class ListItemSummaryActivity extends AppCompatActivity {
         ListAnItemRequest listAnItemRequest;
         mProgressBar.setVisibility(View.VISIBLE);
         mLinearLayout.setAlpha((float) 0.6);
-      /*  if (productId.isEmpty()) {
+      /*  if (userProductMsgId.isEmpty()) {
             listAnItemRequest = new ListAnItemRequest(mProductTitle, null, mItemPrice, mMinRental,
                     mItemDesc, listDiscounts, listUploadItemImage, mItemAvailability, mZipcode, fromAustin);
         } else {
-            listAnItemRequest = new ListAnItemRequest(productId, mItemPrice, mMinRental,
+            listAnItemRequest = new ListAnItemRequest(userProductMsgId, mItemPrice, mMinRental,
                     mItemDesc, listDiscounts, listUploadItemImage, mItemAvailability, mZipcode, fromAustin);
         }
 */

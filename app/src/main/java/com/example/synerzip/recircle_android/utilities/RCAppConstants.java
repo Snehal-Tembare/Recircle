@@ -10,6 +10,8 @@ public class RCAppConstants {
 
     public static final String RC_SHARED_PREFERENCES_LOGIN_FIRST_USERNAME="firstname";
 
+    public static final String RC_SHARED_PREFERENCES_LOGIN_LAST_USERNAME="lastname";
+
     public static final String RC_SHARED_PREFERENCES_LOGIN_USER_IMAGE="userImage";
 
     public static final String RC_SHARED_PREFERENCES_LOGIN_USERNAME="username";

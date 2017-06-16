@@ -1,12 +1,13 @@
-<menu
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:appcompat="http://schemas.android.com/tools">
 
     <item
         android:id="@+id/action_messages"
         android:title="Messages"
         android:visible="false"
-        app:showAsAction="ifRoom" />
+        app:actionLayout="@layout/notification_badge"
+        app:showAsAction="always"/>
 
     <item
         android:id="@+id/action_rentals"
@@ -14,5 +15,12 @@
         android:title="Rentals"
         android:visible="false"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:visible="false"
+        android:id="@+id/menu_search"
+        android:title="Search"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="always"/>
 
 </menu>

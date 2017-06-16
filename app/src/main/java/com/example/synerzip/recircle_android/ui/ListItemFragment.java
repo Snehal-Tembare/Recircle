@@ -201,10 +201,7 @@ public class ListItemFragment extends Fragment {
         super.onResume();
         productsCustomList = new ArrayList<>();
         productItemList = new ArrayList<>();
-        RCAPInterface service;
-        service = ApiClient.getClient().create(RCAPInterface.class);
         utility.populateAutoCompleteData();
-
 
         ReadyCallback readyCallback = new ReadyCallback() {
             @Override
