@@ -62,4 +62,10 @@ public class RCWebConstants {
 
     public static final String RC_USER_QUE_ANS = "/api/user_message";
 
+    public static final String RC_ACTION_ON_USER_REQUEST="/api/user_message/{userProdMsgId}";
+
+    public static final String RC_GET_USER_PRODUCT_PROFILE="/api/products/userProducts/{userId}";
+
+    public static final String RC_CANCEL_ORDER="/api/products/cancelOrder";
+
 }

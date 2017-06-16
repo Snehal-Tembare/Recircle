@@ -44,8 +44,8 @@ public class PopularItemsAdapter extends RecyclerView.Adapter<PopularItemsAdapte
         Products popularProducts = popularProductsList.get(position);
 
         if (popularProducts.getUser_product_info().getUser_prod_images().size() != 0 &&
-                popularProducts.getUser_product_info().getUser_prod_images().get(0).getUser_prod_image_url() != null
-                ) {
+                popularProducts.getUser_product_info().getUser_prod_images().get(0)
+                        .getUser_prod_image_url() != null) {
             Picasso.with(mContext)
                     .load(popularProducts.getUser_product_info()
                             .getUser_prod_images().get(0)
@@ -56,7 +56,8 @@ public class PopularItemsAdapter extends RecyclerView.Adapter<PopularItemsAdapte
         if (null != popularProducts.getUser_product_info().getProduct_avg_rating() &&
                 popularProducts.getUser_product_info().getUser_prod_reviews() != null
                 && popularProducts.getUser_product_info().getUser_prod_reviews().size() != 0) {
-            viewHolder.mRatingBar.setRating(Float.parseFloat(popularProducts.getUser_product_info().getProduct_avg_rating()));
+            viewHolder.mRatingBar.setRating(Float.parseFloat(popularProducts.getUser_product_info()
+                    .getProduct_avg_rating()));
         } else {
             viewHolder.mRatingBar.setVisibility(View.GONE);
         }

@@ -18,6 +18,8 @@ import com.example.synerzip.recircle_android.models.user_messages.RootMessageInf
  * Copyright © 2017 Synerzip. All rights reserved
  */
 
+//TODO the implementation is in progress
+
 public class OwnerMsgFragment extends Fragment {
 
     private MessagesAdapter mMessagesAdapter;

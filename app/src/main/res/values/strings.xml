@@ -212,7 +212,7 @@
     <string name="condition">Condition</string>
     <string name="see_more">See More</string>
     <string name="view_less">View less</string>
-    <string name="checkbox_text">Protection Plan (Already Include In This Price)</string>
+    <string name="checkbox_text">Include Protection plan</string>
     <string name="product_id">productId</string>
     <string name="price">Price</string>
     <string name="select_dates">Select Dates</string>
@@ -381,13 +381,14 @@
     <string name="item_request_faild">Item Request Failed</string>
     <string name="rent_item">Rent Item</string>
     <string name="my_profile">My Profile</string>
-    <string name="no_pending_requests">You Haven’t Received Any Requests Yet</string>
+    <string name="no_pending_requests">You haven’t received any request yet</string>
+    <string name="no_pending_rentings">You haven’t placed any request yet</string>
     <string name="session_expired">Session Expired Please Log in to Continue</string>
     <string name="cvv">CVV</string>
     <string name="dd_mm_yyyy_hh_mm">dd MMM yyyy K:mma</string>
     <string name="rentings">rentings</string>
     <string name="renquests">renquests</string>
-    <string name="requested_on">Requested on: </string>
+    <string name="requested_on">Requested on  </string>
     <string name="time_to_respond">Time To Respond </string>
     <string name="request_expired">Request Expired</string>
     <string name="per_day">/day</string>
@@ -396,15 +397,30 @@
     <string name="write_msg">Write a Message</string>
     <string name="approve">Approve</string>
     <string name="confirm_and_approve">Confirm and Approve</string>
+    <string name="service_fee">Service Fee</string>
+    <string name="protection_fee">Protection Fee</string>
+    <string name="pre_auth_fee">Pre Auth fee</string>
     <string name="toolbar_msgs">Messages</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="tab_msgs_owner">from owner</string>
-    <string name="tab_msgs_renter">from renter</string>
     <string name="search_hint">Search by name</string>
     <string name="field_not_empty">Fiels should not be empty</string>
     <string name="que_success">Question submitted successfully !</string>
     <string name="msg_sent">Message sent !</string>
     <string name="renter_name">renter_name</string>
+    <string name="tab_msgs_renter">Messages from renter</string>
+    <string name="cancel_order"><u>Cancel Order</u></string>
+    <string name="day">day</string>
+    <string name="decline">decline</string>
+    <string name="cancelled">Cancelled</string>
+    <string name="approved">Approved</string>
+    <string name="declined">Declined</string>
+    <string name="wating_for_owner">Waiting for the owner to approve</string>
+    <string name="enter_message">Please enter message</string>
+    <string name="order_cancelled">Order Cancelled</string>
+    <string name="confirm_and_cancel">Confirm and Cancel</string>
+    <string name="edit_item">edit_item</string>
+    <string name="user_product_id">user_product_id</string>
 </resources>

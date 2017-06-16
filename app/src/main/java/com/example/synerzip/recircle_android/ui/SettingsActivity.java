@@ -2,6 +2,7 @@ package com.example.synerzip.recircle_android.ui;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -35,6 +36,7 @@ import retrofit2.Response;
 public class SettingsActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE = 1;
+    private static final long TIMER = 800;
 
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
@@ -140,11 +142,34 @@ public class SettingsActivity extends AppCompatActivity {
 
                         mTxtUserName.setText(mFirstName + " " + mLastName);
                     }
+
                     mEmail = response.body().getEmail();
                     mMobNo = String.valueOf(response.body().getUser_mob_no());
                     mUserImg = response.body().getUser_image_url();
-                    mUserId = response.body().getUser_id();
-                    mUserAddreessId = response.body().getUserAddress().getUser_address_id();
+                    if (response.body().getUser_id() != null) {
+                        mUserId = response.body().getUser_id();
+                    }
+
+                    if (response.body().getUserAddress() != null) {
+                        mUserAddreessId = response.body().getUserAddress().getUser_address_id();
+
+                        if (!response.body().getUserAddress().getCity().isEmpty()) {
+                            mLinearLayoutCity.setVisibility(View.VISIBLE);
+                            mTxtCity.setText(response.body().getUserAddress().getCity());
+                        }
+                        if (!response.body().getUserAddress().getState().isEmpty()) {
+                            mLinearLayoutState.setVisibility(View.VISIBLE);
+                            mTxtState.setText(response.body().getUserAddress().getState());
+                        }
+                        if (!response.body().getUserAddress().getStreet().isEmpty()) {
+                            mLinearLayoutStreetAddr.setVisibility(View.VISIBLE);
+                            mTxtStreetAddr.setText(response.body().getUserAddress().getStreet());
+                        }
+                        if (response.body().getUserAddress().getZip() != 0) {
+                            mLinearLayoutZipcode.setVisibility(View.VISIBLE);
+                            mTxtZipcode.setText(String.valueOf(response.body().getUserAddress().getZip()));
+                        }
+                    }
                     mTextNotification = response.body().isNotification_flag();
 
                     if (mTextNotification) {
@@ -153,22 +178,7 @@ public class SettingsActivity extends AppCompatActivity {
                         mSwitchNotification.setChecked(false);
                     }
 
-                    if (!response.body().getUserAddress().getCity().isEmpty()) {
-                        mLinearLayoutCity.setVisibility(View.VISIBLE);
-                        mTxtCity.setText(response.body().getUserAddress().getCity());
-                    }
-                    if (!response.body().getUserAddress().getState().isEmpty()) {
-                        mLinearLayoutState.setVisibility(View.VISIBLE);
-                        mTxtState.setText(response.body().getUserAddress().getState());
-                    }
-                    if (!response.body().getUserAddress().getStreet().isEmpty()) {
-                        mLinearLayoutStreetAddr.setVisibility(View.VISIBLE);
-                        mTxtStreetAddr.setText(response.body().getUserAddress().getStreet());
-                    }
-                    if (response.body().getUserAddress().getZip() != 0) {
-                        mLinearLayoutZipcode.setVisibility(View.VISIBLE);
-                        mTxtZipcode.setText(String.valueOf(response.body().getUserAddress().getZip()));
-                    }
+
 
                     mTxtUserName.setText(mFirstName + " " + mLastName);
                     mTxtUserEmail.setText(mEmail);
@@ -176,7 +186,13 @@ public class SettingsActivity extends AppCompatActivity {
                     Picasso.with(SettingsActivity.this).load(mUserImg).into(mImgUserProfile);
                 } else {
 
-                    RCLog.showToast(SettingsActivity.this, "Response is null");
+                    RCLog.showToast(SettingsActivity.this, getString(R.string.user_not_authenticated));
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            finish();
+                        }
+                    },TIMER);
 
                     mProgressBar.setVisibility(View.GONE);
                     mFrameLayout.setAlpha((float) 1.0);

@@ -22,6 +22,9 @@ import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.Discounts;
+import com.example.synerzip.recircle_android.models.Product;
+import com.example.synerzip.recircle_android.models.Products;
+import com.example.synerzip.recircle_android.models.UserProdImages;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 
 import java.io.ByteArrayOutputStream;
@@ -31,13 +34,16 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 /**
  * Created by Prajakta Patil on 9/5/17.
  * Copyright © 2017 Synerzip. All rights reserved
  */
 public class UploadImgActivity extends AppCompatActivity {
-
+    private Products product;
     public static ArrayList<String> listUploadGalleryImage;
+    private UploadImageAdapter mUploadImageAdapter;
+
 
     @BindView(R.id.recycler_view_upload_img)
     protected RecyclerView mRecyclerView;
@@ -50,28 +56,53 @@ public class UploadImgActivity extends AppCompatActivity {
 
         listUploadGalleryImage = new ArrayList<>();
 
+        if (MyProfileActivity.isItemEdit) {
+            Bundle bundle = getIntent().getExtras();
+            if (bundle != null) {
+                product = bundle.getParcelable(getString(R.string.product));
+                if (product != null) {
+                    if (product.getUser_product_info().getUser_prod_images() != null &&
+                            product.getUser_product_info().getUser_prod_images().size() != 0) {
+                        for (UserProdImages imageUrl : product.getUser_product_info().getUser_prod_images()) {
+                            listUploadGalleryImage.add(imageUrl.getUser_prod_image_url());
+                        }
+
+                        mUploadImageAdapter = new UploadImageAdapter(UploadImgActivity.this, listUploadGalleryImage);
+                        mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+                        mRecyclerView.setAdapter(mUploadImageAdapter);
+                    }
+
+                }
+            }
+        }
+
     }
+
     @OnClick(R.id.img_proceed)
-    public void btnProceed(View view){
-        if(listUploadGalleryImage.size()!=0) {
+    public void btnProceed(View view) {
+        if (listUploadGalleryImage.size() != 0) {
             Intent intent = new Intent(UploadImgActivity.this, AdditionalDetailsActivity.class);
             intent.putExtra(getString(R.string.uplaod_image_gallery), listUploadGalleryImage);
-
+            if (MyProfileActivity.isItemEdit) {
+                intent.putExtra(getString(R.string.product), product);
+            }
             startActivity(intent);
-        }else {
-            RCLog.showToast(UploadImgActivity.this,getString(R.string.upload_img));
+        } else {
+            RCLog.showToast(UploadImgActivity.this, getString(R.string.upload_img));
         }
     }
+
     @OnClick(R.id.img_gallery)
-    public void imgGalleryImg(View view){
+    public void imgGalleryImg(View view) {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), 2);
     }
+
     @OnClick(R.id.img_camera)
-    public void imgCameraImg(View view){
+    public void imgCameraImg(View view) {
         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(cameraIntent, 3);
     }
@@ -81,16 +112,14 @@ public class UploadImgActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 3 && resultCode == RESULT_OK) {
-            UploadImageAdapter mUploadImageAdapter;
-            mUploadImageAdapter = new UploadImageAdapter(UploadImgActivity.this, listUploadGalleryImage);
-                Bitmap photo = (Bitmap) data.getExtras().get("data");
-                Uri tempUri = getImageUri(getApplicationContext(), photo);
-                File cameraFilePath = new File(getRealPathFromURI(tempUri));
-                listUploadGalleryImage.add(cameraFilePath.toString());
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            Uri tempUri = getImageUri(getApplicationContext(), photo);
+            File cameraFilePath = new File(getRealPathFromURI(tempUri));
+            listUploadGalleryImage.add(cameraFilePath.toString());
 
-                mUploadImageAdapter.notifyDataSetChanged();
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-                mRecyclerView.setAdapter(mUploadImageAdapter);
+            mUploadImageAdapter.notifyDataSetChanged();
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+            mRecyclerView.setAdapter(mUploadImageAdapter);
         }
         if (requestCode == 2 && resultCode == RESULT_OK && null != data) {
             UploadImageAdapter mUploadImageAdapter;
@@ -118,6 +147,7 @@ public class UploadImgActivity extends AppCompatActivity {
             }
         }
     }
+
     public Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
@@ -131,6 +161,7 @@ public class UploadImgActivity extends AppCompatActivity {
         int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
         return cursor.getString(idx);
     }
+
     /**
      * get file path from uri
      *
@@ -153,6 +184,7 @@ public class UploadImgActivity extends AppCompatActivity {
         cursor.close();
         return filePath;
     }
+
     /**
      * textview cancel to go to previous activity
      *
@@ -162,6 +194,7 @@ public class UploadImgActivity extends AppCompatActivity {
     public void txtCancel(View view) {
         finish();
     }
+
     /**
      * action bar back button
      *

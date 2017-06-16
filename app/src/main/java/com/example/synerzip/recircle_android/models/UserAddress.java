@@ -1,5 +1,8 @@
 package com.example.synerzip.recircle_android.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +12,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class UserAddress {
+public class UserAddress implements Parcelable {
 
     private String user_address_id;
 
@@ -35,5 +38,39 @@ public class UserAddress {
         this.city = city;
         this.state = state;
         this.zip = zip;
+    }
+
+    protected UserAddress(Parcel in) {
+        user_address_id = in.readString();
+        street = in.readString();
+        city = in.readString();
+        state = in.readString();
+        zip = in.readInt();
+    }
+
+    public static final Creator<UserAddress> CREATOR = new Creator<UserAddress>() {
+        @Override
+        public UserAddress createFromParcel(Parcel in) {
+            return new UserAddress(in);
+        }
+
+        @Override
+        public UserAddress[] newArray(int size) {
+            return new UserAddress[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(user_address_id);
+        dest.writeString(street);
+        dest.writeString(city);
+        dest.writeString(state);
+        dest.writeInt(zip);
     }
 }

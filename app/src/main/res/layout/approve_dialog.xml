@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 <TextView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -16,24 +16,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <com.pkmmte.view.CircularImageView
-            android:id="@+id/img_renters"
+            android:id="@+id/img_requesters"
             android:layout_width="@dimen/common_dimens_40"
             android:layout_height="@dimen/common_dimens_40"
             app:shadow="true"
-            app:border="true"
+            app:border="false"
             app:border_color="@color/common_white"
             android:layout_margin="@dimen/common_dimens_10"
-            android:src="@drawable/ic_user"/>
+            android:src="@drawable/ic_user"
+            android:layout_gravity="center_vertical"/>
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="@dimen/common_dimens_10">
     <TextView
-        android:id="@+id/txt_renters_name"
+        android:id="@+id/txt_requesters_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="John Deo"
         android:textSize="@dimen/text_size_16"
         android:textColor="@color/text_color"
         android:padding="@dimen/dimen_1dp"/>
@@ -41,7 +41,6 @@
         android:id="@+id/txt_item_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="D3300"
         android:textSize="@dimen/text_size_16"
         android:textColor="@color/text_color"
         android:padding="@dimen/dimen_1dp"/>
@@ -49,7 +48,6 @@
         android:id="@+id/txt_requested_on"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Requested on 21 June 2017 7.30pm"
         android:padding="@dimen/dimen_1dp"/>
 </LinearLayout>
 
@@ -77,6 +75,7 @@
         android:textSize="@dimen/text_size_16"
         />
     <EditText
+        android:id="@+id/edt_msg_to_requester"
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_dimens_100"
         android:hint="@string/write_msg"

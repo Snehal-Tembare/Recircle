@@ -21,7 +21,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,6 +35,8 @@ import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.ui.messages.AllMessagesActivity;
 import com.example.synerzip.recircle_android.ui.messages.OwnerMsgFragment;
+import com.example.synerzip.recircle_android.ui.rentals.AllRequestsActivity;
+import com.example.synerzip.recircle_android.ui.messages.UserQueAnsActivity;
 import com.example.synerzip.recircle_android.ui.rentals.AllRequestsActivity;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
@@ -68,6 +69,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     @BindView(R.id.tab_layout)
     protected TabLayout mTabLayout;
+
+    protected ListItemFragment listItemFragment;
 
     private PagerAdapter mPagerAdapter;
 
@@ -116,6 +119,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         mProgressBar.setVisibility(View.VISIBLE);
         mFrameLayout.setAlpha((float) 0.6);
 
+        listItemFragment=new ListItemFragment();
+
         mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
         mPagerAdapter.addFragment(new SearchItemFragment(), getString(R.string.tab_search));
         mPagerAdapter.addFragment(new ListItemFragment(), getString(R.string.tab_list));
@@ -125,6 +130,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
 
+        //Edit product details
+        if (MyProfileActivity.isItemEdit){
+            mViewPager.setCurrentItem(1);
+            Bundle bundle=getIntent().getExtras();
+            listItemFragment.setArguments(bundle);
+        }
         //get data from shared preferences
         sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
         isLoggedIn = sharedPreferences.getBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
@@ -191,30 +202,22 @@ mOwnerNameList=new ArrayList<>();
                 mFrameLayout.setAlpha((float) 1.0);
                 if (response.isSuccessful()) {
                     rootMessageInfo=response.body();
-                //    ownerMsgFragment.getMessageDetails(rootMessageInfo);
                     for(int i=0;i<response.body().getOwnerProdRelatedMsgs().size();i++) {
                         mOwnerNameList.add(response.body().getOwnerProdRelatedMsgs().get(i).getUser().getFirst_name()
                         +response.body().getOwnerProdRelatedMsgs().get(i).getUser().getLast_name()) ;
-                    Log.v("msgs_owner_names",mOwnerNameList+"");
 
                     }
                     mProdRelatedMsgs = response.body().getOwnerProdRelatedMsgs().size();
                     isOwnerMsgs =response.body().getOwnerProdRelatedMsgs().get(0).is_read();
-                    Log.v("msgs_owner",response.body().getOwnerProdRelatedMsgs().get(0).is_read()+"");
                     isRenterMsgs =response.body().getOwnerRequestMsgs().get(0).is_read();
-                    Log.v("msgs_owner",response.body().getOwnerRequestMsgs().get(0).is_read()+"");
 
                     if(!isOwnerMsgs){
                         ownerMsgsCount=response.body().getOwnerProdRelatedMsgs().size();
-                        Log.v("msgs_owner",ownerMsgsCount+"");
                     }
                     if(!isRenterMsgs){
                         renterMsgsCount=response.body().getOwnerRequestMsgs().size();
-                        Log.v("msgs_renter",renterMsgsCount+"");
                     }
                     mProdRelatedMsgs=ownerMsgsCount + renterMsgsCount;
-                    Log.v("msgs_total",mProdRelatedMsgs+"");
-
                 }
             }
 
@@ -261,7 +264,7 @@ mOwnerNameList=new ArrayList<>();
         TextView mTxtMsgCount = (TextView) notificationCount.findViewById(R.id.txt_notification_count);
         mTxtMsgCount.setText(String.valueOf(mProdRelatedMsgs));
 
-      //  ActivityCompat.invalidateOptionsMenu(HomeActivity.this);
+        ActivityCompat.invalidateOptionsMenu(HomeActivity.this);
 
         MenuItem menuItemMsgs = menu.findItem(R.id.action_messages);
         MenuItem menuItemRentals = menu.findItem(R.id.action_rentals);
@@ -373,7 +376,6 @@ mOwnerNameList=new ArrayList<>();
                 break;
 
             case R.id.nav_payments:
-                startActivity(new Intent(HomeActivity.this,AllMessagesActivity.class));
                 break;
 
             case R.id.nav_faq:

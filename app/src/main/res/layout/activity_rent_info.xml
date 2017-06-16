@@ -2,10 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parent_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.synerzip.recircle_android.ui.RentInfoActivity">
+    tools:context="com.example.synerzip.recircle_android.ui.rentitem.RentInfoActivity">
 
     <include layout="@layout/partial_toolbar" />
 
@@ -35,7 +36,8 @@
                         android:id="@+id/img_product"
                         android:layout_width="@dimen/common_dimens_80"
                         android:layout_height="@dimen/common_dimens_80"
-                        android:layout_margin="@dimen/common_dimens_5" />
+                        android:layout_margin="@dimen/common_dimens_5"
+                        android:src="@drawable/ic_camera"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -68,6 +70,7 @@
                                 android:id="@+id/img_owner"
                                 android:layout_width="@dimen/common_dimens_40"
                                 android:layout_height="@dimen/common_dimens_40"
+                                android:src="@drawable/ic_user"
                                 app:border="false"
                                 app:border_color="@color/common_white"
                                 app:border_width="@dimen/dimen_1dp"
@@ -86,12 +89,34 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/layout_five"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/layout_one"
+                    android:layout_margin="@dimen/common_dimens_5"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/check_protection_plan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/checkbox_text" />
+
+                    <ImageButton
+                        android:layout_width="@dimen/common_dimens_10"
+                        android:layout_height="@dimen/common_dimens_10"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/common_dimens_5"
+                        android:src="@drawable/ic_about" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/layout_two"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/layout_one"
+                    android:layout_below="@id/layout_five"
                     android:layout_marginTop="@dimen/common_dimens_5"
                     android:orientation="vertical">
 
@@ -303,6 +328,61 @@
 
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/common_dimens_5"
+                        android:orientation="horizontal"
+                        android:weightSum="1">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            android:padding="@dimen/common_dimens_5"
+                            android:text="@string/service_fee"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/text_size_16" />
+
+                        <TextView
+                            android:id="@+id/txt_service_fee"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            android:padding="@dimen/common_dimens_5"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/text_size_16" />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/protection_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/common_dimens_5"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="1">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            android:padding="@dimen/common_dimens_5"
+                            android:text="@string/protection_fee"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/text_size_16" />
+
+                        <TextView
+                            android:id="@+id/txt_protection_fee"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            android:padding="@dimen/common_dimens_5"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/text_size_16" />
+
+                    </LinearLayout>
+
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/common_dimens_2"
@@ -337,6 +417,33 @@
                             android:textStyle="bold" />
 
                     </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/pre_auth_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/common_dimens_5"
+                        android:orientation="horizontal"
+                        android:weightSum="1">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            android:padding="@dimen/common_dimens_5"
+                            android:text="@string/pre_auth_fee"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/text_size_16" />
+
+                        <TextView
+                            android:id="@+id/txt_pre_auth_fee"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            android:padding="@dimen/common_dimens_5"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/text_size_16" />
+
+                    </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
@@ -368,35 +475,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/common_dimens_60"
                         android:layout_marginTop="@dimen/common_dimens_10"
+                        android:gravity="start|left"
+                        android:scrollbars="vertical"
+                        android:maxLines="5"
+                        android:maxLength="2000"
+                        android:inputType="textCapSentences|textMultiLine"
                         android:background="@drawable/edittxt_square"
-                        android:focusable="false"
                         android:hint="@string/note_hint"
                         android:padding="@dimen/common_dimens_5" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/layout_five"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/layout_four"
-                    android:layout_margin="@dimen/common_dimens_5"
-                    android:orientation="horizontal">
-
-                    <CheckBox
-                        android:id="@+id/check_protection_plan"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:checked="true"
-                        android:text="@string/checkbox_text" />
-
-                    <ImageButton
-                        android:layout_width="@dimen/common_dimens_10"
-                        android:layout_height="@dimen/common_dimens_10"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/common_dimens_5"
-                        android:src="@drawable/ic_about" />
-                </LinearLayout>
 
             </RelativeLayout>
 
@@ -419,6 +507,11 @@
                 android:textColor="@color/common_white"
                 android:textSize="@dimen/text_size_16" />
         </LinearLayout>
+        <include
+            android:id="@+id/progress_bar"
+            layout="@layout/progress_bar_layout"
+            android:animateLayoutChanges="true"
+            android:visibility="gone" />
     </FrameLayout>
 
 </LinearLayout>

@@ -16,7 +16,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -42,10 +44,15 @@ public class UploadImageAdapter extends RecyclerView.Adapter<UploadImageAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        if(position==0){
+        if (position == 0) {
             holder.txtCoverImage.setVisibility(View.VISIBLE);
         }
-        holder.imgItem.setImageDrawable(Drawable.createFromPath(mListUserProdImages.get(position)));
+        if (position>0){
+            File file=new File(mListUserProdImages.get(position));
+            Picasso.with(mContext).load(file).into(holder.imgItem);
+        }else {
+            Picasso.with(mContext).load(mListUserProdImages.get(position)).into(holder.imgItem);}
+
         holder.imgItem.setAlpha(0.7f);
     }
 
@@ -67,7 +74,7 @@ public class UploadImageAdapter extends RecyclerView.Adapter<UploadImageAdapter.
 
             imgItem = (ImageView) itemView.findViewById(R.id.img_upload_item);
             imgItemCancel = (ImageView) itemView.findViewById(R.id.img_upload_cancel);
-            txtCoverImage=(TextView) itemView.findViewById(R.id.txt_cover_image);
+            txtCoverImage = (TextView) itemView.findViewById(R.id.txt_cover_image);
 
             imgItemCancel.setOnClickListener(new View.OnClickListener() {
                 @Override

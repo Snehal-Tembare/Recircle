@@ -55,11 +55,11 @@
         <activity android:name=".ui.UploadImgActivity" />
         <activity android:name=".ui.AdditionalDetailsActivity" />
         <activity android:name=".ui.AllReviewsActivity" />
-        <activity android:name=".ui.RentInfoActivity" />
-        <activity android:name=".ui.PaymentModeActivity" />
-        <activity android:name=".ui.CreditCardActivity" />
+        <activity android:name=".ui.rentitem.RentInfoActivity" />
+        <activity android:name=".ui.rentitem.PaymentModeActivity" />
+        <activity android:name=".ui.rentitem.CreditCardActivity" />
         <activity android:name=".ui.HomeActivity" />
-        <activity android:name=".ui.RentItemSuccessActivity" />
+        <activity android:name=".ui.rentitem.RentItemSuccessActivity" />
         <activity android:name=".ui.SettingsActivity" />
         <activity android:name=".ui.EditProfileActivity" />
         <activity android:name=".ui.PaymentsActivity" />
