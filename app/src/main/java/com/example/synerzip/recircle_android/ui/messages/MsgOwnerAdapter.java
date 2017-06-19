@@ -1,12 +1,10 @@
 package com.example.synerzip.recircle_android.ui.messages;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
@@ -25,7 +23,7 @@ import java.util.List;
 
 public class MsgOwnerAdapter extends RecyclerView.Adapter<MsgOwnerAdapter.ViewHolder> {
 
-    private List<OwnerProdRelatedMsg> ownerProdRelatedMsgs = new ArrayList<>();
+    private List<OwnerProdRelatedMsg> messageDetailsRespons = new ArrayList<>();
     private Context context;
     private RootMessageInfo mRootMessageInfo;
 
@@ -46,12 +44,12 @@ public class MsgOwnerAdapter extends RecyclerView.Adapter<MsgOwnerAdapter.ViewHo
     }
 
     public void onBindViewHolder(final MsgOwnerAdapter.ViewHolder viewHolder, int position) {
-        OwnerProdRelatedMsg ownerProdRelatedMsg=mRootMessageInfo.getOwnerProdRelatedMsgs().get(position);
+        OwnerProdRelatedMsg ownerProdRelatedMsg =mRootMessageInfo.getOwnerProdRelatedMsgs().get(position);
         viewHolder.mTxtOwnerMsgs.setText(ownerProdRelatedMsg.getUser_msg());
     }
 
     public int getItemCount() {
-        return this.ownerProdRelatedMsgs.size();
+        return this.messageDetailsRespons.size();
     }
 
 

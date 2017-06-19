@@ -19,6 +19,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class OwnerProdRelatedMsg implements Parcelable {
+
     private String user_prod_msg_id;
 
     private String user_product_id;

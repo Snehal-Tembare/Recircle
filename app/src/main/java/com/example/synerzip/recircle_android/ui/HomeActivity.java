@@ -30,16 +30,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
+import com.example.synerzip.recircle_android.models.user_messages.OwnerProdRelatedMsg;
 import com.example.synerzip.recircle_android.models.user_messages.RootMessageInfo;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.ui.messages.AllMessagesActivity;
 import com.example.synerzip.recircle_android.ui.messages.OwnerMsgFragment;
 import com.example.synerzip.recircle_android.ui.rentals.AllRequestsActivity;
-import com.example.synerzip.recircle_android.ui.messages.UserQueAnsActivity;
-import com.example.synerzip.recircle_android.ui.rentals.AllRequestsActivity;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
-import com.example.synerzip.recircle_android.utilities.RCLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -197,13 +195,15 @@ mOwnerNameList=new ArrayList<>();
         Call<RootMessageInfo> call = service.getUserMessage("Bearer " + mAccessToken);
         call.enqueue(new Callback<RootMessageInfo>() {
             @Override
-            public void onResponse(Call<RootMessageInfo> call, Response<RootMessageInfo> response) {
+            public void onResponse(Call<RootMessageInfo> call,
+                                   Response<RootMessageInfo> response) {
                 mProgressBar.setVisibility(View.GONE);
                 mFrameLayout.setAlpha((float) 1.0);
                 if (response.isSuccessful()) {
                     rootMessageInfo=response.body();
-                    for(int i=0;i<response.body().getOwnerProdRelatedMsgs().size();i++) {
-                        mOwnerNameList.add(response.body().getOwnerProdRelatedMsgs().get(i).getUser().getFirst_name()
+                    for(int i = 0; i<response.body().getOwnerProdRelatedMsgs().size(); i++) {
+                        mOwnerNameList.add(response.body().getOwnerProdRelatedMsgs().get(i).getUser()
+                                .getFirst_name()
                         +response.body().getOwnerProdRelatedMsgs().get(i).getUser().getLast_name()) ;
 
                     }
@@ -241,7 +241,6 @@ mOwnerNameList=new ArrayList<>();
                 break;
             case R.id.action_messages:
                 Intent intent=new Intent(HomeActivity.this,AllMessagesActivity.class);
-                intent.putExtra("msg_object",rootMessageInfo);
                 startActivity(intent);
 
                 break;

@@ -27,10 +27,10 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.synerzip.recircle_android.R;
+import com.example.synerzip.recircle_android.models.user_messages.OwnerProdRelatedMsg;
 import com.example.synerzip.recircle_android.models.user_messages.RootMessageInfo;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
-import com.example.synerzip.recircle_android.ui.AutocompleteAdapter;
 import com.example.synerzip.recircle_android.ui.HomeActivity;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
@@ -52,8 +52,6 @@ import retrofit2.Response;
 //TODO class implemetation is in progress
 
 public class AllMessagesActivity extends AppCompatActivity {
-
-    private RootMessageInfo rootMessageInfo;
 
     private RenterMsgFragment renterMsgFragment;
 
@@ -83,6 +81,8 @@ public class AllMessagesActivity extends AppCompatActivity {
     private OwnerMsgFragment ownerMsgFragment;
 
     public static String userProductMsgId;
+
+    private  RootMessageInfo rootMessageInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

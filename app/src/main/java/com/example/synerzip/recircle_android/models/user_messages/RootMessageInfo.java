@@ -18,7 +18,7 @@ public class RootMessageInfo implements Parcelable {
 
     private ArrayList<OwnerProdRelatedMsg> ownerProdRelatedMsgs;
 
-    private ArrayList<OwnerRequestMsg> ownerRequestMsgs;
+    private ArrayList<OwnerProdRelatedMsg> ownerRequestMsgs;
 
     @Override
     public int describeContents() {
@@ -36,7 +36,7 @@ public class RootMessageInfo implements Parcelable {
 
     protected RootMessageInfo(Parcel in) {
         this.ownerProdRelatedMsgs = in.createTypedArrayList(OwnerProdRelatedMsg.CREATOR);
-        this.ownerRequestMsgs = in.createTypedArrayList(OwnerRequestMsg.CREATOR);
+        this.ownerRequestMsgs = in.createTypedArrayList(OwnerProdRelatedMsg.CREATOR);
     }
 
     public static final Parcelable.Creator<RootMessageInfo> CREATOR = new Parcelable.Creator<RootMessageInfo>() {

@@ -15,14 +15,12 @@ import com.example.synerzip.recircle_android.models.SearchProduct;
 import com.example.synerzip.recircle_android.models.SignUpRequest;
 import com.example.synerzip.recircle_android.models.User;
 import com.example.synerzip.recircle_android.models.rentals.UserRequest;
-import com.example.synerzip.recircle_android.models.user_messages.UserAskQueResponse;
-import com.example.synerzip.recircle_android.models.rentals.UserRequest;
+import com.example.synerzip.recircle_android.models.user_messages.OwnerProdRelatedMsg;
 import com.example.synerzip.recircle_android.models.user_messages.RootMessageInfo;
+import com.example.synerzip.recircle_android.models.user_messages.UserAskQueResponse;
 import com.example.synerzip.recircle_android.models.user_messages.UserAskQueRequest;
 import com.example.synerzip.recircle_android.models.ZipcodeRoot;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
-
-import java.net.UnknownServiceException;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -194,7 +192,7 @@ public interface RCAPInterface {
      */
     @POST(RCWebConstants.RC_USER_QUE_ANS)
     Call<RootMessageInfo> getUserQueAns(@Header("Authorization") String token,
-                                        @Body UserAskQueRequest userAskQueRequest);
+                                            @Body UserAskQueRequest userAskQueRequest);
 
     /**
      * api call to reply to user
@@ -204,7 +202,7 @@ public interface RCAPInterface {
      */
     @POST(RCWebConstants.RC_USER_QUE_ANS)
     Call<RootMessageInfo> getMsgResponse(@Header("Authorization") String token,
-                                         @Body UserAskQueResponse userAskQueResponse);
+                                             @Body UserAskQueResponse userAskQueResponse);
 
     /**
      *  Get order details
