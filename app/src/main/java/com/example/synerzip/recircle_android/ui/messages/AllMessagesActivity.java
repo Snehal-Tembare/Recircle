@@ -27,7 +27,6 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.synerzip.recircle_android.R;
-import com.example.synerzip.recircle_android.models.user_messages.OwnerProdRelatedMsg;
 import com.example.synerzip.recircle_android.models.user_messages.RootMessageInfo;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
@@ -73,8 +72,6 @@ public class AllMessagesActivity extends AppCompatActivity {
     private RCAPInterface service;
 
     private String mAccessToken = "";
-
-    private SharedPreferences sharedPreferences;
 
     private boolean isLoggedIn;
 
@@ -127,7 +124,8 @@ public class AllMessagesActivity extends AppCompatActivity {
         ownerMsgFragment = new OwnerMsgFragment();
         renterMsgFragment = new RenterMsgFragment();
 
-        //get data from shared preferences
+        //get data from shared preferences+
+        SharedPreferences sharedPreferences;
         sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
         isLoggedIn = sharedPreferences.getBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
         mAccessToken = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
@@ -154,8 +152,9 @@ public class AllMessagesActivity extends AppCompatActivity {
                 mProgressBar.setVisibility(View.GONE);
                 mFrameLayout.setAlpha((float) 1.0);
                 if (response.isSuccessful()) {
+
                     rootMessageInfo = response.body();
-                    userProductMsgId =response.body().getOwnerProdRelatedMsgs().get(0).getUser_prod_msg_id();
+                    userProductMsgId =response.body().getProdRelatedMsgs().get(0).getUser_prod_msg_id();
                     ownerMsgFragment.getMessageDetails(rootMessageInfo);
                 }
             }

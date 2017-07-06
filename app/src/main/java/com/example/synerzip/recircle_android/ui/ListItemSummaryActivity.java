@@ -115,6 +115,8 @@ public class ListItemSummaryActivity extends AppCompatActivity {
     @BindView(R.id.txt_show_dates)
     protected TextView mTxtShowDates;
 
+    private ListAnItemRequest listAnItemRequest;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -155,8 +157,8 @@ public class ListItemSummaryActivity extends AppCompatActivity {
         listDiscounts = ListItemFragment.listDiscounts;
 
         //TODO changes needed for ListAnItem api for discount ; the functionality should be dynamic
-        mTxtDiscFiveDays.setText(getString(R.string.five_days) + "$ " + String.valueOf(ListItemFragment.discFiveDays));
-        mTxtDiscTenDays.setText(getString(R.string.ten_days) + "$ " + String.valueOf(ListItemFragment.discTenDays));
+        mTxtDiscFiveDays.setText(getString(R.string.five_days));
+        mTxtDiscTenDays.setText(getString(R.string.ten_days));
         mItemAvailability = AdditionalDetailsActivity.mItemAvailability;
 
         mZipcode = AdditionalDetailsActivity.mZipcode;
@@ -215,12 +217,17 @@ public class ListItemSummaryActivity extends AppCompatActivity {
      * api call for list an item
      */
     private void getListAnItem() {
-        ListAnItemRequest listAnItemRequest;
         mProgressBar.setVisibility(View.VISIBLE);
         mLinearLayout.setAlpha((float) 0.6);
-
-        listAnItemRequest = new ListAnItemRequest(productId, mItemPrice, mMinRental,
-                mItemDesc, listDiscounts, listUploadItemImage, mItemAvailability, mZipcode, fromAustin);
+        if (productId == null) {
+            mProductTitle = "";
+            listAnItemRequest = new ListAnItemRequest(productId, mProductTitle, mItemPrice, mMinRental,
+                    mItemDesc, listDiscounts, listUploadItemImage, mItemAvailability, mZipcode, fromAustin);
+        } else {
+            productId = "";
+            listAnItemRequest = new ListAnItemRequest(productId, mProductTitle, mItemPrice, mMinRental,
+                    mItemDesc, listDiscounts, listUploadItemImage, mItemAvailability, mZipcode, fromAustin);
+        }
         service = ApiClient.getClient().create(RCAPInterface.class);
         Call<AllProductInfo> call = service.listAnItem("Bearer " + mAccessToken, listAnItemRequest);
         call.enqueue(new Callback<AllProductInfo>() {

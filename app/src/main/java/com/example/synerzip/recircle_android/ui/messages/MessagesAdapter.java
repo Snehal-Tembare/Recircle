@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
-import com.example.synerzip.recircle_android.models.user_messages.OwnerProdRelatedMsg;
+import com.example.synerzip.recircle_android.models.user_messages.ProdRelatedMsg;
 import com.example.synerzip.recircle_android.models.user_messages.RootMessageInfo;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.squareup.picasso.Picasso;
@@ -22,10 +22,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by Prajakta Patil on 8/6/17.
  * Copyright © 2017 Synerzip. All rights reserved
  */
+
+//TODO class implemetation is in progress
+
 public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHolder> {
     private Context mContext;
     private RootMessageInfo mRootMessageInfo;
-    private OwnerProdRelatedMsg ownerProdRelatedMsg;
+    private ProdRelatedMsg prodRelatedMsg;
 
     public MessagesAdapter(Context mContext, RootMessageInfo mRootMessageInfo) {
         this.mContext = mContext;
@@ -42,8 +45,8 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, int position) {
 
-        ownerProdRelatedMsg = mRootMessageInfo.getOwnerProdRelatedMsgs().get(position);
-        if (!ownerProdRelatedMsg.is_read()) {
+        prodRelatedMsg = mRootMessageInfo.getProdRelatedMsgs().get(position);
+        if (!prodRelatedMsg.is_read()) {
             viewHolder.mCardView.setBackgroundColor(viewHolder.mCardView.getContext()
                     .getResources().getColor(R.color.colorLightGrey));
         } else {
@@ -51,16 +54,16 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
                     .getResources().getColor(R.color.colorWhite));
         }
 
-        viewHolder.mTxtOwnerName.setText(ownerProdRelatedMsg.getUser().getFirst_name() +
-                " " + ownerProdRelatedMsg.getUser().getLast_name());
-        if (ownerProdRelatedMsg.getUser_product().getProduct_manufacturer_title() != null) {
-            viewHolder.mTxtOwnerProdName.setText(ownerProdRelatedMsg.getUser_product()
+        viewHolder.mTxtOwnerName.setText(prodRelatedMsg.getUser().getFirst_name() +
+                " " + prodRelatedMsg.getUser().getLast_name());
+        if (prodRelatedMsg.getUser_product().getProduct_manufacturer_title() != null) {
+            viewHolder.mTxtOwnerProdName.setText(prodRelatedMsg.getUser_product()
                     .getProduct_manufacturer_title());
         }
-        if (ownerProdRelatedMsg.getUser().getUser_image_url() != null) {
+        if (prodRelatedMsg.getUser().getUser_image_url() != null) {
 
             Picasso.with(mContext)
-                    .load(ownerProdRelatedMsg.getUser().getUser_image_url())
+                    .load(prodRelatedMsg.getUser().getUser_image_url())
                     .placeholder(R.drawable.ic_user)
                     .into(viewHolder.mImgOwnerImage);
         }
@@ -69,7 +72,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return mRootMessageInfo.getOwnerProdRelatedMsgs().size();
+        return mRootMessageInfo.getProdRelatedMsgs().size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -79,23 +82,25 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
 
         public ViewHolder(View view) {
             super(view);
+
             mCardView = (CardView) view.findViewById(R.id.cardview_msgs);
             mImgOwnerImage = (CircleImageView) view.findViewById(R.id.img_user_profile);
             mTxtOwnerName = (TextView) view.findViewById(R.id.txt_user_name);
             mTxtOwnerProdName = (TextView) view.findViewById(R.id.txt_product_name);
             mTxtOwnerReqTime = (TextView) view.findViewById(R.id.txt_msg_date_time);
-            view.setOnClickListener(new View.OnClickListener() {
+
+              view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    ownerProdRelatedMsg.set_read(true);
+                    prodRelatedMsg.set_read(true);
                     mCardView.setBackgroundColor(mCardView.getContext().getResources().getColor(R.color.colorWhite));
 
-                    Intent intent = new Intent(v.getContext(), ChatActivity.class);
+                    Intent intent = new Intent(v.getContext(), NewItemReqActivity.class);
                     Bundle bundle = new Bundle();
 
-                    bundle.putString("renter_name", ownerProdRelatedMsg.getUser().getFirst_name() + " " +
-                            ownerProdRelatedMsg.getUser().getLast_name());
+                    bundle.putString("renter_name", prodRelatedMsg.getUser().getFirst_name() + " " +
+                            prodRelatedMsg.getUser().getLast_name());
                     intent.putExtras(bundle);
                     v.getContext().startActivity(intent);
                     RCLog.showToast(v.getContext(), getAdapterPosition() + " clicked");

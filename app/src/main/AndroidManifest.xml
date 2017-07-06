@@ -58,7 +58,9 @@
         <activity android:name=".ui.rentitem.RentInfoActivity" />
         <activity android:name=".ui.rentitem.PaymentModeActivity" />
         <activity android:name=".ui.rentitem.CreditCardActivity" />
-        <activity android:name=".ui.HomeActivity" />
+        <activity
+            android:name=".ui.HomeActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".ui.rentitem.RentItemSuccessActivity" />
         <activity android:name=".ui.SettingsActivity" />
         <activity android:name=".ui.EditProfileActivity" />
@@ -92,6 +94,7 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity android:name=".ui.messages.ChatActivity" />
+        <activity android:name=".ui.messages.NewItemReqActivity" />
     </application>
 
 </manifest>

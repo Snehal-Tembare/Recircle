@@ -6,7 +6,7 @@ package com.example.synerzip.recircle_android.utilities;
  */
 public class RCWebConstants {
 
-    public static final String RC_BASE_URL = "https://5f730a4e.ngrok.io";
+    public static final String RC_BASE_URL = "http://a5e0d37d.ngrok.io";
 
     public static final int RC_SUCCESS_CODE = 200;
 
@@ -68,4 +68,5 @@ public class RCWebConstants {
 
     public static final String RC_CANCEL_ORDER="/api/products/cancelOrder";
 
+    public static final String RC_CANCEL_PROD_REQUEST = "/api/products/cancelOrder";
 }

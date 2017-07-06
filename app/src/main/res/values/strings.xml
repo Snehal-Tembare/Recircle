@@ -300,8 +300,8 @@
     <string name="list_item_success">Success! Your listing is live</string>
     <string name="disc_five_days">discFiveDays</string>
     <string name="disc_ten_days">discTenDays</string>
-    <string name="five_days">30% discount for 5 days : </string>
-    <string name="ten_days">40% discount for 10 days : </string>
+    <string name="five_days">30% discount for 5 days </string>
+    <string name="ten_days">40% discount for 10 days </string>
     <string name="disc_five">5 days $</string>
     <string name="disc_ten">10 days $</string>
     <string name="show_dates">Show Dates</string>
@@ -423,4 +423,10 @@
     <string name="confirm_and_cancel">Confirm and Cancel</string>
     <string name="edit_item">edit_item</string>
     <string name="user_product_id">user_product_id</string>
+    <string name="cancel_req">Cancel request</string>
+    <string name="cancel_request">Are you sure you want to cancel this request?</string>
+    <string name="cancellation_fee">Please note that you will be charged the 8% cancellation fee</string>
+    <string name="cancel_reason">Reason to cancel</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="cancel_request_confirm">Cancel request</string>
 </resources>

@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
-import com.example.synerzip.recircle_android.models.user_messages.OwnerProdRelatedMsg;
+import com.example.synerzip.recircle_android.models.user_messages.ProdRelatedMsg;
 import com.example.synerzip.recircle_android.models.user_messages.RootMessageInfo;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import java.util.List;
 
 public class MsgOwnerAdapter extends RecyclerView.Adapter<MsgOwnerAdapter.ViewHolder> {
 
-    private List<OwnerProdRelatedMsg> messageDetailsRespons = new ArrayList<>();
+    private List<ProdRelatedMsg> messageDetailsRespons = new ArrayList<>();
     private Context context;
     private RootMessageInfo mRootMessageInfo;
 
@@ -44,8 +44,8 @@ public class MsgOwnerAdapter extends RecyclerView.Adapter<MsgOwnerAdapter.ViewHo
     }
 
     public void onBindViewHolder(final MsgOwnerAdapter.ViewHolder viewHolder, int position) {
-        OwnerProdRelatedMsg ownerProdRelatedMsg =mRootMessageInfo.getOwnerProdRelatedMsgs().get(position);
-        viewHolder.mTxtOwnerMsgs.setText(ownerProdRelatedMsg.getUser_msg());
+        ProdRelatedMsg prodRelatedMsg =mRootMessageInfo.getProdRelatedMsgs().get(position);
+        viewHolder.mTxtOwnerMsgs.setText(prodRelatedMsg.getUser_msg());
     }
 
     public int getItemCount() {

@@ -16,9 +16,9 @@ import lombok.Setter;
 @Setter
 public class RootMessageInfo implements Parcelable {
 
-    private ArrayList<OwnerProdRelatedMsg> ownerProdRelatedMsgs;
+    private ArrayList<ProdRelatedMsg> prodRelatedMsgs;
 
-    private ArrayList<OwnerProdRelatedMsg> ownerRequestMsgs;
+    private ArrayList<ProdRelatedMsg> ownerRequestMsgs;
 
     @Override
     public int describeContents() {
@@ -27,7 +27,7 @@ public class RootMessageInfo implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeTypedList(this.ownerProdRelatedMsgs);
+        dest.writeTypedList(this.prodRelatedMsgs);
         dest.writeTypedList(this.ownerRequestMsgs);
     }
 
@@ -35,8 +35,8 @@ public class RootMessageInfo implements Parcelable {
     }
 
     protected RootMessageInfo(Parcel in) {
-        this.ownerProdRelatedMsgs = in.createTypedArrayList(OwnerProdRelatedMsg.CREATOR);
-        this.ownerRequestMsgs = in.createTypedArrayList(OwnerProdRelatedMsg.CREATOR);
+        this.prodRelatedMsgs = in.createTypedArrayList(ProdRelatedMsg.CREATOR);
+        this.ownerRequestMsgs = in.createTypedArrayList(ProdRelatedMsg.CREATOR);
     }
 
     public static final Parcelable.Creator<RootMessageInfo> CREATOR = new Parcelable.Creator<RootMessageInfo>() {

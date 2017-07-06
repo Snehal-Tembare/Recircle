@@ -18,7 +18,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class OwnerProdRelatedMsg implements Parcelable {
+public class ProdRelatedMsg implements Parcelable {
 
     private String user_prod_msg_id;
 
@@ -62,10 +62,10 @@ public class OwnerProdRelatedMsg implements Parcelable {
         dest.writeParcelable(this.user_product, flags);
     }
 
-    public OwnerProdRelatedMsg() {
+    public ProdRelatedMsg() {
     }
 
-    protected OwnerProdRelatedMsg(Parcel in) {
+    protected ProdRelatedMsg(Parcel in) {
         this.user_prod_msg_id = in.readString();
         this.user_product_id = in.readString();
         this.user_id = in.readString();
@@ -81,15 +81,15 @@ public class OwnerProdRelatedMsg implements Parcelable {
         this.user_product = in.readParcelable(Product.class.getClassLoader());
     }
 
-    public static final Parcelable.Creator<OwnerProdRelatedMsg> CREATOR = new Parcelable.Creator<OwnerProdRelatedMsg>() {
+    public static final Parcelable.Creator<ProdRelatedMsg> CREATOR = new Parcelable.Creator<ProdRelatedMsg>() {
         @Override
-        public OwnerProdRelatedMsg createFromParcel(Parcel source) {
-            return new OwnerProdRelatedMsg(source);
+        public ProdRelatedMsg createFromParcel(Parcel source) {
+            return new ProdRelatedMsg(source);
         }
 
         @Override
-        public OwnerProdRelatedMsg[] newArray(int size) {
-            return new OwnerProdRelatedMsg[size];
+        public ProdRelatedMsg[] newArray(int size) {
+            return new ProdRelatedMsg[size];
         }
     };
 }

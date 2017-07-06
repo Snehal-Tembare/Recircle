@@ -5,6 +5,7 @@ import com.example.synerzip.recircle_android.models.ChangePwdRequest;
 import com.example.synerzip.recircle_android.models.ForgotPwdRequest;
 import com.example.synerzip.recircle_android.models.ListAnItemRequest;
 import com.example.synerzip.recircle_android.models.LogInRequest;
+import com.example.synerzip.recircle_android.models.UserMessages.CancelUserProdRequest;
 import com.example.synerzip.recircle_android.models.rentals.CancelOrder;
 import com.example.synerzip.recircle_android.models.rentals.OrderDetails;
 import com.example.synerzip.recircle_android.models.Products;
@@ -15,7 +16,6 @@ import com.example.synerzip.recircle_android.models.SearchProduct;
 import com.example.synerzip.recircle_android.models.SignUpRequest;
 import com.example.synerzip.recircle_android.models.User;
 import com.example.synerzip.recircle_android.models.rentals.UserRequest;
-import com.example.synerzip.recircle_android.models.user_messages.OwnerProdRelatedMsg;
 import com.example.synerzip.recircle_android.models.user_messages.RootMessageInfo;
 import com.example.synerzip.recircle_android.models.user_messages.UserAskQueResponse;
 import com.example.synerzip.recircle_android.models.user_messages.UserAskQueRequest;
@@ -235,4 +235,15 @@ public interface RCAPInterface {
      */
     @PUT(RCWebConstants.RC_CANCEL_ORDER)
     Call<CancelOrder> cancelOrder(@Body CancelOrder cancelOrder);
+
+
+    /**
+     * cancel user product request
+     * @param token
+     * @param cancelUserProdRequest
+     * @return
+     */
+    @PUT(RCWebConstants.RC_CANCEL_PROD_REQUEST)
+    Call<RootMessageInfo> cancelProdRequest(@Header("Authorization") String token,
+                                            @Body CancelUserProdRequest cancelUserProdRequest);
 }

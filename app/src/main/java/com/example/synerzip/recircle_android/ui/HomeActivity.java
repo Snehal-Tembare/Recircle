@@ -30,7 +30,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
-import com.example.synerzip.recircle_android.models.user_messages.OwnerProdRelatedMsg;
 import com.example.synerzip.recircle_android.models.user_messages.RootMessageInfo;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
@@ -38,6 +37,7 @@ import com.example.synerzip.recircle_android.ui.messages.AllMessagesActivity;
 import com.example.synerzip.recircle_android.ui.messages.OwnerMsgFragment;
 import com.example.synerzip.recircle_android.ui.rentals.AllRequestsActivity;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
+import com.example.synerzip.recircle_android.utilities.RCLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,18 +70,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     protected ListItemFragment listItemFragment;
 
-    private PagerAdapter mPagerAdapter;
-
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
-
-    private SharedPreferences sharedPreferences;
 
     private boolean isLoggedIn;
 
     private String mUserFirstName, mUserLastName, mUserEmail, mUserImage, mAccessToken = "";
-
-    private RCAPInterface service;
 
     private RootMessageInfo rootMessageInfo;
 
@@ -93,9 +87,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @BindView(R.id.frame_layout)
     protected FrameLayout mFrameLayout;
 
-    private boolean isOwnerMsgs,isRenterMsgs;
+    private boolean isOwnerMsgs, isRenterMsgs;
 
-    private int renterMsgsCount,ownerMsgsCount;
+    private int renterMsgsCount, ownerMsgsCount;
 
     private OwnerMsgFragment ownerMsgFragment;
 
@@ -112,13 +106,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        ownerMsgFragment=new OwnerMsgFragment();
+        ownerMsgFragment = new OwnerMsgFragment();
 
         mProgressBar.setVisibility(View.VISIBLE);
         mFrameLayout.setAlpha((float) 0.6);
 
-        listItemFragment=new ListItemFragment();
-
+        listItemFragment = new ListItemFragment();
+        PagerAdapter mPagerAdapter;
         mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
         mPagerAdapter.addFragment(new SearchItemFragment(), getString(R.string.tab_search));
         mPagerAdapter.addFragment(new ListItemFragment(), getString(R.string.tab_list));
@@ -129,12 +123,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
 
         //Edit product details
-        if (MyProfileActivity.isItemEdit){
+        if (MyProfileActivity.isItemEdit) {
             mViewPager.setCurrentItem(1);
-            Bundle bundle=getIntent().getExtras();
+            Bundle bundle = getIntent().getExtras();
             listItemFragment.setArguments(bundle);
         }
         //get data from shared preferences
+        SharedPreferences sharedPreferences;
         sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
         isLoggedIn = sharedPreferences.getBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
         mUserFirstName = sharedPreferences.getString(
@@ -172,25 +167,27 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             menu.removeItem(R.id.nav_logIn_signUp);
 
         } else {
+            RCLog.showToast(this,"User not logged in");
             menu.removeItem(R.id.nav_settings);
             menu.removeItem(R.id.nav_payments);
             menu.removeItem(R.id.nav_logout);
             menu.removeItem(R.id.nav_faq);
         }
-mOwnerNameList=new ArrayList<>();
+        mOwnerNameList = new ArrayList<>();
     }//end onCreate()
 
     @Override
     protected void onResume() {
         super.onResume();
         //get user messages details
-        getMessageDetails();
+         getMessageDetails();
     }
 
     /**
      * get details of user messages
      */
     public void getMessageDetails() {
+        RCAPInterface service;
         service = ApiClient.getClient().create(RCAPInterface.class);
         Call<RootMessageInfo> call = service.getUserMessage("Bearer " + mAccessToken);
         call.enqueue(new Callback<RootMessageInfo>() {
@@ -200,24 +197,29 @@ mOwnerNameList=new ArrayList<>();
                 mProgressBar.setVisibility(View.GONE);
                 mFrameLayout.setAlpha((float) 1.0);
                 if (response.isSuccessful()) {
-                    rootMessageInfo=response.body();
-                    for(int i = 0; i<response.body().getOwnerProdRelatedMsgs().size(); i++) {
-                        mOwnerNameList.add(response.body().getOwnerProdRelatedMsgs().get(i).getUser()
-                                .getFirst_name()
-                        +response.body().getOwnerProdRelatedMsgs().get(i).getUser().getLast_name()) ;
+                    rootMessageInfo = response.body();
+                    if (response.body().getProdRelatedMsgs() !=null) {
+                        for (int i = 0; i < response.body().getProdRelatedMsgs().size(); i++) {
+                            mOwnerNameList.add(
+                                    response.body().getProdRelatedMsgs().get(i).getUser().getFirst_name()
+                                            + response.body().getProdRelatedMsgs().get(i).getUser().getLast_name());
 
-                    }
-                    mProdRelatedMsgs = response.body().getOwnerProdRelatedMsgs().size();
-                    isOwnerMsgs =response.body().getOwnerProdRelatedMsgs().get(0).is_read();
-                    isRenterMsgs =response.body().getOwnerRequestMsgs().get(0).is_read();
+                        }
 
-                    if(!isOwnerMsgs){
-                        ownerMsgsCount=response.body().getOwnerProdRelatedMsgs().size();
+                        mProdRelatedMsgs = response.body().getProdRelatedMsgs().size();
+                        isOwnerMsgs = response.body().getProdRelatedMsgs().get(0).is_read();
+                        isRenterMsgs = response.body().getOwnerRequestMsgs().get(0).is_read();
+
+                        if (!isOwnerMsgs) {
+                            ownerMsgsCount = response.body().getProdRelatedMsgs().size();
+                        }
+                        if (!isRenterMsgs) {
+                            renterMsgsCount = response.body().getOwnerRequestMsgs().size();
+                        }
+                        mProdRelatedMsgs = ownerMsgsCount + renterMsgsCount;
+                    } else {
+                        RCLog.showToast(HomeActivity.this, "Messages are empty");
                     }
-                    if(!isRenterMsgs){
-                        renterMsgsCount=response.body().getOwnerRequestMsgs().size();
-                    }
-                    mProdRelatedMsgs=ownerMsgsCount + renterMsgsCount;
                 }
             }
 
@@ -240,12 +242,13 @@ mOwnerNameList=new ArrayList<>();
                 }
                 break;
             case R.id.action_messages:
-                Intent intent=new Intent(HomeActivity.this,AllMessagesActivity.class);
+                Intent intent = new Intent(HomeActivity.this, AllMessagesActivity.class);
+                intent.putExtra("rootMessageInfo", rootMessageInfo);
                 startActivity(intent);
 
                 break;
             case R.id.action_rentals:
-                startActivity(new Intent(HomeActivity.this,AllRequestsActivity.class));
+                startActivity(new Intent(HomeActivity.this, AllRequestsActivity.class));
                 break;
             default:
                 break;
@@ -384,8 +387,7 @@ mOwnerNameList=new ArrayList<>();
                 startActivity(intent);
                 break;
             case R.id.nav_msgs:
-
-                startActivity(new Intent(HomeActivity.this,AllMessagesActivity.class));
+                startActivity(new Intent(HomeActivity.this, AllMessagesActivity.class));
                 break;
         }
 
