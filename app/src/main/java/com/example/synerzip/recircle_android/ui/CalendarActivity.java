@@ -87,8 +87,6 @@ public class CalendarActivity extends AppCompatActivity {
 
                 for (UserProductUnAvailability unAvailability : userProductUnAvailabilities) {
 
-                    Log.v("onDateSelected", userProductUnAvailabilities.get(0).getUnavai_from_date() + "ListItemCalendarActivity");
-
                     DateFormat dateFormat = new SimpleDateFormat(getString(R.string.calendar_date_format));
 
                     Date parsedDate = null;

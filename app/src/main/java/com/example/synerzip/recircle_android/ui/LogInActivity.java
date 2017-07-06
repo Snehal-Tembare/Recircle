@@ -327,6 +327,7 @@ public class LogInActivity extends AppCompatActivity {
             case android.R.id.home:
                 onBackPressed();
                 finish();
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -352,6 +353,7 @@ public class LogInActivity extends AppCompatActivity {
             editor.putBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, true);
             editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USERNAME, mUserEmail);
             editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_FIRST_USERNAME, mUserFirstName);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_LAST_USERNAME, mUserLastName);
             editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_IMAGE, mUserImage);
             editor.putLong(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_MOB_NO, mUserMobNo);
             editor.apply();

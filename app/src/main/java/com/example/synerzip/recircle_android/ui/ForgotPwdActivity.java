@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
@@ -68,7 +69,7 @@ public class ForgotPwdActivity extends AppCompatActivity {
     protected Toolbar mToolbar;
 
     @BindView(R.id.progress_bar)
-    protected ProgressBar mProgressBar;
+    protected RelativeLayout mProgressBar;
 
     @BindView(R.id.layout_activity_forgot)
     protected LinearLayout mLinearLayout;

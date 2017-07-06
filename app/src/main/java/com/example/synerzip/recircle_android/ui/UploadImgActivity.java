@@ -67,7 +67,6 @@ public class UploadImgActivity extends AppCompatActivity {
                             listUploadGalleryImage.add(imageUrl.getUser_prod_image_url());
                         }
 
-                        Log.v("UploadImgActivity", product.getProduct_info().getProduct_title());
                         mUploadImageAdapter = new UploadImageAdapter(UploadImgActivity.this, listUploadGalleryImage);
                         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
                         mRecyclerView.setAdapter(mUploadImageAdapter);
@@ -113,7 +112,6 @@ public class UploadImgActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 3 && resultCode == RESULT_OK) {
-//            mUploadImageAdapter = new UploadImageAdapter(UploadImgActivity.this, listUploadGalleryImage);
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             Uri tempUri = getImageUri(getApplicationContext(), photo);
             File cameraFilePath = new File(getRealPathFromURI(tempUri));

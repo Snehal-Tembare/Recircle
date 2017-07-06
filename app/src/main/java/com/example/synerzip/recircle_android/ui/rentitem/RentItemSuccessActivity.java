@@ -22,7 +22,6 @@ import butterknife.OnClick;
  */
 
 public class RentItemSuccessActivity extends AppCompatActivity {
-//    public static boolean isViewAllRequest=false;
 
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;

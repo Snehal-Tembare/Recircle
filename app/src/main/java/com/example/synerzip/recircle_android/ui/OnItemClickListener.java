@@ -9,6 +9,4 @@ import com.example.synerzip.recircle_android.models.UserProductDetails;
 
 interface OnItemClickListener {
     void onItemClick(Products product);
-//    void onPopularItemClick(PopularProducts popularProduct);
-//    void onRecentItemClick(ProductDetails recentProduct);
 }

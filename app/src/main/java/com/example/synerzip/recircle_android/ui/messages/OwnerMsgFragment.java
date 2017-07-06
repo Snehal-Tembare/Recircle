@@ -1,25 +1,32 @@
 package com.example.synerzip.recircle_android.ui.messages;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.synerzip.recircle_android.R;
-
-import butterknife.ButterKnife;
+import com.example.synerzip.recircle_android.models.user_messages.RootMessageInfo;
 
 /**
  * Created by Prajakta Patil on 7/6/17.
  * Copyright © 2017 Synerzip. All rights reserved
  */
 
-//TODO screen not implememted
+//TODO the implementation is in progress
 
 public class OwnerMsgFragment extends Fragment {
+
+    private MessagesAdapter mMessagesAdapter;
+
+    private RecyclerView mRecyclerView;
+
+    private RootMessageInfo mMessageInfo;
+
     /**
      * empty constructor for OwnerMsgFragment
      */
@@ -29,9 +36,32 @@ public class OwnerMsgFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment_owner_msg, container, false);
-        ButterKnife.bind(this, view);
+        super.onCreateView(inflater,container,savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_owner_msg, container, false);
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+           mRecyclerView = (RecyclerView) view.findViewById(R.id.owner_recycler_view);
+    }
+
+    /**
+     * get message details from HomeActivity
+     * @param rootMessageInfo
+     */
+    public void getMessageDetails(RootMessageInfo rootMessageInfo) {
+
+        this.mMessageInfo = rootMessageInfo;
+
+        if(mMessageInfo!=null ){
+            mMessagesAdapter = new MessagesAdapter(getActivity(), mMessageInfo);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+            mRecyclerView.setLayoutManager(layoutManager);
+            mRecyclerView.setAdapter(mMessagesAdapter);
+        }
     }
 
 }

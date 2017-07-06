@@ -384,12 +384,6 @@ public class RentInfoActivity extends AppCompatActivity {
             mRentItem.setPre_auth_fee(preAuthFee);
         }
 
-        //Waiting for stripe integration
-       /* Intent intentPayMode = new Intent(this, PaymentModeActivity.class);
-        intentPayMode.putExtra(getString(R.string.total), finalTotal);
-        intentPayMode.putExtra(getString(R.string.user_id), user_id);
-        startActivity(intentPayMode);*/
-
         startActivity(new Intent(this, RentItemSuccessActivity.class));
         RCLog.showToast(this, getString(R.string.item_requested_successfully));
 

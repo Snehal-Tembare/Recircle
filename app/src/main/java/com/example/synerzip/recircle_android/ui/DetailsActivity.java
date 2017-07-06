@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
@@ -32,6 +33,8 @@ import com.example.synerzip.recircle_android.models.UserProductUnAvailability;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.ui.rentitem.RentInfoActivity;
+import com.example.synerzip.recircle_android.ui.messages.AllMessagesActivity;
+import com.example.synerzip.recircle_android.ui.messages.UserQueAnsActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -50,7 +53,9 @@ import retrofit2.Response;
  */
 
 public class DetailsActivity extends AppCompatActivity {
+
     private static final String EXTRA_IMAGE = "extra_image";
+
     public static boolean isShowInfo;
 
     @BindView(R.id.toolbar)
@@ -257,9 +262,9 @@ public class DetailsActivity extends AppCompatActivity {
 
                             mCollapsibleLayout.setTitle(product.getProduct_info().getProduct_title());
 
-                                Picasso.with(getApplicationContext())
-                                        .load(product.getUser_info().getUser_image_url())
-                                        .placeholder(R.drawable.ic_user).into(mImgUser);
+                            Picasso.with(getApplicationContext())
+                                    .load(product.getUser_info().getUser_image_url())
+                                    .placeholder(R.drawable.ic_user).into(mImgUser);
 
                             mTxtUserName.setText(product.getUser_info().getFirst_name() + " "
                                     + product.getUser_info().getLast_name());

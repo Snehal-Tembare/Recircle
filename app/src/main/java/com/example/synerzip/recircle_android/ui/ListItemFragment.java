@@ -115,8 +115,7 @@ public class ListItemFragment extends Fragment {
 
     public static double discFiveDays, discTenDays;
 
-    @BindView(R.id.btn_upload_img)
-    protected Button mBtnUploadImg;
+    public static  String mCustomProductTitle;
 
     /**
      * ListItemFragment empty constructor
@@ -131,8 +130,6 @@ public class ListItemFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-
-
 
         utility = new SearchUtility();
         mProductAutoComplete.setSingleLine();
@@ -192,7 +189,6 @@ public class ListItemFragment extends Fragment {
 
                                 }
                             }
-
                         }
                     }
                 }
@@ -259,10 +255,7 @@ public class ListItemFragment extends Fragment {
         super.onResume();
         productsCustomList = new ArrayList<>();
         productItemList = new ArrayList<>();
-        RCAPInterface service;
-        service = ApiClient.getClient().create(RCAPInterface.class);
         utility.populateAutoCompleteData();
-
 
         ReadyCallback readyCallback = new ReadyCallback() {
             @Override

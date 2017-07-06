@@ -33,7 +33,8 @@ import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.user_messages.RootMessageInfo;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
-import com.example.synerzip.recircle_android.ui.messages.UserQueAnsActivity;
+import com.example.synerzip.recircle_android.ui.messages.AllMessagesActivity;
+import com.example.synerzip.recircle_android.ui.messages.OwnerMsgFragment;
 import com.example.synerzip.recircle_android.ui.rentals.AllRequestsActivity;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
@@ -51,8 +52,7 @@ import retrofit2.Response;
  * Created by Prajakta Patil on 15/5/17.
  * Copyright © 2017 Synerzip. All rights reserved
  */
-public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "SearchFragment";
 
@@ -67,20 +67,17 @@ public class HomeActivity extends AppCompatActivity
 
     @BindView(R.id.tab_layout)
     protected TabLayout mTabLayout;
-    protected ListItemFragment listItemFragment;
 
-    private PagerAdapter mPagerAdapter;
+    protected ListItemFragment listItemFragment;
 
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
-
-    private SharedPreferences sharedPreferences;
 
     private boolean isLoggedIn;
 
     private String mUserFirstName, mUserLastName, mUserEmail, mUserImage, mAccessToken = "";
 
-    private RCAPInterface service;
+    private RootMessageInfo rootMessageInfo;
 
     private int mProdRelatedMsgs;
 
@@ -89,6 +86,14 @@ public class HomeActivity extends AppCompatActivity
 
     @BindView(R.id.frame_layout)
     protected FrameLayout mFrameLayout;
+
+    private boolean isOwnerMsgs, isRenterMsgs;
+
+    private int renterMsgsCount, ownerMsgsCount;
+
+    private OwnerMsgFragment ownerMsgFragment;
+
+    public static ArrayList<String> mOwnerNameList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,14 +106,16 @@ public class HomeActivity extends AppCompatActivity
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
+        ownerMsgFragment = new OwnerMsgFragment();
+
         mProgressBar.setVisibility(View.VISIBLE);
         mFrameLayout.setAlpha((float) 0.6);
 
-        listItemFragment=new ListItemFragment();
-
+        listItemFragment = new ListItemFragment();
+        PagerAdapter mPagerAdapter;
         mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
         mPagerAdapter.addFragment(new SearchItemFragment(), getString(R.string.tab_search));
-        mPagerAdapter.addFragment(listItemFragment, getString(R.string.tab_list));
+        mPagerAdapter.addFragment(new ListItemFragment(), getString(R.string.tab_list));
         mViewPager.setAdapter(mPagerAdapter);
 
         mTabLayout.setupWithViewPager(mViewPager);
@@ -116,18 +123,21 @@ public class HomeActivity extends AppCompatActivity
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
 
         //Edit product details
-        if (MyProfileActivity.isItemEdit){
+        if (MyProfileActivity.isItemEdit) {
             mViewPager.setCurrentItem(1);
-            Bundle bundle=getIntent().getExtras();
-//            String user_prod_id=bundle.getString(getString(R.string.product_id));
+            Bundle bundle = getIntent().getExtras();
             listItemFragment.setArguments(bundle);
         }
         //get data from shared preferences
+        SharedPreferences sharedPreferences;
         sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
         isLoggedIn = sharedPreferences.getBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
-        mUserFirstName = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_FIRST_USERNAME, mUserFirstName);
-        mUserLastName = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_FIRST_USERNAME, mUserLastName);
-        mUserEmail = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_FIRST_USERNAME, mUserEmail);
+        mUserFirstName = sharedPreferences.getString(
+                RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_FIRST_USERNAME, mUserFirstName);
+        mUserLastName = sharedPreferences.getString(
+                RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_FIRST_USERNAME, mUserLastName);
+        mUserEmail = sharedPreferences.getString(
+                RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_FIRST_USERNAME, mUserEmail);
         mUserImage = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_IMAGE, mUserImage);
         mAccessToken = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
 
@@ -157,34 +167,59 @@ public class HomeActivity extends AppCompatActivity
             menu.removeItem(R.id.nav_logIn_signUp);
 
         } else {
+            RCLog.showToast(this,"User not logged in");
             menu.removeItem(R.id.nav_settings);
             menu.removeItem(R.id.nav_payments);
             menu.removeItem(R.id.nav_logout);
             menu.removeItem(R.id.nav_faq);
         }
-
+        mOwnerNameList = new ArrayList<>();
     }//end onCreate()
 
     @Override
     protected void onResume() {
         super.onResume();
         //get user messages details
-        getMessageDetails();
+         getMessageDetails();
     }
 
     /**
      * get details of user messages
      */
     public void getMessageDetails() {
+        RCAPInterface service;
         service = ApiClient.getClient().create(RCAPInterface.class);
         Call<RootMessageInfo> call = service.getUserMessage("Bearer " + mAccessToken);
         call.enqueue(new Callback<RootMessageInfo>() {
             @Override
-            public void onResponse(Call<RootMessageInfo> call, Response<RootMessageInfo> response) {
+            public void onResponse(Call<RootMessageInfo> call,
+                                   Response<RootMessageInfo> response) {
                 mProgressBar.setVisibility(View.GONE);
                 mFrameLayout.setAlpha((float) 1.0);
                 if (response.isSuccessful()) {
-                    mProdRelatedMsgs = response.body().getOwnerProdRelatedMsgs().size();
+                    rootMessageInfo = response.body();
+                    if (response.body().getProdRelatedMsgs() !=null) {
+                        for (int i = 0; i < response.body().getProdRelatedMsgs().size(); i++) {
+                            mOwnerNameList.add(
+                                    response.body().getProdRelatedMsgs().get(i).getUser().getFirst_name()
+                                            + response.body().getProdRelatedMsgs().get(i).getUser().getLast_name());
+
+                        }
+
+                        mProdRelatedMsgs = response.body().getProdRelatedMsgs().size();
+                        isOwnerMsgs = response.body().getProdRelatedMsgs().get(0).is_read();
+                        isRenterMsgs = response.body().getOwnerRequestMsgs().get(0).is_read();
+
+                        if (!isOwnerMsgs) {
+                            ownerMsgsCount = response.body().getProdRelatedMsgs().size();
+                        }
+                        if (!isRenterMsgs) {
+                            renterMsgsCount = response.body().getOwnerRequestMsgs().size();
+                        }
+                        mProdRelatedMsgs = ownerMsgsCount + renterMsgsCount;
+                    } else {
+                        RCLog.showToast(HomeActivity.this, "Messages are empty");
+                    }
                 }
             }
 
@@ -207,63 +242,67 @@ public class HomeActivity extends AppCompatActivity
                 }
                 break;
             case R.id.action_messages:
+                Intent intent = new Intent(HomeActivity.this, AllMessagesActivity.class);
+                intent.putExtra("rootMessageInfo", rootMessageInfo);
+                startActivity(intent);
+
                 break;
             case R.id.action_rentals:
-                startActivity(new Intent(HomeActivity.this,AllRequestsActivity.class));
+                startActivity(new Intent(HomeActivity.this, AllRequestsActivity.class));
                 break;
             default:
                 break;
         }
 
         return super.onOptionsItemSelected(item);
-
     }
-   @Override
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-       getMenuInflater().inflate(R.menu.menu_main, menu);
-       MenuItem item = menu.findItem(R.id.action_messages);
-       MenuItemCompat.setActionView(menu.findItem(R.id.action_messages), R.layout.notification_badge);
-       RelativeLayout notificationCount = (RelativeLayout) item.getActionView();
-       TextView mTxtMsgCount = (TextView) notificationCount.findViewById(R.id.txt_notification_count);
-       mTxtMsgCount.setText(String.valueOf(mProdRelatedMsgs));
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuItem item = menu.findItem(R.id.action_messages);
+        MenuItemCompat.setActionView(menu.findItem(R.id.action_messages), R.layout.notification_badge);
+        RelativeLayout notificationCount = (RelativeLayout) item.getActionView();
+        TextView mTxtMsgCount = (TextView) notificationCount.findViewById(R.id.txt_notification_count);
+        mTxtMsgCount.setText(String.valueOf(mProdRelatedMsgs));
 
-       // ActivityCompat.invalidateOptionsMenu(HomeActivity.this);
+        ActivityCompat.invalidateOptionsMenu(HomeActivity.this);
 
-       MenuItem menuItemMsgs = menu.findItem(R.id.action_messages);
-       MenuItem menuItemRentals = menu.findItem(R.id.action_rentals);
+        MenuItem menuItemMsgs = menu.findItem(R.id.action_messages);
+        MenuItem menuItemRentals = menu.findItem(R.id.action_rentals);
 
-       if (isLoggedIn) {
-           menuItemMsgs.setVisible(true);
-           menuItemRentals.setVisible(true);
-       }
+        if (isLoggedIn) {
+            menuItemMsgs.setVisible(true);
+            menuItemRentals.setVisible(true);
+        }
 
-       mTxtMsgCount.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-//               startActivity(new Intent(HomeActivity.this, AllMessagesActivity.class));
-           }
-       });
+        mTxtMsgCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(HomeActivity.this, AllMessagesActivity.class));
+            }
+        });
 
-       final MenuItem itemNotification = menu.findItem(R.id.action_messages);
-       View actionViewNotification = MenuItemCompat.getActionView(itemNotification);
-       actionViewNotification.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               onOptionsItemSelected(itemNotification);
+        final MenuItem itemNotification = menu.findItem(R.id.action_messages);
+        View actionViewNotification = MenuItemCompat.getActionView(itemNotification);
+        actionViewNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onOptionsItemSelected(itemNotification);
 
-           }
-       });
-       final MenuItem itemRentals = menu.findItem(R.id.action_rentals);
-       View actionRentals = MenuItemCompat.getActionView(itemNotification);
-       actionRentals.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               onOptionsItemSelected(itemRentals);
-           }
-       });
-       return true;
+            }
+        });
+        final MenuItem itemRentals = menu.findItem(R.id.action_rentals);
+        View actionRentals = MenuItemCompat.getActionView(itemNotification);
+        actionRentals.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onOptionsItemSelected(itemRentals);
+            }
+        });
+        return true;
+    }
 
-   }
     /**
      * PagerAdapter Class
      */
@@ -330,25 +369,25 @@ public class HomeActivity extends AppCompatActivity
                     }
                 });
                 alertDialog.show();
+                clearData();
                 break;
             }
-            //TODO functionality yet to be completed for below menu items
 
             case R.id.nav_settings:
                 startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
                 break;
 
             case R.id.nav_payments:
-                RCLog.showToast(HomeActivity.this, TAG);
-//                startActivity(new Intent(HomeActivity.this, AllRequestsActivity.class));
-                startActivity(new Intent(HomeActivity.this, MyProfileActivity.class));
                 break;
 
             case R.id.nav_faq:
                 String helpUrl = "http://recirkle.com/#/help";
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(helpUrl));
-                startActivity(i);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(helpUrl));
+                startActivity(intent);
+                break;
+            case R.id.nav_msgs:
+                startActivity(new Intent(HomeActivity.this, AllMessagesActivity.class));
                 break;
         }
 
@@ -365,6 +404,7 @@ public class HomeActivity extends AppCompatActivity
                 getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
+        editor.apply();
         editor.commit();
     }
 

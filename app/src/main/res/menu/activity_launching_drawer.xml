@@ -6,6 +6,10 @@
             android:id="@+id/nav_settings"
             android:title="Settings" />
         <item
+            android:icon="@mipmap/ic_nav_msgs"
+            android:id="@+id/nav_msgs"
+            android:title="Messages" />
+        <item
             android:icon="@mipmap/ic_nav_payments"
             android:id="@+id/nav_payments"
             android:title="Payments" />
