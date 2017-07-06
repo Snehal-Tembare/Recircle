@@ -6,14 +6,14 @@ package com.example.synerzip.recircle_android.utilities;
  */
 public class RCWebConstants {
 
-    public static final String RC_BASE_URL = "http://a0999759.ngrok.io";
-//    public static final String RC_BASE_URL = "http://134f6614.ngrok.io";
+    public static final String RC_BASE_URL = "http://55d3b8b3.ngrok.io";
 
     public static final int RC_SUCCESS_CODE = 200;
 
     public static final int RC_ERROR_CODE_BAD_REQUEST = 400;
 
     public static final int RC_ERROR_CODE_FORBIDDEN = 403;
+
 
     public static final int RC_ERROR_CODE_NOT_FOUND = 404;
 
@@ -68,5 +68,7 @@ public class RCWebConstants {
     public static final String RC_GET_USER_PRODUCT_PROFILE="/api/products/userProducts/{userId}";
 
     public static final String RC_CANCEL_ORDER="/api/products/cancelOrder";
+
+    public static final String RC_EDIT_PRODUCT_DETAILS="/api/products";
 
 }

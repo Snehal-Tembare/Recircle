@@ -136,6 +136,7 @@ public class LogInActivity extends AppCompatActivity {
                     mUserId = response.body().getUser_id();
                     mUserName = response.body().getEmail();
                     mUserFirstName = response.body().getFirst_name();
+                    mUserEmail = response.body().getEmail();
                     mUserLastName = response.body().getLast_name();
                     mAccessToken = response.body().getToken();
                     mUserImage = response.body().getUser_image_url();
@@ -144,8 +145,8 @@ public class LogInActivity extends AppCompatActivity {
                     if (null != mUserId && null != mUserName &&
                             null != mUserFirstName && null != mUserLastName && null != mAccessToken) {
                         saveUserData();
-                        Intent intent = new Intent(LogInActivity.this,
-                                HomeActivity.class);
+                        Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                     } else {
                         RCLog.showToast(LogInActivity.this, getString(R.string.please_try_again));
@@ -350,8 +351,9 @@ public class LogInActivity extends AppCompatActivity {
             editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_USERID, mUserId);
             editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_PASSWORD, encryptedPassword);
             editor.putBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, true);
-            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USERNAME, mUserEmail);
-            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_FIRST_USERNAME, mUserFirstName);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_EMAIL, mUserEmail);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_FIRSTNAME, mUserFirstName);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_LASTNAME, mUserLastName);
             editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_IMAGE, mUserImage);
             editor.putLong(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_MOB_NO, mUserMobNo);
             editor.apply();

@@ -66,12 +66,12 @@ public class UploadImgActivity extends AppCompatActivity {
                         for (UserProdImages imageUrl : product.getUser_product_info().getUser_prod_images()) {
                             listUploadGalleryImage.add(imageUrl.getUser_prod_image_url());
                         }
-
+                    }
                         Log.v("UploadImgActivity", product.getProduct_info().getProduct_title());
                         mUploadImageAdapter = new UploadImageAdapter(UploadImgActivity.this, listUploadGalleryImage);
                         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
                         mRecyclerView.setAdapter(mUploadImageAdapter);
-                    }
+
 
                 }
             }

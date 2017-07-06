@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.Discounts;
+import com.example.synerzip.recircle_android.models.EditProduct;
 import com.example.synerzip.recircle_android.models.Product;
 import com.example.synerzip.recircle_android.models.Products;
 import com.example.synerzip.recircle_android.models.ProductsData;
@@ -50,6 +51,8 @@ import retrofit2.Response;
  * Copyright © 2017 Synerzip. All rights reserved
  */
 public class ListItemFragment extends Fragment {
+
+    public static EditProduct editProduct;
 
     @BindView(R.id.edit_enter_price)
     protected EditText mEditTxtEnterPrice;
@@ -165,7 +168,7 @@ public class ListItemFragment extends Fragment {
 
         //Populate data to edit
         if (MyProfileActivity.isItemEdit){
-            Log.v("ListItemFragment**",getArguments().getString(getString(R.string.product_id)));
+            editProduct=new EditProduct();
             service=ApiClient.getClient().create(RCAPInterface.class);
 
             Call<Products> call=service.getProductDetailsByID(getArguments().getString(getString(R.string.product_id)));
@@ -220,6 +223,12 @@ public class ListItemFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), UploadImgActivity.class);
                 if (MyProfileActivity.isItemEdit){
                     intent.putExtra(getString(R.string.product),product);
+
+                    //Set data for edit
+                    editProduct.setUser_product_id(product.getUser_product_info().getUser_product_id());
+                    editProduct.setPrice_per_day(Integer.parseInt(mEditTxtEnterPrice.getText().toString().trim()));
+                    editProduct.setMin_rental_days(Integer.parseInt(mEditMinRental.getText().toString().trim()));
+                    editProduct.setUser_prod_discounts(listDiscounts);
                 }
                 startActivity(intent);
             } else {

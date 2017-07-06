@@ -48,13 +48,11 @@ dependencies {
     //Third party Libraries
 
     compile 'com.android.support:appcompat-v7:25.2.0'
-    compile 'com.jakewharton:butterknife:8.2.1'
     compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
     compile 'com.squareup:android-times-square:1.6.5@aar'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     //Collapsible Toolbar
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.jakewharton:butterknife:8.2.1'
     compile 'com.squareup:android-times-square:1.6.5@aar'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'

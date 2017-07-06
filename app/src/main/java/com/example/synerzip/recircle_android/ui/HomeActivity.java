@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -33,10 +32,10 @@ import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.user_messages.RootMessageInfo;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
-import com.example.synerzip.recircle_android.ui.messages.UserQueAnsActivity;
 import com.example.synerzip.recircle_android.ui.rentals.AllRequestsActivity;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
+import com.pkmmte.view.CircularImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,9 +51,9 @@ import retrofit2.Response;
  * Copyright © 2017 Synerzip. All rights reserved
  */
 public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,DrawerLayout.DrawerListener {
 
-    private static final String TAG = "SearchFragment";
+    private static final String TAG = "HomeActivity";
 
     @BindView(R.id.drawer_layout)
     protected DrawerLayout mDrawerLayout;
@@ -90,6 +89,9 @@ public class HomeActivity extends AppCompatActivity
     @BindView(R.id.frame_layout)
     protected FrameLayout mFrameLayout;
 
+    private Menu menu;
+    private View mNavHeader;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,7 +106,7 @@ public class HomeActivity extends AppCompatActivity
         mProgressBar.setVisibility(View.VISIBLE);
         mFrameLayout.setAlpha((float) 0.6);
 
-        listItemFragment=new ListItemFragment();
+        listItemFragment = new ListItemFragment();
 
         mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
         mPagerAdapter.addFragment(new SearchItemFragment(), getString(R.string.tab_search));
@@ -116,20 +118,13 @@ public class HomeActivity extends AppCompatActivity
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
 
         //Edit product details
-        if (MyProfileActivity.isItemEdit){
+        if (MyProfileActivity.isItemEdit) {
             mViewPager.setCurrentItem(1);
-            Bundle bundle=getIntent().getExtras();
+            Bundle bundle = getIntent().getExtras();
 //            String user_prod_id=bundle.getString(getString(R.string.product_id));
             listItemFragment.setArguments(bundle);
         }
-        //get data from shared preferences
-        sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
-        isLoggedIn = sharedPreferences.getBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
-        mUserFirstName = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_FIRST_USERNAME, mUserFirstName);
-        mUserLastName = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_FIRST_USERNAME, mUserLastName);
-        mUserEmail = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_FIRST_USERNAME, mUserEmail);
-        mUserImage = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_IMAGE, mUserImage);
-        mAccessToken = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
+
 
         //navigation drawer layout
         ActionBarDrawerToggle toggle =
@@ -151,25 +146,55 @@ public class HomeActivity extends AppCompatActivity
         });
         mNavigationView.bringToFront();
         mNavigationView.setNavigationItemSelectedListener(this);
-        Menu menu = mNavigationView.getMenu();
+        menu = mNavigationView.getMenu();
 
-        if (isLoggedIn) {
-            menu.removeItem(R.id.nav_logIn_signUp);
-
-        } else {
-            menu.removeItem(R.id.nav_settings);
-            menu.removeItem(R.id.nav_payments);
-            menu.removeItem(R.id.nav_logout);
-            menu.removeItem(R.id.nav_faq);
-        }
-
+        mDrawerLayout.addDrawerListener(this);
     }//end onCreate()
+
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        //get data from shared preferences
+        sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
+        isLoggedIn = sharedPreferences.getBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
+        mUserFirstName = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_FIRSTNAME, mUserFirstName);
+        mUserLastName = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_LASTNAME, mUserLastName);
+        mUserEmail = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_EMAIL, mUserEmail);
+        mUserImage = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_IMAGE, mUserImage);
+        mAccessToken = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
+
         //get user messages details
         getMessageDetails();
+         mNavHeader = mNavigationView.getHeaderView(0);
+
+        if (isLoggedIn) {
+            menu.setGroupVisible(R.id.grp_nav_logIn_signUp,false);
+
+            //To show user info for navigation header
+            mNavHeader.setVisibility(View.VISIBLE);
+            menu.setGroupVisible(R.id.grp_ic_nav_settings,true);
+            menu.setGroupVisible(R.id.grp_nav_payments,true);
+            menu.setGroupVisible(R.id.grp_nav_logout,true);
+            menu.setGroupVisible(R.id.grp_nav_faq,true);
+
+            TextView mTxtUserName = (TextView) mNavHeader.findViewById(R.id.txt_nav_user_name);
+            TextView mTxtUserEmail = (TextView) mNavHeader.findViewById(R.id.txt_nav_user_email);
+            CircularImageView mImgUser = (CircularImageView) mNavHeader.findViewById(R.id.img_nav_user_profile);
+            mTxtUserName.setText(mUserFirstName+" "+mUserLastName);
+            mTxtUserEmail.setText(mUserEmail);
+
+        }
+        /*else {
+            menu.setGroupVisible(R.id.grp_nav_logIn_signUp,true);
+            mNavHeader.setVisibility(View.GONE);
+            menu.setGroupVisible(R.id.grp_ic_nav_settings,false);
+            menu.setGroupVisible(R.id.grp_nav_payments,false);
+            menu.setGroupVisible(R.id.grp_nav_logout,false);
+            menu.setGroupVisible(R.id.grp_nav_faq,false);
+        }*/
+
     }
 
     /**
@@ -196,6 +221,8 @@ public class HomeActivity extends AppCompatActivity
         });
     }
 
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -209,61 +236,108 @@ public class HomeActivity extends AppCompatActivity
             case R.id.action_messages:
                 break;
             case R.id.action_rentals:
-                startActivity(new Intent(HomeActivity.this,AllRequestsActivity.class));
+                startActivity(new Intent(HomeActivity.this, AllRequestsActivity.class));
                 break;
             default:
                 break;
         }
 
-        return super.onOptionsItemSelected(item);
+        return true;
 
     }
-   @Override
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-       getMenuInflater().inflate(R.menu.menu_main, menu);
-       MenuItem item = menu.findItem(R.id.action_messages);
-       MenuItemCompat.setActionView(menu.findItem(R.id.action_messages), R.layout.notification_badge);
-       RelativeLayout notificationCount = (RelativeLayout) item.getActionView();
-       TextView mTxtMsgCount = (TextView) notificationCount.findViewById(R.id.txt_notification_count);
-       mTxtMsgCount.setText(String.valueOf(mProdRelatedMsgs));
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuItem item = menu.findItem(R.id.action_messages);
+        MenuItemCompat.setActionView(menu.findItem(R.id.action_messages), R.layout.notification_badge);
+        RelativeLayout notificationCount = (RelativeLayout) item.getActionView();
+        TextView mTxtMsgCount = (TextView) notificationCount.findViewById(R.id.txt_notification_count);
+        mTxtMsgCount.setText(String.valueOf(mProdRelatedMsgs));
 
-       // ActivityCompat.invalidateOptionsMenu(HomeActivity.this);
+        // ActivityCompat.invalidateOptionsMenu(HomeActivity.this);
 
-       MenuItem menuItemMsgs = menu.findItem(R.id.action_messages);
-       MenuItem menuItemRentals = menu.findItem(R.id.action_rentals);
+        MenuItem menuItemMsgs = menu.findItem(R.id.action_messages);
+        MenuItem menuItemRentals = menu.findItem(R.id.action_rentals);
 
-       if (isLoggedIn) {
-           menuItemMsgs.setVisible(true);
-           menuItemRentals.setVisible(true);
-       }
+        if (isLoggedIn) {
+            menuItemMsgs.setVisible(true);
+            menuItemRentals.setVisible(true);
+        }
 
-       mTxtMsgCount.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
+        mTxtMsgCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 //               startActivity(new Intent(HomeActivity.this, AllMessagesActivity.class));
-           }
-       });
+            }
+        });
 
-       final MenuItem itemNotification = menu.findItem(R.id.action_messages);
-       View actionViewNotification = MenuItemCompat.getActionView(itemNotification);
-       actionViewNotification.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               onOptionsItemSelected(itemNotification);
+        final MenuItem itemNotification = menu.findItem(R.id.action_messages);
+        View actionViewNotification = MenuItemCompat.getActionView(itemNotification);
+        actionViewNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onOptionsItemSelected(itemNotification);
 
-           }
-       });
-       final MenuItem itemRentals = menu.findItem(R.id.action_rentals);
-       View actionRentals = MenuItemCompat.getActionView(itemNotification);
-       actionRentals.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               onOptionsItemSelected(itemRentals);
-           }
-       });
-       return true;
+            }
+        });
+        final MenuItem itemRentals = menu.findItem(R.id.action_rentals);
+        View actionRentals = MenuItemCompat.getActionView(itemNotification);
+        actionRentals.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onOptionsItemSelected(itemRentals);
+            }
+        });
+        return true;
 
-   }
+    }
+
+    @Override
+    public void onDrawerSlide(View drawerView, float slideOffset) {
+
+    }
+
+
+
+    @Override
+    public void onDrawerOpened(View drawerView) {
+        /*if (isLoggedIn) {
+            menu.setGroupVisible(R.id.grp_nav_logIn_signUp,false);
+
+            //To show user info for navigation header
+            mNavHeader.setVisibility(View.VISIBLE);
+            menu.setGroupVisible(R.id.grp_ic_nav_settings,true);
+            menu.setGroupVisible(R.id.grp_nav_payments,true);
+            menu.setGroupVisible(R.id.grp_nav_logout,true);
+            menu.setGroupVisible(R.id.grp_nav_faq,true);
+
+            TextView mTxtUserName = (TextView) mNavHeader.findViewById(R.id.txt_nav_user_name);
+            TextView mTxtUserEmail = (TextView) mNavHeader.findViewById(R.id.txt_nav_user_email);
+            CircularImageView mImgUser = (CircularImageView) mNavHeader.findViewById(R.id.img_nav_user_profile);
+            mTxtUserName.setText(mUserFirstName+" "+mUserLastName);
+            mTxtUserEmail.setText(mUserEmail);
+
+        } else {
+            menu.setGroupVisible(R.id.grp_nav_logIn_signUp,true);
+            mNavHeader.setVisibility(View.GONE);
+            menu.setGroupVisible(R.id.grp_ic_nav_settings,false);
+            menu.setGroupVisible(R.id.grp_nav_payments,false);
+            menu.setGroupVisible(R.id.grp_nav_logout,false);
+            menu.setGroupVisible(R.id.grp_nav_faq,false);
+              }*/
+    }
+
+    @Override
+    public void onDrawerClosed(View drawerView) {
+
+    }
+
+    @Override
+    public void onDrawerStateChanged(int newState) {
+
+    }
+
     /**
      * PagerAdapter Class
      */
@@ -309,7 +383,8 @@ public class HomeActivity extends AppCompatActivity
         switch (id) {
 
             case R.id.nav_logIn_signUp:
-                startActivity(new Intent(HomeActivity.this, LogInActivity.class));
+                Intent intent=new Intent(HomeActivity.this, LogInActivity.class);
+                startActivity(intent);
                 break;
 
             case R.id.nav_logout: {
@@ -318,9 +393,20 @@ public class HomeActivity extends AppCompatActivity
                 alertDialog.setPositiveButton(getResources().getString(R.string.logout), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogInterface, int arg1) {
                         dialogInterface.dismiss();
-                        clearData();
-                        Intent intent = new Intent(HomeActivity.this, LogInActivity.class);
-                        startActivity(intent);
+                        SharedPreferences sharedPreferences = getApplicationContext().
+                                getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+                         sharedPreferences.edit().clear().commit();
+                        isLoggedIn=false;
+
+                        menu.setGroupVisible(R.id.grp_nav_logIn_signUp,true);
+                        mNavHeader.setVisibility(View.GONE);
+                        menu.setGroupVisible(R.id.grp_ic_nav_settings,false);
+                        menu.setGroupVisible(R.id.grp_nav_payments,false);
+                        menu.setGroupVisible(R.id.grp_nav_logout,false);
+                        menu.setGroupVisible(R.id.grp_nav_faq,false);
+
+                     /*   Intent intent = new Intent(HomeActivity.this, LogInActivity.class);
+                        startActivity(intent);*/
                     }
                 });
 

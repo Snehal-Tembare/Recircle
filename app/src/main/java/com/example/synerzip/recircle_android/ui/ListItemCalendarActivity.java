@@ -71,6 +71,7 @@ public class ListItemCalendarActivity extends AppCompatActivity {
         restoreDates = new ArrayList<>();
 
         restoreDates = (ArrayList<Date>) getIntent().getSerializableExtra(getString(R.string.dates));
+
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MONTH, 2);
         Date today = new Date();
@@ -86,6 +87,8 @@ public class ListItemCalendarActivity extends AppCompatActivity {
                 mPickerView.selectDate(date);
             }
         }
+
+
         //on date selected listener
         mPickerView.setOnDateSelectedListener(new CalendarPickerView.OnDateSelectedListener() {
 
@@ -101,6 +104,7 @@ public class ListItemCalendarActivity extends AppCompatActivity {
                 DateFormat dateFormat = new SimpleDateFormat(getString(R.string.calendar_date_format));
                 String dateString = dateFormat.format(date);
                 datesList.add(dateString);
+
             }
 
             @Override
@@ -127,7 +131,7 @@ public class ListItemCalendarActivity extends AppCompatActivity {
      */
     @OnClick(R.id.btn_save)
     public void btnCalendarSave(View view) {
-        if (!datesList.isEmpty() && datesList.size() != 0) {
+        if (!datesList.isEmpty() && datesList.size() != 0 && restoreDates.size() != 0) {
             Intent intent = new Intent(ListItemCalendarActivity.this, HomeActivity.class);
             intent.putExtra(getString(R.string.calendar_availability_days_count), datesList.size());
             intent.putExtra(getString(R.string.calendar_availability_days), datesList);
