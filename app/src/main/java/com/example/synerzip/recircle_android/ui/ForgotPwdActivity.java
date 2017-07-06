@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
@@ -67,11 +68,11 @@ public class ForgotPwdActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
 
- /*   @BindView(R.id.progress_bar)
-    protected ProgressBar mProgressBar;
+    @BindView(R.id.progress_bar)
+    protected RelativeLayout mProgressBar;
 
     @BindView(R.id.layout_activity_forgot)
-    protected LinearLayout mLinearLayout;*/
+    protected LinearLayout mLinearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,16 +101,16 @@ public class ForgotPwdActivity extends AppCompatActivity {
         HideKeyboard.hideKeyBoard(ForgotPwdActivity.this);
 
         if (NetworkUtility.isNetworkAvailable(this)) {
-           /* mProgressBar.setVisibility(View.VISIBLE);
-            mLinearLayout.setAlpha((float) 0.6);*/
+            mProgressBar.setVisibility(View.VISIBLE);
+            mLinearLayout.setAlpha((float) 0.6);
             mEmail = mEditEmail.getText().toString();
             mOtp = Integer.parseInt(mEditOtp.getText().toString());
             mNewPwd = mEditNewPwd.getText().toString();
             getForgotPwd();
 
         } else {
-          /*  mProgressBar.setVisibility(View.GONE);
-            mLinearLayout.setAlpha((float) 1.0);*/
+            mProgressBar.setVisibility(View.GONE);
+            mLinearLayout.setAlpha((float) 1.0);
             RCLog.showToast(this, getResources().getString(R.string.err_network_available));
         }
     }
@@ -124,8 +125,8 @@ public class ForgotPwdActivity extends AppCompatActivity {
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-              /*  mProgressBar.setVisibility(View.GONE);
-                mLinearLayout.setAlpha((float) 1.0);*/
+                mProgressBar.setVisibility(View.GONE);
+                mLinearLayout.setAlpha((float) 1.0);
                 if (response.isSuccessful()) {
                     startActivity(new Intent(ForgotPwdActivity.this, LogInActivity.class));
                 }
@@ -133,8 +134,8 @@ public class ForgotPwdActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-               /* mProgressBar.setVisibility(View.GONE);
-                mLinearLayout.setAlpha((float) 1.0);*/
+                mProgressBar.setVisibility(View.GONE);
+                mLinearLayout.setAlpha((float) 1.0);
             }
         });
     }
@@ -146,8 +147,8 @@ public class ForgotPwdActivity extends AppCompatActivity {
      */
     @OnClick(R.id.txt_resend_code)
     public void txtResendOtp(View view) {
-       /* mProgressBar.setVisibility(View.VISIBLE);
-        mLinearLayout.setAlpha((float) 0.6);*/
+        mProgressBar.setVisibility(View.VISIBLE);
+        mLinearLayout.setAlpha((float) 0.6);
         mEmail = mEditEmail.getText().toString();
 
         service = ApiClient.getClient().create(RCAPInterface.class);
@@ -155,8 +156,8 @@ public class ForgotPwdActivity extends AppCompatActivity {
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-               /* mProgressBar.setVisibility(View.GONE);
-                mLinearLayout.setAlpha((float) 1.0);*/
+                mProgressBar.setVisibility(View.GONE);
+                mLinearLayout.setAlpha((float) 1.0);
                 if (response.isSuccessful()) {
                     RCLog.showToast(getApplicationContext(), getString(R.string.toast_send_otp));
                 }
@@ -164,8 +165,8 @@ public class ForgotPwdActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-              /*  mProgressBar.setVisibility(View.GONE);
-                mLinearLayout.setAlpha((float) 1.0);*/
+                mProgressBar.setVisibility(View.GONE);
+                mLinearLayout.setAlpha((float) 1.0);
             }
         });
     }
