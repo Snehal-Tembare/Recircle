@@ -94,6 +94,8 @@
                     android:textSize="@dimen/dimen_16sp" />
 
                 <View
+                    android:visibility="gone"
+                    android:id="@+id/viewDiscounts"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dimen_1dp"
                     android:layout_gravity="center"
@@ -104,6 +106,8 @@
                     android:background="@color/colorLightGrey" />
 
                 <TextView
+                    android:id="@+id/txtDiscounts"
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dimen_40dp"
@@ -112,6 +116,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/txt_five_days_disc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -119,6 +124,7 @@
                     android:textSize="@dimen/dimen_16sp" />
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/txt_ten_days_disc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

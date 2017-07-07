@@ -18,13 +18,13 @@ import java.util.Date;
  * Copyright © 2017 Synerzip. All rights reserved
  */
 
-
 public class MonthDecorator implements CalendarCellDecorator {
-
     private Date selectedDate, unSelectedDate;
     private Context mContext;
 
-    public MonthDecorator(Context mContext, @Nullable Date selectedDate, @Nullable Date unSelectedDate) {
+    public MonthDecorator(Context mContext,
+                          @Nullable Date selectedDate,
+                          @Nullable Date unSelectedDate) {
 
         this.selectedDate = selectedDate;
         this.mContext = mContext;
@@ -40,5 +40,5 @@ public class MonthDecorator implements CalendarCellDecorator {
                 calendarCellView.setBackgroundResource(0);
             }
         }
-        }
+    }
 }

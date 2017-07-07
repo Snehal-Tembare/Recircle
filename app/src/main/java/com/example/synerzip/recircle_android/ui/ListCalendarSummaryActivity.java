@@ -1,31 +1,23 @@
 package com.example.synerzip.recircle_android.ui;
-
-import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.graphics.drawable.ClipDrawable;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
 import com.example.synerzip.recircle_android.R;
 import com.squareup.timessquare.*;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.squareup.timessquare.CalendarPickerView.SelectionMode.MULTIPLE;
-
+/**
+ * Created by Prajakta Patil on 9/5/17.
+ * Copyright © 2017 Synerzip. All rights reserved
+ */
 public class ListCalendarSummaryActivity extends AppCompatActivity {
     @BindView(R.id.calendar_view)
     protected CalendarPickerView mPickerView;
@@ -63,13 +55,18 @@ public class ListCalendarSummaryActivity extends AppCompatActivity {
         Date today = new Date();
 
         mPickerView.init(today, calendar.getTime());
+        mPickerView.setPressed(false);
+        mPickerView.setSaveEnabled(false);
+        mPickerView.setEnabled(false);
+
+        List<CalendarCellDecorator> decoratorList = new ArrayList<>();
+
         if (unavailableDates != null && !unavailableDates.isEmpty()) {
             for(Date date:unavailableDates) {
-                List<CalendarCellDecorator> decoratorList = new ArrayList<>();
-                decoratorList.add(new MonthDecorator(ListCalendarSummaryActivity.this, date, null));
-                mPickerView.setDecorators(decoratorList);
+                decoratorList.add(new HighlightDecorator(ListCalendarSummaryActivity.this,date));
             }
-            mPickerView.highlightDates(unavailableDates);
+            mPickerView.setDecorators(decoratorList);
+
         }
     }
 
@@ -82,5 +79,4 @@ public class ListCalendarSummaryActivity extends AppCompatActivity {
     public void txtCalendarCancel(View view) {
         finish();
     }
-
 }
