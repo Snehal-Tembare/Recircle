@@ -18,12 +18,10 @@ import android.widget.TextView;
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.rentals.CancelOrder;
 import com.example.synerzip.recircle_android.models.rentals.UserRentings;
-import com.example.synerzip.recircle_android.models.rentals.UserRequest;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
-import com.google.android.gms.common.api.Api;
 import com.pkmmte.view.CircularImageView;
 import com.squareup.picasso.Picasso;
 

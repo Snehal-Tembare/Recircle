@@ -71,4 +71,5 @@ public class RCWebConstants {
 
     public static final String RC_EDIT_PRODUCT_DETAILS="/api/products";
 
+    public static final String RC_CANCEL_PROD_REQUEST = "/api/products/cancelOrder";
 }

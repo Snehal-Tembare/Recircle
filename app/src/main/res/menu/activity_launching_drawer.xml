@@ -8,10 +8,17 @@
             android:title="Settings" />
     </group>
 
+<group android:id="@+id/grp_ic_nav_msgs">
+    <item
+        android:icon="@mipmap/ic_nav_msgs"
+        android:id="@+id/nav_msgs"
+        android:title="Messages" />
+</group>
+
     <group android:id="@+id/grp_nav_payments">
         <item
-            android:id="@+id/nav_payments"
             android:icon="@mipmap/ic_nav_payments"
+            android:id="@+id/nav_payments"
             android:title="Payments" />
     </group>
 

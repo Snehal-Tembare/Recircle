@@ -52,7 +52,7 @@ public class UserQueAnsActivity extends AppCompatActivity {
     @BindView(R.id.edit_txt_ask_que)
     protected EditText mEditTxtAskQue;
 
-    private String mAskQue;
+    private String mAskQue,mUserFirstName,mUserLastName;
 
     @BindView(R.id.txt_user_name)
     protected TextView mTxtUserName;
@@ -62,6 +62,8 @@ public class UserQueAnsActivity extends AppCompatActivity {
 
     @BindView(R.id.img_user_profile)
     protected CircleImageView mImgUserProfile;
+
+    private String productId;
 
     //TODO functionality not completed yet
 
@@ -77,27 +79,43 @@ public class UserQueAnsActivity extends AppCompatActivity {
         mToolbar.setTitle(R.string.ask_que);
         mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
 
-        SharedPreferences sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
-        mAccessToken = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
+        SharedPreferences sharedPreferences = getSharedPreferences
+                (RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
+        mAccessToken = sharedPreferences.getString
+                (RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
+        mUserFirstName=sharedPreferences.getString
+                (RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_FIRSTNAME, mUserFirstName);
+        mUserLastName=sharedPreferences.getString
+                (RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_LAST_USERNAME, mUserLastName);
 
-        mTxtUserName.setText(SettingsActivity.mFirstName + " " + SettingsActivity.mLastName);
-        Picasso.with(this).load(SettingsActivity.mUserImg).into(mImgUserProfile);
+        mTxtUserName.setText(mUserFirstName+" "+mUserLastName);
+
+        Picasso.with(this).load(SettingsActivity.mUserImg).placeholder(R.drawable.ic_user).
+                into(mImgUserProfile);
+
+        productId=getIntent().getExtras().getString(getString(R.string.product_id));
+        mTxtProdName.setText(getIntent().getExtras().getString(getString(R.string.product_title)));
     }
 
     @OnClick(R.id.btn_ask)
     public void editTxtAsk(View view) {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mFrameLayout.setAlpha((float) 0.6);
-        userAueAns();
+        if(!mEditTxtAskQue.getText().toString().isEmpty()) {
+            mAskQue = mEditTxtAskQue.getText().toString();
+            mProgressBar.setVisibility(View.VISIBLE);
+            mFrameLayout.setAlpha((float) 0.6);
+            userAueAns();
+        }else {
+            RCLog.showToast(this,getString(R.string.field_not_empty));
+        }
+
     }
 
     /**
      * get user question and answer
      */
     public void userAueAns() {
-        mAskQue = mEditTxtAskQue.getText().toString();
-        UserAskQueRequest userAskQueRequest = new UserAskQueRequest
-                ("622f9f40-6ad6-462e-b369-ab1a42af4261", mAskQue);
+
+        UserAskQueRequest userAskQueRequest = new UserAskQueRequest(productId, mAskQue);
         service = ApiClient.getClient().create(RCAPInterface.class);
         Call<RootMessageInfo> call = service.getUserQueAns("Bearer " + mAccessToken, userAskQueRequest);
         call.enqueue(new Callback<RootMessageInfo>() {
@@ -106,7 +124,7 @@ public class UserQueAnsActivity extends AppCompatActivity {
                 mProgressBar.setVisibility(View.GONE);
                 mFrameLayout.setAlpha((float) 1.0);
                 if (response.isSuccessful()) {
-                    RCLog.showToast(UserQueAnsActivity.this, response.message());
+                    RCLog.showToast(UserQueAnsActivity.this, getString(R.string.que_success));
 
                 } else {
                 }

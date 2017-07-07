@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -20,6 +21,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,6 +34,8 @@ import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.user_messages.RootMessageInfo;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
+import com.example.synerzip.recircle_android.ui.messages.AllMessagesActivity;
+import com.example.synerzip.recircle_android.ui.messages.OwnerMsgFragment;
 import com.example.synerzip.recircle_android.ui.rentals.AllRequestsActivity;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
@@ -50,8 +54,7 @@ import retrofit2.Response;
  * Created by Prajakta Patil on 15/5/17.
  * Copyright © 2017 Synerzip. All rights reserved
  */
-public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,DrawerLayout.DrawerListener {
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "HomeActivity";
 
@@ -66,20 +69,18 @@ public class HomeActivity extends AppCompatActivity
 
     @BindView(R.id.tab_layout)
     protected TabLayout mTabLayout;
-    protected ListItemFragment listItemFragment;
 
-    private PagerAdapter mPagerAdapter;
+    protected ListItemFragment listItemFragment;
+    protected SearchItemFragment searchItemFragment;
 
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
-
-    private SharedPreferences sharedPreferences;
 
     private boolean isLoggedIn;
 
     private String mUserFirstName, mUserLastName, mUserEmail, mUserImage, mAccessToken = "";
 
-    private RCAPInterface service;
+    private RootMessageInfo rootMessageInfo;
 
     private int mProdRelatedMsgs;
 
@@ -92,6 +93,15 @@ public class HomeActivity extends AppCompatActivity
     private Menu menu;
     private View mNavHeader;
 
+    private boolean isOwnerMsgs, isRenterMsgs;
+
+    private int renterMsgsCount, ownerMsgsCount;
+
+    private OwnerMsgFragment ownerMsgFragment;
+
+    public static ArrayList<String> mOwnerNameList;
+    private SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,28 +113,24 @@ public class HomeActivity extends AppCompatActivity
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
+        ownerMsgFragment = new OwnerMsgFragment();
+
         mProgressBar.setVisibility(View.VISIBLE);
         mFrameLayout.setAlpha((float) 0.6);
 
+        searchItemFragment = new SearchItemFragment();
+
         listItemFragment = new ListItemFragment();
 
+        PagerAdapter mPagerAdapter;
         mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
-        mPagerAdapter.addFragment(new SearchItemFragment(), getString(R.string.tab_search));
+        mPagerAdapter.addFragment(searchItemFragment, getString(R.string.tab_search));
         mPagerAdapter.addFragment(listItemFragment, getString(R.string.tab_list));
         mViewPager.setAdapter(mPagerAdapter);
 
         mTabLayout.setupWithViewPager(mViewPager);
         mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
-
-        //Edit product details
-        if (MyProfileActivity.isItemEdit) {
-            mViewPager.setCurrentItem(1);
-            Bundle bundle = getIntent().getExtras();
-//            String user_prod_id=bundle.getString(getString(R.string.product_id));
-            listItemFragment.setArguments(bundle);
-        }
-
 
         //navigation drawer layout
         ActionBarDrawerToggle toggle =
@@ -148,7 +154,13 @@ public class HomeActivity extends AppCompatActivity
         mNavigationView.setNavigationItemSelectedListener(this);
         menu = mNavigationView.getMenu();
 
-        mDrawerLayout.addDrawerListener(this);
+        //Edit product details
+        if (MyProfileActivity.isItemEdit) {
+            Bundle bundle = getIntent().getExtras();
+            listItemFragment.setArguments(bundle);
+            mViewPager.setCurrentItem(1);
+        }
+
     }//end onCreate()
 
 
@@ -176,6 +188,7 @@ public class HomeActivity extends AppCompatActivity
             mNavHeader.setVisibility(View.VISIBLE);
             menu.setGroupVisible(R.id.grp_ic_nav_settings,true);
             menu.setGroupVisible(R.id.grp_nav_payments,true);
+            menu.setGroupVisible(R.id.grp_ic_nav_msgs,true);
             menu.setGroupVisible(R.id.grp_nav_logout,true);
             menu.setGroupVisible(R.id.grp_nav_faq,true);
 
@@ -185,15 +198,23 @@ public class HomeActivity extends AppCompatActivity
             mTxtUserName.setText(mUserFirstName+" "+mUserLastName);
             mTxtUserEmail.setText(mUserEmail);
 
+            mNavHeader.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(HomeActivity.this,MyProfileActivity.class));
+                }
+            });
+
         }
-        /*else {
-            menu.setGroupVisible(R.id.grp_nav_logIn_signUp,true);
+        else {
             mNavHeader.setVisibility(View.GONE);
+            menu.setGroupVisible(R.id.grp_nav_logIn_signUp,true);
             menu.setGroupVisible(R.id.grp_ic_nav_settings,false);
             menu.setGroupVisible(R.id.grp_nav_payments,false);
+            menu.setGroupVisible(R.id.grp_ic_nav_msgs,false);
             menu.setGroupVisible(R.id.grp_nav_logout,false);
-            menu.setGroupVisible(R.id.grp_nav_faq,false);
-        }*/
+            menu.setGroupVisible(R.id.grp_nav_faq,true);
+        }
 
     }
 
@@ -201,15 +222,39 @@ public class HomeActivity extends AppCompatActivity
      * get details of user messages
      */
     public void getMessageDetails() {
+        RCAPInterface service;
         service = ApiClient.getClient().create(RCAPInterface.class);
         Call<RootMessageInfo> call = service.getUserMessage("Bearer " + mAccessToken);
         call.enqueue(new Callback<RootMessageInfo>() {
             @Override
-            public void onResponse(Call<RootMessageInfo> call, Response<RootMessageInfo> response) {
+            public void onResponse(Call<RootMessageInfo> call,
+                                   Response<RootMessageInfo> response) {
                 mProgressBar.setVisibility(View.GONE);
                 mFrameLayout.setAlpha((float) 1.0);
                 if (response.isSuccessful()) {
-                    mProdRelatedMsgs = response.body().getOwnerProdRelatedMsgs().size();
+                    rootMessageInfo = response.body();
+                    if (response.body().getProdRelatedMsgs() !=null) {
+                        for (int i = 0; i < response.body().getProdRelatedMsgs().size(); i++) {
+                            mOwnerNameList.add(
+                                    response.body().getProdRelatedMsgs().get(i).getUser().getFirst_name()
+                                            + response.body().getProdRelatedMsgs().get(i).getUser().getLast_name());
+
+                        }
+
+                        mProdRelatedMsgs = response.body().getProdRelatedMsgs().size();
+                        isOwnerMsgs = response.body().getProdRelatedMsgs().get(0).is_read();
+                        isRenterMsgs = response.body().getOwnerRequestMsgs().get(0).is_read();
+
+                        if (!isOwnerMsgs) {
+                            ownerMsgsCount = response.body().getProdRelatedMsgs().size();
+                        }
+                        if (!isRenterMsgs) {
+                            renterMsgsCount = response.body().getOwnerRequestMsgs().size();
+                        }
+                        mProdRelatedMsgs = ownerMsgsCount + renterMsgsCount;
+                    } else {
+                        RCLog.showToast(HomeActivity.this, "Messages are empty");
+                    }
                 }
             }
 
@@ -234,6 +279,10 @@ public class HomeActivity extends AppCompatActivity
                 }
                 break;
             case R.id.action_messages:
+                Intent intent = new Intent(HomeActivity.this, AllMessagesActivity.class);
+                intent.putExtra("rootMessageInfo", rootMessageInfo);
+                startActivity(intent);
+
                 break;
             case R.id.action_rentals:
                 startActivity(new Intent(HomeActivity.this, AllRequestsActivity.class));
@@ -255,7 +304,7 @@ public class HomeActivity extends AppCompatActivity
         TextView mTxtMsgCount = (TextView) notificationCount.findViewById(R.id.txt_notification_count);
         mTxtMsgCount.setText(String.valueOf(mProdRelatedMsgs));
 
-        // ActivityCompat.invalidateOptionsMenu(HomeActivity.this);
+        ActivityCompat.invalidateOptionsMenu(HomeActivity.this);
 
         MenuItem menuItemMsgs = menu.findItem(R.id.action_messages);
         MenuItem menuItemRentals = menu.findItem(R.id.action_rentals);
@@ -268,7 +317,7 @@ public class HomeActivity extends AppCompatActivity
         mTxtMsgCount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//               startActivity(new Intent(HomeActivity.this, AllMessagesActivity.class));
+                startActivity(new Intent(HomeActivity.this, AllMessagesActivity.class));
             }
         });
 
@@ -290,52 +339,6 @@ public class HomeActivity extends AppCompatActivity
             }
         });
         return true;
-
-    }
-
-    @Override
-    public void onDrawerSlide(View drawerView, float slideOffset) {
-
-    }
-
-
-
-    @Override
-    public void onDrawerOpened(View drawerView) {
-        /*if (isLoggedIn) {
-            menu.setGroupVisible(R.id.grp_nav_logIn_signUp,false);
-
-            //To show user info for navigation header
-            mNavHeader.setVisibility(View.VISIBLE);
-            menu.setGroupVisible(R.id.grp_ic_nav_settings,true);
-            menu.setGroupVisible(R.id.grp_nav_payments,true);
-            menu.setGroupVisible(R.id.grp_nav_logout,true);
-            menu.setGroupVisible(R.id.grp_nav_faq,true);
-
-            TextView mTxtUserName = (TextView) mNavHeader.findViewById(R.id.txt_nav_user_name);
-            TextView mTxtUserEmail = (TextView) mNavHeader.findViewById(R.id.txt_nav_user_email);
-            CircularImageView mImgUser = (CircularImageView) mNavHeader.findViewById(R.id.img_nav_user_profile);
-            mTxtUserName.setText(mUserFirstName+" "+mUserLastName);
-            mTxtUserEmail.setText(mUserEmail);
-
-        } else {
-            menu.setGroupVisible(R.id.grp_nav_logIn_signUp,true);
-            mNavHeader.setVisibility(View.GONE);
-            menu.setGroupVisible(R.id.grp_ic_nav_settings,false);
-            menu.setGroupVisible(R.id.grp_nav_payments,false);
-            menu.setGroupVisible(R.id.grp_nav_logout,false);
-            menu.setGroupVisible(R.id.grp_nav_faq,false);
-              }*/
-    }
-
-    @Override
-    public void onDrawerClosed(View drawerView) {
-
-    }
-
-    @Override
-    public void onDrawerStateChanged(int newState) {
-
     }
 
     /**
@@ -399,11 +402,13 @@ public class HomeActivity extends AppCompatActivity
                         isLoggedIn=false;
 
                         menu.setGroupVisible(R.id.grp_nav_logIn_signUp,true);
+                        menu.setGroupVisible(R.id.grp_nav_faq,true);
+
                         mNavHeader.setVisibility(View.GONE);
                         menu.setGroupVisible(R.id.grp_ic_nav_settings,false);
+                        menu.setGroupVisible(R.id.grp_ic_nav_msgs,false);
                         menu.setGroupVisible(R.id.grp_nav_payments,false);
                         menu.setGroupVisible(R.id.grp_nav_logout,false);
-                        menu.setGroupVisible(R.id.grp_nav_faq,false);
 
                      /*   Intent intent = new Intent(HomeActivity.this, LogInActivity.class);
                         startActivity(intent);*/
@@ -416,25 +421,26 @@ public class HomeActivity extends AppCompatActivity
                     }
                 });
                 alertDialog.show();
+                clearData();
                 break;
             }
-            //TODO functionality yet to be completed for below menu items
 
             case R.id.nav_settings:
                 startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
                 break;
 
             case R.id.nav_payments:
-                RCLog.showToast(HomeActivity.this, TAG);
-//                startActivity(new Intent(HomeActivity.this, AllRequestsActivity.class));
-                startActivity(new Intent(HomeActivity.this, MyProfileActivity.class));
+                RCLog.showToast(this,getString(R.string.payments));
                 break;
 
             case R.id.nav_faq:
                 String helpUrl = "http://recirkle.com/#/help";
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(helpUrl));
-                startActivity(i);
+                intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(helpUrl));
+                startActivity(intent);
+                break;
+            case R.id.nav_msgs:
+                startActivity(new Intent(HomeActivity.this, AllMessagesActivity.class));
                 break;
         }
 
@@ -451,6 +457,7 @@ public class HomeActivity extends AppCompatActivity
                 getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
+        editor.apply();
         editor.commit();
     }
 
@@ -465,5 +472,7 @@ public class HomeActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+
+
     }
 }

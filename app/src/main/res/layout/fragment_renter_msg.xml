@@ -1,14 +1,15 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+tools:context="com.example.synerzip.recircle_android.ui.messages.RenterMsgFragment">
+
+    <android.support.v7.widget.RecyclerView
+    android:id="@+id/card_renter_msgs"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.synerzip.recircle_android.ui.messages.RenterMsgFragment">
+    android:layout_height="wrap_content"
+    android:nestedScrollingEnabled="false"
+    android:scrollbars="vertical" />
 
-    <!--TODO screen not implememted-->
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
-
-</FrameLayout>
+</LinearLayout>

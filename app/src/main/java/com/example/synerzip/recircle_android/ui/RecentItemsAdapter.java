@@ -49,15 +49,6 @@ public class RecentItemsAdapter extends RecyclerView.Adapter<RecentItemsAdapter.
                     .placeholder(R.mipmap.ic_item)
                     .into(viewHolder.mImageView);
         }
-
-        if (productDetails.getUser_product_info().getUser_prod_images().size() != 0 &&
-                productDetails.getUser_product_info().getUser_prod_images().get(0).getUser_prod_image_url() != null)
-        {
-            Picasso.with(mContext)
-                    .load(productDetails.getUser_product_info().getUser_prod_images().get(0).getUser_prod_image_url())
-                    .placeholder(R.mipmap.ic_item)
-                    .into(viewHolder.mImageView);
-        }
         if (null != productDetails.getUser_product_info().getProduct_avg_rating() &&
                 productDetails.getUser_product_info().getUser_prod_reviews() != null &&
                 productDetails.getUser_product_info().getUser_prod_reviews().size() != 0) {

@@ -328,6 +328,7 @@ public class LogInActivity extends AppCompatActivity {
             case android.R.id.home:
                 onBackPressed();
                 finish();
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

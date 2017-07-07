@@ -33,6 +33,9 @@ import retrofit2.Response;
  * Created by Snehal Tembare on 3/5/17.
  * Copyright © 2017 Synerzip. All rights reserved
  */
+
+//TODO class implementetion is yet to completed
+
 public class CreditCardActivity extends AppCompatActivity {
 
     private static final String EXPIRARY_DATE_PATTERN = "^(0[1-9]|1[0-2])\\/?([0-9]{4}|[0-9]{2})$";
@@ -90,7 +93,6 @@ public class CreditCardActivity extends AppCompatActivity {
         mBundle = getIntent().getExtras();
         if (mBundle != null) {
             user_id = mBundle.getString(getString(R.string.user_id));
-//            mBtnPay.setText("Pay $" + String.valueOf(mBundle.getInt(getString(R.string.total))));
         }
 
        /* cardForm.cardRequired(true)

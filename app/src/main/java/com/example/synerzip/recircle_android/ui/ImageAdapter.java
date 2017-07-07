@@ -13,11 +13,9 @@ import android.widget.LinearLayout;
 
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.UserProdImages;
-import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  *Created by Snehal Tembare on 6/4/17.

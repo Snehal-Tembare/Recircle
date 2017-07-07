@@ -3,7 +3,6 @@ package com.example.synerzip.recircle_android.ui;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -86,8 +85,6 @@ public class CalendarActivity extends AppCompatActivity {
                 final ArrayList<Date> dateArray = new ArrayList<>();
 
                 for (UserProductUnAvailability unAvailability : userProductUnAvailabilities) {
-
-                    Log.v("onDateSelected", userProductUnAvailabilities.get(0).getUnavai_from_date() + "ListItemCalendarActivity");
 
                     DateFormat dateFormat = new SimpleDateFormat(getString(R.string.calendar_date_format));
 

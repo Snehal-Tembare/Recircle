@@ -1,6 +1,5 @@
 package com.example.synerzip.recircle_android.ui;
 
-import android.app.Activity;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
@@ -9,20 +8,15 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
-import com.example.synerzip.recircle_android.models.Discounts;
-import com.example.synerzip.recircle_android.models.Product;
 import com.example.synerzip.recircle_android.models.Products;
 import com.example.synerzip.recircle_android.models.UserProdImages;
 import com.example.synerzip.recircle_android.utilities.RCLog;
@@ -43,7 +37,6 @@ public class UploadImgActivity extends AppCompatActivity {
     private Products product;
     public static ArrayList<String> listUploadGalleryImage;
     private UploadImageAdapter mUploadImageAdapter;
-
 
     @BindView(R.id.recycler_view_upload_img)
     protected RecyclerView mRecyclerView;
@@ -113,13 +106,13 @@ public class UploadImgActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 3 && resultCode == RESULT_OK) {
-//            mUploadImageAdapter = new UploadImageAdapter(UploadImgActivity.this, listUploadGalleryImage);
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             Uri tempUri = getImageUri(getApplicationContext(), photo);
             File cameraFilePath = new File(getRealPathFromURI(tempUri));
             listUploadGalleryImage.add(cameraFilePath.toString());
 
-            mUploadImageAdapter.notifyDataSetChanged();
+            mUploadImageAdapter = new UploadImageAdapter(UploadImgActivity.this, listUploadGalleryImage);
+//            mUploadImageAdapter.notifyDataSetChanged();
             mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
             mRecyclerView.setAdapter(mUploadImageAdapter);
         }
@@ -130,7 +123,7 @@ public class UploadImgActivity extends AppCompatActivity {
                 Uri uri = data.getData();
                 String filepath = getPath(UploadImgActivity.this, uri);
                 listUploadGalleryImage.add(filepath);
-                mUploadImageAdapter.notifyDataSetChanged();
+//                mUploadImageAdapter.notifyDataSetChanged();
                 mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
                 mRecyclerView.setAdapter(mUploadImageAdapter);
             } else {
@@ -142,7 +135,7 @@ public class UploadImgActivity extends AppCompatActivity {
                         String filepath = getPath(UploadImgActivity.this, uri);
                         listUploadGalleryImage.add(filepath);
                     }
-                    mUploadImageAdapter.notifyDataSetChanged();
+//                    mUploadImageAdapter.notifyDataSetChanged();
                     mRecyclerView.setAdapter(mUploadImageAdapter);
                     mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
                 }

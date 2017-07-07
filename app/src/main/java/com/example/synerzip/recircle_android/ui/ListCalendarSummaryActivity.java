@@ -1,30 +1,22 @@
 package com.example.synerzip.recircle_android.ui;
 
-import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.graphics.drawable.ClipDrawable;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.synerzip.recircle_android.R;
 import com.squareup.timessquare.*;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import com.example.synerzip.recircle_android.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static com.squareup.timessquare.CalendarPickerView.SelectionMode.MULTIPLE;
 
 public class ListCalendarSummaryActivity extends AppCompatActivity {
     @BindView(R.id.calendar_view)

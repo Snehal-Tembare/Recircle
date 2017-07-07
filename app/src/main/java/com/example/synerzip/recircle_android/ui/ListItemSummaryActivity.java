@@ -10,6 +10,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+
+import com.example.synerzip.recircle_android.R;
+
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -18,7 +21,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.AllProductInfo;
 import com.example.synerzip.recircle_android.models.Discounts;
 import com.example.synerzip.recircle_android.models.EditProduct;
@@ -35,6 +37,7 @@ import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import butterknife.BindView;
@@ -43,6 +46,7 @@ import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 
 /**
  * Created by Prajakta Patil on 24/4/17.
@@ -122,6 +126,8 @@ public class ListItemSummaryActivity extends AppCompatActivity {
     @BindView(R.id.btn_confirm_item)
     protected Button mTxtConfirmItem;
 
+    private ListAnItemRequest listAnItemRequest;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -175,8 +181,8 @@ public class ListItemSummaryActivity extends AppCompatActivity {
         listDiscounts = ListItemFragment.listDiscounts;
 
         //TODO changes needed for ListAnItem api for discount ; the functionality should be dynamic
-        mTxtDiscFiveDays.setText(getString(R.string.five_days) + "$ " + String.valueOf(ListItemFragment.discFiveDays));
-        mTxtDiscTenDays.setText(getString(R.string.ten_days) + "$ " + String.valueOf(ListItemFragment.discTenDays));
+        mTxtDiscFiveDays.setText(getString(R.string.five_days));
+        mTxtDiscTenDays.setText(getString(R.string.ten_days));
         mItemAvailability = AdditionalDetailsActivity.mItemAvailability;
 
         mZipcode = AdditionalDetailsActivity.mZipcode;
@@ -235,22 +241,22 @@ public class ListItemSummaryActivity extends AppCompatActivity {
      * api call for list an item
      */
     private void getListAnItem() {
-        ListAnItemRequest listAnItemRequest;
         mProgressBar.setVisibility(View.VISIBLE);
         mLinearLayout.setAlpha((float) 0.6);
-      /*  if (productId.isEmpty()) {
-            listAnItemRequest = new ListAnItemRequest(mProductTitle, null, mItemPrice, mMinRental,
+        if (productId == null) {
+            mProductTitle = "";
+            listAnItemRequest = new ListAnItemRequest(productId, mProductTitle, mItemPrice, mMinRental,
                     mItemDesc, listDiscounts, listUploadItemImage, mItemAvailability, mZipcode, fromAustin);
         } else {
-            listAnItemRequest = new ListAnItemRequest(productId, mItemPrice, mMinRental,
+            productId = "";
+            listAnItemRequest = new ListAnItemRequest(productId, mProductTitle, mItemPrice, mMinRental,
                     mItemDesc, listDiscounts, listUploadItemImage, mItemAvailability, mZipcode, fromAustin);
         }
-*/
-        listAnItemRequest = new ListAnItemRequest(productId, mItemPrice, mMinRental,
-                mItemDesc, listDiscounts, listUploadItemImage, mItemAvailability, mZipcode, fromAustin);
         service = ApiClient.getClient().create(RCAPInterface.class);
 
         if (MyProfileActivity.isItemEdit) {
+            ListItemFragment.editProduct.setUser_prod_unavailability(AdditionalDetailsActivity.mItemAvailability);
+            Log.v("Edit product data", ListItemFragment.editProduct.toString());
 
             Call<EditProduct> productsCall = service.editUserProductDetails("Bearer " + mAccessToken, ListItemFragment.editProduct);
             productsCall.enqueue(new Callback<EditProduct>() {
@@ -260,9 +266,16 @@ public class ListItemSummaryActivity extends AppCompatActivity {
                         RCLog.showToast(getApplicationContext(), getString(R.string.details_edited_successfully));
                         mProgressBar.setVisibility(View.GONE);
                         Intent intent = new Intent(ListItemSummaryActivity.this, MyProfileActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
-                        MyProfileActivity.isItemEdit=false;
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        MyProfileActivity.isItemEdit = false;
+                        AdditionalDetailsActivity.mItemAvailability.clear();
                         startActivity(intent);
+                    } else if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
+                        mProgressBar.setVisibility(View.GONE);
+                        RCLog.showToast(ListItemSummaryActivity.this, getString(R.string.user_not_authenticated));
+                    } else {
+                        RCLog.showToast(getApplicationContext(), getString(R.string.something_went_wrong));
+                        mProgressBar.setVisibility(View.GONE);
                     }
                 }
 
@@ -287,14 +300,15 @@ public class ListItemSummaryActivity extends AppCompatActivity {
                         String userProductId = response.body().getUser_product_id();
                         intent.putExtra(getString(R.string.product_id), userProductId);
                         startActivity(intent);
-                    } else {
-                        if (response.code() == RCWebConstants.RC_ERROR_CODE_BAD_REQUEST) {
-                            RCLog.showToast(ListItemSummaryActivity.this, getString(R.string.product_creation_failed));
-                        } else {
-                            RCLog.showToast(ListItemSummaryActivity.this, getString(R.string.user_not_authenticated));
-                            logInDialog();
-                        }
+                    } else if (response.code() == RCWebConstants.RC_ERROR_CODE_BAD_REQUEST) {
+
+                        RCLog.showToast(ListItemSummaryActivity.this, getString(R.string.product_creation_failed));
+                    } else if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
+                        mProgressBar.setVisibility(View.GONE);
+                        RCLog.showToast(ListItemSummaryActivity.this, getString(R.string.user_not_authenticated));
+                        logInDialog();
                     }
+
                 }
 
                 @Override

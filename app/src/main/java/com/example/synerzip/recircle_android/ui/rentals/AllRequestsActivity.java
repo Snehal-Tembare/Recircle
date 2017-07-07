@@ -21,8 +21,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
-import com.example.synerzip.recircle_android.R;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +30,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.LogInRequest;
 import com.example.synerzip.recircle_android.models.User;
 import com.example.synerzip.recircle_android.models.rentals.OrderDetails;

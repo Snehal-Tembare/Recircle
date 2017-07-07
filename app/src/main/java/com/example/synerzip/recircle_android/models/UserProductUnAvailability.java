@@ -12,7 +12,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class UserProductUnAvailability implements Parcelable {
+public class UserProductUnAvailability implements Parcelable{
 
     private String unavai_from_date;
 
