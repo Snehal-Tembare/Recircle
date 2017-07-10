@@ -68,6 +68,9 @@ public class ListItemSummaryActivity extends AppCompatActivity {
     @BindView(R.id.txt_ten_days_disc)
     protected TextView mTxtDiscTenDays;
 
+    @BindView(R.id.txtDiscounts)
+    protected TextView mTxtDisc;
+
     private String mItemDesc, mProductTitle;
 
     private int mItemPrice, mMinRental;
@@ -117,6 +120,9 @@ public class ListItemSummaryActivity extends AppCompatActivity {
 
     private ListAnItemRequest listAnItemRequest;
 
+    @BindView(R.id.viewDiscounts)
+    protected View viewDscounts;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -157,8 +163,22 @@ public class ListItemSummaryActivity extends AppCompatActivity {
         listDiscounts = ListItemFragment.listDiscounts;
 
         //TODO changes needed for ListAnItem api for discount ; the functionality should be dynamic
-        mTxtDiscFiveDays.setText(getString(R.string.five_days));
-        mTxtDiscTenDays.setText(getString(R.string.ten_days));
+        if (listDiscounts.size() != 0) {
+
+            viewDscounts.setVisibility(View.VISIBLE);
+            mTxtDisc.setVisibility(View.VISIBLE);
+
+            if (listDiscounts.get(0).getDiscount_for_days() == 5) {
+                mTxtDiscFiveDays.setVisibility(View.VISIBLE);
+                mTxtDiscFiveDays.setText(getString(R.string.five_days));
+                mTxtDiscTenDays.setVisibility(View.GONE);
+            }
+            if (listDiscounts.get(0).getDiscount_for_days() == 10) {
+                mTxtDiscTenDays.setVisibility(View.VISIBLE);
+                mTxtDiscTenDays.setText(getString(R.string.ten_days));
+                mTxtDiscFiveDays.setVisibility(View.GONE);
+            }
+        }
         mItemAvailability = AdditionalDetailsActivity.mItemAvailability;
 
         mZipcode = AdditionalDetailsActivity.mZipcode;

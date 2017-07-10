@@ -18,21 +18,24 @@ import java.util.Date;
  * Copyright © 2017 Synerzip. All rights reserved
  */
 
-
 public class MonthDecorator implements CalendarCellDecorator {
-
-    private Date selectedDate, unSelectedDate;
+    private Date selectedDate, unSelectedDate, highlightedDate;
     private Context mContext;
 
-    public MonthDecorator(Context mContext, @Nullable Date selectedDate, @Nullable Date unSelectedDate) {
+    public MonthDecorator(Context mContext,
+                          @Nullable Date selectedDate,
+                          @Nullable Date unSelectedDate,
+                          @Nullable Date highlightedDate) {
 
         this.selectedDate = selectedDate;
+        this.highlightedDate = highlightedDate;
         this.mContext = mContext;
         this.unSelectedDate = unSelectedDate;
     }
 
     @Override
     public void decorate(CalendarCellView calendarCellView, Date date) {
+        //show selected dates
         if (date == selectedDate) {
             calendarCellView.setBackgroundResource(R.drawable.ic_cross);
         } else {
@@ -40,5 +43,9 @@ public class MonthDecorator implements CalendarCellDecorator {
                 calendarCellView.setBackgroundResource(0);
             }
         }
+        //show unavailable
+        if (date.equals(highlightedDate)) {
+            calendarCellView.setBackgroundResource(R.drawable.ic_cross);
         }
+    }
 }

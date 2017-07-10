@@ -94,6 +94,7 @@
                     android:textSize="@dimen/dimen_16sp" />
 
                 <View
+                    android:id="@+id/viewDiscounts"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dimen_1dp"
                     android:layout_gravity="center"
@@ -101,29 +102,34 @@
                     android:layout_marginLeft="@dimen/dimen_20dp"
                     android:layout_marginRight="@dimen/dimen_20dp"
                     android:layout_marginTop="@dimen/dimen_10dp"
-                    android:background="@color/colorLightGrey" />
+                    android:background="@color/colorLightGrey"
+                    android:visibility="gone" />
 
                 <TextView
+                    android:id="@+id/txtDiscounts"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dimen_40dp"
                     android:text="@string/discounts_summary"
                     android:textSize="@dimen/dimen_16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/txt_five_days_disc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dimen_40dp"
-                    android:textSize="@dimen/dimen_16sp" />
+                    android:textSize="@dimen/dimen_16sp"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/txt_ten_days_disc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dimen_40dp"
-                    android:textSize="@dimen/dimen_16sp" />
+                    android:textSize="@dimen/dimen_16sp"
+                    android:visibility="gone" />
 
                 <View
                     android:layout_width="match_parent"
@@ -161,10 +167,9 @@
                     android:background="@color/colorLightGrey" />
 
                 <TextView
-                    android:layout_marginLeft="@dimen/dimen_40dp"
-
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dimen_40dp"
                     android:text="@string/unavail_days"
                     android:textSize="@dimen/dimen_16sp"
                     android:textStyle="bold" />
