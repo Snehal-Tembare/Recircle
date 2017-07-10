@@ -95,7 +95,8 @@ public class ListItemCalendarActivity extends AppCompatActivity {
                 selectedDates.add(date);
 
                 List<CalendarCellDecorator> decoratorList = new ArrayList<>();
-                decoratorList.add(new MonthDecorator(ListItemCalendarActivity.this, date, null));
+                decoratorList.add(new MonthDecorator(ListItemCalendarActivity.this, date, null,
+                        null));
                 mPickerView.setDecorators(decoratorList);
 
                 DateFormat dateFormat = new SimpleDateFormat(getString(R.string.calendar_date_format));
@@ -113,7 +114,8 @@ public class ListItemCalendarActivity extends AppCompatActivity {
                 datesList.remove(dateString);
 
                 List<CalendarCellDecorator> decoratorList = new ArrayList<>();
-                decoratorList.add(new MonthDecorator(ListItemCalendarActivity.this, null, date));
+                decoratorList.add(new MonthDecorator(ListItemCalendarActivity.this, null, date,
+                        null));
                 mPickerView.setDecorators(decoratorList);
             }
         });
