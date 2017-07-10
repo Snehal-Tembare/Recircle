@@ -255,7 +255,7 @@ public class ListItemSummaryActivity extends AppCompatActivity {
         service = ApiClient.getClient().create(RCAPInterface.class);
 
         if (MyProfileActivity.isItemEdit) {
-            ListItemFragment.editProduct.setUser_prod_unavailability(AdditionalDetailsActivity.mItemAvailability);
+
             Log.v("Edit product data", ListItemFragment.editProduct.toString());
 
             Call<EditProduct> productsCall = service.editUserProductDetails("Bearer " + mAccessToken, ListItemFragment.editProduct);
@@ -268,6 +268,8 @@ public class ListItemSummaryActivity extends AppCompatActivity {
                         Intent intent = new Intent(ListItemSummaryActivity.this, MyProfileActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         MyProfileActivity.isItemEdit = false;
+                        ListItemCalendarActivity.selectedDates.clear();
+                        AdditionalDetailsActivity.selectedDates.clear();
                         AdditionalDetailsActivity.mItemAvailability.clear();
                         startActivity(intent);
                     } else if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {

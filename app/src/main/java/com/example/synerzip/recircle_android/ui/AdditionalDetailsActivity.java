@@ -259,9 +259,9 @@ public class AdditionalDetailsActivity extends AppCompatActivity {
             listUploadItemImage.add(mUserProdImages);
             if (MyProfileActivity.isItemEdit){
                 ListItemFragment.editProduct.setUser_prod_desc(mEditTxtItemDesc.getText().toString());
+                ListItemFragment.editProduct.setUser_prod_unavailability(mItemAvailability);
                 ListItemFragment.editProduct.setUser_product_zipcode(mEditTxtZipcode.getText().toString());
-            ListItemFragment.editProduct.setUser_prod_images(listUploadItemImage);
-            }
+            ListItemFragment.editProduct.setUser_prod_images(listUploadItemImage);}
 
         } else {
             RCLog.showToast(AdditionalDetailsActivity.this, getString(R.string.mandatory_dates));
