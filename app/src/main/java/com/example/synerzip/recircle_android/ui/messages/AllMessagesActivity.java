@@ -144,27 +144,36 @@ public class AllMessagesActivity extends AppCompatActivity {
      * get details of user messages
      */
     public void getMessageDetails() {
-        service = ApiClient.getClient().create(RCAPInterface.class);
-        Call<RootMessageInfo> call = service.getUserMessage("Bearer " + mAccessToken);
-        call.enqueue(new Callback<RootMessageInfo>() {
-            @Override
-            public void onResponse(Call<RootMessageInfo> call, Response<RootMessageInfo> response) {
-                mProgressBar.setVisibility(View.GONE);
-                mFrameLayout.setAlpha((float) 1.0);
-                if (response.isSuccessful()) {
-
-                    rootMessageInfo = response.body();
-                    userProductMsgId =response.body().getProdRelatedMsgs().get(0).getUser_prod_msg_id();
-                    ownerMsgFragment.getMessageDetails(rootMessageInfo);
+        if (ApiClient.getClient(this)!=null) {
+            service = ApiClient.getClient(this).create(RCAPInterface.class);
+            Call<RootMessageInfo> call = service.getUserMessage("Bearer " + mAccessToken);
+            call.enqueue(new Callback<RootMessageInfo>() {
+                @Override
+                public void onResponse(Call<RootMessageInfo> call, Response<RootMessageInfo> response) {
+                    mProgressBar.setVisibility(View.GONE);
+                    mFrameLayout.setAlpha((float) 1.0);
+                    if (response.isSuccessful()) {
+                        if (response != null) {
+                            rootMessageInfo = response.body();
+                            if (rootMessageInfo.getProdRelatedMsgs() != null &&
+                                    rootMessageInfo.getProdRelatedMsgs().size() != 0) {
+                                userProductMsgId = rootMessageInfo.getProdRelatedMsgs().get(0).getUser_prod_msg_id();
+                                ownerMsgFragment.getMessageDetails(rootMessageInfo);
+                            }
+                        }
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<RootMessageInfo> call, Throwable t) {
-                mProgressBar.setVisibility(View.GONE);
-                mFrameLayout.setAlpha((float) 1.0);
-            }
-        });
+                @Override
+                public void onFailure(Call<RootMessageInfo> call, Throwable t) {
+                    mProgressBar.setVisibility(View.GONE);
+                    mFrameLayout.setAlpha((float) 1.0);
+                }
+            });
+
+        }else {
+            mProgressBar.setVisibility(View.GONE);
+        }
 
         PagerAdapter mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
         mPagerAdapter.addFragment(ownerMsgFragment, getString(R.string.tab_msgs_owner));

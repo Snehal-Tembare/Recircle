@@ -86,9 +86,6 @@ public class ListItemCalendarActivity extends AppCompatActivity {
 
         mPickerView.init(today, nextMonth.getTime()).inMode(MULTIPLE);
         if (!restoreDates.isEmpty()) {
-            /*for (Date date : restoreDates) {
-                mPickerView.selectDate(date);
-            }*/
 
             mPickerView.highlightDates(restoreDates);
         }
@@ -103,7 +100,8 @@ public class ListItemCalendarActivity extends AppCompatActivity {
 
 
                 List<CalendarCellDecorator> decoratorList = new ArrayList<>();
-                decoratorList.add(new MonthDecorator(ListItemCalendarActivity.this, date, null));
+                decoratorList.add(new MonthDecorator(ListItemCalendarActivity.this, date, null,
+                        null));
                 mPickerView.setDecorators(decoratorList);
 
                 selectedDates.add(date);
@@ -122,7 +120,8 @@ public class ListItemCalendarActivity extends AppCompatActivity {
                 datesList.remove(dateString);
 
                 List<CalendarCellDecorator> decoratorList = new ArrayList<>();
-                decoratorList.add(new MonthDecorator(ListItemCalendarActivity.this, null, date));
+                decoratorList.add(new MonthDecorator(ListItemCalendarActivity.this, null, date,
+                        null));
                 mPickerView.setDecorators(decoratorList);
             }
         });

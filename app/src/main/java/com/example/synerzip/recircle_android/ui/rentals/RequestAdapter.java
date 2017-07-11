@@ -20,6 +20,8 @@ import com.example.synerzip.recircle_android.models.rentals.UserRequests;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
+import com.example.synerzip.recircle_android.utilities.RCLog;
+import com.google.android.gms.common.api.Api;
 import com.pkmmte.view.CircularImageView;
 import com.squareup.picasso.Picasso;
 
@@ -66,7 +68,9 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_pending_request, parent, false);
-        service = ApiClient.getClient().create(RCAPInterface.class);
+        if (ApiClient.getClient(mContext) != null) {
+            service = ApiClient.getClient(mContext).create(RCAPInterface.class);
+        }
         return new RequestAdapter.ViewHolder(view);
     }
 
@@ -126,7 +130,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
                     holder.mTxtStatus.setText(mContext.getString(R.string.approved));
                 } else if (userRequest.getStatus().equalsIgnoreCase(mContext.getString(R.string.decline))) {
                     holder.mTxtStatus.setText(mContext.getString(R.string.declined));
-                }else if (userRequest.getStatus().equalsIgnoreCase(mContext.getString(R.string.cancelled))) {
+                } else if (userRequest.getStatus().equalsIgnoreCase(mContext.getString(R.string.cancelled))) {
                     holder.mTxtStatus.setText(mContext.getString(R.string.cancelled));
                 } else {
                     holder.mTxtStatus.setText(mContext.getString(R.string.time_to_respond) + " " +
@@ -268,28 +272,31 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
                     if (tag == 1 && mEdtMsg.getText().toString().isEmpty()) {
                         mEdtMsg.setError(mContext.getString(R.string.enter_message));
                         return;
-                    }else {
+                    } else {
                         request.setUser_msg(mEdtMsg.getText().toString());
                     }
-                    Call<UserRequest> call = service.actionOnRequest(userRequest.getUser_prod_msg().getUser_prod_msg_id(),
-                            "Bearer " + mAccessToken, request);
-                    call.enqueue(new Callback<UserRequest>() {
-                        @Override
-                        public void onResponse(Call<UserRequest> call, Response<UserRequest> response) {
-                            if (response.isSuccessful()) {
-                                if (response.body() != null) {
-                                    Log.v("**onResponse", response.body().getUser_msg());
-                                    alert.cancel();
+                    if (service != null) {
+                        Call<UserRequest> call = service.actionOnRequest(userRequest.getUser_prod_msg().getUser_prod_msg_id(),
+                                "Bearer " + mAccessToken, request);
+                        call.enqueue(new Callback<UserRequest>() {
+                            @Override
+                            public void onResponse(Call<UserRequest> call, Response<UserRequest> response) {
+                                if (response.isSuccessful()) {
+                                    if (response.body() != null) {
+                                        Log.v("**onResponse", response.body().getUser_msg());
+                                        alert.cancel();
+                                    }
                                 }
                             }
-                        }
 
-                        @Override
-                        public void onFailure(Call<UserRequest> call, Throwable t) {
+                            @Override
+                            public void onFailure(Call<UserRequest> call, Throwable t) {
 
-                        }
-                    });
-
+                            }
+                        });
+                    } else {
+                        RCLog.showLongToast(mContext, mContext.getString(R.string.check_nw_connectivity));
+                    }
                 }
             });
 

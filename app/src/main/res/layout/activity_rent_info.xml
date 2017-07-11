@@ -82,7 +82,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
                                 android:layout_marginLeft="@dimen/common_dimens_5"
-                                android:gravity="center_vertical" />
+                                android:layout_gravity="center_vertical" />
                         </LinearLayout>
 
                     </LinearLayout>

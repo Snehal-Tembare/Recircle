@@ -76,6 +76,9 @@ public class ListItemSummaryActivity extends AppCompatActivity {
     @BindView(R.id.txt_ten_days_disc)
     protected TextView mTxtDiscTenDays;
 
+    @BindView(R.id.txtDiscounts)
+    protected TextView mTxtDisc;
+
     private String mItemDesc, mProductTitle;
 
     private int mItemPrice, mMinRental;
@@ -127,6 +130,9 @@ public class ListItemSummaryActivity extends AppCompatActivity {
     protected Button mTxtConfirmItem;
 
     private ListAnItemRequest listAnItemRequest;
+
+    @BindView(R.id.viewDiscounts)
+    protected View viewDscounts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,8 +187,22 @@ public class ListItemSummaryActivity extends AppCompatActivity {
         listDiscounts = ListItemFragment.listDiscounts;
 
         //TODO changes needed for ListAnItem api for discount ; the functionality should be dynamic
-        mTxtDiscFiveDays.setText(getString(R.string.five_days));
-        mTxtDiscTenDays.setText(getString(R.string.ten_days));
+        if (listDiscounts.size() != 0) {
+
+            viewDscounts.setVisibility(View.VISIBLE);
+            mTxtDisc.setVisibility(View.VISIBLE);
+
+            if (listDiscounts.get(0).getDiscount_for_days() == 5) {
+                mTxtDiscFiveDays.setVisibility(View.VISIBLE);
+                mTxtDiscFiveDays.setText(getString(R.string.five_days));
+                mTxtDiscTenDays.setVisibility(View.GONE);
+            }
+            if (listDiscounts.get(0).getDiscount_for_days() == 10) {
+                mTxtDiscTenDays.setVisibility(View.VISIBLE);
+                mTxtDiscTenDays.setText(getString(R.string.ten_days));
+                mTxtDiscFiveDays.setVisibility(View.GONE);
+            }
+        }
         mItemAvailability = AdditionalDetailsActivity.mItemAvailability;
 
         mZipcode = AdditionalDetailsActivity.mZipcode;
@@ -252,72 +272,77 @@ public class ListItemSummaryActivity extends AppCompatActivity {
             listAnItemRequest = new ListAnItemRequest(productId, mProductTitle, mItemPrice, mMinRental,
                     mItemDesc, listDiscounts, listUploadItemImage, mItemAvailability, mZipcode, fromAustin);
         }
-        service = ApiClient.getClient().create(RCAPInterface.class);
 
-        if (MyProfileActivity.isItemEdit) {
+        if (ApiClient.getClient(ListItemSummaryActivity.this) != null) {
+            service = ApiClient.getClient(ListItemSummaryActivity.this).create(RCAPInterface.class);
 
-            Log.v("Edit product data", ListItemFragment.editProduct.toString());
+            if (MyProfileActivity.isItemEdit) {
 
-            Call<EditProduct> productsCall = service.editUserProductDetails("Bearer " + mAccessToken, ListItemFragment.editProduct);
-            productsCall.enqueue(new Callback<EditProduct>() {
-                @Override
-                public void onResponse(Call<EditProduct> call, Response<EditProduct> response) {
-                    if (response.isSuccessful()) {
-                        RCLog.showToast(getApplicationContext(), getString(R.string.details_edited_successfully));
-                        mProgressBar.setVisibility(View.GONE);
-                        Intent intent = new Intent(ListItemSummaryActivity.this, MyProfileActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        MyProfileActivity.isItemEdit = false;
-                        ListItemCalendarActivity.selectedDates.clear();
-                        AdditionalDetailsActivity.selectedDates.clear();
-                        AdditionalDetailsActivity.mItemAvailability.clear();
-                        startActivity(intent);
-                    } else if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
-                        mProgressBar.setVisibility(View.GONE);
-                        RCLog.showToast(ListItemSummaryActivity.this, getString(R.string.user_not_authenticated));
-                    } else {
+                Log.v("Edit product data", ListItemFragment.editProduct.toString());
+
+                Call<EditProduct> productsCall = service.editUserProductDetails("Bearer " + mAccessToken, ListItemFragment.editProduct);
+                productsCall.enqueue(new Callback<EditProduct>() {
+                    @Override
+                    public void onResponse(Call<EditProduct> call, Response<EditProduct> response) {
+                        if (response.isSuccessful()) {
+                            RCLog.showToast(getApplicationContext(), getString(R.string.details_edited_successfully));
+                            mProgressBar.setVisibility(View.GONE);
+                            Intent intent = new Intent(ListItemSummaryActivity.this, MyProfileActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            MyProfileActivity.isItemEdit = false;
+                            ListItemCalendarActivity.selectedDates.clear();
+                            AdditionalDetailsActivity.selectedDates.clear();
+                            AdditionalDetailsActivity.mItemAvailability.clear();
+                            startActivity(intent);
+                        } else if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
+                            mProgressBar.setVisibility(View.GONE);
+                            RCLog.showToast(ListItemSummaryActivity.this, getString(R.string.user_not_authenticated));
+                        } else {
+                            RCLog.showToast(getApplicationContext(), getString(R.string.something_went_wrong));
+                            mProgressBar.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<EditProduct> call, Throwable t) {
                         RCLog.showToast(getApplicationContext(), getString(R.string.something_went_wrong));
                         mProgressBar.setVisibility(View.GONE);
                     }
-                }
+                });
+            } else {
+                mTxtConfirmItem.setText(getString(R.string.list_this_item));
+                Call<AllProductInfo> call = service.listAnItem("Bearer " + mAccessToken, listAnItemRequest);
+                call.enqueue(new Callback<AllProductInfo>() {
 
-                @Override
-                public void onFailure(Call<EditProduct> call, Throwable t) {
-                    RCLog.showToast(getApplicationContext(), getString(R.string.something_went_wrong));
-                    mProgressBar.setVisibility(View.GONE);
-                }
-            });
-        } else {
-            mTxtConfirmItem.setText(getString(R.string.list_this_item));
-            Call<AllProductInfo> call = service.listAnItem("Bearer " + mAccessToken, listAnItemRequest);
-            call.enqueue(new Callback<AllProductInfo>() {
-
-                @Override
-                public void onResponse(Call<AllProductInfo> call, Response<AllProductInfo> response) {
-                    mProgressBar.setVisibility(View.GONE);
-                    mLinearLayout.setAlpha((float) 1.0);
-                    if (response.isSuccessful()) {
-                        RCLog.showToast(ListItemSummaryActivity.this, getString(R.string.item_added));
-                        Intent intent = new Intent(ListItemSummaryActivity.this, ListItemSuccessActivity.class);
-                        String userProductId = response.body().getUser_product_id();
-                        intent.putExtra(getString(R.string.product_id), userProductId);
-                        startActivity(intent);
-                    } else if (response.code() == RCWebConstants.RC_ERROR_CODE_BAD_REQUEST) {
-
-                        RCLog.showToast(ListItemSummaryActivity.this, getString(R.string.product_creation_failed));
-                    } else if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
+                    @Override
+                    public void onResponse(Call<AllProductInfo> call, Response<AllProductInfo> response) {
                         mProgressBar.setVisibility(View.GONE);
-                        RCLog.showToast(ListItemSummaryActivity.this, getString(R.string.user_not_authenticated));
-                        logInDialog();
+                        mLinearLayout.setAlpha((float) 1.0);
+                        if (response.isSuccessful()) {
+                            RCLog.showToast(ListItemSummaryActivity.this, getString(R.string.item_added));
+                            Intent intent = new Intent(ListItemSummaryActivity.this, ListItemSuccessActivity.class);
+                            String userProductId = response.body().getUser_product_id();
+                            intent.putExtra(getString(R.string.product_id), userProductId);
+                            startActivity(intent);
+                        } else if (response.code() == RCWebConstants.RC_ERROR_CODE_BAD_REQUEST) {
+
+                            RCLog.showToast(ListItemSummaryActivity.this, getString(R.string.product_creation_failed));
+                        } else if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
+                            mProgressBar.setVisibility(View.GONE);
+                            RCLog.showToast(ListItemSummaryActivity.this, getString(R.string.user_not_authenticated));
+                            logInDialog();
+                        }
+
                     }
 
-                }
-
-                @Override
-                public void onFailure(Call<AllProductInfo> call, Throwable t) {
-                    RCLog.showToast(ListItemSummaryActivity.this, getString(R.string.product_not_created));
-                }
-            });
+                    @Override
+                    public void onFailure(Call<AllProductInfo> call, Throwable t) {
+                        RCLog.showToast(ListItemSummaryActivity.this, getString(R.string.product_not_created));
+                    }
+                });
+            }
+        } else {
+            mProgressBar.setVisibility(View.GONE);
         }
     }
 
@@ -341,35 +366,39 @@ public class ListItemSummaryActivity extends AppCompatActivity {
                 final String mUserPwd = mEditTxtPwd.getText().toString();
                 LogInRequest logInRequest = new LogInRequest(mUserName, mUserPwd);
 
-                service = ApiClient.getClient().create(RCAPInterface.class);
-                Call<User> userCall = service.userLogIn(logInRequest);
-                userCall.enqueue(new Callback<User>() {
-                    @Override
-                    public void onResponse(Call<User> call, Response<User> response) {
+                if (ApiClient.getClient(ListItemSummaryActivity.this) != null) {
+                    service = ApiClient.getClient(ListItemSummaryActivity.this).create(RCAPInterface.class);
+                    Call<User> userCall = service.userLogIn(logInRequest);
+                    userCall.enqueue(new Callback<User>() {
+                        @Override
+                        public void onResponse(Call<User> call, Response<User> response) {
 
-                        mProgressBar.setVisibility(View.GONE);
-                        mLinearLayout.setAlpha((float) 1.0);
+                            mProgressBar.setVisibility(View.GONE);
+                            mLinearLayout.setAlpha((float) 1.0);
 
-                        if (response.isSuccessful()) {
-                            mAccessToken = response.body().getToken();
-                            sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
-                            editor.apply();
-                            dialog.dismiss();
-                        } else {
-                            if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
-                                RCLog.showToast(ListItemSummaryActivity.this, getString(R.string.err_credentials));
+                            if (response.isSuccessful()) {
+                                mAccessToken = response.body().getToken();
+                                sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
+                                editor.apply();
+                                dialog.dismiss();
+                            } else {
+                                if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
+                                    RCLog.showToast(ListItemSummaryActivity.this, getString(R.string.err_credentials));
+                                }
                             }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<User> call, Throwable t) {
-                        mProgressBar.setVisibility(View.GONE);
-                        mLinearLayout.setAlpha((float) 1.0);
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<User> call, Throwable t) {
+                            mProgressBar.setVisibility(View.GONE);
+                            mLinearLayout.setAlpha((float) 1.0);
+                        }
+                    });
+                } else {
+                    mProgressBar.setVisibility(View.GONE);
+                }
             }
         });
 

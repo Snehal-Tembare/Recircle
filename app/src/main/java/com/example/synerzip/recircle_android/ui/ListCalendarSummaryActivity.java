@@ -6,18 +6,25 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.synerzip.recircle_android.R;
+import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.squareup.timessquare.*;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
 import com.example.synerzip.recircle_android.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * Created by Prajakta Patil on 9/5/17.
+ * Copyright © 2017 Synerzip. All rights reserved
+ */
 public class ListCalendarSummaryActivity extends AppCompatActivity {
     @BindView(R.id.calendar_view)
     protected CalendarPickerView mPickerView;
@@ -55,13 +62,31 @@ public class ListCalendarSummaryActivity extends AppCompatActivity {
         Date today = new Date();
 
         mPickerView.init(today, calendar.getTime());
-        if (unavailableDates != null && !unavailableDates.isEmpty()) {
-            for(Date date:unavailableDates) {
-                List<CalendarCellDecorator> decoratorList = new ArrayList<>();
-                decoratorList.add(new MonthDecorator(ListCalendarSummaryActivity.this, date, null));
-                mPickerView.setDecorators(decoratorList);
+        mPickerView.setPressed(false);
+        mPickerView.setSaveEnabled(false);
+        mPickerView.setEnabled(false);
+        mPickerView.setOnDateSelectedListener(new CalendarPickerView.OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(Date date) {
+                RCLog.showToast(ListCalendarSummaryActivity.this, "Date cannot be selected");
+                mPickerView.setPressed(false);
+                mPickerView.setClickable(false);
+                mPickerView.setSelected(false);
             }
-            mPickerView.highlightDates(unavailableDates);
+
+            @Override
+            public void onDateUnselected(Date date) {
+
+            }
+        });
+        List<CalendarCellDecorator> decoratorList = new ArrayList<>();
+
+        if (unavailableDates != null && !unavailableDates.isEmpty()) {
+            for (Date date : unavailableDates) {
+                decoratorList.add(new MonthDecorator(ListCalendarSummaryActivity.this, null,
+                        null, date));
+            }
+            mPickerView.setDecorators(decoratorList);
         }
     }
 
@@ -74,5 +99,4 @@ public class ListCalendarSummaryActivity extends AppCompatActivity {
     public void txtCalendarCancel(View view) {
         finish();
     }
-
 }

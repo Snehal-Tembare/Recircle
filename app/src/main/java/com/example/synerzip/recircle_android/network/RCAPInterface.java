@@ -42,6 +42,7 @@ public interface RCAPInterface {
     /**
      * Get all products details
      */
+
     @GET(RCWebConstants.RC_GET_PRODUCT_DETAILS)
     Call<AllProductInfo> getProductDetails();
 

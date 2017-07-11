@@ -128,83 +128,87 @@ public class SettingsActivity extends AppCompatActivity {
      * get user details
      */
     public void getUserDetails() {
-        service = ApiClient.getClient().create(RCAPInterface.class);
-        Call<RootUserInfo> userCall = service.getUserDetails("Bearer " + mAccessToken, mUserId);
-        userCall.enqueue(new Callback<RootUserInfo>() {
-            @Override
-            public void onResponse(Call<RootUserInfo> call, Response<RootUserInfo> response) {
-                if (response.isSuccessful()) {
-                    mProgressBar.setVisibility(View.GONE);
-                    mFrameLayout.setAlpha((float) 1.0);
-                    mFirstName = response.body().getFirst_name();
-                    mLastName = response.body().getLast_name();
-                    if (!response.body().getFirst_name().isEmpty() && !response.body().getLast_name().isEmpty()) {
+        if (ApiClient.getClient(this) != null) {
+            service = ApiClient.getClient(this).create(RCAPInterface.class);
+            Call<RootUserInfo> userCall = service.getUserDetails("Bearer " + mAccessToken, mUserId);
+            userCall.enqueue(new Callback<RootUserInfo>() {
+                @Override
+                public void onResponse(Call<RootUserInfo> call, Response<RootUserInfo> response) {
+                    if (response.isSuccessful()) {
+                        mProgressBar.setVisibility(View.GONE);
+                        mFrameLayout.setAlpha((float) 1.0);
+                        mFirstName = response.body().getFirst_name();
+                        mLastName = response.body().getLast_name();
+                        if (!response.body().getFirst_name().isEmpty() && !response.body().getLast_name().isEmpty()) {
+
+                            mTxtUserName.setText(mFirstName + " " + mLastName);
+                        }
+
+                        mEmail = response.body().getEmail();
+                        mMobNo = String.valueOf(response.body().getUser_mob_no());
+                        mUserImg = response.body().getUser_image_url();
+                        if (response.body().getUser_id() != null) {
+                            mUserId = response.body().getUser_id();
+                        }
+
+                        if (response.body().getUserAddress() != null) {
+                            mUserAddreessId = response.body().getUserAddress().getUser_address_id();
+
+                            if (!response.body().getUserAddress().getCity().isEmpty()) {
+                                mLinearLayoutCity.setVisibility(View.VISIBLE);
+                                mTxtCity.setText(response.body().getUserAddress().getCity());
+                            }
+                            if (!response.body().getUserAddress().getState().isEmpty()) {
+                                mLinearLayoutState.setVisibility(View.VISIBLE);
+                                mTxtState.setText(response.body().getUserAddress().getState());
+                            }
+                            if (!response.body().getUserAddress().getStreet().isEmpty()) {
+                                mLinearLayoutStreetAddr.setVisibility(View.VISIBLE);
+                                mTxtStreetAddr.setText(response.body().getUserAddress().getStreet());
+                            }
+                            if (response.body().getUserAddress().getZip() != 0) {
+                                mLinearLayoutZipcode.setVisibility(View.VISIBLE);
+                                mTxtZipcode.setText(String.valueOf(response.body().getUserAddress().getZip()));
+                            }
+                        }
+                        mTextNotification = response.body().isNotification_flag();
+
+                        if (mTextNotification) {
+                            mSwitchNotification.setChecked(true);
+                        } else {
+                            mSwitchNotification.setChecked(false);
+                        }
+
 
                         mTxtUserName.setText(mFirstName + " " + mLastName);
-                    }
-
-                    mEmail = response.body().getEmail();
-                    mMobNo = String.valueOf(response.body().getUser_mob_no());
-                    mUserImg = response.body().getUser_image_url();
-                    if (response.body().getUser_id() != null) {
-                        mUserId = response.body().getUser_id();
-                    }
-
-                    if (response.body().getUserAddress() != null) {
-                        mUserAddreessId = response.body().getUserAddress().getUser_address_id();
-
-                        if (!response.body().getUserAddress().getCity().isEmpty()) {
-                            mLinearLayoutCity.setVisibility(View.VISIBLE);
-                            mTxtCity.setText(response.body().getUserAddress().getCity());
-                        }
-                        if (!response.body().getUserAddress().getState().isEmpty()) {
-                            mLinearLayoutState.setVisibility(View.VISIBLE);
-                            mTxtState.setText(response.body().getUserAddress().getState());
-                        }
-                        if (!response.body().getUserAddress().getStreet().isEmpty()) {
-                            mLinearLayoutStreetAddr.setVisibility(View.VISIBLE);
-                            mTxtStreetAddr.setText(response.body().getUserAddress().getStreet());
-                        }
-                        if (response.body().getUserAddress().getZip() != 0) {
-                            mLinearLayoutZipcode.setVisibility(View.VISIBLE);
-                            mTxtZipcode.setText(String.valueOf(response.body().getUserAddress().getZip()));
-                        }
-                    }
-                    mTextNotification = response.body().isNotification_flag();
-
-                    if (mTextNotification) {
-                        mSwitchNotification.setChecked(true);
+                        mTxtUserEmail.setText(mEmail);
+                        mTxtUserMob.setText(mMobNo);
+                        Picasso.with(SettingsActivity.this).load(mUserImg)
+                                .placeholder(R.drawable.ic_user).into(mImgUserProfile);
                     } else {
-                        mSwitchNotification.setChecked(false);
+
+                        RCLog.showToast(SettingsActivity.this, getString(R.string.user_not_authenticated));
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                finish();
+                            }
+                        }, TIMER);
+
+                        mProgressBar.setVisibility(View.GONE);
+                        mFrameLayout.setAlpha((float) 1.0);
                     }
+                }
 
-
-
-                    mTxtUserName.setText(mFirstName + " " + mLastName);
-                    mTxtUserEmail.setText(mEmail);
-                    mTxtUserMob.setText(mMobNo);
-                    Picasso.with(SettingsActivity.this).load(mUserImg).into(mImgUserProfile);
-                } else {
-
-                    RCLog.showToast(SettingsActivity.this, getString(R.string.user_not_authenticated));
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            finish();
-                        }
-                    },TIMER);
-
+                @Override
+                public void onFailure(Call<RootUserInfo> call, Throwable t) {
                     mProgressBar.setVisibility(View.GONE);
                     mFrameLayout.setAlpha((float) 1.0);
                 }
-            }
-
-            @Override
-            public void onFailure(Call<RootUserInfo> call, Throwable t) {
-                mProgressBar.setVisibility(View.GONE);
-                mFrameLayout.setAlpha((float) 1.0);
-            }
-        });
+            });
+        } else {
+            mProgressBar.setVisibility(View.GONE);
+        }
     }
 
     /**

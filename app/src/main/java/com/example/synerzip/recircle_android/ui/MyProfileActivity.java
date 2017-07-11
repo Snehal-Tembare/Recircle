@@ -90,7 +90,8 @@ public class MyProfileActivity extends AppCompatActivity {
     }
 
     private void getMyProfileData() {
-        service = ApiClient.getClient().create(RCAPInterface.class);
+        if (ApiClient.getClient(this)!=null){
+        service = ApiClient.getClient(this).create(RCAPInterface.class);
         Call<User> call = service.getUserProfile(user_id);
         mProgressBar.setVisibility(View.VISIBLE);
         call.enqueue(new Callback<User>() {
@@ -101,10 +102,14 @@ public class MyProfileActivity extends AppCompatActivity {
                     if (response.body() != null) {
                         User user = response.body();
                         if (user!=null){
+                            Picasso.with(getApplicationContext())
+                                    .load(R.drawable.ic_user)
+                                    .placeholder(R.drawable.ic_user).into(mImg);
 
                             if (user.getUser_image_url() != null) {
                                 Picasso.with(getApplicationContext())
-                                        .load(user.getUser_image_url()).into(mImg);
+                                        .load(user.getUser_image_url())
+                                        .placeholder(R.drawable.ic_user).into(mImg);
                             }
 
                             if (user.getFirst_name() != null || user.getLast_name() != null) {
@@ -157,6 +162,9 @@ public class MyProfileActivity extends AppCompatActivity {
                 RCLog.showToast(getApplicationContext(),getString(R.string.something_went_wrong));
             }
         });
+    }else {
+            mProgressBar.setVisibility(View.GONE);
+        }
     }
 
     @Override

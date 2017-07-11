@@ -2,6 +2,8 @@ package com.example.synerzip.recircle_android.ui;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.provider.Settings;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
@@ -15,9 +17,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -25,13 +27,21 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
+import com.example.synerzip.recircle_android.models.LogInRequest;
 import com.example.synerzip.recircle_android.models.Products;
+import com.example.synerzip.recircle_android.models.User;
 import com.example.synerzip.recircle_android.models.UserProdImages;
 import com.example.synerzip.recircle_android.models.UserProdReview;
 import com.example.synerzip.recircle_android.models.UserProductUnAvailability;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
+import com.example.synerzip.recircle_android.ui.messages.UserQueAnsActivity;
 import com.example.synerzip.recircle_android.ui.rentitem.RentInfoActivity;
+import com.example.synerzip.recircle_android.utilities.AESEncryptionDecryption;
+import com.example.synerzip.recircle_android.utilities.RCAppConstants;
+import com.example.synerzip.recircle_android.utilities.RCLog;
+import com.example.synerzip.recircle_android.utilities.RCWebConstants;
+import com.pkmmte.view.CircularImageView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -55,6 +65,19 @@ public class DetailsActivity extends AppCompatActivity {
 
     public static boolean isShowInfo;
 
+    private SharedPreferences sharedPreferences;
+
+    private String mAccessToken;
+
+    private String mUserName;
+    private String mPassword;
+    private String mUserId;
+    private String mUserEmail;
+    private String mUserLastName;
+    private String mUserFirstName;
+    private String mUserImage;
+    private long mUserMobNo;
+
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
 
@@ -65,7 +88,7 @@ public class DetailsActivity extends AppCompatActivity {
     protected RecyclerView mRecyclerImages;
 
     @BindView(R.id.img_user)
-    protected ImageView mImgUser;
+    protected CircularImageView mImgUser;
 
     @BindView(R.id.txt_product_name)
     protected TextView mTxtProductName;
@@ -139,6 +162,9 @@ public class DetailsActivity extends AppCompatActivity {
     private int selectedImgPosition = 0;
     private ImageAdapter mImageAdapter;
     private LinearLayoutManager mLayoutManager;
+    private boolean isLoggedIn;
+    private String productId;
+    private Intent askQueActivityIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,6 +184,10 @@ public class DetailsActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(R.string.recircle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
+
+        sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
+        mAccessToken = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
+        isLoggedIn = sharedPreferences.getBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
 
         mProgressBar.setVisibility(View.VISIBLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -182,135 +212,147 @@ public class DetailsActivity extends AppCompatActivity {
             }
         });
 
-        service = ApiClient.getClient().create(RCAPInterface.class);
-        Bundle bundle = getIntent().getExtras();
-        final String productId = bundle.getString(getString(R.string.product_id), "");
+        if (ApiClient.getClient(this) != null) {
+            service = ApiClient.getClient(this).create(RCAPInterface.class);
 
-        final Call<Products> productsCall = service.getProductDetailsByID(productId);
+            Bundle bundle = getIntent().getExtras();
+            productId = bundle.getString(getString(R.string.product_id), "");
 
-        productsCall.enqueue(new Callback<Products>() {
-            @Override
-            public void onResponse(Call<Products> call, Response<Products> response) {
-                if (response.isSuccessful()) {
-                    if (response.body() != null && response != null) {
-                        mProgressBar.setVisibility(View.GONE);
-                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        product = response.body();
+            final Call<Products> productsCall = service.getProductDetailsByID(productId);
 
-                        if (product != null) {
-                            if (product.getUser_product_info().getUser_prod_reviews() != null
-                                    && product.getUser_product_info().getUser_prod_reviews().size() != 0) {
-                                userProdReviewArrayList = product.getUser_product_info().getUser_prod_reviews();
-                                mLayoutRentersReview.setVisibility(View.VISIBLE);
-                                reviewsListAdapter = new ReviewsListAdapter(getApplicationContext(), userProdReviewArrayList);
-                                if (userProdReviewArrayList.size() > 0) {
-                                    mTxtSeeAllReviews.setVisibility(View.VISIBLE);
-                                    mTxtSeeAllReviews.setText(getString(R.string.see_all_reviews) + " (" + userProdReviewArrayList.size() + ")");
-                                }
-                                mReViewReviews.setLayoutManager(new LinearLayoutManager(DetailsActivity.this));
-                                mReViewReviews.setAdapter(reviewsListAdapter);
-                            } else {
-                                mTxtSeeAllReviews.setVisibility(View.GONE);
-                                mLayoutRentersReview.setVisibility(View.GONE);
-                            }
-                            if (product.getUser_product_info().getUser_prod_images() != null
-                                    && product.getUser_product_info().getUser_prod_images().size() > 1) {
-                                mLayoutImages.setVisibility(View.VISIBLE);
-                                userProdImagesArrayList = product.getUser_product_info().getUser_prod_images();
+            productsCall.enqueue(new Callback<Products>() {
+                @Override
+                public void onResponse(Call<Products> call, Response<Products> response) {
+                    if (response.isSuccessful()) {
+                        if (response.body() != null && response != null) {
+                            mProgressBar.setVisibility(View.GONE);
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            product = response.body();
 
-                                mImageAdapter = new ImageAdapter(getApplicationContext(), selectedImgPosition, userProdImagesArrayList, new ImageAdapter.OnImageItemClickListener() {
-                                    @Override
-                                    public void onImageClick(int position, UserProdImages userProdImages) {
-
-                                        Picasso.with(DetailsActivity.this)
-                                                .load(userProdImages.getUser_prod_image_url())
-                                                .into(mImgMain);
-
-                                        View view = mRecyclerImages.getChildAt(position);
-
-                                        view.setBackground(ContextCompat.getDrawable(DetailsActivity.this, R.drawable.selected_image_background));
-
-                                        for (int i = 0; i < userProdImagesArrayList.size(); i++) {
-                                            view = mRecyclerImages.getChildAt(i);
-                                            if (i != position) {
-                                                view.setBackground(ContextCompat.getDrawable(DetailsActivity.this, R.drawable.custom_imageview));
-                                            }
-                                        }
-                                        selectedImgPosition = position;
-                                        mLayoutManager.scrollToPosition(position);
-
+                            if (product != null) {
+                                if (product.getUser_product_info().getUser_prod_reviews() != null
+                                        && product.getUser_product_info().getUser_prod_reviews().size() != 0) {
+                                    userProdReviewArrayList = product.getUser_product_info().getUser_prod_reviews();
+                                    mLayoutRentersReview.setVisibility(View.VISIBLE);
+                                    reviewsListAdapter = new ReviewsListAdapter(getApplicationContext(), userProdReviewArrayList);
+                                    if (userProdReviewArrayList.size() > 0) {
+                                        mTxtSeeAllReviews.setVisibility(View.VISIBLE);
+                                        mTxtSeeAllReviews.setText(getString(R.string.see_all_reviews) + " (" + userProdReviewArrayList.size() + ")");
                                     }
-                                });
+                                    mReViewReviews.setLayoutManager(new LinearLayoutManager(DetailsActivity.this));
+                                    mReViewReviews.setAdapter(reviewsListAdapter);
+                                } else {
+                                    mTxtSeeAllReviews.setVisibility(View.GONE);
+                                    mLayoutRentersReview.setVisibility(View.GONE);
+                                }
+                                if (product.getUser_product_info().getUser_prod_images() != null
+                                        && product.getUser_product_info().getUser_prod_images().size() > 1) {
+                                    mLayoutImages.setVisibility(View.VISIBLE);
+                                    userProdImagesArrayList = product.getUser_product_info().getUser_prod_images();
 
-                                mLayoutManager = new LinearLayoutManager(DetailsActivity.this, LinearLayoutManager.HORIZONTAL, false);
+                                    mImageAdapter = new ImageAdapter(getApplicationContext(), selectedImgPosition, userProdImagesArrayList, new ImageAdapter.OnImageItemClickListener() {
+                                        @Override
+                                        public void onImageClick(int position, UserProdImages userProdImages) {
 
-                                mRecyclerImages.setLayoutManager(mLayoutManager);
-                                mRecyclerImages.setAdapter(mImageAdapter);
-                            } else {
-                                mLayoutImages.setVisibility(View.GONE);
-                            }
+                                            Picasso.with(DetailsActivity.this)
+                                                    .load(userProdImages.getUser_prod_image_url())
+                                                    .placeholder(R.drawable.ic_camera)
+                                                    .into(mImgMain);
 
-                            if (product.getUser_product_info().getUser_prod_unavailability() != null
-                                    && product.getUser_product_info().getUser_prod_unavailability().size() != 0) {
-                                userProductUnAvailabilities = product.getUser_product_info().getUser_prod_unavailability();
-                            }
+                                            View view = mRecyclerImages.getChildAt(position);
 
-                            mTxtProductName.setText(product.getProduct_info().getProduct_title());
+                                            if (view != null) {
+                                                view.setBackground(ContextCompat.getDrawable(DetailsActivity.this, R.drawable.selected_image_background));
+                                            }
 
-                            mCollapsibleLayout.setTitle(product.getProduct_info().getProduct_title());
+                                            for (int i = 0; i < userProdImagesArrayList.size(); i++) {
+                                                view = mRecyclerImages.getChildAt(i);
+                                                if (i != position) {
+                                                    if (view != null) {
+                                                        view.setBackground(ContextCompat.getDrawable(DetailsActivity.this, R.drawable.custom_imageview));
+                                                    }
+                                                }
+                                            }
+                                            selectedImgPosition = position;
+                                            mLayoutManager.scrollToPosition(position);
 
-                            Picasso.with(getApplicationContext())
-                                    .load(product.getUser_info().getUser_image_url())
-                                    .placeholder(R.drawable.ic_user).into(mImgUser);
+                                        }
+                                    });
 
-                            mTxtUserName.setText(product.getUser_info().getFirst_name() + " "
-                                    + product.getUser_info().getLast_name());
+                                    mLayoutManager = new LinearLayoutManager(DetailsActivity.this, LinearLayoutManager.HORIZONTAL, false);
 
-                            if (product.getUser_product_info().getProduct_avg_rating() != null) {
-                                mDetailsRating.setVisibility(View.VISIBLE);
-                                mRatingAllAvg.setVisibility(View.VISIBLE);
-                                mTxtDetailsRateCount.setVisibility(View.VISIBLE);
-                                mTxtAvgRatingCount.setVisibility(View.VISIBLE);
+                                    mRecyclerImages.setLayoutManager(mLayoutManager);
+                                    mRecyclerImages.setAdapter(mImageAdapter);
+                                } else {
+                                    mLayoutImages.setVisibility(View.GONE);
+                                }
 
-                                mDetailsRating.setRating(Float.parseFloat(product.getUser_product_info().getProduct_avg_rating()));
-                                mRatingAllAvg.setRating(Float.parseFloat(product.getUser_product_info().getProduct_avg_rating()));
-                                mTxtDetailsRateCount.setText("(" + product.getUser_product_info().getProduct_avg_rating() + ")");
-                                mTxtAvgRatingCount.setText("(" + String.valueOf(product.getUser_product_info().getProduct_avg_rating()) + ")");
-                            } else {
-                                mDetailsRating.setVisibility(View.GONE);
-                                mRatingAllAvg.setVisibility(View.GONE);
-                                mTxtDetailsRateCount.setVisibility(View.GONE);
-                                mTxtAvgRatingCount.setVisibility(View.GONE);
-                            }
+                                if (product.getUser_product_info().getUser_prod_unavailability() != null
+                                        && product.getUser_product_info().getUser_prod_unavailability().size() != 0) {
+                                    userProductUnAvailabilities = product.getUser_product_info().getUser_prod_unavailability();
+                                }
 
-                            if (product.getUser_product_info().getPrice_per_day() != null) {
-                                mBtnPrice.setText(getString(R.string.rent_item_at) + product.getUser_product_info().getPrice_per_day() + "/day");
-                            }
+                                mTxtProductName.setText(product.getProduct_info().getProduct_title());
 
-                            if (product.getProduct_info().getProduct_description() != null) {
-                                mTxtDecscriptionDetail.setText(product.getProduct_info().getProduct_description());
-                            }
+                                mCollapsibleLayout.setTitle(product.getProduct_info().getProduct_title());
 
-                            if (product.getUser_product_info().getUser_prod_desc() != null) {
-                                mTxtConditionDetail.setText(product.getUser_product_info().getUser_prod_desc());
-                            }
-
-                            if (product.getUser_product_info().getUser_prod_images() != null
-                                    && product.getUser_product_info().getUser_prod_images().size() != 0) {
                                 Picasso.with(getApplicationContext())
-                                        .load(product.getUser_product_info().getUser_prod_images().get(0).getUser_prod_image_url())
-                                        .into(mImgMain);
+                                        .load(product.getUser_info().getUser_image_url())
+                                        .placeholder(R.drawable.ic_user).into(mImgUser);
+
+                                mTxtUserName.setText(product.getUser_info().getFirst_name() + " "
+                                        + product.getUser_info().getLast_name());
+
+                                if (product.getUser_product_info().getProduct_avg_rating() != null) {
+                                    mDetailsRating.setVisibility(View.VISIBLE);
+                                    mRatingAllAvg.setVisibility(View.VISIBLE);
+                                    mTxtDetailsRateCount.setVisibility(View.VISIBLE);
+                                    mTxtAvgRatingCount.setVisibility(View.VISIBLE);
+
+                                    mDetailsRating.setRating(Float.parseFloat(product.getUser_product_info().getProduct_avg_rating()));
+                                    mRatingAllAvg.setRating(Float.parseFloat(product.getUser_product_info().getProduct_avg_rating()));
+                                    mTxtDetailsRateCount.setText("(" + product.getUser_product_info().getProduct_avg_rating() + ")");
+                                    mTxtAvgRatingCount.setText("(" + String.valueOf(product.getUser_product_info().getProduct_avg_rating()) + ")");
+                                } else {
+                                    mDetailsRating.setVisibility(View.GONE);
+                                    mRatingAllAvg.setVisibility(View.GONE);
+                                    mTxtDetailsRateCount.setVisibility(View.GONE);
+                                    mTxtAvgRatingCount.setVisibility(View.GONE);
+                                }
+
+                                if (product.getUser_product_info().getPrice_per_day() != null) {
+                                    mBtnPrice.setText(getString(R.string.rent_item_at) + product.getUser_product_info().getPrice_per_day() + "/day");
+                                }
+
+                                if (product.getProduct_info().getProduct_description() != null) {
+                                    mTxtDecscriptionDetail.setText(product.getProduct_info().getProduct_description());
+                                }
+
+                                if (product.getUser_product_info().getUser_prod_desc() != null) {
+                                    mTxtConditionDetail.setText(product.getUser_product_info().getUser_prod_desc());
+                                }
+
+                                if (product.getUser_product_info().getUser_prod_images() != null
+                                        && product.getUser_product_info().getUser_prod_images().size() != 0) {
+                                    Picasso.with(getApplicationContext())
+                                            .load(product.getUser_product_info()
+                                                    .getUser_prod_images().get(0).getUser_prod_image_url())
+                                            .placeholder(R.drawable.ic_camera)
+                                            .into(mImgMain);
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<Products> call, Throwable t) {
+                @Override
+                public void onFailure(Call<Products> call, Throwable t) {
 
-            }
-        });
+                }
+            });
+        } else {
+            mProgressBar.setVisibility(View.GONE);
+        }
 
         mTxtDecscriptionDetail.getViewTreeObserver().
 
@@ -347,12 +389,17 @@ public class DetailsActivity extends AppCompatActivity {
         {
             @Override
             public void onClick(View v) {
-                Dialog loginDialog = new Dialog(DetailsActivity.this);
-                loginDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                loginDialog.setContentView(R.layout.activity_log_in);
-                Toolbar toolbar = (Toolbar) loginDialog.findViewById(R.id.toolbar);
-                toolbar.setVisibility(View.GONE);
-                loginDialog.show();
+                askQueActivityIntent = new Intent(DetailsActivity.this, UserQueAnsActivity.class);
+                askQueActivityIntent.putExtra(getString(R.string.product_id), productId);
+                askQueActivityIntent.putExtra(getString(R.string.product_title), product.getProduct_info().getProduct_title());
+
+                if (!isLoggedIn) {
+                    RCLog.showToast(DetailsActivity.this, getString(R.string.user_must_login));
+                    logInDialog();
+                } else {
+                    startActivity(askQueActivityIntent);
+                }
+
             }
         });
 
@@ -370,6 +417,103 @@ public class DetailsActivity extends AppCompatActivity {
 
 
     }
+
+    /**
+     * Login again dialog
+     */
+    private void logInDialog() {
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.log_in_again_dialog);
+        dialog.setTitle(getString(R.string.log_in_again));
+        final EditText mEditTxtUserName = (EditText) dialog.findViewById(R.id.edit_login_email_dialog);
+        final EditText mEditTxtPwd = (EditText) dialog.findViewById(R.id.edit_login_pwd_dialog);
+
+        Button btnLogin = (Button) dialog.findViewById(R.id.btn_user_log_in_dialog);
+
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mProgressBar.setVisibility(View.VISIBLE);
+                mParentLayout.setAlpha((float) 0.6);
+                final String mLogInUserName = mEditTxtUserName.getText().toString();
+                final String mLogInPwd = mEditTxtPwd.getText().toString();
+                LogInRequest logInRequest = new LogInRequest(mLogInUserName, mLogInPwd);
+
+                if (ApiClient.getClient(DetailsActivity.this) != null) {
+                    service = ApiClient.getClient(DetailsActivity.this).create(RCAPInterface.class);
+
+                Call<User> userCall = service.userLogIn(logInRequest);
+                userCall.enqueue(new Callback<User>() {
+                    @Override
+                    public void onResponse(Call<User> call, Response<User> response) {
+
+                        mProgressBar.setVisibility(View.GONE);
+                        mParentLayout.setAlpha((float) 1.0);
+
+                        if (response.isSuccessful()) {
+                            mAccessToken = response.body().getToken();
+                            mUserId = response.body().getUser_id();
+                            mUserName = response.body().getEmail();
+                            mUserFirstName = response.body().getFirst_name();
+                            mUserEmail = response.body().getEmail();
+                            mUserLastName = response.body().getLast_name();
+                            mAccessToken = response.body().getToken();
+                            mUserImage = response.body().getUser_image_url();
+                            mUserMobNo = response.body().getUser_mob_no();
+
+                            if (null != mUserId && null != mLogInUserName &&
+                                    null != mUserFirstName && null != mUserLastName && null != mAccessToken) {
+                                saveUserData();
+                            }
+                            dialog.dismiss();
+
+                            startActivity(askQueActivityIntent);
+                        } else {
+                            if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
+                                RCLog.showToast(DetailsActivity.this, getString(R.string.err_credentials));
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
+                        mProgressBar.setVisibility(View.GONE);
+                        mParentLayout.setAlpha((float) 1.0);
+                    }
+                });
+            }else {
+                    RCLog.showLongToast(DetailsActivity.this,getString(R.string.check_nw_connectivity));
+                }
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void saveUserData() {
+        String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        try {
+            String encryptedPassword = AESEncryptionDecryption.encrypt(android_id, mPassword);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_USERID, mUserId);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_PASSWORD, encryptedPassword);
+            editor.putBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, true);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_EMAIL, mUserEmail);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_FIRSTNAME, mUserFirstName);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_LASTNAME, mUserLastName);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_IMAGE, mUserImage);
+            editor.putLong(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_MOB_NO, mUserMobNo);
+            editor.apply();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * OnClick of home button

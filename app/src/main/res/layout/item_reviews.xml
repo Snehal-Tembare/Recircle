@@ -36,7 +36,8 @@
                 app:border="false"
                 app:border_color="@color/common_white"
                 app:border_width="1dp"
-                app:shadow="true" />
+                app:shadow="true"
+                android:src="@drawable/ic_user" />
 
             <LinearLayout
                 android:layout_width="0dp"

@@ -118,8 +118,6 @@ public class ListItemFragment extends Fragment {
 
     public static double discFiveDays, discTenDays;
 
-    public static String mCustomProductTitle;
-
     /**
      * ListItemFragment empty constructor
      */
@@ -134,7 +132,7 @@ public class ListItemFragment extends Fragment {
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
-        utility = new SearchUtility();
+        utility = new SearchUtility(getActivity());
         mProductAutoComplete.setSingleLine();
 
         mProductAutoComplete.addTextChangedListener(new ListItemFragment.RCTextWatcher(mProductAutoComplete));
@@ -143,25 +141,30 @@ public class ListItemFragment extends Fragment {
 
         listDiscounts = new ArrayList<>();
 
+        final ArrayList<Discounts> strings=new ArrayList<>();
         //discounts checkbox listener
         mDiscountForFiveDay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    mDiscounts = new Discounts(30, 5, 0);
-                    listDiscounts.add(mDiscounts);
+                    mDiscounts = new Discounts(30, 5, 1);
+                    strings.add(mDiscounts);
                 }
             }
         });
+
         mDiscountForTenDay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    mDiscounts = new Discounts(40, 10, 0);
-                    listDiscounts.add(mDiscounts);
+                    mDiscounts = new Discounts(40, 10, 1);
+                    strings.add(mDiscounts);
                 }
             }
         });
+
+        listDiscounts.addAll(strings);
 
         if (MyProfileActivity.isItemEdit){
             mProductAutoComplete.dismissDropDown();
@@ -184,7 +187,7 @@ public class ListItemFragment extends Fragment {
         mProductName = mProductAutoComplete.getText().toString();
         submitForm();
         HideKeyboard.hideKeyBoard(getActivity());
-        if (NetworkUtility.isNetworkAvailable(getActivity())) {
+        if (NetworkUtility.isNetworkAvailable()) {
             if (getValues()) {
                 Intent intent = new Intent(getActivity(), UploadImgActivity.class);
                 if (MyProfileActivity.isItemEdit) {
@@ -213,15 +216,16 @@ public class ListItemFragment extends Fragment {
         if (!strPrice.isEmpty() && !strRental.isEmpty()) {
             mItemPrice = Integer.parseInt(mEditTxtEnterPrice.getText().toString().trim());
             mMinRental = Integer.parseInt(mEditMinRental.getText().toString().trim());
-            if (mDiscounts!=null){
-            if (mDiscounts.getDiscount_for_days() != 0) {
-                if (mDiscounts.getDiscount_for_days() == 5) {
-                    discFiveDays = Math.round(productPrice * 0.03);
+            if (mDiscounts != null) {
+                if (mDiscounts.getDiscount_for_days() != 0) {
+                    if (mDiscounts.getDiscount_for_days() == 5) {
+                        discFiveDays = Math.round(productPrice * 0.03);
+                    }
+                    if (mDiscounts.getDiscount_for_days() == 10) {
+                        discTenDays = Math.round(productPrice * 0.04);
+                    }
                 }
-                if (mDiscounts.getDiscount_for_days() == 10) {
-                    discTenDays = Math.round(productPrice * 0.04);
-                }
-            }}
+            }
             return true;
         }
         return false;
@@ -303,7 +307,6 @@ public class ListItemFragment extends Fragment {
                             suggestedPrice = Math.round(0.04 * productPrice);
                         } else if (productPrice > 500 && productPrice <= 1000) {
                             suggestedPrice = Math.round(0.03 * productPrice);
-
                         } else if (productPrice > 1000 && productPrice <= 2000) {
                             suggestedPrice = Math.round(0.02 * productPrice);
 
@@ -312,10 +315,8 @@ public class ListItemFragment extends Fragment {
 
                         } else if (productPrice > 10000 && productPrice <= 25000) {
                             suggestedPrice = Math.round(0.07 * productPrice);
-
                         } else {
                             suggestedPrice = Math.round(0.03 * productPrice);
-
                         }
                         mEditTxtEnterPrice.setText(String.valueOf(suggestedPrice));
 
@@ -326,23 +327,25 @@ public class ListItemFragment extends Fragment {
                         mDiscreteSeekBar.setMax((int) suggestedPrice * 2);
                         mDiscreteSeekBar.setProgress((int) suggestedPrice);
 
-                        mDiscreteSeekBar.setOnProgressChangeListener(new DiscreteSeekBar.OnProgressChangeListener() {
-                            @Override
-                            public void onProgressChanged(DiscreteSeekBar seekBar, int value, boolean fromUser) {
-                                String strValue = String.valueOf(value);
-                                mEditTxtEnterPrice.setText(strValue);
-                            }
+                        mDiscreteSeekBar.setOnProgressChangeListener
+                                (new DiscreteSeekBar.OnProgressChangeListener() {
+                                    @Override
+                                    public void onProgressChanged(DiscreteSeekBar seekBar,
+                                                                  int value, boolean fromUser) {
+                                        String strValue = String.valueOf(value);
+                                        mEditTxtEnterPrice.setText(strValue);
+                                    }
 
-                            @Override
-                            public void onStartTrackingTouch(DiscreteSeekBar seekBar) {
-                                seekBar.setProgress((int) suggestedPrice);
-                            }
+                                    @Override
+                                    public void onStartTrackingTouch(DiscreteSeekBar seekBar) {
+                                        seekBar.setProgress((int) suggestedPrice);
+                                    }
 
-                            @Override
-                            public void onStopTrackingTouch(DiscreteSeekBar seekBar) {
+                                    @Override
+                                    public void onStopTrackingTouch(DiscreteSeekBar seekBar) {
 
-                            }
-                        });
+                                    }
+                                });
                     }
                 }
                 HideKeyboard.hideKeyBoard(getActivity());
@@ -351,48 +354,51 @@ public class ListItemFragment extends Fragment {
 
         if (MyProfileActivity.isItemEdit) {
             editProduct = new EditProduct();
-            service = ApiClient.getClient().create(RCAPInterface.class);
+            if (ApiClient.getClient(getActivity()) != null) {
+                service = ApiClient.getClient(getActivity()).create(RCAPInterface.class);
 
-            if (getArguments() != null) {
-                Call<Products> call = service.getProductDetailsByID(getArguments().getString(getString(R.string.product_id)));
+                if (getArguments() != null) {
+                    Call<Products> call = service.getProductDetailsByID(getArguments().getString(getString(R.string.product_id)));
 
-                call.enqueue(new Callback<Products>() {
-                    @Override
-                    public void onResponse(Call<Products> call, Response<Products> response) {
-                        if (response.isSuccessful()) {
-                            if (response.body() != null) {
-                                Log.v("onSu Edit product data",response+"");
-                                product = response.body();
-                                if (product != null) {
-                                    mProductAutoComplete.setText(product.getProduct_info().getProduct_title());
-                                    mEditTxtEnterPrice.setText(product.getUser_product_info().getPrice_per_day());
-                                    mEditMinRental.setText(product.getUser_product_info().getMin_rental_days());
+                    call.enqueue(new Callback<Products>() {
+                        @Override
+                        public void onResponse(Call<Products> call, Response<Products> response) {
+                            if (response.isSuccessful()) {
+                                if (response.body() != null) {
+                                    Log.v("onSu Edit product data", response + "");
+                                    product = response.body();
+                                    if (product != null) {
+                                        mProductAutoComplete.setText(product.getProduct_info().getProduct_title());
+                                        mEditTxtEnterPrice.setText(product.getUser_product_info().getPrice_per_day());
+                                        mEditMinRental.setText(product.getUser_product_info().getMin_rental_days());
 
-                                    ArrayList<UserProductDiscount> productDiscountArrayList = product.getUser_product_info().getUser_product_discounts();
-                                    if (productDiscountArrayList.size() != 0) {
-                                        for (int i = 0; i < productDiscountArrayList.size(); i++) {
-                                            if (productDiscountArrayList.get(i).getDiscount_for_days() == 5) {
-                                                mDiscountForFiveDay.setChecked(true);
-                                            } else if (productDiscountArrayList.get(i).getDiscount_for_days() == 10) {
-                                                mDiscountForTenDay.setChecked(true);
+                                        ArrayList<UserProductDiscount> productDiscountArrayList = product.getUser_product_info().getUser_product_discounts();
+                                        if (productDiscountArrayList.size() != 0) {
+                                            for (int i = 0; i < productDiscountArrayList.size(); i++) {
+                                                if (productDiscountArrayList.get(i).getDiscount_for_days() == 5) {
+                                                    mDiscountForFiveDay.setChecked(true);
+                                                } else if (productDiscountArrayList.get(i).getDiscount_for_days() == 10) {
+                                                    mDiscountForTenDay.setChecked(true);
+                                                }
                                             }
-                                        }
 
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<Products> call, Throwable t) {
+                        @Override
+                        public void onFailure(Call<Products> call, Throwable t) {
 
-                    }
-                });
+                        }
+                    });
+                }
+
+            } else {
+
             }
-
         }
-
     }
 
     /**

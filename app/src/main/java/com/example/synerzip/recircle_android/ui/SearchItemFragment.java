@@ -163,11 +163,11 @@ public class SearchItemFragment extends Fragment {
 
         ButterKnife.bind(this, view);
 
-        utility = new SearchUtility();
+        utility = new SearchUtility(getActivity());
         mProductAutoComplete.setSingleLine();
 
         //check network availability
-        if (NetworkUtility.isNetworkAvailable(getActivity())) {
+        if (NetworkUtility.isNetworkAvailable()) {
 
             getAllProductDetails();
         } else {
@@ -289,7 +289,8 @@ public class SearchItemFragment extends Fragment {
         productDetailsList = new ArrayList<>();
         popularProducts = new ArrayList<>();
 
-        service = ApiClient.getClient().create(RCAPInterface.class);
+        if (ApiClient.getClient(getActivity())!=null){
+        service = ApiClient.getClient(getActivity()).create(RCAPInterface.class);
 
         Call<AllProductInfo> call = service.getProductDetails();
 
@@ -321,6 +322,9 @@ public class SearchItemFragment extends Fragment {
                 Log.v(TAG, t.toString());
             }
         });
+    }else {
+            mProgressBar.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -368,8 +372,6 @@ public class SearchItemFragment extends Fragment {
         productsCustomList = new ArrayList<>();
 
         productItemList = new ArrayList<>();
-
-        service = ApiClient.getClient().create(RCAPInterface.class);
 
         utility.populateAutoCompleteData();
 

@@ -159,7 +159,7 @@ public class EditProfileActivity extends AppCompatActivity {
     public void btnSubmitDetails(View view) {
         submitForm();
         HideKeyboard.hideKeyBoard(this);
-        if (NetworkUtility.isNetworkAvailable(this)) {
+        if (NetworkUtility.isNetworkAvailable()) {
             if (getValues()) {
                 editUserDetails();
                 Intent intent = new Intent(EditProfileActivity.this, HomeActivity.class);
@@ -228,26 +228,29 @@ public class EditProfileActivity extends AppCompatActivity {
      */
     private void verifyMobNo() {
         mMobNo = Long.parseLong(mEditTxtMob.getText().toString());
-
-        service = ApiClient.getClient().create(RCAPInterface.class);
-        Call<RootUserInfo> userCall = service.verifyUserMobNo("Bearer " + mAccessToken);
-        userCall.enqueue(new Callback<RootUserInfo>() {
-            @Override
-            public void onResponse(Call<RootUserInfo> call, Response<RootUserInfo> response) {
-                mProgressBar.setVisibility(View.GONE);
-                mFrameLayout.setAlpha((float) 1.0);
-                if (response.isSuccessful()) {
-                    RCLog.showToast(EditProfileActivity.this, getString(R.string.toast_send_otp));
-                    mMobVerification = true;
+        if (ApiClient.getClient(this) != null) {
+            service = ApiClient.getClient(this).create(RCAPInterface.class);
+            Call<RootUserInfo> userCall = service.verifyUserMobNo("Bearer " + mAccessToken);
+            userCall.enqueue(new Callback<RootUserInfo>() {
+                @Override
+                public void onResponse(Call<RootUserInfo> call, Response<RootUserInfo> response) {
+                    mProgressBar.setVisibility(View.GONE);
+                    mFrameLayout.setAlpha((float) 1.0);
+                    if (response.isSuccessful()) {
+                        RCLog.showToast(EditProfileActivity.this, getString(R.string.toast_send_otp));
+                        mMobVerification = true;
+                    }
                 }
-            }
-            @Override
-            public void onFailure(Call<RootUserInfo> call, Throwable t) {
-                mProgressBar.setVisibility(View.GONE);
-                mFrameLayout.setAlpha((float) 1.0);
-            }
-        });
 
+                @Override
+                public void onFailure(Call<RootUserInfo> call, Throwable t) {
+                    mProgressBar.setVisibility(View.GONE);
+                    mFrameLayout.setAlpha((float) 1.0);
+                }
+            });
+        } else {
+            mProgressBar.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -255,7 +258,8 @@ public class EditProfileActivity extends AppCompatActivity {
      */
     private void editUserDetails() {
         getValues();
-        service = ApiClient.getClient().create(RCAPInterface.class);
+        if (ApiClient.getClient(this)!=null){
+        service = ApiClient.getClient(this).create(RCAPInterface.class);
         RootUserInfo rootUserInfo = new RootUserInfo(mUserId, mFirstName, mLastName, mEmail, mUserImage, mNotificationFlag,
                 mMobNo, mMobVerification
                 , mAddress, mAccDetails);
@@ -274,7 +278,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     mAddress.setState(response.body().getUserAddress().getState());
                     mAddress.setStreet(response.body().getUserAddress().getStreet());
                     mAddress.setZip(response.body().getUserAddress().getZip());
-                    mTextNotification=response.body().isNotification_flag();
+                    mTextNotification = response.body().isNotification_flag();
 
                     sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -301,7 +305,9 @@ public class EditProfileActivity extends AppCompatActivity {
                 mFrameLayout.setAlpha((float) 1.0);
             }
         });
-
+        }else {
+            mProgressBar.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -324,7 +330,8 @@ public class EditProfileActivity extends AppCompatActivity {
                 final String mUserPwd = mEditTxtPwd.getText().toString();
                 LogInRequest logInRequest = new LogInRequest(mUserName, mUserPwd);
 
-                service = ApiClient.getClient().create(RCAPInterface.class);
+                if (ApiClient.getClient(EditProfileActivity.this)!=null){
+                service = ApiClient.getClient(EditProfileActivity.this).create(RCAPInterface.class);
                 Call<User> userCall = service.userLogIn(logInRequest);
                 userCall.enqueue(new Callback<User>() {
                     @Override
@@ -353,6 +360,9 @@ public class EditProfileActivity extends AppCompatActivity {
                         mFrameLayout.setAlpha((float) 1.0);
                     }
                 });
+                }else {
+                    mProgressBar.setVisibility(View.GONE);
+                }
             }
         });
 
@@ -385,7 +395,8 @@ public class EditProfileActivity extends AppCompatActivity {
                 final String mUserPwd = mEditTxtNewPwd.getText().toString();
                 ChangePwdRequest changePwdRequest = new ChangePwdRequest(mUserName, mUserPwd);
 
-                service = ApiClient.getClient().create(RCAPInterface.class);
+                if (ApiClient.getClient(EditProfileActivity.this)!=null){
+                service = ApiClient.getClient(EditProfileActivity.this).create(RCAPInterface.class);
                 Call<User> userCall = service.changePwd("Bearer " + mAccessToken, changePwdRequest);
                 userCall.enqueue(new Callback<User>() {
                     @Override
@@ -412,6 +423,9 @@ public class EditProfileActivity extends AppCompatActivity {
                         mFrameLayout.setAlpha((float) 1.0);
                     }
                 });
+                }else {
+                    mProgressBar.setVisibility(View.GONE);
+                }
             }
         });
 

@@ -50,7 +50,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                 productDetails.getUser_prod_images().get(0).getUser_prod_image_url() != null) {
             Picasso.with(mContext)
                     .load(productDetails.getUser_prod_images().get(0).getUser_prod_image_url())
-                    .placeholder(R.mipmap.ic_item)
+                    .placeholder(R.drawable.ic_camera)
                     .into(holder.mImageView);
         }
 

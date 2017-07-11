@@ -22,6 +22,10 @@ public class RCLog {
 
         Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show();
     }
+    public static void showLongToast(Context context, String toastMessage) {
+
+        Toast.makeText(context, toastMessage, Toast.LENGTH_LONG).show();
+    }
 
     public static void debug(String message) {
         Log.d(RC_LOG_TAG, message);

@@ -31,6 +31,7 @@ import com.example.synerzip.recircle_android.utilities.NetworkUtility;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
+import com.google.android.gms.common.api.Api;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -72,7 +73,7 @@ public class LogInActivity extends AppCompatActivity {
     @BindView(R.id.linear_layout)
     protected LinearLayout mLinearLayout;
 
-    protected String mUserId, mUserEmail,mUserLastName, mUserFirstName, mUserImage, mAccessToken = "";
+    protected String mUserId, mUserEmail, mUserLastName, mUserFirstName, mUserImage, mAccessToken = "";
 
     private long mUserMobNo;
 
@@ -100,7 +101,7 @@ public class LogInActivity extends AppCompatActivity {
 
         submitForm();
         HideKeyboard.hideKeyBoard(LogInActivity.this);
-        if (NetworkUtility.isNetworkAvailable(this)) {
+        if (NetworkUtility.isNetworkAvailable()) {
             mProgressBar.setVisibility(View.VISIBLE);
             mLinearLayout.setAlpha((float) 0.6);
             mUserName = mEditLogInEmail.getText().toString().trim();
@@ -122,48 +123,53 @@ public class LogInActivity extends AppCompatActivity {
 
         LogInRequest logInRequest = new LogInRequest(mUserName, mPassword);
 
-        service = ApiClient.getClient().create(RCAPInterface.class);
-        Call<User> userCall = service.userLogIn(logInRequest);
-        userCall.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
+        if (ApiClient.getClient(this) != null) {
+            service = ApiClient.getClient(this).create(RCAPInterface.class);
+            Call<User> userCall = service.userLogIn(logInRequest);
+            userCall.enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
 
-                mProgressBar.setVisibility(View.GONE);
-                mLinearLayout.setAlpha((float) 1.0);
+                    mProgressBar.setVisibility(View.GONE);
+                    mLinearLayout.setAlpha((float) 1.0);
 
-                if (response.isSuccessful()) {
+                    if (response.isSuccessful()) {
 
-                    mUserId = response.body().getUser_id();
-                    mUserName = response.body().getEmail();
-                    mUserFirstName = response.body().getFirst_name();
-                    mUserEmail = response.body().getEmail();
-                    mUserLastName = response.body().getLast_name();
-                    mAccessToken = response.body().getToken();
-                    mUserImage = response.body().getUser_image_url();
-                    mUserMobNo = response.body().getUser_mob_no();
+                        mUserId = response.body().getUser_id();
+                        mUserName = response.body().getEmail();
+                        mUserFirstName = response.body().getFirst_name();
+                        mUserEmail = response.body().getEmail();
+                        mUserLastName = response.body().getLast_name();
+                        mAccessToken = response.body().getToken();
+                        mUserImage = response.body().getUser_image_url();
+                        mUserMobNo = response.body().getUser_mob_no();
 
-                    if (null != mUserId && null != mUserName &&
-                            null != mUserFirstName && null != mUserLastName && null != mAccessToken) {
-                        saveUserData();
-                        Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
+                        if (null != mUserId && null != mUserName &&
+                                null != mUserFirstName && null != mUserLastName && null != mAccessToken) {
+                            saveUserData();
+                            Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                        } else {
+                            RCLog.showToast(LogInActivity.this, getString(R.string.please_try_again));
+                        }
                     } else {
-                        RCLog.showToast(LogInActivity.this, getString(R.string.please_try_again));
-                    }
-                } else {
-                    if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
-                        RCLog.showToast(LogInActivity.this, getString(R.string.err_credentials));
+                        if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
+                            RCLog.showToast(LogInActivity.this, getString(R.string.err_credentials));
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                mProgressBar.setVisibility(View.GONE);
-                mLinearLayout.setAlpha((float) 1.0);
-            }
-        });
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    mProgressBar.setVisibility(View.GONE);
+                    mLinearLayout.setAlpha((float) 1.0);
+                }
+
+            });
+        } else {
+            mProgressBar.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -199,7 +205,8 @@ public class LogInActivity extends AppCompatActivity {
                 mLinearLayout.setAlpha((float) 0.6);
                 mEmail = mEditTxtEmail.getText().toString();
 
-                service = ApiClient.getClient().create(RCAPInterface.class);
+                if (ApiClient.getClient(LogInActivity.this)!=null){
+                service = ApiClient.getClient(LogInActivity.this).create(RCAPInterface.class);
                 Call<User> call = service.otpForgotPassword(mEmail);
                 call.enqueue(new Callback<User>() {
                     @Override
@@ -224,7 +231,11 @@ public class LogInActivity extends AppCompatActivity {
                         mLinearLayout.setAlpha((float) 1.0);
                     }
                 });
-            }
+            }else {
+                    mProgressBar.setVisibility(View.GONE);
+                }
+        }
+
         });
 
         dialog.show();

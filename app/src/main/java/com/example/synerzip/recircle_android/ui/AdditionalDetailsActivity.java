@@ -130,7 +130,8 @@ public class AdditionalDetailsActivity extends AppCompatActivity {
      */
     private void checkZipcodes() {
         if (mZipcode != 0) {
-            service = ApiClient.getClient().create(RCAPInterface.class);
+            if (ApiClient.getClient(this)!=null){
+            service = ApiClient.getClient(this).create(RCAPInterface.class);
             Call<ZipcodeRoot> call = service.zipcodeCheck(mZipcode);
             call.enqueue(new Callback<ZipcodeRoot>() {
                 @Override
@@ -173,6 +174,9 @@ public class AdditionalDetailsActivity extends AppCompatActivity {
                 public void onFailure(Call<ZipcodeRoot> call, Throwable t) {
                 }
             });
+        }
+        }else {
+
         }
         return;
     }

@@ -38,6 +38,7 @@ import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 import com.example.synerzip.recircle_android.R;
 
 /**
@@ -132,7 +133,9 @@ public class SignUpActivity extends AppCompatActivity {
      */
     public static class IncomingSms extends BroadcastReceiver {
         final SmsManager sms = SmsManager.getDefault();
-        public IncomingSms() { }
+
+        public IncomingSms() {
+        }
 
         public void onReceive(Context context, Intent intent) {
 
@@ -148,7 +151,7 @@ public class SignUpActivity extends AppCompatActivity {
                         message = message.substring(0, message.length());
 
                         Intent myIntent = new Intent("otp");
-                        myIntent.putExtra("message",message);
+                        myIntent.putExtra("message", message);
                         LocalBroadcastManager.getInstance(context).sendBroadcast(myIntent);
                     }
                 }
@@ -157,6 +160,7 @@ public class SignUpActivity extends AppCompatActivity {
             }
         }
     }//end IncomingSms()
+
     @Override
     public void onResume() {
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, new IntentFilter("otp"));
@@ -168,6 +172,7 @@ public class SignUpActivity extends AppCompatActivity {
         super.onPause();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
     }
+
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -184,25 +189,29 @@ public class SignUpActivity extends AppCompatActivity {
     private void getUserSignUp() {
         SignUpRequest signUpRequest = new SignUpRequest(mFirstName, mLastName, mEmail, mPassword, mUserMobNo, mVerficationCode);
 
-        service = ApiClient.getClient().create(RCAPInterface.class);
-        Call<User> userCall = service.userSignUp(signUpRequest);
-        userCall.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                mProgressBar.setVisibility(View.GONE);
-                mScrollView.setAlpha((float) 1.0);
+        if (ApiClient.getClient(this) != null) {
+            service = ApiClient.getClient(this).create(RCAPInterface.class);
+            Call<User> userCall = service.userSignUp(signUpRequest);
+            userCall.enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    mProgressBar.setVisibility(View.GONE);
+                    mScrollView.setAlpha((float) 1.0);
 
-                if (response.body() != null) {
-                    startActivity(new Intent(SignUpActivity.this, HomeActivity.class));
+                    if (response.body() != null) {
+                        startActivity(new Intent(SignUpActivity.this, HomeActivity.class));
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                mProgressBar.setVisibility(View.GONE);
-                mScrollView.setAlpha((float) 1.0);
-            }
-        });
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    mProgressBar.setVisibility(View.GONE);
+                    mScrollView.setAlpha((float) 1.0);
+                }
+            });
+        } else {
+            mProgressBar.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -215,7 +224,7 @@ public class SignUpActivity extends AppCompatActivity {
         submitForm();
         HideKeyboard.hideKeyBoard(this);
 
-        if (NetworkUtility.isNetworkAvailable(this)) {
+        if (NetworkUtility.isNetworkAvailable()) {
             mProgressBar.setVisibility(View.VISIBLE);
             mScrollView.setAlpha((float) 0.6);
             mFirstName = mEditFirstName.getText().toString();
@@ -223,14 +232,14 @@ public class SignUpActivity extends AppCompatActivity {
             mEmail = mEditEmail.getText().toString();
             mPassword = mEditPassword.getText().toString();
             mUserMobNo = Long.parseLong(mEditMobNo.getText().toString());
-           if(!mEditVerificationCode.getText().toString().isEmpty()) {
+            if (!mEditVerificationCode.getText().toString().isEmpty()) {
                 try {
                     mVerficationCode = Integer.parseInt(mEditVerificationCode.getText().toString());
-                }catch (NumberFormatException e){
+                } catch (NumberFormatException e) {
 
                 }
             }
-             BroadcastReceiver receiver = new BroadcastReceiver() {
+            BroadcastReceiver receiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
                     if (intent.getAction().equalsIgnoreCase("otp")) {
@@ -276,25 +285,28 @@ public class SignUpActivity extends AppCompatActivity {
         mEmail = mEditEmail.getText().toString();
         mUserMobNo = Long.parseLong(mEditMobNo.getText().toString());
 
-        service = ApiClient.getClient().create(RCAPInterface.class);
-        Call<User> userCall = service.verificationCode(mEmail, mUserMobNo);
-        userCall.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                mProgressBarOtp.setVisibility(View.GONE);
-                mTxtResendOtp.setVisibility(View.VISIBLE);
-                mTxtSendOtp.setVisibility(View.GONE);
-                RCLog.showToast(SignUpActivity.this, getString(R.string.toast_send_otp));
-            }
+        if (ApiClient.getClient(this) != null) {
+            service = ApiClient.getClient(this).create(RCAPInterface.class);
+            Call<User> userCall = service.verificationCode(mEmail, mUserMobNo);
+            userCall.enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    mProgressBarOtp.setVisibility(View.GONE);
+                    mTxtResendOtp.setVisibility(View.VISIBLE);
+                    mTxtSendOtp.setVisibility(View.GONE);
+                    RCLog.showToast(SignUpActivity.this, getString(R.string.toast_send_otp));
+                }
 
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                mProgressBarOtp.setVisibility(View.GONE);
-                mTxtResendOtp.setVisibility(View.VISIBLE);
-                mTxtResendOtp.setVisibility(View.GONE);
-            }
-        });
-
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    mProgressBarOtp.setVisibility(View.GONE);
+                    mTxtResendOtp.setVisibility(View.VISIBLE);
+                    mTxtResendOtp.setVisibility(View.GONE);
+                }
+            });
+        } else {
+            mProgressBar.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -366,8 +378,10 @@ public class SignUpActivity extends AppCompatActivity {
             }
         }
     }
+
     /**
      * validate first name
+     *
      * @return
      */
     private boolean validateFirstName() {
@@ -381,8 +395,10 @@ public class SignUpActivity extends AppCompatActivity {
 
         return true;
     }
+
     /**
      * validate last name
+     *
      * @return
      */
     private boolean validateLastName() {
@@ -396,8 +412,10 @@ public class SignUpActivity extends AppCompatActivity {
 
         return true;
     }
+
     /**
      * validate email
+     *
      * @return
      */
     private boolean validateEmail() {
@@ -413,8 +431,10 @@ public class SignUpActivity extends AppCompatActivity {
 
         return true;
     }
+
     /**
      * validate password
+     *
      * @return
      */
     private boolean validatePassword() {
@@ -428,8 +448,10 @@ public class SignUpActivity extends AppCompatActivity {
 
         return true;
     }
+
     /**
      * validate mobile number
+     *
      * @return
      */
     private boolean validateMobileNo() {
@@ -445,8 +467,10 @@ public class SignUpActivity extends AppCompatActivity {
 
         return true;
     }
+
     /**
      * validate verification code
+     *
      * @return
      */
     private boolean validateOtp() {
@@ -474,7 +498,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId()==android.R.id.home){
+        if (item.getItemId() == android.R.id.home) {
             finish();
         }
         return true;

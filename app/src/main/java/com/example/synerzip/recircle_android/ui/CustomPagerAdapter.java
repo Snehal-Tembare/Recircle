@@ -44,8 +44,11 @@ public class CustomPagerAdapter extends PagerAdapter {
         View itemView = inflater.inflate(R.layout.item_page, container, false);
 
         TouchImageView imageView = (TouchImageView) itemView.findViewById(R.id.page_image);
+        if (userProdImagesArrayList.get(position).getUser_prod_image_url() != null) {
+            Picasso.with(mContext).load(userProdImagesArrayList.get(position).getUser_prod_image_url())
+                    .placeholder(R.drawable.ic_camera).into(imageView);
+        }
 
-        Picasso.with(mContext).load(userProdImagesArrayList.get(position).getUser_prod_image_url()).into(imageView);
         container.addView(itemView);
         return itemView;
     }

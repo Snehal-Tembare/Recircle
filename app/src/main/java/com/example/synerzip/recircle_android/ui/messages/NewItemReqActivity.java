@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
@@ -15,6 +16,7 @@ import com.example.synerzip.recircle_android.models.user_messages.RootMessageInf
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
+import com.google.android.gms.common.api.Api;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,6 +40,9 @@ public class NewItemReqActivity extends AppCompatActivity {
     private RCAPInterface service;
 
     private String mAccessToken, mUserProdId;
+
+    @BindView(R.id.progress_bar)
+    protected RelativeLayout mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,18 +90,23 @@ public class NewItemReqActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final String mCancelReason = mEditTxtReason.getText().toString();
                 CancelUserProdRequest cancelUserProdRequest = new CancelUserProdRequest(mUserProdId, mCancelReason);
-                service = ApiClient.getClient().create(RCAPInterface.class);
-                Call<RootMessageInfo> call = service.cancelProdRequest("Bearer " + mAccessToken, cancelUserProdRequest);
-                call.enqueue(new Callback<RootMessageInfo>() {
-                    @Override
-                    public void onResponse(Call<RootMessageInfo> call, Response<RootMessageInfo> response) {
+                mProgressBar.setVisibility(View.VISIBLE);
+                if (ApiClient.getClient(NewItemReqActivity.this)!=null) {
+                    service = ApiClient.getClient(NewItemReqActivity.this).create(RCAPInterface.class);
+                    Call<RootMessageInfo> call = service.cancelProdRequest("Bearer " + mAccessToken, cancelUserProdRequest);
+                    call.enqueue(new Callback<RootMessageInfo>() {
+                        @Override
+                        public void onResponse(Call<RootMessageInfo> call, Response<RootMessageInfo> response) {
 
-                    }
-                    @Override
-                    public void onFailure(Call<RootMessageInfo> call, Throwable t) {
-                    }
-                });
+                        }
 
+                        @Override
+                        public void onFailure(Call<RootMessageInfo> call, Throwable t) {
+                        }
+                    });
+                }else {
+                    mProgressBar.setVisibility(View.GONE);
+                }
                 dialog.show();
             }
         });

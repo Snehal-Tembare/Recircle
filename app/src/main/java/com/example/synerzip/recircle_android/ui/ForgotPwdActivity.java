@@ -99,7 +99,7 @@ public class ForgotPwdActivity extends AppCompatActivity {
         submitForm();
         HideKeyboard.hideKeyBoard(ForgotPwdActivity.this);
 
-        if (NetworkUtility.isNetworkAvailable(this)) {
+        if (NetworkUtility.isNetworkAvailable()) {
             mProgressBar.setVisibility(View.VISIBLE);
             mLinearLayout.setAlpha((float) 0.6);
             mEmail = mEditEmail.getText().toString();
@@ -119,7 +119,8 @@ public class ForgotPwdActivity extends AppCompatActivity {
      */
     public void getForgotPwd() {
         ForgotPwdRequest forgotPwdRequest = new ForgotPwdRequest(mOtp, mEmail, mNewPwd);
-        service = ApiClient.getClient().create(RCAPInterface.class);
+        if (ApiClient.getClient(this)!=null){
+        service = ApiClient.getClient(this).create(RCAPInterface.class);
         Call<User> call = service.forgotPassword(forgotPwdRequest);
         call.enqueue(new Callback<User>() {
             @Override
@@ -136,7 +137,9 @@ public class ForgotPwdActivity extends AppCompatActivity {
                 mProgressBar.setVisibility(View.GONE);
                 mLinearLayout.setAlpha((float) 1.0);
             }
-        });
+        });}else {
+            mProgressBar.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -150,7 +153,8 @@ public class ForgotPwdActivity extends AppCompatActivity {
         mLinearLayout.setAlpha((float) 0.6);
         mEmail = mEditEmail.getText().toString();
 
-        service = ApiClient.getClient().create(RCAPInterface.class);
+        if (ApiClient.getClient(this)!=null){
+        service = ApiClient.getClient(this).create(RCAPInterface.class);
         Call<User> call = service.otpForgotPassword(mEmail);
         call.enqueue(new Callback<User>() {
             @Override
@@ -168,6 +172,9 @@ public class ForgotPwdActivity extends AppCompatActivity {
                 mLinearLayout.setAlpha((float) 1.0);
             }
         });
+        }else {
+            mProgressBar.setVisibility(View.GONE);
+        }
     }
 
     /**

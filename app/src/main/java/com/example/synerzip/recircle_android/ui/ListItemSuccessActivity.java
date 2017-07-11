@@ -59,7 +59,13 @@ public class ListItemSuccessActivity extends AppCompatActivity {
     public void btnListItem(View view) {
         startActivity(new Intent(ListItemSuccessActivity.this, HomeActivity.class));
     }
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent=new Intent(ListItemSuccessActivity.this,HomeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
     /**
      * action bar back button
      *

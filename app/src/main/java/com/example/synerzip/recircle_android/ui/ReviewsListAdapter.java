@@ -47,43 +47,44 @@ public class ReviewsListAdapter extends RecyclerView.Adapter<ReviewsListAdapter.
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
         UserProdReview review = userProdReviewArrayList.get(position);
+        if (review != null) {
+            holder.reviewersName.setText(review.getUser().getFirst_name() + " " + review.getUser().getLast_name());
+            Picasso.with(mContext).load(review.getUser().getUser_image_url()).
+                    placeholder(R.drawable.ic_user).into(holder.reviewersImage);
+            if (null != review.getProd_rating() && review.getProd_rating() != 0) {
+                holder.rating.setRating(review.getProd_rating());
+                holder.avgRatingCount.setText("(" + review.getProd_rating() + ")");
+            } else {
+                holder.rating.setVisibility(View.GONE);
+                holder.avgRatingCount.setVisibility(View.GONE);
+            }
+            holder.reviewComment.setText(review.getProd_review());
 
-        holder.reviewersName.setText(review.getUser().getFirst_name() + " " + review.getUser().getLast_name());
-        Picasso.with(mContext).load(review.getUser().getUser_image_url()).into(holder.reviewersImage);
-        if (null != review.getProd_rating() && review.getProd_rating() != 0) {
-            holder.rating.setRating(review.getProd_rating());
-            holder.avgRatingCount.setText("(" + review.getProd_rating() + ")");
-        } else {
-            holder.rating.setVisibility(View.GONE);
-            holder.avgRatingCount.setVisibility(View.GONE);
-        }
-        holder.reviewComment.setText(review.getProd_review());
 
-
-        holder.reviewComment.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-                final int lineCount = holder.reviewComment.getLayout().getLineCount();
-                Log.v("Count", "onPreDraw" + lineCount);
-                if (lineCount > 2) {
-                    holder.reviewSeeMore.setVisibility(View.VISIBLE);
-                } else {
-                    holder.reviewSeeMore.setVisibility(View.GONE);
+            holder.reviewComment.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    final int lineCount = holder.reviewComment.getLayout().getLineCount();
+                    Log.v("Count", "onPreDraw" + lineCount);
+                    if (lineCount > 2) {
+                        holder.reviewSeeMore.setVisibility(View.VISIBLE);
+                    } else {
+                        holder.reviewSeeMore.setVisibility(View.GONE);
+                    }
+                    return true;
                 }
-                return true;
-            }
-        });
+            });
 
 
-        holder.reviewSeeMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                holder.reviewComment.toggle();
-                holder.reviewSeeMore.setText(holder.reviewComment.isExpanded() ? R.string.see_more : R.string.view_less);
+            holder.reviewSeeMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    holder.reviewComment.toggle();
+                    holder.reviewSeeMore.setText(holder.reviewComment.isExpanded() ? R.string.see_more : R.string.view_less);
 
-            }
-        });
-
+                }
+            });
+        }
     }
 
     @Override

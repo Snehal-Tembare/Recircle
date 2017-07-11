@@ -179,42 +179,45 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         //get user messages details
         getMessageDetails();
-         mNavHeader = mNavigationView.getHeaderView(0);
+        mNavHeader = mNavigationView.getHeaderView(0);
+        if (mAccessToken != null) {
+            if (isLoggedIn) {
+                menu.setGroupVisible(R.id.grp_nav_logIn_signUp, false);
 
-        if (isLoggedIn) {
-            menu.setGroupVisible(R.id.grp_nav_logIn_signUp,false);
+                //To show user info for navigation header
+                mNavHeader.setVisibility(View.VISIBLE);
+                menu.setGroupVisible(R.id.grp_ic_nav_settings, true);
+                menu.setGroupVisible(R.id.grp_nav_payments, true);
+                menu.setGroupVisible(R.id.grp_ic_nav_msgs, true);
+                menu.setGroupVisible(R.id.grp_nav_logout, true);
+                menu.setGroupVisible(R.id.grp_nav_faq, true);
 
-            //To show user info for navigation header
-            mNavHeader.setVisibility(View.VISIBLE);
-            menu.setGroupVisible(R.id.grp_ic_nav_settings,true);
-            menu.setGroupVisible(R.id.grp_nav_payments,true);
-            menu.setGroupVisible(R.id.grp_ic_nav_msgs,true);
-            menu.setGroupVisible(R.id.grp_nav_logout,true);
-            menu.setGroupVisible(R.id.grp_nav_faq,true);
+                TextView mTxtUserName = (TextView) mNavHeader.findViewById(R.id.txt_nav_user_name);
+                TextView mTxtUserEmail = (TextView) mNavHeader.findViewById(R.id.txt_nav_user_email);
+                CircularImageView mImgUser = (CircularImageView) mNavHeader.findViewById(R.id.img_nav_user_profile);
+                mTxtUserName.setText(mUserFirstName + " " + mUserLastName);
+                mTxtUserEmail.setText(mUserEmail);
 
-            TextView mTxtUserName = (TextView) mNavHeader.findViewById(R.id.txt_nav_user_name);
-            TextView mTxtUserEmail = (TextView) mNavHeader.findViewById(R.id.txt_nav_user_email);
-            CircularImageView mImgUser = (CircularImageView) mNavHeader.findViewById(R.id.img_nav_user_profile);
-            mTxtUserName.setText(mUserFirstName+" "+mUserLastName);
-            mTxtUserEmail.setText(mUserEmail);
+                mNavHeader.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(HomeActivity.this, MyProfileActivity.class));
+                    }
+                });
 
-            mNavHeader.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(HomeActivity.this,MyProfileActivity.class));
-                }
-            });
-
+            } else {
+                mNavHeader.setVisibility(View.GONE);
+                menu.setGroupVisible(R.id.grp_nav_logIn_signUp, true);
+                menu.setGroupVisible(R.id.grp_ic_nav_settings, false);
+                menu.setGroupVisible(R.id.grp_nav_payments, false);
+                menu.setGroupVisible(R.id.grp_ic_nav_msgs, false);
+                menu.setGroupVisible(R.id.grp_nav_logout, false);
+                menu.setGroupVisible(R.id.grp_nav_faq, true);
+            }
+        } else {
+            RCLog.showToast(this, getString(R.string.session_expired));
         }
-        else {
-            mNavHeader.setVisibility(View.GONE);
-            menu.setGroupVisible(R.id.grp_nav_logIn_signUp,true);
-            menu.setGroupVisible(R.id.grp_ic_nav_settings,false);
-            menu.setGroupVisible(R.id.grp_nav_payments,false);
-            menu.setGroupVisible(R.id.grp_ic_nav_msgs,false);
-            menu.setGroupVisible(R.id.grp_nav_logout,false);
-            menu.setGroupVisible(R.id.grp_nav_faq,true);
-        }
+
 
     }
 
@@ -223,49 +226,52 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
      */
     public void getMessageDetails() {
         RCAPInterface service;
-        service = ApiClient.getClient().create(RCAPInterface.class);
-        Call<RootMessageInfo> call = service.getUserMessage("Bearer " + mAccessToken);
-        call.enqueue(new Callback<RootMessageInfo>() {
-            @Override
-            public void onResponse(Call<RootMessageInfo> call,
-                                   Response<RootMessageInfo> response) {
-                mProgressBar.setVisibility(View.GONE);
-                mFrameLayout.setAlpha((float) 1.0);
-                if (response.isSuccessful()) {
-                    rootMessageInfo = response.body();
-                    if (response.body().getProdRelatedMsgs() !=null) {
-                        for (int i = 0; i < response.body().getProdRelatedMsgs().size(); i++) {
-                            mOwnerNameList.add(
-                                    response.body().getProdRelatedMsgs().get(i).getUser().getFirst_name()
-                                            + response.body().getProdRelatedMsgs().get(i).getUser().getLast_name());
+        if (ApiClient.getClient(this) != null) {
+            service = ApiClient.getClient(this).create(RCAPInterface.class);
+            Call<RootMessageInfo> call = service.getUserMessage("Bearer " + mAccessToken);
+            call.enqueue(new Callback<RootMessageInfo>() {
+                @Override
+                public void onResponse(Call<RootMessageInfo> call,
+                                       Response<RootMessageInfo> response) {
+                    mProgressBar.setVisibility(View.GONE);
+                    mFrameLayout.setAlpha((float) 1.0);
+                    if (response.isSuccessful()) {
+                        rootMessageInfo = response.body();
+                        if (response.body().getProdRelatedMsgs() != null) {
+                            for (int i = 0; i < response.body().getProdRelatedMsgs().size(); i++) {
+                                mOwnerNameList.add(
+                                        response.body().getProdRelatedMsgs().get(i).getUser().getFirst_name()
+                                                + response.body().getProdRelatedMsgs().get(i).getUser().getLast_name());
 
-                        }
+                            }
 
-                        mProdRelatedMsgs = response.body().getProdRelatedMsgs().size();
-                        isOwnerMsgs = response.body().getProdRelatedMsgs().get(0).is_read();
-                        isRenterMsgs = response.body().getOwnerRequestMsgs().get(0).is_read();
+                            mProdRelatedMsgs = response.body().getProdRelatedMsgs().size();
+                            isOwnerMsgs = response.body().getProdRelatedMsgs().get(0).is_read();
+                            isRenterMsgs = response.body().getOwnerRequestMsgs().get(0).is_read();
 
-                        if (!isOwnerMsgs) {
-                            ownerMsgsCount = response.body().getProdRelatedMsgs().size();
+                            if (!isOwnerMsgs) {
+                                ownerMsgsCount = response.body().getProdRelatedMsgs().size();
+                            }
+                            if (!isRenterMsgs) {
+                                renterMsgsCount = response.body().getOwnerRequestMsgs().size();
+                            }
+                            mProdRelatedMsgs = ownerMsgsCount + renterMsgsCount;
+                        } else {
+                            Log.v(TAG, "Messages are empty");
                         }
-                        if (!isRenterMsgs) {
-                            renterMsgsCount = response.body().getOwnerRequestMsgs().size();
-                        }
-                        mProdRelatedMsgs = ownerMsgsCount + renterMsgsCount;
-                    } else {
-                        RCLog.showToast(HomeActivity.this, "Messages are empty");
                     }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<RootMessageInfo> call, Throwable t) {
-                mProgressBar.setVisibility(View.GONE);
-                mFrameLayout.setAlpha((float) 1.0);
-            }
-        });
+                @Override
+                public void onFailure(Call<RootMessageInfo> call, Throwable t) {
+                    mProgressBar.setVisibility(View.GONE);
+                    mFrameLayout.setAlpha((float) 1.0);
+                }
+            });
+        } else {
+            mProgressBar.setVisibility(View.GONE);
+        }
     }
-
 
 
     @Override
@@ -298,20 +304,20 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        MenuItem item = menu.findItem(R.id.action_messages);
-        MenuItemCompat.setActionView(menu.findItem(R.id.action_messages), R.layout.notification_badge);
-        RelativeLayout notificationCount = (RelativeLayout) item.getActionView();
+        final MenuItem itemNotification = menu.findItem(R.id.action_messages);
+        MenuItemCompat.setActionView(itemNotification, R.layout.notification_badge);
+        RelativeLayout notificationCount = (RelativeLayout) itemNotification.getActionView();
         TextView mTxtMsgCount = (TextView) notificationCount.findViewById(R.id.txt_notification_count);
         mTxtMsgCount.setText(String.valueOf(mProdRelatedMsgs));
 
         ActivityCompat.invalidateOptionsMenu(HomeActivity.this);
-
-        MenuItem menuItemMsgs = menu.findItem(R.id.action_messages);
         MenuItem menuItemRentals = menu.findItem(R.id.action_rentals);
 
         if (isLoggedIn) {
-            menuItemMsgs.setVisible(true);
-            menuItemRentals.setVisible(true);
+            if (mProdRelatedMsgs != 0) {
+                itemNotification.setVisible(true);
+                menuItemRentals.setVisible(true);
+            }
         }
 
         mTxtMsgCount.setOnClickListener(new View.OnClickListener() {
@@ -321,7 +327,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        final MenuItem itemNotification = menu.findItem(R.id.action_messages);
         View actionViewNotification = MenuItemCompat.getActionView(itemNotification);
         actionViewNotification.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -386,7 +391,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         switch (id) {
 
             case R.id.nav_logIn_signUp:
-                Intent intent=new Intent(HomeActivity.this, LogInActivity.class);
+                Intent intent = new Intent(HomeActivity.this, LogInActivity.class);
                 startActivity(intent);
                 break;
 
@@ -398,20 +403,20 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         dialogInterface.dismiss();
                         SharedPreferences sharedPreferences = getApplicationContext().
                                 getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
-                         sharedPreferences.edit().clear().commit();
-                        isLoggedIn=false;
+                        sharedPreferences.edit().clear().commit();
+                        isLoggedIn = false;
 
-                        menu.setGroupVisible(R.id.grp_nav_logIn_signUp,true);
-                        menu.setGroupVisible(R.id.grp_nav_faq,true);
+                        menu.setGroupVisible(R.id.grp_nav_logIn_signUp, true);
+                        menu.setGroupVisible(R.id.grp_nav_faq, true);
 
                         mNavHeader.setVisibility(View.GONE);
-                        menu.setGroupVisible(R.id.grp_ic_nav_settings,false);
-                        menu.setGroupVisible(R.id.grp_ic_nav_msgs,false);
-                        menu.setGroupVisible(R.id.grp_nav_payments,false);
-                        menu.setGroupVisible(R.id.grp_nav_logout,false);
+                        menu.setGroupVisible(R.id.grp_ic_nav_settings, false);
+                        menu.setGroupVisible(R.id.grp_ic_nav_msgs, false);
+                        menu.setGroupVisible(R.id.grp_nav_payments, false);
+                        menu.setGroupVisible(R.id.grp_nav_logout, false);
 
-                     /*   Intent intent = new Intent(HomeActivity.this, LogInActivity.class);
-                        startActivity(intent);*/
+                        RCLog.showToast(getApplicationContext(), getString(R.string.user_logged_out));
+
                     }
                 });
 
@@ -430,7 +435,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_payments:
-                RCLog.showToast(this,getString(R.string.payments));
+                RCLog.showToast(this, getString(R.string.payments));
                 break;
 
             case R.id.nav_faq:
