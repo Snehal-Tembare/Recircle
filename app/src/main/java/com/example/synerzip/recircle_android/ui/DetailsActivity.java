@@ -33,8 +33,6 @@ import com.example.synerzip.recircle_android.models.UserProductUnAvailability;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.ui.rentitem.RentInfoActivity;
-import com.example.synerzip.recircle_android.ui.messages.AllMessagesActivity;
-import com.example.synerzip.recircle_android.ui.messages.UserQueAnsActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -221,7 +219,8 @@ public class DetailsActivity extends AppCompatActivity {
                                 mLayoutImages.setVisibility(View.VISIBLE);
                                 userProdImagesArrayList = product.getUser_product_info().getUser_prod_images();
 
-                                mImageAdapter = new ImageAdapter(getApplicationContext(), selectedImgPosition, userProdImagesArrayList, new ImageAdapter.OnImageItemClickListener() {
+                                mImageAdapter = new ImageAdapter(getApplicationContext(), selectedImgPosition, userProdImagesArrayList,
+                                        new ImageAdapter.OnImageItemClickListener() {
                                     @Override
                                     public void onImageClick(int position, UserProdImages userProdImages) {
 
@@ -360,7 +359,6 @@ public class DetailsActivity extends AppCompatActivity {
         });
 
         mImgMain.setOnClickListener(new View.OnClickListener()
-
         {
             @Override
             public void onClick(View v) {

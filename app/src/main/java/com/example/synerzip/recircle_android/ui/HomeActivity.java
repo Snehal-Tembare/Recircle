@@ -21,6 +21,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,7 +35,6 @@ import com.example.synerzip.recircle_android.models.user_messages.RootMessageInf
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.ui.messages.AllMessagesActivity;
-import com.example.synerzip.recircle_android.ui.messages.OwnerMsgFragment;
 import com.example.synerzip.recircle_android.ui.rentals.AllRequestsActivity;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
@@ -52,9 +52,8 @@ import retrofit2.Response;
  * Created by Prajakta Patil on 15/5/17.
  * Copyright © 2017 Synerzip. All rights reserved
  */
-public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
-    private static final String TAG = "SearchFragment";
+public class HomeActivity extends AppCompatActivity implements
+        NavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.drawer_layout)
     protected DrawerLayout mDrawerLayout;
@@ -87,11 +86,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @BindView(R.id.frame_layout)
     protected FrameLayout mFrameLayout;
 
-    private boolean isOwnerMsgs, isRenterMsgs;
-
     private int renterMsgsCount, ownerMsgsCount;
-
-    private OwnerMsgFragment ownerMsgFragment;
 
     public static ArrayList<String> mOwnerNameList;
 
@@ -105,8 +100,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-
-        ownerMsgFragment = new OwnerMsgFragment();
 
         mProgressBar.setVisibility(View.VISIBLE);
         mFrameLayout.setAlpha((float) 0.6);
@@ -167,7 +160,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             menu.removeItem(R.id.nav_logIn_signUp);
 
         } else {
-            RCLog.showToast(this,"User not logged in");
+            RCLog.showToast(this, getString(R.string.not_logged_in));
             menu.removeItem(R.id.nav_settings);
             menu.removeItem(R.id.nav_payments);
             menu.removeItem(R.id.nav_logout);
@@ -180,7 +173,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     protected void onResume() {
         super.onResume();
         //get user messages details
-         getMessageDetails();
+        getMessageDetails();
     }
 
     /**
@@ -198,27 +191,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 mFrameLayout.setAlpha((float) 1.0);
                 if (response.isSuccessful()) {
                     rootMessageInfo = response.body();
-                    if (response.body().getProdRelatedMsgs() !=null) {
-                        for (int i = 0; i < response.body().getProdRelatedMsgs().size(); i++) {
-                            mOwnerNameList.add(
-                                    response.body().getProdRelatedMsgs().get(i).getUser().getFirst_name()
-                                            + response.body().getProdRelatedMsgs().get(i).getUser().getLast_name());
-
-                        }
-
-                        mProdRelatedMsgs = response.body().getProdRelatedMsgs().size();
-                        isOwnerMsgs = response.body().getProdRelatedMsgs().get(0).is_read();
-                        isRenterMsgs = response.body().getOwnerRequestMsgs().get(0).is_read();
-
-                        if (!isOwnerMsgs) {
-                            ownerMsgsCount = response.body().getProdRelatedMsgs().size();
-                        }
-                        if (!isRenterMsgs) {
-                            renterMsgsCount = response.body().getOwnerRequestMsgs().size();
-                        }
+                    if (!response.body().getOwnerRequestMsgs().isEmpty() &&
+                            !response.body().getOwnerProdRelatedMsgs().isEmpty()) {
+                        ownerMsgsCount = response.body().getOwnerProdRelatedMsgs().size();
+                        renterMsgsCount = response.body().getOwnerRequestMsgs().size();
                         mProdRelatedMsgs = ownerMsgsCount + renterMsgsCount;
-                    } else {
-                        RCLog.showToast(HomeActivity.this, "Messages are empty");
                     }
                 }
             }
@@ -260,20 +237,20 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        MenuItem item = menu.findItem(R.id.action_messages);
-        MenuItemCompat.setActionView(menu.findItem(R.id.action_messages), R.layout.notification_badge);
-        RelativeLayout notificationCount = (RelativeLayout) item.getActionView();
+        final MenuItem itemNotification = menu.findItem(R.id.action_messages);
+        MenuItemCompat.setActionView(itemNotification, R.layout.notification_badge);
+        RelativeLayout notificationCount = (RelativeLayout) itemNotification.getActionView();
         TextView mTxtMsgCount = (TextView) notificationCount.findViewById(R.id.txt_notification_count);
         mTxtMsgCount.setText(String.valueOf(mProdRelatedMsgs));
 
         ActivityCompat.invalidateOptionsMenu(HomeActivity.this);
-
-        MenuItem menuItemMsgs = menu.findItem(R.id.action_messages);
         MenuItem menuItemRentals = menu.findItem(R.id.action_rentals);
 
         if (isLoggedIn) {
-            menuItemMsgs.setVisible(true);
-            menuItemRentals.setVisible(true);
+            if (mProdRelatedMsgs != 0) {
+                itemNotification.setVisible(true);
+                menuItemRentals.setVisible(true);
+            }
         }
 
         mTxtMsgCount.setOnClickListener(new View.OnClickListener() {
@@ -283,7 +260,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        final MenuItem itemNotification = menu.findItem(R.id.action_messages);
         View actionViewNotification = MenuItemCompat.getActionView(itemNotification);
         actionViewNotification.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -39,12 +39,11 @@ public class MsgOwnerAdapter extends RecyclerView.Adapter<MsgOwnerAdapter.ViewHo
 
     @Override
     public int getItemViewType(int position) {
-        //inflate respective layouts for renter n owner
         return super.getItemViewType(position);
     }
 
     public void onBindViewHolder(final MsgOwnerAdapter.ViewHolder viewHolder, int position) {
-        ProdRelatedMsg prodRelatedMsg =mRootMessageInfo.getProdRelatedMsgs().get(position);
+        ProdRelatedMsg prodRelatedMsg =mRootMessageInfo.getOwnerProdRelatedMsgs().get(position);
         viewHolder.mTxtOwnerMsgs.setText(prodRelatedMsg.getUser_msg());
     }
 

@@ -30,7 +30,6 @@ public class UploadImageAdapter extends RecyclerView.Adapter<UploadImageAdapter.
     private Context mContext;
     private ArrayList<String> mListUserProdImages;
 
-
     public UploadImageAdapter(Context mContext, ArrayList<String> mListUserProdImages) {
         this.mContext = mContext;
         this.mListUserProdImages = mListUserProdImages;
@@ -47,12 +46,9 @@ public class UploadImageAdapter extends RecyclerView.Adapter<UploadImageAdapter.
         if (position == 0) {
             holder.txtCoverImage.setVisibility(View.VISIBLE);
         }
-        if (position>0){
-            File file=new File(mListUserProdImages.get(position));
-            Picasso.with(mContext).load(file).into(holder.imgItem);
-        }else {
-            Picasso.with(mContext).load(mListUserProdImages.get(position)).into(holder.imgItem);}
 
+        File file = new File(mListUserProdImages.get(position));
+        Picasso.with(mContext).load(file).into(holder.imgItem);
         holder.imgItem.setAlpha(0.7f);
     }
 

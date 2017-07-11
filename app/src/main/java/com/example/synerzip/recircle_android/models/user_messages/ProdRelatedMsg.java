@@ -76,7 +76,7 @@ public class ProdRelatedMsg implements Parcelable {
         this.created_at = tmpCreated_at == -1 ? null : new Date(tmpCreated_at);
         this.user = in.readParcelable(User.class.getClassLoader());
         this.user_prod_order_detail = in.readParcelable(UserProdOrderDetail.class.getClassLoader());
-        this.user_prod_msg_pools = new ArrayList<UserProdMsgPool>();
+        this.user_prod_msg_pools = new ArrayList<>();
         in.readList(this.user_prod_msg_pools, UserProdMsgPool.class.getClassLoader());
         this.user_product = in.readParcelable(Product.class.getClassLoader());
     }

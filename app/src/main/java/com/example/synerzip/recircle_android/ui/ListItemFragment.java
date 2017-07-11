@@ -138,6 +138,7 @@ public class ListItemFragment extends Fragment {
 
         listDiscounts = new ArrayList<>();
 
+        final ArrayList<Discounts> strings = new ArrayList<>();
         //discounts checkbox listener
         mDiscountForFiveDay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -145,8 +146,12 @@ public class ListItemFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     mDiscounts = new Discounts(30, 5, 1);
-                    listDiscounts.add(mDiscounts);
+                    strings.add(mDiscounts);
+                } else {
+                    strings.remove(mDiscounts);
                 }
+                listDiscounts.addAll(strings);
+
             }
         });
 
@@ -155,10 +160,16 @@ public class ListItemFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     mDiscounts = new Discounts(40, 10, 1);
-                    listDiscounts.add(mDiscounts);
+
+                    strings.add(mDiscounts);
+                } else {
+                    strings.remove(mDiscounts);
                 }
+                listDiscounts.addAll(strings);
             }
         });
+        listDiscounts.addAll(strings);
+
 
         //Populate data to edit
         if (MyProfileActivity.isItemEdit) {

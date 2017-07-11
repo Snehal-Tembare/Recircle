@@ -52,8 +52,6 @@ import retrofit2.Response;
 
 public class AllMessagesActivity extends AppCompatActivity {
 
-    private RenterMsgFragment renterMsgFragment;
-
     @BindView(R.id.progress_bar)
     protected RelativeLayout mProgressBar;
 
@@ -77,9 +75,11 @@ public class AllMessagesActivity extends AppCompatActivity {
 
     private OwnerMsgFragment ownerMsgFragment;
 
+    private RenterMsgFragment renterMsgFragment;
+
     public static String userProductMsgId;
 
-    private  RootMessageInfo rootMessageInfo;
+    private RootMessageInfo rootMessageInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,11 +89,20 @@ public class AllMessagesActivity extends AppCompatActivity {
 
         mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mProgressBar.setVisibility(View.VISIBLE);
+        mFrameLayout.setAlpha((float) 0.6);
+
         mToolbar.setTitle(R.string.toolbar_msgs);
 
-        LayoutInflater inflator = (LayoutInflater) this
+        ownerMsgFragment = new OwnerMsgFragment();
+        renterMsgFragment = new RenterMsgFragment();
+
+        //TODO code commented to add search messages
+
+   /*     LayoutInflater inflator = (LayoutInflater) this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflator.inflate(R.layout.layout_search_msgs, null);
 
@@ -117,20 +126,15 @@ public class AllMessagesActivity extends AppCompatActivity {
 
             }
         });
-      /*  MsgAutocompleteAdapter mAutocompleteAdapter = new MsgAutocompleteAdapter
+        MsgAutocompleteAdapter mAutocompleteAdapter = new MsgAutocompleteAdapter
                 (this, R.layout.activity_all_messages, R.id.txtProductName, HomeActivity.mOwnerNameList);
         textView.setAdapter(mAutocompleteAdapter);*/
-
-        ownerMsgFragment = new OwnerMsgFragment();
-        renterMsgFragment = new RenterMsgFragment();
 
         //get data from shared preferences+
         SharedPreferences sharedPreferences;
         sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
         isLoggedIn = sharedPreferences.getBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
         mAccessToken = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
-
-        ownerMsgFragment = new OwnerMsgFragment();
 
         if (isLoggedIn) {
             getMessageDetails();
@@ -152,10 +156,15 @@ public class AllMessagesActivity extends AppCompatActivity {
                 mProgressBar.setVisibility(View.GONE);
                 mFrameLayout.setAlpha((float) 1.0);
                 if (response.isSuccessful()) {
-
                     rootMessageInfo = response.body();
-                    userProductMsgId =response.body().getProdRelatedMsgs().get(0).getUser_prod_msg_id();
-                    ownerMsgFragment.getMessageDetails(rootMessageInfo);
+                    if (!response.body().getOwnerProdRelatedMsgs().isEmpty()) {
+                        userProductMsgId = response.body().getOwnerProdRelatedMsgs().get(0).getUser_prod_msg_id();
+                        ownerMsgFragment.getMessageDetails(rootMessageInfo);
+                    }
+                    if (!response.body().getOwnerProdRelatedMsgs().isEmpty()) {
+                        userProductMsgId = response.body().getOwnerRequestMsgs().get(0).getUser_prod_msg_id();
+                        renterMsgFragment.getRenterMessageDetails(rootMessageInfo);
+                    }
                 }
             }
 
@@ -177,7 +186,8 @@ public class AllMessagesActivity extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
     }
 
-    @Override
+    //TODO code commented to add search messages
+ /*   @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
@@ -188,6 +198,7 @@ public class AllMessagesActivity extends AppCompatActivity {
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         return true;
     }
+*/
 
     /**
      * PagerAdapter Class

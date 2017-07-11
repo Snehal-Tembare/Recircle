@@ -27,6 +27,7 @@ import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 /**
  * Created by Prajakta Patil on 14/6/17.
  * Copyright © 2017 Synerzip. All rights reserved
@@ -74,10 +75,15 @@ public class ChatActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //owner msgs
         mChatAdapter = new MsgOwnerAdapter(getApplicationContext(), R.id.txt_msg_owner);
         mListViewMsgs.setAdapter(mChatAdapter);
 
-        Bundle bundle=getIntent().getExtras();
+        //renter msgs
+        mChatAdapter = new MsgOwnerAdapter(getApplicationContext(), R.id.txt_msg_owner);
+        mListViewMsgs.setAdapter(mChatAdapter);
+
+        Bundle bundle = getIntent().getExtras();
         mTxtUserName.setText(bundle.getString(getString(R.string.renter_name)));
 
         //get data from shared preferences
@@ -108,7 +114,7 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<RootMessageInfo> call, Response<RootMessageInfo> response) {
                 if (response.isSuccessful()) {
-                    mListRenterMsgs=new ArrayList<>();
+                    mListRenterMsgs = new ArrayList<>();
                     RCLog.showToast(ChatActivity.this, getString(R.string.msg_sent));
                 }
             }
@@ -118,6 +124,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
     }
+
     /**
      * action bar back button
      *

@@ -3,6 +3,7 @@ package com.example.synerzip.recircle_android.ui;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
+import android.os.Parcel;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -57,7 +58,7 @@ public class SettingsActivity extends AppCompatActivity {
     @BindView(R.id.img_user_pro)
     protected CircleImageView mImgUserProfile;
 
-    public static String mFirstName, mLastName, mUserImg, mMobNo, mEmail;
+    public static String mFirstName, mLastName, mUserImg, mMobNo, mEmail, mUserCity, mUserState, mUserStreet, mUserZipcode;
 
     @BindView(R.id.progress_bar)
     protected RelativeLayout mProgressBar;
@@ -94,6 +95,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     public static boolean mTextNotification;
 
+    private RootUserInfo rootUserInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +136,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<RootUserInfo> call, Response<RootUserInfo> response) {
                 if (response.isSuccessful()) {
+                    rootUserInfo=response.body();
                     mProgressBar.setVisibility(View.GONE);
                     mFrameLayout.setAlpha((float) 1.0);
                     mFirstName = response.body().getFirst_name();
@@ -146,6 +149,11 @@ public class SettingsActivity extends AppCompatActivity {
                     mEmail = response.body().getEmail();
                     mMobNo = String.valueOf(response.body().getUser_mob_no());
                     mUserImg = response.body().getUser_image_url();
+                    mUserCity = response.body().getUserAddress().getCity();
+                    mUserState = response.body().getUserAddress().getState();
+                    mUserStreet = response.body().getUserAddress().getStreet();
+                    mUserZipcode = String.valueOf(response.body().getUserAddress().getZip());
+
                     if (response.body().getUser_id() != null) {
                         mUserId = response.body().getUser_id();
                     }
@@ -178,12 +186,11 @@ public class SettingsActivity extends AppCompatActivity {
                         mSwitchNotification.setChecked(false);
                     }
 
-
-
                     mTxtUserName.setText(mFirstName + " " + mLastName);
                     mTxtUserEmail.setText(mEmail);
                     mTxtUserMob.setText(mMobNo);
-                    Picasso.with(SettingsActivity.this).load(mUserImg).into(mImgUserProfile);
+                    Picasso.with(SettingsActivity.this).load(mUserImg).placeholder(R.drawable.ic_user).
+                            into(mImgUserProfile);
                 } else {
 
                     RCLog.showToast(SettingsActivity.this, getString(R.string.user_not_authenticated));
@@ -192,11 +199,15 @@ public class SettingsActivity extends AppCompatActivity {
                         public void run() {
                             finish();
                         }
-                    },TIMER);
+                    }, TIMER);
 
                     mProgressBar.setVisibility(View.GONE);
                     mFrameLayout.setAlpha((float) 1.0);
                 }
+
+                Intent i=new Intent(SettingsActivity.this,EditProfileActivity.class);
+                i.putExtra(getString(R.string.rootUserInfo), rootUserInfo);
+                startActivity(i);
             }
 
             @Override
@@ -216,53 +227,6 @@ public class SettingsActivity extends AppCompatActivity {
     public void btnEditProfile(View view) {
         startActivityForResult(new Intent(SettingsActivity.this, EditProfileActivity.class),
                 REQUEST_CODE);
-    }
-
-    /**
-     * get edit user details in onActivityResult()
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        getUserDetails();
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                if (!EditProfileActivity.mFirstName.isEmpty() && !EditProfileActivity.mLastName.isEmpty()) {
-                    mTxtUserName.setText(EditProfileActivity.mFirstName + " " + EditProfileActivity.mLastName);
-                }
-                if (EditProfileActivity.mMobNo != 0) {
-                    mTxtUserName.setText(String.valueOf(EditProfileActivity.mMobNo));
-                }
-                if (!EditProfileActivity.mAddress.getStreet().isEmpty()) {
-                    mLinearLayoutStreetAddr.setVisibility(View.VISIBLE);
-                    mTxtStreetAddr.setText(EditProfileActivity.mAddress.getStreet());
-                }
-                if (!EditProfileActivity.mAddress.getState().isEmpty()) {
-                    mLinearLayoutState.setVisibility(View.VISIBLE);
-                    mTxtState.setText(EditProfileActivity.mAddress.getState());
-
-                }
-                if (!EditProfileActivity.mAddress.getCity().isEmpty()) {
-                    mLinearLayoutCity.setVisibility(View.VISIBLE);
-                    mTxtCity.setText(EditProfileActivity.mAddress.getCity());
-
-                }
-                if (EditProfileActivity.mAddress.getZip() != 0) {
-                    mLinearLayoutZipcode.setVisibility(View.VISIBLE);
-                    String zipcode = String.valueOf(EditProfileActivity.mAddress.getZip());
-                    mTxtZipcode.setText(zipcode);
-                }
-                if (EditProfileActivity.mTextNotification) {
-                    mSwitchNotification.setChecked(true);
-                } else {
-                    mSwitchNotification.setChecked(false);
-                }
-            }
-        }
     }
 
     /**

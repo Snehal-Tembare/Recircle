@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
+import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.squareup.timessquare.*;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import butterknife.OnClick;
  * Copyright © 2017 Synerzip. All rights reserved
  */
 public class ListCalendarSummaryActivity extends AppCompatActivity {
+
     @BindView(R.id.calendar_view)
     protected CalendarPickerView mPickerView;
 
@@ -59,9 +61,21 @@ public class ListCalendarSummaryActivity extends AppCompatActivity {
         Date today = new Date();
 
         mPickerView.init(today, calendar.getTime());
-        mPickerView.setPressed(false);
-        mPickerView.setSaveEnabled(false);
-        mPickerView.setEnabled(false);
+
+        mPickerView.setOnDateSelectedListener(new CalendarPickerView.OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(Date date) {
+                RCLog.showToast(ListCalendarSummaryActivity.this,"Date cannot be selected");
+                mPickerView.setPressed(false);
+                mPickerView.setClickable(false);
+                mPickerView.setSelected(false);
+            }
+
+            @Override
+            public void onDateUnselected(Date date) {
+
+            }
+        });
 
         List<CalendarCellDecorator> decoratorList = new ArrayList<>();
 
