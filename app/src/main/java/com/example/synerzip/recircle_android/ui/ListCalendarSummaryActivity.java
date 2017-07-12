@@ -15,6 +15,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import com.example.synerzip.recircle_android.R;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -66,9 +68,6 @@ public class ListCalendarSummaryActivity extends AppCompatActivity {
             @Override
             public void onDateSelected(Date date) {
                 RCLog.showToast(ListCalendarSummaryActivity.this,"Date cannot be selected");
-                mPickerView.setPressed(false);
-                mPickerView.setClickable(false);
-                mPickerView.setSelected(false);
             }
 
             @Override

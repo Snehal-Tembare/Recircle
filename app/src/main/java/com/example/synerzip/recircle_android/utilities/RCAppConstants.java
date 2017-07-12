@@ -8,7 +8,11 @@ public class RCAppConstants {
 
     public static final String RC_SHARED_PREFERENCES_ACCESS_TOKEN="accessToken";
 
-    public static final String RC_SHARED_PREFERENCES_LOGIN_FIRST_USERNAME="firstname";
+    public static final String RC_SHARED_PREFERENCES_LOGIN_USER_FIRSTNAME ="firstname";
+
+    public static final String RC_SHARED_PREFERENCES_LOGIN_USER_LASTNAME ="lastname";
+
+    public static final String RC_SHARED_PREFERENCES_LOGIN_USER_EMAIL="useremail";
 
     public static final String RC_SHARED_PREFERENCES_LOGIN_LAST_USERNAME="lastname";
 

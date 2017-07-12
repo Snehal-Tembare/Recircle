@@ -14,6 +14,7 @@ public class RCWebConstants {
 
     public static final int RC_ERROR_CODE_FORBIDDEN = 403;
 
+
     public static final int RC_ERROR_CODE_NOT_FOUND = 404;
 
     public static final int RC_ERROR_CODE_CONFLICT = 409;
@@ -67,6 +68,8 @@ public class RCWebConstants {
     public static final String RC_GET_USER_PRODUCT_PROFILE="/api/products/userProducts/{userId}";
 
     public static final String RC_CANCEL_ORDER="/api/products/cancelOrder";
+
+    public static final String RC_EDIT_PRODUCT_DETAILS="/api/products";
 
     public static final String RC_CANCEL_PROD_REQUEST = "/api/products/cancelOrder";
 }

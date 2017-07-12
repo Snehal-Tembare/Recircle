@@ -7,10 +7,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 
 import java.text.DateFormat;
@@ -24,6 +22,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import com.example.synerzip.recircle_android.R;
 
 import static com.squareup.timessquare.CalendarPickerView.SelectionMode.MULTIPLE;
 
@@ -53,6 +53,8 @@ public class ListItemCalendarActivity extends AppCompatActivity {
     private ArrayList<String> datesList;
 
     private ArrayList<Date> restoreDates;
+    private String dateString;
+    private DateFormat dateFormat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +73,8 @@ public class ListItemCalendarActivity extends AppCompatActivity {
         restoreDates = new ArrayList<>();
 
         restoreDates = (ArrayList<Date>) getIntent().getSerializableExtra(getString(R.string.dates));
+        dateFormat = new SimpleDateFormat(getString(R.string.calendar_date_format));
+
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MONTH, 2);
         Date today = new Date();
@@ -82,25 +86,27 @@ public class ListItemCalendarActivity extends AppCompatActivity {
 
         mPickerView.init(today, nextMonth.getTime()).inMode(MULTIPLE);
         if (!restoreDates.isEmpty()) {
-            for (Date date : restoreDates) {
-                mPickerView.selectDate(date);
-            }
+
+            mPickerView.highlightDates(restoreDates);
         }
+
+        if (MyProfileActivity.isItemEdit) {
+            selectedDates.addAll(restoreDates);}
         //on date selected listener
         mPickerView.setOnDateSelectedListener(new CalendarPickerView.OnDateSelectedListener() {
 
             @Override
             public void onDateSelected(Date date) {
 
-                selectedDates.add(date);
 
                 List<CalendarCellDecorator> decoratorList = new ArrayList<>();
                 decoratorList.add(new MonthDecorator(ListItemCalendarActivity.this, date, null,
                         null));
                 mPickerView.setDecorators(decoratorList);
 
-                DateFormat dateFormat = new SimpleDateFormat(getString(R.string.calendar_date_format));
-                String dateString = dateFormat.format(date);
+                selectedDates.add(date);
+
+                dateString = dateFormat.format(date);
                 datesList.add(dateString);
             }
 
@@ -119,6 +125,11 @@ public class ListItemCalendarActivity extends AppCompatActivity {
                 mPickerView.setDecorators(decoratorList);
             }
         });
+
+        for (Date date1:selectedDates){
+            dateString = dateFormat.format(date1);
+            datesList.add(dateString);
+        }
 
     }//end onCreate()
 

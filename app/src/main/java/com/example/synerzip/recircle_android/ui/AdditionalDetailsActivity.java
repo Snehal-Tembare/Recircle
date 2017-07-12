@@ -13,15 +13,21 @@ import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.Products;
+import com.example.synerzip.recircle_android.models.UserProdImages;
 import com.example.synerzip.recircle_android.models.UserProductUnAvailability;
 import com.example.synerzip.recircle_android.models.ZipcodeRoot;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -68,7 +74,9 @@ public class AdditionalDetailsActivity extends AppCompatActivity {
 
     @BindView(R.id.edit_enter_zip)
     protected EditText mEditTxtZipcode;
+
     private Products product;
+    private ArrayList<UserProdImages> listUploadItemImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,15 +98,21 @@ public class AdditionalDetailsActivity extends AppCompatActivity {
                     mEditTxtItemDesc.setText(product.getUser_product_info().getUser_prod_desc());
                     mEditTxtZipcode.setText(product.getUser_product_info().getUser_product_zipcode());
 
-                    //TODO:UnAvailable dates functionality
                     ArrayList<UserProductUnAvailability> unavailableDates;
                     unavailableDates = product.getUser_product_info().getUser_prod_unavailability();
 
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(getString(R.string.ddd_mm));
+
                     for (UserProductUnAvailability date : unavailableDates) {
-                        userProductUnAvailability = new UserProductUnAvailability(date.getUnavai_from_date(), date.getUnavai_to_date());
-                        mItemAvailability.add(userProductUnAvailability);
+                        try {
+                            selectedDates.add(simpleDateFormat.parse(date.getUnavai_from_date()));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
                     }
-                    daysCount =unavailableDates.size() ;
+
+                    daysCount = unavailableDates.size();
                     if (daysCount != 0) {
                         mTxtDaysOfAvailability.setVisibility(View.VISIBLE);
                         mTxtDaysOfAvailability.setText(getString(R.string.calendar_days_selected) + " " +
@@ -116,7 +130,8 @@ public class AdditionalDetailsActivity extends AppCompatActivity {
      */
     private void checkZipcodes() {
         if (mZipcode != 0) {
-            service = ApiClient.getClient().create(RCAPInterface.class);
+            if (ApiClient.getClient(this)!=null){
+            service = ApiClient.getClient(this).create(RCAPInterface.class);
             Call<ZipcodeRoot> call = service.zipcodeCheck(mZipcode);
             call.enqueue(new Callback<ZipcodeRoot>() {
                 @Override
@@ -145,6 +160,7 @@ public class AdditionalDetailsActivity extends AppCompatActivity {
                         if (mCheckboxAgreement.isChecked()) {
 
                             Intent intent = new Intent(AdditionalDetailsActivity.this, ListItemSummaryActivity.class);
+                            intent.putExtra(getString(R.string.product), product);
                             startActivity(intent);
 
 
@@ -158,6 +174,9 @@ public class AdditionalDetailsActivity extends AppCompatActivity {
                 public void onFailure(Call<ZipcodeRoot> call, Throwable t) {
                 }
             });
+        }
+        }else {
+
         }
         return;
     }
@@ -185,7 +204,13 @@ public class AdditionalDetailsActivity extends AppCompatActivity {
     @OnClick(R.id.edit_calendar_availability)
     public void calendarAvailability(View view) {
         Intent intent = new Intent(AdditionalDetailsActivity.this, ListItemCalendarActivity.class);
-        intent.putExtra(getString(R.string.dates), selectedDates);
+        if (MyProfileActivity.isItemEdit) {
+            intent.putExtra(getString(R.string.dates), selectedDates);
+
+        } else {
+            intent.putExtra(getString(R.string.dates), selectedDates);
+
+        }
         startActivityForResult(intent, 1);
     }
 
@@ -203,11 +228,13 @@ public class AdditionalDetailsActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 ArrayList<String> availableDates;
                 availableDates = data.getStringArrayListExtra(getString(R.string.calendar_availability_days));
+                selectedDates.clear();
                 selectedDates = (ArrayList<Date>) data.getSerializableExtra(getString(R.string.selectedDates));
                 for (String date : availableDates) {
                     userProductUnAvailability = new UserProductUnAvailability(date, date);
                     mItemAvailability.add(userProductUnAvailability);
                 }
+
                 daysCount = data.getIntExtra(getString(R.string.calendar_availability_days_count), 0);
                 if (daysCount != 0) {
                     mTxtDaysOfAvailability.setVisibility(View.VISIBLE);
@@ -222,6 +249,20 @@ public class AdditionalDetailsActivity extends AppCompatActivity {
     public void btnNext(View view) {
         if (getValues()) {
             checkZipcodes();
+
+
+            UserProdImages mUserProdImages;
+
+            mUserProdImages = new UserProdImages("https://s3.ap-south-1.amazonaws.com/recircleimages/1398934243000_1047081.jpg",
+                    "2017-02-04T13:13:09.000Z");
+            listUploadItemImage = new ArrayList<>();
+            listUploadItemImage.add(mUserProdImages);
+            if (MyProfileActivity.isItemEdit){
+                ListItemFragment.editProduct.setUser_prod_desc(mEditTxtItemDesc.getText().toString());
+                ListItemFragment.editProduct.setUser_prod_unavailability(mItemAvailability);
+                ListItemFragment.editProduct.setUser_product_zipcode(mEditTxtZipcode.getText().toString());
+            ListItemFragment.editProduct.setUser_prod_images(listUploadItemImage);}
+
         } else {
             RCLog.showToast(AdditionalDetailsActivity.this, getString(R.string.mandatory_dates));
         }

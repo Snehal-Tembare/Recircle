@@ -13,11 +13,9 @@ import android.widget.LinearLayout;
 
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.UserProdImages;
-import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  *Created by Snehal Tembare on 6/4/17.
@@ -47,11 +45,12 @@ class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         UserProdImages userProdImages = userProdImagesArrayList.get(position);
 
-        Picasso.with(mContext).load(userProdImages.getUser_prod_image_url()).into(holder.imageView);
+        Picasso.with(mContext).load(userProdImages.getUser_prod_image_url())
+                .placeholder(R.drawable.ic_camera).into(holder.imageView);
 
         holder.bind(position, userProdImagesArrayList.get(position), onImageItemClickListener);
 
-        if (selectedImgPosition == position) {
+        if (position == 0) {
             holder.layout.setBackground(ContextCompat.getDrawable(mContext, R.drawable.selected_image_background));
         }
     }

@@ -18,7 +18,6 @@ import android.widget.TextView;
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.rentals.CancelOrder;
 import com.example.synerzip.recircle_android.models.rentals.UserRentings;
-import com.example.synerzip.recircle_android.models.rentals.UserRequest;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
@@ -75,12 +74,13 @@ public class RentingsAdapter extends RecyclerView.Adapter<RentingsAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         userRentings = userRentingsArrayList.get(position);
-        service = ApiClient.getClient().create(RCAPInterface.class);
-
+        if (ApiClient.getClient(mContext) != null) {
+            service = ApiClient.getClient(mContext).create(RCAPInterface.class);
+        }
         if (userRentings.getUser_prod_images() != null) {
             if (userRentings.getUser().getUser_image_url() != null) {
                 Picasso.with(mContext).load(userRentings.getUser().getUser_image_url())
-                        .into(holder.mImgUser);
+                        .placeholder(R.drawable.ic_user).into(holder.mImgUser);
             }
         }
 
@@ -149,7 +149,7 @@ public class RentingsAdapter extends RecyclerView.Adapter<RentingsAdapter.ViewHo
         if (userRentings.getUser_prod_images() != null) {
             if (userRentings.getUser_prod_images().get(0).getUser_prod_image_url() != null) {
                 Picasso.with(mContext).load(userRentings.getUser_prod_images()
-                        .get(0).getUser_prod_image_url())
+                        .get(0).getUser_prod_image_url()).placeholder(R.drawable.ic_camera)
                         .into(holder.mImgItem);
             }
         }
@@ -235,29 +235,31 @@ public class RentingsAdapter extends RecyclerView.Adapter<RentingsAdapter.ViewHo
 
                     //TODO:Waiting for stripe Integration
                     alert.cancel();
-                    CancelOrder cancelOrder=new CancelOrder();
+                    CancelOrder cancelOrder = new CancelOrder();
                     cancelOrder.setUser_msg(mEdtMsg.getText().toString());
                     mEdtMsg.setError(mContext.getString(R.string.enter_message));
                     cancelOrder.setUser_prod_order_id(userRentings.getUser_prod_order_id());
-
-                    Call<CancelOrder> call=service.cancelOrder(cancelOrder);
-                    call.enqueue(new Callback<CancelOrder>() {
-                        @Override
-                        public void onResponse(Call<CancelOrder> call, Response<CancelOrder> response) {
-                            if (response.isSuccessful()){
-                                RCLog.showToast(mContext,mContext.getString(R.string.order_cancelled));
-                            }else {
-                                RCLog.showToast(mContext,mContext.getString(R.string.something_went_wrong));
+                    if (service != null) {
+                        Call<CancelOrder> call = service.cancelOrder(cancelOrder);
+                        call.enqueue(new Callback<CancelOrder>() {
+                            @Override
+                            public void onResponse(Call<CancelOrder> call, Response<CancelOrder> response) {
+                                if (response.isSuccessful()) {
+                                    RCLog.showToast(mContext, mContext.getString(R.string.order_cancelled));
+                                } else {
+                                    RCLog.showToast(mContext, mContext.getString(R.string.something_went_wrong));
+                                }
                             }
-                        }
 
-                        @Override
-                        public void onFailure(Call<CancelOrder> call, Throwable t) {
+                            @Override
+                            public void onFailure(Call<CancelOrder> call, Throwable t) {
 
-                        }
-                    });
-
+                            }
+                        });
+                    } else {
+                        RCLog.showLongToast(mContext,mContext.getString(R.string.check_nw_connectivity));
                     }
+                }
             });
 
         }

@@ -21,14 +21,14 @@
             android:layout_height="match_parent"
             tools:openDrawer="end">
 
-            <android.support.design.widget.NavigationView
+        <!--    <android.support.design.widget.NavigationView
                 android:id="@+id/nav_view"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="left"
                 android:fitsSystemWindows="true"
                 android:visibility="visible"
-                app:menu="@menu/activity_launching_drawer" />
+                app:menu="@menu/activity_launching_drawer" />-->
 
             <ScrollView
                 android:layout_width="match_parent"

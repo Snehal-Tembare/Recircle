@@ -6,16 +6,14 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.synerzip.recircle_android.R;
-import com.example.synerzip.recircle_android.models.SearchProduct;
-import com.example.synerzip.recircle_android.ui.messages.AllMessagesActivity;
-import com.example.synerzip.recircle_android.utilities.RCWebConstants;
+
 /**
  * Created by Prajakta Patil on 24/3/17.
  * Copyright © 2017 Synerzip. All rights reserved
  */
 public class SplashActivity extends AppCompatActivity {
 
-    private static int SPLASH_TIME_OUT = 1500;
+    private static int SPLASH_TIME_OUT = 4000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

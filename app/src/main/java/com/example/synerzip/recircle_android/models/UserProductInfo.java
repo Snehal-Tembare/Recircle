@@ -48,6 +48,7 @@ public class UserProductInfo implements Parcelable {
     private ArrayList<UserProductDiscount> user_product_discounts;
 
     protected UserProductInfo(Parcel in) {
+        user_product_id = in.readString();
         product_id = in.readString();
         avai_to_date = in.readString();
         avai_from_date = in.readString();
@@ -55,7 +56,6 @@ public class UserProductInfo implements Parcelable {
         created_at = in.readString();
         user_prod_desc = in.readString();
         price_per_day = in.readString();
-        user_product_id = in.readString();
         min_rental_days = in.readString();
         user_product_zipcode = in.readString();
         user_prod_reviews = in.createTypedArrayList(UserProdReview.CREATOR);
@@ -83,6 +83,7 @@ public class UserProductInfo implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(user_product_id);
         dest.writeString(product_id);
         dest.writeString(avai_to_date);
         dest.writeString(avai_from_date);
@@ -92,7 +93,6 @@ public class UserProductInfo implements Parcelable {
         dest.writeString(price_per_day);
         dest.writeString(min_rental_days);
         dest.writeString(user_product_zipcode);
-        dest.writeString(user_product_id);
         dest.writeTypedList(user_prod_reviews);
         dest.writeTypedList(user_prod_unavailability);
         dest.writeTypedList(user_product_discounts);

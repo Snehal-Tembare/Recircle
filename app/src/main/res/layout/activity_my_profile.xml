@@ -28,6 +28,7 @@
             android:layout_height="@dimen/common_dimens_40"
             android:src="@drawable/ic_user"
             android:layout_marginTop="@dimen/common_dimens_5"
+            android:layout_gravity="center"
             app:border="false"
             app:shadow="true"
             app:border_color="@color/common_white"

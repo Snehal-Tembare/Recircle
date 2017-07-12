@@ -19,6 +19,7 @@ import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.ui.SettingsActivity;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
+import com.google.android.gms.common.api.Api;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -52,7 +53,7 @@ public class UserQueAnsActivity extends AppCompatActivity {
     @BindView(R.id.edit_txt_ask_que)
     protected EditText mEditTxtAskQue;
 
-    private String mAskQue,mUserFirstName,mUserLastName;
+    private String mAskQue, mUserFirstName, mUserLastName;
 
     @BindView(R.id.txt_user_name)
     protected TextView mTxtUserName;
@@ -83,29 +84,31 @@ public class UserQueAnsActivity extends AppCompatActivity {
                 (RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
         mAccessToken = sharedPreferences.getString
                 (RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
-        mUserFirstName=sharedPreferences.getString
-                (RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_FIRST_USERNAME, mUserFirstName);
-        mUserLastName=sharedPreferences.getString
+        mUserFirstName = sharedPreferences.getString
+                (RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_FIRSTNAME, mUserFirstName);
+        mUserLastName = sharedPreferences.getString
                 (RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_LAST_USERNAME, mUserLastName);
 
-        mTxtUserName.setText(mUserFirstName+" "+mUserLastName);
+        mTxtUserName.setText(mUserFirstName + " " + mUserLastName);
 
         Picasso.with(this).load(SettingsActivity.mUserImg).placeholder(R.drawable.ic_user).
                 into(mImgUserProfile);
 
-        productId=getIntent().getExtras().getString(getString(R.string.product_id));
-        mTxtProdName.setText(getIntent().getExtras().getString(getString(R.string.product_title)));
+        if (getIntent().getExtras() != null) {
+            productId = getIntent().getExtras().getString(getString(R.string.product_id));
+            mTxtProdName.setText(getIntent().getExtras().getString(getString(R.string.product_title)));
+        }
     }
 
     @OnClick(R.id.btn_ask)
     public void editTxtAsk(View view) {
-        if(!mEditTxtAskQue.getText().toString().isEmpty()) {
+        if (!mEditTxtAskQue.getText().toString().isEmpty()) {
             mAskQue = mEditTxtAskQue.getText().toString();
             mProgressBar.setVisibility(View.VISIBLE);
             mFrameLayout.setAlpha((float) 0.6);
             userAueAns();
-        }else {
-            RCLog.showToast(this,getString(R.string.field_not_empty));
+        } else {
+            RCLog.showToast(this, getString(R.string.field_not_empty));
         }
 
     }
@@ -116,25 +119,30 @@ public class UserQueAnsActivity extends AppCompatActivity {
     public void userAueAns() {
 
         UserAskQueRequest userAskQueRequest = new UserAskQueRequest(productId, mAskQue);
-        service = ApiClient.getClient().create(RCAPInterface.class);
-        Call<RootMessageInfo> call = service.getUserQueAns("Bearer " + mAccessToken, userAskQueRequest);
-        call.enqueue(new Callback<RootMessageInfo>() {
-            @Override
-            public void onResponse(Call<RootMessageInfo> call, Response<RootMessageInfo> response) {
-                mProgressBar.setVisibility(View.GONE);
-                mFrameLayout.setAlpha((float) 1.0);
-                if (response.isSuccessful()) {
-                    RCLog.showToast(UserQueAnsActivity.this, getString(R.string.que_success));
-
-                } else {
+        mProgressBar.setVisibility(View.VISIBLE);
+        if (ApiClient.getClient(this) != null) {
+            service = ApiClient.getClient(this).create(RCAPInterface.class);
+            Call<RootMessageInfo> call = service.getUserQueAns("Bearer " + mAccessToken, userAskQueRequest);
+            call.enqueue(new Callback<RootMessageInfo>() {
+                @Override
+                public void onResponse(Call<RootMessageInfo> call, Response<RootMessageInfo> response) {
+                    mProgressBar.setVisibility(View.GONE);
+                    mFrameLayout.setAlpha((float) 1.0);
+                    if (response.isSuccessful()) {
+                        RCLog.showToast(UserQueAnsActivity.this, getString(R.string.que_success));
+                        finish();
+                    } else {
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<RootMessageInfo> call, Throwable t) {
-                mProgressBar.setVisibility(View.GONE);
-                mFrameLayout.setAlpha((float) 1.0);
-            }
-        });
+                @Override
+                public void onFailure(Call<RootMessageInfo> call, Throwable t) {
+                    mProgressBar.setVisibility(View.GONE);
+                    mFrameLayout.setAlpha((float) 1.0);
+                }
+            });
+        } else {
+            mProgressBar.setVisibility(View.GONE);
+        }
     }
 }

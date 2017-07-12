@@ -22,6 +22,7 @@
             android:layout_height="@dimen/image_height"
             android:layout_marginTop="@dimen/common_dimens_5"
             android:layout_marginBottom="@dimen/common_dimens_5"
+            android:src="@drawable/ic_camera"
             android:layout_weight="0.4" />
 
         <LinearLayout

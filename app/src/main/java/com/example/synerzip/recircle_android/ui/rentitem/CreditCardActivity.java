@@ -22,6 +22,7 @@ import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
+import com.google.android.gms.common.api.Api;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -82,7 +83,9 @@ public class CreditCardActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getString(R.string.card_details));
         mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
 
-        service = ApiClient.getClient().create(RCAPInterface.class);
+        if (ApiClient.getClient(this) != null) {
+            service = ApiClient.getClient(this).create(RCAPInterface.class);
+        }
 
         //get data from shared preferences
         sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
@@ -94,7 +97,7 @@ public class CreditCardActivity extends AppCompatActivity {
         if (mBundle != null) {
             user_id = mBundle.getString(getString(R.string.user_id));
         }
-
+//TODO- Functionality yet to complete
        /* cardForm.cardRequired(true)
                 .expirationRequired(true)
                 .cvvRequired(false)
@@ -192,7 +195,7 @@ public class CreditCardActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId()==android.R.id.home){
+        if (item.getItemId() == android.R.id.home) {
             finish();
         }
         return true;
@@ -225,37 +228,40 @@ public class CreditCardActivity extends AppCompatActivity {
                 final String mUserPwd = mEditTxtPwd.getText().toString();
                 LogInRequest logInRequest = new LogInRequest(mUserName, mUserPwd);
 
-                service = ApiClient.getClient().create(RCAPInterface.class);
-                Call<User> userCall = service.userLogIn(logInRequest);
-                userCall.enqueue(new Callback<User>() {
-                    @Override
-                    public void onResponse(Call<User> call, Response<User> response) {
+                if (service != null) {
+                    Call<User> userCall = service.userLogIn(logInRequest);
+                    userCall.enqueue(new Callback<User>() {
+                        @Override
+                        public void onResponse(Call<User> call, Response<User> response) {
 
-                        mProgressBar.setVisibility(View.GONE);
-                        mLinearLayout.setAlpha((float) 1.0);
+                            mProgressBar.setVisibility(View.GONE);
+                            mLinearLayout.setAlpha((float) 1.0);
 
-                        if (response.isSuccessful()) {
-                            mAccessToken = response.body().getToken();
-                            sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
-                            editor.putBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, true);
-                            editor.apply();
-                            isLoggedIn=true;
-                            dialog.dismiss();
-                        } else {
-                            if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
-                                RCLog.showToast(CreditCardActivity.this, getString(R.string.err_credentials));
+                            if (response.isSuccessful()) {
+                                mAccessToken = response.body().getToken();
+                                sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
+                                editor.putBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, true);
+                                editor.apply();
+                                isLoggedIn = true;
+                                dialog.dismiss();
+                            } else {
+                                if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
+                                    RCLog.showToast(CreditCardActivity.this, getString(R.string.err_credentials));
+                                }
                             }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<User> call, Throwable t) {
-                        mProgressBar.setVisibility(View.GONE);
-                        mLinearLayout.setAlpha((float) 1.0);
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<User> call, Throwable t) {
+                            mProgressBar.setVisibility(View.GONE);
+                            mLinearLayout.setAlpha((float) 1.0);
+                        }
+                    });
+                } else {
+                    RCLog.showLongToast(CreditCardActivity.this, getString(R.string.check_nw_connectivity));
+                }
             }
         });
 

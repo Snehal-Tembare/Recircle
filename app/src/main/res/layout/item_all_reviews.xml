@@ -33,6 +33,7 @@
                 android:layout_marginTop="@dimen/common_dimens_5"
                 android:layout_weight="0.2"
                 app:border="false"
+                android:src="@drawable/ic_user"
                 app:border_color="@color/common_white"
                 app:border_width="1dp"
                 app:shadow="true" />

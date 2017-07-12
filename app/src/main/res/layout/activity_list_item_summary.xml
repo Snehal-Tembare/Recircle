@@ -7,14 +7,14 @@
     <include layout="@layout/partial_toolbar" />
 
     <FrameLayout
-
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:animateLayoutChanges="true">
+        android:layout_height="match_parent">
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/common_dimens_50"
+            android:scrollbarStyle="insideOverlay">
 
             <LinearLayout
                 android:id="@+id/layout_list_item_summary"
@@ -199,18 +199,25 @@
             </LinearLayout>
         </ScrollView>
 
-        <Button
-            android:id="@+id/btn_confirm_item"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginTop="@dimen/common_dimens_20"
-            android:background="@drawable/border_upload_image"
-            android:padding="@dimen/dimen_10dp"
-            android:text="@string/confirm_item"
-            android:textAllCaps="false"
-            android:textColor="@color/common_white"
-            android:textSize="@dimen/text_size_16" />
+            android:layout_gravity="bottom|end"
+            android:weightSum="1">
+
+            <Button
+                android:id="@+id/btn_confirm_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/common_dimens_20"
+                android:background="@drawable/border_upload_image"
+                android:padding="@dimen/dimen_10dp"
+                android:text="@string/confirm_item"
+                android:textAllCaps="true"
+                android:textColor="@color/common_white"
+                android:textSize="@dimen/text_size_16" />
+
+        </LinearLayout>
 
         <include
             android:id="@+id/progress_bar"
@@ -218,7 +225,5 @@
             android:animateLayoutChanges="true"
             android:visibility="gone" />
     </FrameLayout>
-
-    <include layout="@layout/partial_toolbar" />
 
 </LinearLayout>

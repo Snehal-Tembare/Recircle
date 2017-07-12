@@ -9,6 +9,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
@@ -64,6 +66,9 @@ public class ChatActivity extends AppCompatActivity {
     @BindView(R.id.txt_toolbar_user_name)
     protected TextView mTxtUserName;
 
+    @BindView(R.id.progress_bar)
+    protected RelativeLayout mProgressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,21 +113,27 @@ public class ChatActivity extends AppCompatActivity {
      */
     public void sendUserMsg() {
         UserAskQueResponse userAskQueResponse = new UserAskQueResponse(AllMessagesActivity.userProductMsgId, mAskQue);
-        service = ApiClient.getClient().create(RCAPInterface.class);
-        Call<RootMessageInfo> call = service.getMsgResponse("Bearer " + mAccessToken, userAskQueResponse);
-        call.enqueue(new Callback<RootMessageInfo>() {
-            @Override
-            public void onResponse(Call<RootMessageInfo> call, Response<RootMessageInfo> response) {
-                if (response.isSuccessful()) {
-                    mListRenterMsgs = new ArrayList<>();
-                    RCLog.showToast(ChatActivity.this, getString(R.string.msg_sent));
+        mProgressBar.setVisibility(View.VISIBLE);
+        if (ApiClient.getClient(this) != null) {
+            service = ApiClient.getClient(this).create(RCAPInterface.class);
+            Call<RootMessageInfo> call = service.getMsgResponse("Bearer " + mAccessToken, userAskQueResponse);
+            call.enqueue(new Callback<RootMessageInfo>() {
+                @Override
+                public void onResponse(Call<RootMessageInfo> call, Response<RootMessageInfo> response) {
+                    if (response.isSuccessful()) {
+                        mListRenterMsgs = new ArrayList<>();
+                        RCLog.showToast(ChatActivity.this, getString(R.string.msg_sent));
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<RootMessageInfo> call, Throwable t) {
-            }
-        });
+                @Override
+                public void onFailure(Call<RootMessageInfo> call, Throwable t) {
+                    RCLog.showToast(ChatActivity.this, getString(R.string.something_went_wrong));
+                }
+            });
+        } else {
+            mProgressBar.setVisibility(View.GONE);
+        }
     }
 
     /**

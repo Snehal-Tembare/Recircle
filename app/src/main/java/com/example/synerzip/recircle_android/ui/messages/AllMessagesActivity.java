@@ -148,7 +148,7 @@ public class AllMessagesActivity extends AppCompatActivity {
      * get details of user messages
      */
     public void getMessageDetails() {
-        service = ApiClient.getClient().create(RCAPInterface.class);
+        service = ApiClient.getClient(this).create(RCAPInterface.class);
         Call<RootMessageInfo> call = service.getUserMessage("Bearer " + mAccessToken);
         call.enqueue(new Callback<RootMessageInfo>() {
             @Override
