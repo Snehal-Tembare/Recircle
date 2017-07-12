@@ -3,11 +3,8 @@ package com.example.synerzip.recircle_android.network;
 import android.content.Context;
 
 import com.example.synerzip.recircle_android.R;
-import com.example.synerzip.recircle_android.utilities.MyApplication;
 import com.example.synerzip.recircle_android.utilities.NetworkUtility;
 import com.example.synerzip.recircle_android.utilities.RCLog;
-import com.example.synerzip.recircle_android.utilities.RCWebConstants;
-
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
 
 import okhttp3.OkHttpClient;

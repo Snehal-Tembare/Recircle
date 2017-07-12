@@ -1,4 +1,4 @@
-package com.example.synerzip.recircle_android.utilities;
+package com.example.synerzip.recircle_android;
 
 import android.app.Application;
 

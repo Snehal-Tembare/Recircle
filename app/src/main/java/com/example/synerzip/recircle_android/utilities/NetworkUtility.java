@@ -1,9 +1,10 @@
 package com.example.synerzip.recircle_android.utilities;
 
-import android.app.Application;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+
+import com.example.synerzip.recircle_android.MyApplication;
 
 /**
  * Created by Prajakta Patil on 7/3/17.

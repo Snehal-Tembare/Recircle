@@ -233,10 +233,6 @@ public class AdditionalDetailsActivity extends AppCompatActivity {
                 for (String date : availableDates) {
                     userProductUnAvailability = new UserProductUnAvailability(date, date);
                     mItemAvailability.add(userProductUnAvailability);
-
-                    if (MyProfileActivity.isItemEdit){
-                    userProductUnAvailability = new UserProductUnAvailability("2017-08-10T00:00:00.000Z", "2017-08-10T00:00:00.000Z");
-                    mItemAvailability.add(userProductUnAvailability);}
                 }
 
                 daysCount = data.getIntExtra(getString(R.string.calendar_availability_days_count), 0);
