@@ -3,6 +3,7 @@ package com.example.synerzip.recircle_android.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +24,6 @@ import java.util.ArrayList;
  */
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
-    private static final int MAX_ROWS_DISPLAY = 6;
     private ArrayList<UserProductDetails> productDetailsList;
     private Context mContext;
     private MyProfileActivity.OnItemClickListener onItemClickListener;
@@ -50,7 +50,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                 productDetails.getUser_prod_images().get(0).getUser_prod_image_url() != null) {
             Picasso.with(mContext)
                     .load(productDetails.getUser_prod_images().get(0).getUser_prod_image_url())
-                    .placeholder(R.mipmap.ic_item)
+                    .placeholder(R.drawable.ic_camera)
                     .into(holder.mImageView);
         }
 
@@ -70,6 +70,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                 MyProfileActivity.isItemEdit = true;
                 Intent intent = new Intent((mContext), HomeActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                Log.v("ItemAdapter",productDetails.getUser_product_id()+"");
                 intent.putExtra(mContext.getString(R.string.product_id), productDetails.getUser_product_id());
                 mContext.startActivity(intent);
             }
@@ -83,7 +84,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         if (productDetailsList == null) {
             return 0;
         }
-        return Math.min(MAX_ROWS_DISPLAY, productDetailsList.size());
+        return productDetailsList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

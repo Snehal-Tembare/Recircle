@@ -245,11 +245,13 @@ public class RentInfoActivity extends AppCompatActivity {
                         mProduct.getUser_product_info().getUser_prod_images().get(0).getUser_prod_image_url() != null) {
                     Picasso.with(this).load(mProduct.getUser_product_info()
                             .getUser_prod_images().get(0).getUser_prod_image_url())
+                            .placeholder(R.drawable.ic_camera)
                             .into(mImgProduct);
                 }
 
                 if (mProduct.getUser_info().getUser_image_url() != null) {
                     Picasso.with(this).load(mProduct.getUser_info().getUser_image_url())
+                            .placeholder(R.drawable.ic_user)
                             .into(mImgOwner);
                 }
 

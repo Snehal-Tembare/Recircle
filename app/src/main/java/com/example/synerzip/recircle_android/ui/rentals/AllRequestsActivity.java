@@ -21,8 +21,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
-import com.example.synerzip.recircle_android.R;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +30,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.LogInRequest;
 import com.example.synerzip.recircle_android.models.User;
 import com.example.synerzip.recircle_android.models.rentals.OrderDetails;
@@ -43,6 +42,7 @@ import com.example.synerzip.recircle_android.ui.HomeActivity;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
+import com.google.android.gms.common.api.Api;
 
 /**
  * Created by Snehal Tembare on 19/5/17.
@@ -100,58 +100,62 @@ public class AllRequestsActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
         mUserId = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_USERID, mUserId);
         mAccessToken = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
-
-        service = ApiClient.getClient().create(RCAPInterface.class);
-        Call<OrderDetails> call = service.getOrderDetails("Bearer " + mAccessToken);
         mProgressBar.setVisibility(View.VISIBLE);
 
-        call.enqueue(new Callback<OrderDetails>() {
-            @Override
-            public void onResponse(Call<OrderDetails> call, Response<OrderDetails> response) {
-                Log.v(TAG, "before isSuccessful");
-                if (response.isSuccessful()) {
-                    if (response.body() != null) {
-                        if (response.body().getUserRequests() != null) {
-                            userRequestsArrayList = response.body().getUserRequests();
-                            if (userRequestsArrayList.size() == 0) {
-                                mProgressBar.setVisibility(View.GONE);
-                                requestToMeFragment.mTxtNoReuests.setVisibility(View.VISIBLE);
-                            } else {
-                                requestToMeFragment.communicateWithActivity(userRequestsArrayList);
+        if (ApiClient.getClient(this) != null) {
+            service = ApiClient.getClient(this).create(RCAPInterface.class);
+            Call<OrderDetails> call = service.getOrderDetails("Bearer " + mAccessToken);
+
+            call.enqueue(new Callback<OrderDetails>() {
+                @Override
+                public void onResponse(Call<OrderDetails> call, Response<OrderDetails> response) {
+                    Log.v(TAG, "before isSuccessful");
+                    if (response.isSuccessful()) {
+                        if (response.body() != null) {
+                            if (response.body().getUserRequests() != null) {
+                                userRequestsArrayList = response.body().getUserRequests();
+                                if (userRequestsArrayList.size() == 0) {
+                                    mProgressBar.setVisibility(View.GONE);
+                                    requestToMeFragment.mTxtNoReuests.setVisibility(View.VISIBLE);
+                                } else {
+                                    requestToMeFragment.communicateWithActivity(userRequestsArrayList);
+                                    mProgressBar.setVisibility(View.GONE);
+                                }
+                            }
+                            if (response.body().getUserRentings() != null) {
+                                userRentingsArrayList = response.body().getUserRentings();
+                                if (userRentingsArrayList.size() == 0) {
+                                    mProgressBar.setVisibility(View.GONE);
+                                    requestFromMeFragment.mTxtNoRentings.setVisibility(View.VISIBLE);
+                                } else {
+                                    requestFromMeFragment.communicateWithActivity(userRentingsArrayList);
+                                }
                                 mProgressBar.setVisibility(View.GONE);
                             }
-                        }
-                        if (response.body().getUserRentings() != null) {
-                            userRentingsArrayList = response.body().getUserRentings();
-                            if (userRentingsArrayList.size() == 0) {
-                                mProgressBar.setVisibility(View.GONE);
-                                requestFromMeFragment.mTxtNoRentings.setVisibility(View.VISIBLE);
-                            } else {
-                            requestFromMeFragment.communicateWithActivity(userRentingsArrayList);}
-                            mProgressBar.setVisibility(View.GONE);
-                        }
 
 
+                        }
+                    } else if (response.code() == RCWebConstants.RC_ERROR_CODE_FORBIDDEN ||
+                            response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
+                        mProgressBar.setVisibility(View.GONE);
+                        RCLog.showToast(getApplicationContext(), getString(R.string.session_expired));
+                        loginDialog();
+                    } else {
+                        mProgressBar.setVisibility(View.GONE);
+                        RCLog.showToast(getApplicationContext(), getString(R.string.something_went_wrong));
                     }
-                } else if (response.code() == RCWebConstants.RC_ERROR_CODE_FORBIDDEN ||
-                        response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
-                    mProgressBar.setVisibility(View.GONE);
-                    RCLog.showToast(getApplicationContext(), getString(R.string.session_expired));
-                    loginDialog();
-                } else {
+                }
+
+                @Override
+                public void onFailure(Call<OrderDetails> call, Throwable t) {
+                    Log.v(TAG, "onFailure");
                     mProgressBar.setVisibility(View.GONE);
                     RCLog.showToast(getApplicationContext(), getString(R.string.something_went_wrong));
                 }
-            }
-
-            @Override
-            public void onFailure(Call<OrderDetails> call, Throwable t) {
-                Log.v(TAG, "onFailure");
-                mProgressBar.setVisibility(View.GONE);
-                RCLog.showToast(getApplicationContext(), getString(R.string.something_went_wrong));
-            }
-        });
-
+            });
+        } else {
+            mProgressBar.setVisibility(View.GONE);
+        }
         setUpViewPager(mViewPager);
         mTabLayout.setupWithViewPager(mViewPager);
     }
@@ -173,35 +177,39 @@ public class AllRequestsActivity extends AppCompatActivity {
                 final String mUserPwd = mEditTxtPwd.getText().toString();
                 LogInRequest logInRequest = new LogInRequest(mUserName, mUserPwd);
 
-                service = ApiClient.getClient().create(RCAPInterface.class);
-                Call<User> userCall = service.userLogIn(logInRequest);
-                userCall.enqueue(new Callback<User>() {
-                    @Override
-                    public void onResponse(Call<User> call, Response<User> response) {
+                if (ApiClient.getClient(AllRequestsActivity.this) != null) {
+                    service = ApiClient.getClient(AllRequestsActivity.this).create(RCAPInterface.class);
+                    Call<User> userCall = service.userLogIn(logInRequest);
+                    userCall.enqueue(new Callback<User>() {
+                        @Override
+                        public void onResponse(Call<User> call, Response<User> response) {
 
-                        mProgressBar.setVisibility(View.GONE);
-                        mParentLayout.setAlpha((float) 1.0);
+                            mProgressBar.setVisibility(View.GONE);
+                            mParentLayout.setAlpha((float) 1.0);
 
-                        if (response.isSuccessful()) {
-                            mAccessToken = response.body().getToken();
-                            sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
-                            editor.apply();
-                            dialog.dismiss();
-                        } else {
-                            if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
-                                RCLog.showToast(AllRequestsActivity.this, getString(R.string.err_credentials));
+                            if (response.isSuccessful()) {
+                                mAccessToken = response.body().getToken();
+                                sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
+                                editor.apply();
+                                dialog.dismiss();
+                            } else {
+                                if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
+                                    RCLog.showToast(AllRequestsActivity.this, getString(R.string.err_credentials));
+                                }
                             }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<User> call, Throwable t) {
-                        mProgressBar.setVisibility(View.GONE);
-                        mParentLayout.setAlpha((float) 1.0);
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<User> call, Throwable t) {
+                            mProgressBar.setVisibility(View.GONE);
+                            mParentLayout.setAlpha((float) 1.0);
+                        }
+                    });
+                } else {
+                    mProgressBar.setVisibility(View.GONE);
+                }
             }
         });
 

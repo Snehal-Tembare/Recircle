@@ -73,13 +73,16 @@ public class ZoomActivity extends AppCompatActivity {
                         mViewPager.setCurrentItem(position);
 
                         View view = mRecyclerView.getChildAt(position);
-
-                        view.setBackground(ContextCompat.getDrawable(ZoomActivity.this, R.drawable.selected_image_background));
+                        if (view != null) {
+                            view.setBackground(ContextCompat.getDrawable(ZoomActivity.this, R.drawable.selected_image_background));
+                        }
 
                         for (int i = 0; i < userProdImagesArrayList.size(); i++) {
                             view = mRecyclerView.getChildAt(i);
                             if (i != position) {
-                                view.setBackground(ContextCompat.getDrawable(ZoomActivity.this, R.drawable.custom_imageview));
+                                if (view != null) {
+                                    view.setBackground(ContextCompat.getDrawable(ZoomActivity.this, R.drawable.custom_imageview));
+                                }
                             }
                         }
                     }
@@ -97,12 +100,16 @@ public class ZoomActivity extends AppCompatActivity {
                     public void onPageSelected(int position) {
                         View view = mRecyclerView.getChildAt(position);
 
-                        view.setBackground(ContextCompat.getDrawable(ZoomActivity.this, R.drawable.selected_image_background));
+                        if (view != null) {
+                            view.setBackground(ContextCompat.getDrawable(ZoomActivity.this, R.drawable.selected_image_background));
+                        }
 
                         for (int i = 0; i < userProdImagesArrayList.size(); i++) {
                             view = mRecyclerView.getChildAt(i);
-                            if (i != mViewPager.getCurrentItem()) {
-                                view.setBackground(ContextCompat.getDrawable(ZoomActivity.this, R.drawable.custom_imageview));
+                            if (view != null) {
+                                if (i != mViewPager.getCurrentItem()) {
+                                    view.setBackground(ContextCompat.getDrawable(ZoomActivity.this, R.drawable.custom_imageview));
+                                }
                             }
                         }
                     }

@@ -2,20 +2,15 @@ package com.example.synerzip.recircle_android.ui;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.example.synerzip.recircle_android.R;
-import com.example.synerzip.recircle_android.utilities.RCLog;
 
 import java.util.ArrayList;
 

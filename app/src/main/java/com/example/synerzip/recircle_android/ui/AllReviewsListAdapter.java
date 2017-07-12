@@ -41,14 +41,20 @@ class AllReviewsListAdapter extends RecyclerView.Adapter<AllReviewsListAdapter.V
     public void onBindViewHolder(ViewHolder holder, int position) {
 
         UserProdReview review = userProdReviewArrayList.get(position);
-
-        holder.reviewersName.setText(review.getUser().getFirst_name() + " " + review.getUser().getLast_name());
-        Picasso.with(mContext).load(review.getUser().getUser_image_url()).into(holder.reviewersImage);
-        if (null != review.getProd_rating()) {
-            holder.rating.setRating(review.getProd_rating());
-            holder.avgRatingCount.setText("(" + review.getProd_rating() + ")");
+        if (review != null) {
+            if (review.getUser() != null) {
+                holder.reviewersName.setText(review.getUser().getFirst_name() + " " + review.getUser().getLast_name());
+            }
+            if (review.getUser().getUser_image_url() != null) {
+                Picasso.with(mContext).load(review.getUser().getUser_image_url())
+                        .placeholder(R.drawable.ic_user).into(holder.reviewersImage);
+            }
+            if (null != review.getProd_rating()) {
+                holder.rating.setRating(review.getProd_rating());
+                holder.avgRatingCount.setText("(" + review.getProd_rating() + ")");
+            }
+            holder.reviewComment.setText(review.getProd_review());
         }
-        holder.reviewComment.setText(review.getProd_review());
     }
 
     @Override

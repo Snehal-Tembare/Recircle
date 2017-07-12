@@ -87,8 +87,11 @@ public class MyProfileActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
         user_id = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_USERID, user_id);
+    }
 
-        service = ApiClient.getClient().create(RCAPInterface.class);
+    private void getMyProfileData() {
+        if (ApiClient.getClient(this)!=null){
+        service = ApiClient.getClient(this).create(RCAPInterface.class);
         Call<User> call = service.getUserProfile(user_id);
         mProgressBar.setVisibility(View.VISIBLE);
         call.enqueue(new Callback<User>() {
@@ -99,42 +102,46 @@ public class MyProfileActivity extends AppCompatActivity {
                     if (response.body() != null) {
                         User user = response.body();
                         if (user!=null){
-
-                        if (user.getUser_image_url() != null) {
                             Picasso.with(getApplicationContext())
-                                    .load(user.getUser_image_url()).into(mImg);
-                        }
+                                    .load(R.drawable.ic_user)
+                                    .placeholder(R.drawable.ic_user).into(mImg);
 
-                        if (user.getFirst_name() != null || user.getLast_name() != null) {
-                            mTxtName.setText(user.getFirst_name() + " " + user.getLast_name());
-                        }
+                            if (user.getUser_image_url() != null) {
+                                Picasso.with(getApplicationContext())
+                                        .load(user.getUser_image_url())
+                                        .placeholder(R.drawable.ic_user).into(mImg);
+                            }
 
-                        if (user.getUser_avg_rating() != null) {
-                            mRatingBar.setRating(Float.parseFloat(user.getUser_avg_rating()));
-                            mTxtReviewsCount.setText("(" + user.getUser_avg_rating() + ")");
-                        }
+                            if (user.getFirst_name() != null || user.getLast_name() != null) {
+                                mTxtName.setText(user.getFirst_name() + " " + user.getLast_name());
+                            }
 
-                        if (user.getUserProductDetails() != null
-                                && user.getUserProductDetails().size() != 0) {
-                            userProductDetailsList = user.getUserProductDetails();
-                            Log.v(TAG, "***" + user.getFirst_name() + " " + user.getLast_name());
-                            adapter = new ItemAdapter(getApplicationContext(), userProductDetailsList, new OnItemClickListener() {
-                                @Override
-                                public void onProductClick(UserProductDetails userProductDetails) {
-                                    Log.v(TAG, "onProductClick");
-                                    Intent intent = new Intent(MyProfileActivity.this, DetailsActivity.class);
-                                    if (userProductDetails.getUser_product_id() != null) {
-                                        intent.putExtra(getString(R.string.product_id), userProductDetails.getUser_product_id());
+                            if (user.getUser_avg_rating() != null) {
+                                mRatingBar.setRating(Float.parseFloat(user.getUser_avg_rating()));
+                                mTxtReviewsCount.setText("(" + user.getUser_avg_rating() + ")");
+                            }
+
+                            if (user.getUserProductDetails() != null
+                                    && user.getUserProductDetails().size() != 0) {
+                                userProductDetailsList = user.getUserProductDetails();
+                                Log.v(TAG, "***" + user.getFirst_name() + " " + user.getLast_name());
+                                adapter = new ItemAdapter(getApplicationContext(), userProductDetailsList, new OnItemClickListener() {
+                                    @Override
+                                    public void onProductClick(UserProductDetails userProductDetails) {
+                                        Log.v(TAG, "onProductClick");
+                                        Intent intent = new Intent(MyProfileActivity.this, DetailsActivity.class);
+                                        if (userProductDetails.getUser_product_id() != null) {
+                                            intent.putExtra(getString(R.string.product_id), userProductDetails.getUser_product_id());
+                                        }
+                                        startActivity(intent);
                                     }
-                                    startActivity(intent);
-                                }
-                            });
+                                });
 
-                            mRecyclerItems.setLayoutManager(new GridLayoutManager(MyProfileActivity.this, 2));
-                            mRecyclerItems.setAdapter(adapter);
+                                mRecyclerItems.setLayoutManager(new GridLayoutManager(MyProfileActivity.this, 2));
+                                mRecyclerItems.setAdapter(adapter);
+                            }
+
                         }
-
-                    }
                     }
                 }else if (response.code()== RCWebConstants.RC_ERROR_CODE_BAD_REQUEST){
                     RCLog.showToast(getApplicationContext(),getString(R.string.user_not_authenticated));
@@ -155,12 +162,16 @@ public class MyProfileActivity extends AppCompatActivity {
                 RCLog.showToast(getApplicationContext(),getString(R.string.something_went_wrong));
             }
         });
+    }else {
+            mProgressBar.setVisibility(View.GONE);
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-         }
+        getMyProfileData();
+    }
 
     /**
      * OnClick of home button

@@ -32,6 +32,7 @@
             android:background="@android:drawable/ic_notification_overlay"
             android:textColor="@color/colorWhite"
             android:textSize="@dimen/dimen_10sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:clickable="true"/>
     </RelativeLayout>
 </RelativeLayout>

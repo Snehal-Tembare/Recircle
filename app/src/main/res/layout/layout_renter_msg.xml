@@ -4,7 +4,7 @@
     android:id="@+id/layout_renter"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_below="@+id/layout-owner"
+    android:layout_below="@+id/layout_owner"
     android:layout_marginTop="@dimen/dimen_30dp"
     android:orientation="horizontal">
 

@@ -2,6 +2,7 @@ package com.example.synerzip.recircle_android.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -13,7 +14,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.Discounts;
+import com.example.synerzip.recircle_android.models.EditProduct;
 import com.example.synerzip.recircle_android.models.Product;
 import com.example.synerzip.recircle_android.models.Products;
 import com.example.synerzip.recircle_android.models.ProductsData;
@@ -50,6 +51,8 @@ import retrofit2.Response;
  * Copyright © 2017 Synerzip. All rights reserved
  */
 public class ListItemFragment extends Fragment {
+
+    public static EditProduct editProduct;
 
     @BindView(R.id.edit_enter_price)
     protected EditText mEditTxtEnterPrice;
@@ -129,7 +132,7 @@ public class ListItemFragment extends Fragment {
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
-        utility = new SearchUtility();
+        utility = new SearchUtility(getActivity());
         mProductAutoComplete.setSingleLine();
 
         mProductAutoComplete.addTextChangedListener(new ListItemFragment.RCTextWatcher(mProductAutoComplete));
@@ -138,6 +141,7 @@ public class ListItemFragment extends Fragment {
 
         listDiscounts = new ArrayList<>();
 
+        final ArrayList<Discounts> strings=new ArrayList<>();
         //discounts checkbox listener
         mDiscountForFiveDay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -145,7 +149,7 @@ public class ListItemFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     mDiscounts = new Discounts(30, 5, 1);
-                    listDiscounts.add(mDiscounts);
+                    strings.add(mDiscounts);
                 }
             }
         });
@@ -155,67 +159,45 @@ public class ListItemFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     mDiscounts = new Discounts(40, 10, 1);
-                    listDiscounts.add(mDiscounts);
+                    strings.add(mDiscounts);
                 }
             }
         });
 
-        //Populate data to edit
-        if (MyProfileActivity.isItemEdit) {
-            Log.v("ListItemFragment**", getArguments().getString(getString(R.string.product_id)));
-            service = ApiClient.getClient().create(RCAPInterface.class);
+        listDiscounts.addAll(strings);
 
-            Call<Products> call = service.getProductDetailsByID(getArguments().getString(getString(R.string.product_id)));
-            call.enqueue(new Callback<Products>() {
-                @Override
-                public void onResponse(Call<Products> call, Response<Products> response) {
-                    if (response.isSuccessful()) {
-                        if (response.body() != null) {
-                            product = response.body();
-                            if (product != null) {
-                                mProductAutoComplete.setText(product.getProduct_info().getProduct_title());
-                                mEditTxtEnterPrice.setText(product.getUser_product_info().getPrice_per_day());
-                                mEditMinRental.setText(product.getUser_product_info().getMin_rental_days());
-
-                                ArrayList<UserProductDiscount> productDiscountArrayList = product.getUser_product_info().getUser_product_discounts();
-                                if (productDiscountArrayList.size() != 0) {
-                                    for (int i = 0; i < productDiscountArrayList.size(); i++) {
-                                        if (productDiscountArrayList.get(i).getDiscount_for_days() == 5) {
-                                            mDiscountForFiveDay.setChecked(true);
-                                        } else if (productDiscountArrayList.get(i).getDiscount_for_days() == 10) {
-                                            mDiscountForTenDay.setChecked(true);
-                                        }
-                                    }
-
-                                }
-                            }
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<Products> call, Throwable t) {
-
-                }
-            });
-
-
+        if (MyProfileActivity.isItemEdit){
+            mProductAutoComplete.dismissDropDown();
         }
+
 
         return view;
 
     }//end onCreateView()
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        //Populate data to edit
+
+    }
 
     @OnClick(R.id.btn_upload_img)
     public void btnUploadImg(View view) {
         mProductName = mProductAutoComplete.getText().toString();
         submitForm();
         HideKeyboard.hideKeyBoard(getActivity());
-        if (NetworkUtility.isNetworkAvailable(getActivity())) {
+        if (NetworkUtility.isNetworkAvailable()) {
             if (getValues()) {
                 Intent intent = new Intent(getActivity(), UploadImgActivity.class);
                 if (MyProfileActivity.isItemEdit) {
                     intent.putExtra(getString(R.string.product), product);
+
+                    //Set data for edit
+                    editProduct.setUser_product_id(product.getUser_product_info().getUser_product_id());
+                    editProduct.setPrice_per_day(Integer.parseInt(mEditTxtEnterPrice.getText().toString().trim()));
+                    editProduct.setMin_rental_days(Integer.parseInt(mEditMinRental.getText().toString().trim()));
+                    editProduct.setUser_prod_discounts(listDiscounts);
                 }
                 startActivity(intent);
             } else {
@@ -259,7 +241,7 @@ public class ListItemFragment extends Fragment {
         productItemList = new ArrayList<>();
         utility.populateAutoCompleteData();
 
-        ReadyCallback readyCallback = new ReadyCallback() {
+        final ReadyCallback readyCallback = new ReadyCallback() {
             @Override
             public void searchProductResult(SearchProduct sd) {
                 searchProduct = sd;
@@ -370,6 +352,53 @@ public class ListItemFragment extends Fragment {
             }
         });
 
+        if (MyProfileActivity.isItemEdit) {
+            editProduct = new EditProduct();
+            if (ApiClient.getClient(getActivity()) != null) {
+                service = ApiClient.getClient(getActivity()).create(RCAPInterface.class);
+
+                if (getArguments() != null) {
+                    Call<Products> call = service.getProductDetailsByID(getArguments().getString(getString(R.string.product_id)));
+
+                    call.enqueue(new Callback<Products>() {
+                        @Override
+                        public void onResponse(Call<Products> call, Response<Products> response) {
+                            if (response.isSuccessful()) {
+                                if (response.body() != null) {
+                                    Log.v("onSu Edit product data", response + "");
+                                    product = response.body();
+                                    if (product != null) {
+                                        mProductAutoComplete.setText(product.getProduct_info().getProduct_title());
+                                        mEditTxtEnterPrice.setText(product.getUser_product_info().getPrice_per_day());
+                                        mEditMinRental.setText(product.getUser_product_info().getMin_rental_days());
+
+                                        ArrayList<UserProductDiscount> productDiscountArrayList = product.getUser_product_info().getUser_product_discounts();
+                                        if (productDiscountArrayList.size() != 0) {
+                                            for (int i = 0; i < productDiscountArrayList.size(); i++) {
+                                                if (productDiscountArrayList.get(i).getDiscount_for_days() == 5) {
+                                                    mDiscountForFiveDay.setChecked(true);
+                                                } else if (productDiscountArrayList.get(i).getDiscount_for_days() == 10) {
+                                                    mDiscountForTenDay.setChecked(true);
+                                                }
+                                            }
+
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Products> call, Throwable t) {
+
+                        }
+                    });
+                }
+
+            } else {
+
+            }
+        }
     }
 
     /**

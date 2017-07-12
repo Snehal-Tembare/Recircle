@@ -2,6 +2,7 @@ package com.example.synerzip.recircle_android.network;
 
 import com.example.synerzip.recircle_android.models.AllProductInfo;
 import com.example.synerzip.recircle_android.models.ChangePwdRequest;
+import com.example.synerzip.recircle_android.models.EditProduct;
 import com.example.synerzip.recircle_android.models.ForgotPwdRequest;
 import com.example.synerzip.recircle_android.models.ListAnItemRequest;
 import com.example.synerzip.recircle_android.models.LogInRequest;
@@ -41,6 +42,7 @@ public interface RCAPInterface {
     /**
      * Get all products details
      */
+
     @GET(RCWebConstants.RC_GET_PRODUCT_DETAILS)
     Call<AllProductInfo> getProductDetails();
 
@@ -235,6 +237,14 @@ public interface RCAPInterface {
      */
     @PUT(RCWebConstants.RC_CANCEL_ORDER)
     Call<CancelOrder> cancelOrder(@Body CancelOrder cancelOrder);
+
+    /**
+     *  Edit user product details
+     * @param editProduct
+     */
+    @PUT(RCWebConstants.RC_EDIT_PRODUCT_DETAILS)
+    Call<EditProduct> editUserProductDetails(@Header("Authorization") String token,
+                                          @Body EditProduct editProduct);
 
 
     /**

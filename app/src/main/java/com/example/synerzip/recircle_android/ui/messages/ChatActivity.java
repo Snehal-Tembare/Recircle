@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
@@ -27,6 +28,7 @@ import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 /**
  * Created by Prajakta Patil on 14/6/17.
  * Copyright © 2017 Synerzip. All rights reserved
@@ -63,6 +65,9 @@ public class ChatActivity extends AppCompatActivity {
     @BindView(R.id.txt_toolbar_user_name)
     protected TextView mTxtUserName;
 
+    @BindView(R.id.progress_bar)
+    protected RelativeLayout mProgressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +82,7 @@ public class ChatActivity extends AppCompatActivity {
         mChatAdapter = new MsgOwnerAdapter(getApplicationContext(), R.id.txt_msg_owner);
         mListViewMsgs.setAdapter(mChatAdapter);
 
-        Bundle bundle=getIntent().getExtras();
+        Bundle bundle = getIntent().getExtras();
         mTxtUserName.setText(bundle.getString(getString(R.string.renter_name)));
 
         //get data from shared preferences
@@ -102,22 +107,29 @@ public class ChatActivity extends AppCompatActivity {
      */
     public void sendUserMsg() {
         UserAskQueResponse userAskQueResponse = new UserAskQueResponse(AllMessagesActivity.userProductMsgId, mAskQue);
-        service = ApiClient.getClient().create(RCAPInterface.class);
-        Call<RootMessageInfo> call = service.getMsgResponse("Bearer " + mAccessToken, userAskQueResponse);
-        call.enqueue(new Callback<RootMessageInfo>() {
-            @Override
-            public void onResponse(Call<RootMessageInfo> call, Response<RootMessageInfo> response) {
-                if (response.isSuccessful()) {
-                    mListRenterMsgs=new ArrayList<>();
-                    RCLog.showToast(ChatActivity.this, getString(R.string.msg_sent));
+        mProgressBar.setVisibility(View.VISIBLE);
+        if (ApiClient.getClient(this) != null) {
+            service = ApiClient.getClient(this).create(RCAPInterface.class);
+            Call<RootMessageInfo> call = service.getMsgResponse("Bearer " + mAccessToken, userAskQueResponse);
+            call.enqueue(new Callback<RootMessageInfo>() {
+                @Override
+                public void onResponse(Call<RootMessageInfo> call, Response<RootMessageInfo> response) {
+                    if (response.isSuccessful()) {
+                        mListRenterMsgs = new ArrayList<>();
+                        RCLog.showToast(ChatActivity.this, getString(R.string.msg_sent));
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<RootMessageInfo> call, Throwable t) {
-            }
-        });
+                @Override
+                public void onFailure(Call<RootMessageInfo> call, Throwable t) {
+                    RCLog.showToast(ChatActivity.this, getString(R.string.something_went_wrong));
+                }
+            });
+        } else {
+            mProgressBar.setVisibility(View.GONE);
+        }
     }
+
     /**
      * action bar back button
      *

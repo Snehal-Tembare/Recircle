@@ -1,13 +1,6 @@
 package com.example.synerzip.recircle_android.ui;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,12 +40,9 @@ public class UploadImageAdapter extends RecyclerView.Adapter<UploadImageAdapter.
         if (position == 0) {
             holder.txtCoverImage.setVisibility(View.VISIBLE);
         }
-        if (position>0){
-            File file=new File(mListUserProdImages.get(position));
-            Picasso.with(mContext).load(file).into(holder.imgItem);
-        }else {
-            Picasso.with(mContext).load(mListUserProdImages.get(position)).into(holder.imgItem);}
 
+        File file = new File(mListUserProdImages.get(position));
+        Picasso.with(mContext).load(file).placeholder(R.drawable.ic_camera).into(holder.imgItem);
         holder.imgItem.setAlpha(0.7f);
     }
 

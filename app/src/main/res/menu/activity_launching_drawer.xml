@@ -1,29 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <group android:id="@+id/grp_ic_nav_settings">
         <item
-            android:icon="@mipmap/ic_nav_settings"
             android:id="@+id/nav_settings"
+            android:icon="@mipmap/ic_nav_settings"
             android:title="Settings" />
-        <item
-            android:icon="@mipmap/ic_nav_msgs"
-            android:id="@+id/nav_msgs"
-            android:title="Messages" />
+    </group>
+
+<group android:id="@+id/grp_ic_nav_msgs">
+    <item
+        android:icon="@mipmap/ic_nav_msgs"
+        android:id="@+id/nav_msgs"
+        android:title="Messages" />
+</group>
+
+    <group android:id="@+id/grp_nav_payments">
         <item
             android:icon="@mipmap/ic_nav_payments"
             android:id="@+id/nav_payments"
             android:title="Payments" />
-        <item
-            android:icon="@mipmap/ic_nav_login"
-            android:id="@+id/nav_logIn_signUp"
-            android:title="Log In/Sign Up" />
+    </group>
 
+    <group android:id="@+id/grp_nav_logIn_signUp">
         <item
-            android:icon="@mipmap/ic_nav_faq"
+            android:id="@+id/nav_logIn_signUp"
+            android:icon="@mipmap/ic_nav_login"
+            android:title="Log In/Sign Up" />
+    </group>
+
+    <group android:id="@+id/grp_nav_faq">
+        <item
             android:id="@+id/nav_faq"
+            android:icon="@mipmap/ic_nav_faq"
             android:title="FAQ" />
+    </group>
+    <group android:id="@+id/grp_nav_logout">
         <item
-            android:icon="@mipmap/ic_nav_logout"
             android:id="@+id/nav_logout"
+            android:icon="@mipmap/ic_nav_logout"
             android:title="Logout" />
+    </group>
+
 </menu>

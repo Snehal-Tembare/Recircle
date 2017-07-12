@@ -13,15 +13,16 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <com.pkmmte.view.CircularImageView
         android:id="@+id/img_nav_user_profile"
         android:layout_width="@dimen/dimen_80dp"
         android:layout_height="@dimen/dimen_80dp"
         android:layout_gravity="center"
-        android:src="@drawable/ic_nav_user"
-        app:civ_border_color="@color/colorLightGrey"
-        app:civ_border_width="@dimen/dimen_2dp"
-        app:civ_fill_color="@color/common_white" />
+        android:src="@drawable/ic_user"
+        app:border="false"
+        app:shadow="true"
+        app:border_color="@color/common_white"
+        app:border_width="@dimen/dimen_1dp" />
 
     <TextView
         android:id="@+id/txt_nav_user_name"
@@ -29,14 +30,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/dimen_10dp"
-        android:text="Abhijit Bongarde"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
         android:gravity="center"
         android:id="@+id/txt_nav_user_email"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="bongarde@gmail.com" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

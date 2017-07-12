@@ -6,9 +6,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.synerzip.recircle_android.R;
-import com.example.synerzip.recircle_android.models.SearchProduct;
-import com.example.synerzip.recircle_android.ui.messages.AllMessagesActivity;
-import com.example.synerzip.recircle_android.utilities.RCWebConstants;
+
 /**
  * Created by Prajakta Patil on 24/3/17.
  * Copyright © 2017 Synerzip. All rights reserved

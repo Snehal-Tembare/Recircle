@@ -47,10 +47,13 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         holder.productName.setText(product.getProduct_info().getProduct_title());
         holder.pricePerDay.setText("$" + product.getUser_product_info().getPrice_per_day() + "/day");
 
-        if (product.getUser_product_info().getUser_prod_images().get(position).getUser_prod_image_url() != null
-                && product.getUser_product_info().getUser_prod_images().size() != 0) {
+        if (product.getUser_product_info().getUser_prod_images().size() != 0
+                && product.getUser_product_info().getUser_prod_images().get(0).getUser_prod_image_url() != null
+                ) {
             Picasso.with(mContext)
-                    .load(product.getUser_product_info().getUser_prod_images().get(position).getUser_prod_image_url())
+                    .load(product.getUser_product_info().getUser_prod_images()
+                            .get(0).getUser_prod_image_url())
+                    .placeholder(R.drawable.ic_camera)
                     .into(holder.imgProduct);
         }
 

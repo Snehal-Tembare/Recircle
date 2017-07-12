@@ -138,7 +138,7 @@ public class ResultActivity extends AppCompatActivity {
         mDialog = new ProgressDialog(this);
         mDialog.setMessage(getString(R.string.loading));
 
-        utility = new SearchUtility();
+        utility = new SearchUtility(this);
 
         mIntent = getIntent().getExtras();
 
