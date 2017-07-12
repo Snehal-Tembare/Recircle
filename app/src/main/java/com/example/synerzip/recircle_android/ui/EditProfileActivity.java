@@ -156,10 +156,12 @@ public class EditProfileActivity extends AppCompatActivity {
         mEditTxtLastName.setText(rootUserInfo.getLast_name());
         mEditTxtMob.setText(String.valueOf(rootUserInfo.getUser_mob_no()));
         mSwitchNotification.setChecked(rootUserInfo.isNotification_flag());
-        mEditTxtCity.setText(rootUserInfo.getUserAddress().getCity());
-        mEditTxtState.setText(rootUserInfo.getUserAddress().getState());
-        mEditTxtStreetAddr.setText(rootUserInfo.getUserAddress().getStreet());
-        mEditTxtZipcode.setText(rootUserInfo.getUserAddress().getZip());
+        if(rootUserInfo.getUserAddress()!=null) {
+            mEditTxtCity.setText(rootUserInfo.getUserAddress().getCity());
+            mEditTxtState.setText(rootUserInfo.getUserAddress().getState());
+            mEditTxtStreetAddr.setText(rootUserInfo.getUserAddress().getStreet());
+            mEditTxtZipcode.setText(rootUserInfo.getUserAddress().getZip());
+        }
         Picasso.with(this).load(rootUserInfo.getUser_image_url()).placeholder(R.drawable.ic_user).into(mImgUserProfile);
 
     }

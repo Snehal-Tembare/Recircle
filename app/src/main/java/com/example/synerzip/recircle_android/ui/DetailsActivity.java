@@ -373,15 +373,26 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     /**
-     * OnClick of home button
+     * action bar back button
+     *
+     * @param item
+     * @return
      */
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                Intent intent = new Intent(DetailsActivity.this, HomeActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+
         }
-        return true;
     }
 
     @Override

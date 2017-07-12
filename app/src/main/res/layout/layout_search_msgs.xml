@@ -17,5 +17,6 @@
         android:textColor="@color/colorWhite">
 
         <requestFocus />
+
     </AutoCompleteTextView>
 </LinearLayout>

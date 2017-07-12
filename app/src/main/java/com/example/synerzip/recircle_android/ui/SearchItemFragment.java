@@ -150,6 +150,8 @@ public class SearchItemFragment extends Fragment {
     @BindView(R.id.frame_layout)
     protected FrameLayout mFrameLayout;
 
+    private AllProductInfo allProductInfo;
+
     /**
      * SearchItemFragment empty constructor
      */
@@ -298,6 +300,7 @@ public class SearchItemFragment extends Fragment {
             public void onResponse(Call<AllProductInfo> call, Response<AllProductInfo> response) {
 
                 if (response.isSuccessful()) {
+
                     mListsLayout.setVisibility(View.VISIBLE);
                     if (null != response && null != response.body()) {
 
@@ -327,35 +330,35 @@ public class SearchItemFragment extends Fragment {
      * bind values to adapter
      */
     private void bindData() {
-        RecentItemsAdapter mRecentItemsAdapter;
-        PopularItemsAdapter mPopularItemsAdapter;
-        mRecentItemsAdapter = new RecentItemsAdapter(getActivity(), productDetailsList, new OnItemClickListener() {
-            @Override
-            public void onItemClick(Products product) {
-                Intent detailsIntent = new Intent(getActivity(), DetailsActivity.class);
-                detailsIntent.putExtra(getString(R.string.product_id),
-                        product.getUser_product_info().getUser_product_id());
-                startActivity(detailsIntent);
-            }
-        });
-
-        mRecyclerViewRecent.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        mRecyclerViewRecent.setAdapter(mRecentItemsAdapter);
-
-        mPopularItemsAdapter = new PopularItemsAdapter(getActivity(), popularProducts, new OnItemClickListener() {
-            @Override
-            public void onItemClick(Products product) {
-                Log.v(TAG, "onItemClick" + product.getUser_product_info().getUser_product_id());
-
-                Intent detailsIntent = new Intent(getActivity(), DetailsActivity.class);
-                detailsIntent.putExtra(getString(R.string.product_id),
-                        product.getUser_product_info().getUser_product_id());
-                startActivity(detailsIntent);
-            }
-        });
+        ProductsAdapter productsAdapter;
+        productsAdapter = new ProductsAdapter(getActivity(), "popularproducts", popularProducts, null,
+                new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Products product) {
+                        Intent detailsIntent = new Intent(getActivity(), DetailsActivity.class);
+                        detailsIntent.putExtra(getString(R.string.product_id),
+                                product.getUser_product_info().getUser_product_id());
+                        startActivity(detailsIntent);
+                    }
+                });
 
         mRecyclerViewPopular.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        mRecyclerViewPopular.setAdapter(mPopularItemsAdapter);
+        mRecyclerViewPopular.setAdapter(productsAdapter);
+
+        productsAdapter = new ProductsAdapter(getActivity(), "productDetails", null, productDetailsList,
+                new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Products product) {
+                        Intent detailsIntent = new Intent(getActivity(), DetailsActivity.class);
+                        detailsIntent.putExtra(getString(R.string.product_id),
+                                product.getUser_product_info().getUser_product_id());
+                        startActivity(detailsIntent);
+                    }
+                });
+
+        mRecyclerViewRecent.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        mRecyclerViewRecent.setAdapter(productsAdapter);
+
     }
 
     /**

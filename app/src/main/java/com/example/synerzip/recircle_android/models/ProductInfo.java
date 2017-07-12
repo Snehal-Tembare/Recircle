@@ -32,7 +32,6 @@ public class ProductInfo implements Parcelable {
 
     private String product_price;
 
-
     private UserProdImages product_image_url;
 
     private String product_model_id;

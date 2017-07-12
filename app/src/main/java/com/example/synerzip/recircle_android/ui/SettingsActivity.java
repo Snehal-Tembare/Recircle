@@ -124,6 +124,8 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         getUserDetails();
+
+
     }
 
     /**
@@ -149,11 +151,12 @@ public class SettingsActivity extends AppCompatActivity {
                     mEmail = response.body().getEmail();
                     mMobNo = String.valueOf(response.body().getUser_mob_no());
                     mUserImg = response.body().getUser_image_url();
-                    mUserCity = response.body().getUserAddress().getCity();
-                    mUserState = response.body().getUserAddress().getState();
-                    mUserStreet = response.body().getUserAddress().getStreet();
-                    mUserZipcode = String.valueOf(response.body().getUserAddress().getZip());
-
+                    if(response.body().getUserAddress()!=null) {
+                        mUserCity = response.body().getUserAddress().getCity();
+                        mUserState = response.body().getUserAddress().getState();
+                        mUserStreet = response.body().getUserAddress().getStreet();
+                        mUserZipcode = String.valueOf(response.body().getUserAddress().getZip());
+                    }
                     if (response.body().getUser_id() != null) {
                         mUserId = response.body().getUser_id();
                     }
@@ -205,9 +208,6 @@ public class SettingsActivity extends AppCompatActivity {
                     mFrameLayout.setAlpha((float) 1.0);
                 }
 
-                Intent i=new Intent(SettingsActivity.this,EditProfileActivity.class);
-                i.putExtra(getString(R.string.rootUserInfo), rootUserInfo);
-                startActivity(i);
             }
 
             @Override
@@ -225,8 +225,9 @@ public class SettingsActivity extends AppCompatActivity {
      */
     @OnClick(R.id.btn_edit_profile)
     public void btnEditProfile(View view) {
-        startActivityForResult(new Intent(SettingsActivity.this, EditProfileActivity.class),
-                REQUEST_CODE);
+        Intent i=new Intent(SettingsActivity.this,EditProfileActivity.class);
+        i.putExtra(getString(R.string.rootUserInfo), rootUserInfo);
+        startActivity(i);
     }
 
     /**
