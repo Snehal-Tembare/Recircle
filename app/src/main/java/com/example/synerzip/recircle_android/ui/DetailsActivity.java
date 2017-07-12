@@ -188,6 +188,7 @@ public class DetailsActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
         mAccessToken = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
         isLoggedIn = sharedPreferences.getBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
+        mUserId = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_USERID, mUserId);
 
         mProgressBar.setVisibility(View.VISIBLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -230,11 +231,20 @@ public class DetailsActivity extends AppCompatActivity {
                             product = response.body();
 
                             if (product != null) {
+
+                                //Disable ask question for self listed item
+                                if (mUserId.equalsIgnoreCase(product.getUser_info().getUser_id())) {
+                                    mTxtAskQuestion.setVisibility(View.GONE);
+                                } else {
+                                    mTxtAskQuestion.setVisibility(View.VISIBLE);
+                                }
+
                                 if (product.getUser_product_info().getUser_prod_reviews() != null
                                         && product.getUser_product_info().getUser_prod_reviews().size() != 0) {
                                     userProdReviewArrayList = product.getUser_product_info().getUser_prod_reviews();
                                     mLayoutRentersReview.setVisibility(View.VISIBLE);
                                     reviewsListAdapter = new ReviewsListAdapter(getApplicationContext(), userProdReviewArrayList);
+
                                     if (userProdReviewArrayList.size() > 0) {
                                         mTxtSeeAllReviews.setVisibility(View.VISIBLE);
                                         mTxtSeeAllReviews.setText(getString(R.string.see_all_reviews) + " (" + userProdReviewArrayList.size() + ")");
@@ -418,6 +428,19 @@ public class DetailsActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //Disable ask question for self listed item
+        if (product != null) {
+            if (mUserId.equalsIgnoreCase(product.getUser_info().getUser_id())) {
+                mTxtAskQuestion.setVisibility(View.GONE);
+            } else {
+                mTxtAskQuestion.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
     /**
      * Login again dialog
      */
@@ -442,47 +465,47 @@ public class DetailsActivity extends AppCompatActivity {
                 if (ApiClient.getClient(DetailsActivity.this) != null) {
                     service = ApiClient.getClient(DetailsActivity.this).create(RCAPInterface.class);
 
-                Call<User> userCall = service.userLogIn(logInRequest);
-                userCall.enqueue(new Callback<User>() {
-                    @Override
-                    public void onResponse(Call<User> call, Response<User> response) {
+                    Call<User> userCall = service.userLogIn(logInRequest);
+                    userCall.enqueue(new Callback<User>() {
+                        @Override
+                        public void onResponse(Call<User> call, Response<User> response) {
 
-                        mProgressBar.setVisibility(View.GONE);
-                        mParentLayout.setAlpha((float) 1.0);
+                            mProgressBar.setVisibility(View.GONE);
+                            mParentLayout.setAlpha((float) 1.0);
 
-                        if (response.isSuccessful()) {
-                            mAccessToken = response.body().getToken();
-                            mUserId = response.body().getUser_id();
-                            mUserName = response.body().getEmail();
-                            mUserFirstName = response.body().getFirst_name();
-                            mUserEmail = response.body().getEmail();
-                            mUserLastName = response.body().getLast_name();
-                            mAccessToken = response.body().getToken();
-                            mUserImage = response.body().getUser_image_url();
-                            mUserMobNo = response.body().getUser_mob_no();
+                            if (response.isSuccessful()) {
+                                mAccessToken = response.body().getToken();
+                                mUserId = response.body().getUser_id();
+                                mUserName = response.body().getEmail();
+                                mUserFirstName = response.body().getFirst_name();
+                                mUserEmail = response.body().getEmail();
+                                mUserLastName = response.body().getLast_name();
+                                mAccessToken = response.body().getToken();
+                                mUserImage = response.body().getUser_image_url();
+                                mUserMobNo = response.body().getUser_mob_no();
 
-                            if (null != mUserId && null != mLogInUserName &&
-                                    null != mUserFirstName && null != mUserLastName && null != mAccessToken) {
-                                saveUserData();
-                            }
-                            dialog.dismiss();
+                                if (null != mUserId && null != mLogInUserName &&
+                                        null != mUserFirstName && null != mUserLastName && null != mAccessToken) {
+                                    saveUserData();
+                                }
+                                dialog.dismiss();
 
-                            startActivity(askQueActivityIntent);
-                        } else {
-                            if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
-                                RCLog.showToast(DetailsActivity.this, getString(R.string.err_credentials));
+                                startActivity(askQueActivityIntent);
+                            } else {
+                                if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
+                                    RCLog.showToast(DetailsActivity.this, getString(R.string.err_credentials));
+                                }
                             }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<User> call, Throwable t) {
-                        mProgressBar.setVisibility(View.GONE);
-                        mParentLayout.setAlpha((float) 1.0);
-                    }
-                });
-            }else {
-                    RCLog.showLongToast(DetailsActivity.this,getString(R.string.check_nw_connectivity));
+                        @Override
+                        public void onFailure(Call<User> call, Throwable t) {
+                            mProgressBar.setVisibility(View.GONE);
+                            mParentLayout.setAlpha((float) 1.0);
+                        }
+                    });
+                } else {
+                    RCLog.showLongToast(DetailsActivity.this, getString(R.string.check_nw_connectivity));
                 }
             }
         });

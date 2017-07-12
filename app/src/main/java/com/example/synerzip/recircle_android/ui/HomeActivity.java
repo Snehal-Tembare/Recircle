@@ -112,6 +112,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+//        getSupportActionBar().setIcon(R.drawable.ic_splash_logo);
 
         ownerMsgFragment = new OwnerMsgFragment();
 

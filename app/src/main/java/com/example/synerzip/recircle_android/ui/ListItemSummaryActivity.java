@@ -3,6 +3,7 @@ package com.example.synerzip.recircle_android.ui;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ import com.example.synerzip.recircle_android.models.UserProdImages;
 import com.example.synerzip.recircle_android.models.UserProductUnAvailability;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
+import com.example.synerzip.recircle_android.utilities.AESEncryptionDecryption;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
@@ -60,6 +62,14 @@ public class ListItemSummaryActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
 
     private String mAccessToken;
+    private String mPassword;
+    private String mUserId;
+    private String mUserEmail;
+    private String mUserLastName;
+    private String mUserFirstName;
+    private String mUserImage;
+    private long mUserMobNo;
+
     private Products product;
     private boolean isLoggedIn;
 
@@ -378,10 +388,19 @@ public class ListItemSummaryActivity extends AppCompatActivity {
 
                             if (response.isSuccessful()) {
                                 mAccessToken = response.body().getToken();
-                                sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
-                                editor.apply();
+                                mUserId = response.body().getUser_id();
+                                mUserEmail = response.body().getEmail();
+                                mUserFirstName = response.body().getFirst_name();
+                                mUserEmail = response.body().getEmail();
+                                mUserLastName = response.body().getLast_name();
+                                mAccessToken = response.body().getToken();
+                                mUserImage = response.body().getUser_image_url();
+                                mUserMobNo = response.body().getUser_mob_no();
+
+                                if (null != mUserId && null != mUserName &&
+                                        null != mUserFirstName && null != mUserLastName && null != mAccessToken) {
+                                    saveUserData();
+                                }
                                 dialog.dismiss();
                             } else {
                                 if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
@@ -403,6 +422,30 @@ public class ListItemSummaryActivity extends AppCompatActivity {
         });
 
         dialog.show();
+    }
+
+    private void saveUserData() {
+        String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        try {
+            String encryptedPassword = AESEncryptionDecryption.encrypt(android_id, mPassword);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_USERID, mUserId);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_PASSWORD, encryptedPassword);
+            editor.putBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, true);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_EMAIL, mUserEmail);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_FIRSTNAME, mUserFirstName);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_LASTNAME, mUserLastName);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_IMAGE, mUserImage);
+            editor.putLong(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_MOB_NO, mUserMobNo);
+            editor.apply();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
