@@ -12,7 +12,5 @@
         app:theme="@style/ToolBarTheme"
         android:layout_height="?attr/actionBarSize"
         app:layout_collapseMode="pin"
-
         />
-
 </LinearLayout>
