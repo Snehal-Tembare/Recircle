@@ -21,6 +21,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -108,6 +109,11 @@ public class HomeActivity extends AppCompatActivity implements
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+//        getSupportActionBar().setIcon(R.drawable.ic_splash_logo);
+
+        String re="<font color='#236894' size='30px;'>re</font>";
+        String circ="<font color='#D67C6E'>circ</font>";
+        getSupportActionBar().setTitle(Html.fromHtml(re+circ,Html.FROM_HTML_MODE_LEGACY));
 
         mProgressBar.setVisibility(View.VISIBLE);
         mFrameLayout.setAlpha((float) 0.6);

@@ -1,6 +1,7 @@
 package com.example.synerzip.recircle_android.ui.rentitem;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,11 +22,13 @@ import com.example.synerzip.recircle_android.models.RentItem;
 import com.example.synerzip.recircle_android.models.UserProductUnAvailability;
 import com.example.synerzip.recircle_android.ui.CalendarActivity;
 import com.example.synerzip.recircle_android.ui.DetailsActivity;
+import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.pkmmte.view.CircularImageView;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -68,6 +71,8 @@ public class RentInfoActivity extends AppCompatActivity {
     private Date toDate;
     private ArrayList<UserProductUnAvailability> userProductUnAvailabilities;
     private int dayCount;
+    private String mUserId;
+    private SharedPreferences sharedPreferences;
 
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
@@ -149,6 +154,8 @@ public class RentInfoActivity extends AppCompatActivity {
         mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
 
         mBundle = getIntent().getExtras();
+        sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
+        mUserId = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_USERID, mUserId);
 
         if (mBundle != null) {
             dayCount = calculateDayCount(mBundle.getString(getString(R.string.from_date)),
@@ -342,7 +349,7 @@ public class RentInfoActivity extends AppCompatActivity {
                 mTxtDays.setText(String.valueOf(dayCount) + " " + getString(R.string.days));
                 mTxtSubTotal.setText("$" + String.valueOf(subTotal));
                 mTxtServiceFee.setText("$" + String.valueOf(serviceFee));
-                mTxtProtectionFee.setText("$" + String.valueOf(protectionPlanFee));
+                mTxtProtectionFee.setText("$" + String.valueOf(new DecimalFormat("##.##").format(protectionPlanFee)));
                 mTxtPreAuthFee.setText("$" + String.valueOf(preAuthFee));
 
             }
@@ -386,9 +393,13 @@ public class RentInfoActivity extends AppCompatActivity {
             mRentItem.setPre_auth_fee(preAuthFee);
         }
 
-        startActivity(new Intent(this, RentItemSuccessActivity.class));
-        RCLog.showToast(this, getString(R.string.item_requested_successfully));
-
-
+        if (mProduct!=null){
+            if (mUserId.equalsIgnoreCase(mProduct.getUser_info().getUser_id())){
+                RCLog.showToast(this, getString(R.string.rent_warning_msg));
+            }else {
+                startActivity(new Intent(this, RentItemSuccessActivity.class));
+                RCLog.showToast(this, getString(R.string.item_requested_successfully));
+            }
+        }
     }
 }
