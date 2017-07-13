@@ -13,7 +13,7 @@ import com.example.synerzip.recircle_android.R;
  */
 public class SplashActivity extends AppCompatActivity {
 
-    private static int SPLASH_TIME_OUT = 4000;
+    private static int SPLASH_TIME_OUT = 1500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
