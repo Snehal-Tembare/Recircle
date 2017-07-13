@@ -366,12 +366,9 @@ public class ListItemFragment extends Fragment {
                         public void onResponse(Call<Products> call, Response<Products> response) {
                             if (response.isSuccessful()) {
                                 if (response.body() != null) {
-                                    Log.v("onSu Edit product data", response + "");
                                     product = response.body();
                                     if (product != null) {
                                         mProductAutoComplete.setText(product.getProduct_info().getProduct_title());
-                                        mProductAutoComplete.setEnabled(false);
-                                        mProductAutoComplete.dismissDropDown();
                                         mEditTxtEnterPrice.setText(product.getUser_product_info().getPrice_per_day());
                                         mEditMinRental.setText(product.getUser_product_info().getMin_rental_days());
 

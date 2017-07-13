@@ -48,9 +48,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="@dimen/dimen_8dp"
                     android:padding="@dimen/dimen_1dp"
-                    android:text="Prajakta Patil"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/text_size_14" />
 

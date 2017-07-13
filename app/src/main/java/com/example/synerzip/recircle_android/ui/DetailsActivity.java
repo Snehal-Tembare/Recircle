@@ -72,11 +72,7 @@ public class DetailsActivity extends AppCompatActivity {
 
     private String mUserName;
     private String mPassword;
-    private String mUserId;
-    private String mUserEmail;
-    private String mUserLastName;
-    private String mUserFirstName;
-    private String mUserImage;
+    private String mUserImage,mUserCity,mUserFirstName,mUserLastName,mUserEmail,mUserId;
     private long mUserMobNo;
 
     @BindView(R.id.toolbar)
