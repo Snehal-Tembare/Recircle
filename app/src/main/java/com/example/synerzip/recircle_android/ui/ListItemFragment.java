@@ -134,6 +134,7 @@ public class ListItemFragment extends Fragment {
 
         utility = new SearchUtility(getActivity());
         mProductAutoComplete.setSingleLine();
+        mProductAutoComplete.setEnabled(true);
 
         mProductAutoComplete.addTextChangedListener(new ListItemFragment.RCTextWatcher(mProductAutoComplete));
         mEditTxtEnterPrice.addTextChangedListener(new ListItemFragment.RCTextWatcher(mEditTxtEnterPrice));
@@ -150,7 +151,11 @@ public class ListItemFragment extends Fragment {
                 if (isChecked) {
                     mDiscounts = new Discounts(30, 5, 1);
                     strings.add(mDiscounts);
+                } else {
+                    strings.remove(mDiscounts);
                 }
+                listDiscounts.addAll(strings);
+
             }
         });
 
@@ -159,11 +164,14 @@ public class ListItemFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     mDiscounts = new Discounts(40, 10, 1);
+
                     strings.add(mDiscounts);
+                } else {
+                    strings.remove(mDiscounts);
                 }
+                listDiscounts.addAll(strings);
             }
         });
-
         listDiscounts.addAll(strings);
 
         if (MyProfileActivity.isItemEdit){
@@ -174,13 +182,6 @@ public class ListItemFragment extends Fragment {
         return view;
 
     }//end onCreateView()
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        //Populate data to edit
-
-    }
 
     @OnClick(R.id.btn_upload_img)
     public void btnUploadImg(View view) {
@@ -369,6 +370,8 @@ public class ListItemFragment extends Fragment {
                                     product = response.body();
                                     if (product != null) {
                                         mProductAutoComplete.setText(product.getProduct_info().getProduct_title());
+                                        mProductAutoComplete.setEnabled(false);
+                                        mProductAutoComplete.dismissDropDown();
                                         mEditTxtEnterPrice.setText(product.getUser_product_info().getPrice_per_day());
                                         mEditMinRental.setText(product.getUser_product_info().getMin_rental_days());
 

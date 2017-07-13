@@ -21,7 +21,7 @@ import com.example.synerzip.recircle_android.models.user_messages.RootMessageInf
 
 public class OwnerMsgFragment extends Fragment {
 
-    private MessagesAdapter mMessagesAdapter;
+    private OwnerMessagesAdapter mOwnerMessagesAdapter;
 
     private RecyclerView mRecyclerView;
 
@@ -56,11 +56,11 @@ public class OwnerMsgFragment extends Fragment {
         this.mMessageInfo = rootMessageInfo;
 
         if(mMessageInfo!=null ){
-            mMessagesAdapter = new MessagesAdapter(getActivity(), mMessageInfo);
+            mOwnerMessagesAdapter = new OwnerMessagesAdapter(getActivity(), mMessageInfo);
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             mRecyclerView.setLayoutManager(layoutManager);
-            mRecyclerView.setAdapter(mMessagesAdapter);
+            mRecyclerView.setAdapter(mOwnerMessagesAdapter);
         }
     }
 

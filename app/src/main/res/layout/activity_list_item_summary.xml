@@ -7,7 +7,6 @@
     <include layout="@layout/partial_toolbar" />
 
     <FrameLayout
-
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -214,7 +213,7 @@
                 android:background="@drawable/border_upload_image"
                 android:padding="@dimen/dimen_10dp"
                 android:text="@string/confirm_item"
-                android:textAllCaps="false"
+                android:textAllCaps="true"
                 android:textColor="@color/common_white"
                 android:textSize="@dimen/text_size_16" />
 

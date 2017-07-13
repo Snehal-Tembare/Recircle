@@ -48,6 +48,7 @@ public class ListItemSuccessActivity extends AppCompatActivity {
         Intent intent = new Intent(ListItemSuccessActivity.this, DetailsActivity.class);
         intent.putExtra(getString(R.string.product_id), productId);
         startActivity(intent);
+        finish();
     }
 
     /**

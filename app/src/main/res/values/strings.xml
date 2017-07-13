@@ -410,7 +410,7 @@
     <string name="que_success">Question submitted successfully !</string>
     <string name="msg_sent">Message sent !</string>
     <string name="renter_name">renter_name</string>
-    <string name="tab_msgs_renter">Messages from renter</string>
+    <string name="tab_msgs_renter">From renter</string>
     <string name="cancel_order"><u>Cancel Order</u></string>
     <string name="day">day</string>
     <string name="decline">decline</string>
@@ -431,6 +431,9 @@
     <string name="cancel_reason">Reason to cancel</string>
     <string name="dismiss">Dismiss</string>
     <string name="cancel_request_confirm">Cancel request</string>
+    <string name="cover_image">Cover Image</string>
+    <string name="not_logged_in">User not logged in</string>
+    <string name="rootUserInfo">rootUserInfo</string>
     <string name="user_logged_out">User Logged out</string>
     <string name="check_nw_connectivity">Check Network Connectivity</string>
 </resources>

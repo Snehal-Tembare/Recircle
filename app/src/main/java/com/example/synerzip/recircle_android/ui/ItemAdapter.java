@@ -66,7 +66,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         holder.mImgEditItemDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RCLog.showToast(mContext, "Edit");
                 MyProfileActivity.isItemEdit = true;
                 Intent intent = new Intent((mContext), HomeActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
