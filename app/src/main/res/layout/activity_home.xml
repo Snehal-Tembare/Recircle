@@ -6,13 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:background="@color/colorPrimary"
-        app:theme="@style/CustomToolBarTheme"
-        android:layout_height="?attr/actionBarSize"
-        app:layout_collapseMode="pin" />
+    <include layout="@layout/partial_toolbar" />
 
     <FrameLayout
         android:id="@+id/frame_layout"

@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -17,6 +19,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,7 +30,9 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -109,11 +114,22 @@ public class HomeActivity extends AppCompatActivity implements
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-//        getSupportActionBar().setIcon(R.drawable.ic_splash_logo);
 
+        //To display custom ActionBar title
+        TextView tv= new TextView(this);
+        LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams (LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        tv.setLayoutParams(layoutParams);
         String re="<font color='#236894' size='30px;'>re</font>";
         String circ="<font color='#D67C6E'>circ</font>";
-        getSupportActionBar().setTitle(Html.fromHtml(re+circ,Html.FROM_HTML_MODE_LEGACY));
+        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.N){
+        tv.setText(Html.fromHtml(re+circ,Html.FROM_HTML_MODE_LEGACY));}
+        else {
+            tv.setText(Html.fromHtml(re+circ,Build.VERSION.SDK_INT));
+        }
+        tv.setTextSize(30);
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(tv);
 
         mProgressBar.setVisibility(View.VISIBLE);
         mFrameLayout.setAlpha((float) 0.6);
@@ -293,34 +309,26 @@ public class HomeActivity extends AppCompatActivity implements
         getMenuInflater().inflate(R.menu.menu_main, menu);
         final MenuItem menuItemMsgs = menu.findItem(R.id.action_messages);
         final MenuItem menuItemRentals = menu.findItem(R.id.action_rentals);
-        if (isLoggedIn) {
-            if (mProdRelatedMsgs != 0) {
-                menuItemMsgs.setVisible(true);
-            }
-            menuItemRentals.setVisible(true);
-        }
-
-        MenuItemCompat.setActionView(menu.findItem(R.id.action_messages), R.layout.notification_badge);
-        RelativeLayout notificationCount = (RelativeLayout) menuItemMsgs.getActionView();
         MenuItemCompat.setActionView(menuItemMsgs, R.layout.notification_badge);
-
         View actionViewNotification = MenuItemCompat.getActionView(menuItemMsgs);
         TextView mTxtMsgCount = (TextView) actionViewNotification.findViewById(R.id.txt_notification_count);
+        RelativeLayout notificationCount = (RelativeLayout) menuItemMsgs.getActionView();
+
+        if (isLoggedIn) {
+            if (mProdRelatedMsgs == 0) {
+                mTxtMsgCount.setVisibility(View.GONE);
+            }
+        }
+
+        menuItemMsgs.setVisible(true);
+        menuItemRentals.setVisible(true);
         mTxtMsgCount.setText(String.valueOf(mProdRelatedMsgs));
         ActivityCompat.invalidateOptionsMenu(HomeActivity.this);
 
         notificationCount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(HomeActivity.this, AllMessagesActivity.class));
-            }
-        });
-
-        View actionRentals = MenuItemCompat.getActionView(menuItemMsgs);
-        actionRentals.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onOptionsItemSelected(menuItemRentals);
+                startActivity(new Intent(HomeActivity.this,AllMessagesActivity.class));
             }
         });
         return true;
