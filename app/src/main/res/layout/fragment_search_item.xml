@@ -291,10 +291,7 @@
                             android:nestedScrollingEnabled="false"
                             android:scrollbars="vertical" />
 
-
                     </LinearLayout>
-
-
                 </LinearLayout>
 
             </ScrollView>

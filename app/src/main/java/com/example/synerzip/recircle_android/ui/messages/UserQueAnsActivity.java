@@ -130,7 +130,7 @@ public class UserQueAnsActivity extends AppCompatActivity {
                     mFrameLayout.setAlpha((float) 1.0);
                     if (response.isSuccessful()) {
                         RCLog.showToast(UserQueAnsActivity.this, getString(R.string.que_success));
-
+                        finish();
                     } else {
                     }
                 }

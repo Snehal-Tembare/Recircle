@@ -11,16 +11,15 @@
         android:layout_margin="@dimen/dimen_5dp"
         android:background="@drawable/selected_image_background"
         android:cropToPadding="true"
-        android:padding="2dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_camera" />
+        android:padding="@dimen/dimen_2dp"
+        android:scaleType="centerCrop" />
 
     <TextView
         android:id="@+id/txt_cover_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Cover Image"
+        android:text="@string/cover_image"
         android:layout_margin="@dimen/dimen_10dp"
         android:textStyle="bold"
         android:textColor="@color/colorWhite"

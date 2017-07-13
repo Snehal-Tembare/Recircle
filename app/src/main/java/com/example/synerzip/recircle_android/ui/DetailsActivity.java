@@ -42,6 +42,7 @@ import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
 import com.pkmmte.view.CircularImageView;
+import com.example.synerzip.recircle_android.ui.rentitem.RentInfoActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -404,7 +405,6 @@ public class DetailsActivity extends AppCompatActivity {
         });
 
         mImgMain.setOnClickListener(new View.OnClickListener()
-
         {
             @Override
             public void onClick(View v) {
@@ -516,15 +516,26 @@ public class DetailsActivity extends AppCompatActivity {
 
 
     /**
-     * OnClick of home button
+     * action bar back button
+     *
+     * @param item
+     * @return
      */
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                Intent intent = new Intent(DetailsActivity.this, HomeActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+
         }
-        return true;
     }
 
     @Override
@@ -597,4 +608,11 @@ public class DetailsActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent=new Intent(DetailsActivity.this,HomeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
 }

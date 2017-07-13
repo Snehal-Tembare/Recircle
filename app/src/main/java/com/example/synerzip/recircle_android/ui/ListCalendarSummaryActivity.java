@@ -26,6 +26,7 @@ import butterknife.OnClick;
  * Copyright © 2017 Synerzip. All rights reserved
  */
 public class ListCalendarSummaryActivity extends AppCompatActivity {
+
     @BindView(R.id.calendar_view)
     protected CalendarPickerView mPickerView;
 
@@ -62,16 +63,11 @@ public class ListCalendarSummaryActivity extends AppCompatActivity {
         Date today = new Date();
 
         mPickerView.init(today, calendar.getTime());
-        mPickerView.setPressed(false);
-        mPickerView.setSaveEnabled(false);
-        mPickerView.setEnabled(false);
+
         mPickerView.setOnDateSelectedListener(new CalendarPickerView.OnDateSelectedListener() {
             @Override
             public void onDateSelected(Date date) {
-                RCLog.showToast(ListCalendarSummaryActivity.this, "Date cannot be selected");
-                mPickerView.setPressed(false);
-                mPickerView.setClickable(false);
-                mPickerView.setSelected(false);
+                RCLog.showToast(ListCalendarSummaryActivity.this,"Date cannot be selected");
             }
 
             @Override
@@ -79,6 +75,7 @@ public class ListCalendarSummaryActivity extends AppCompatActivity {
 
             }
         });
+
         List<CalendarCellDecorator> decoratorList = new ArrayList<>();
 
         if (unavailableDates != null && !unavailableDates.isEmpty()) {

@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
@@ -79,6 +80,11 @@ public class ChatActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //owner msgs
+        mChatAdapter = new MsgOwnerAdapter(getApplicationContext(), R.id.txt_msg_owner);
+        mListViewMsgs.setAdapter(mChatAdapter);
+
+        //renter msgs
         mChatAdapter = new MsgOwnerAdapter(getApplicationContext(), R.id.txt_msg_owner);
         mListViewMsgs.setAdapter(mChatAdapter);
 

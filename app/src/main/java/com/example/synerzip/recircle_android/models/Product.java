@@ -3,10 +3,7 @@ package com.example.synerzip.recircle_android.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import java.util.ArrayList;
+import com.example.synerzip.recircle_android.models.UserMessages.MsgProduct;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +18,7 @@ public class Product implements Parcelable {
 
     private String product_id;
     private String product_title;
+    private String user_product_id;
 
     //var for internal logic
     private String product_manufacturer_id;
@@ -30,6 +28,8 @@ public class Product implements Parcelable {
 
     private ProductDetail product_detail;
     private ProductManufacturer product_manufacturer;
+
+    private MsgProduct product;
 
     public Product(){}
 
@@ -41,6 +41,8 @@ public class Product implements Parcelable {
         product_manufacturer_title = in.readString();
         product_detail = in.readParcelable(ProductDetail.class.getClassLoader());
         product_manufacturer = in.readParcelable(ProductManufacturer.class.getClassLoader());
+         product = in.readParcelable(MsgProduct.class.getClassLoader());
+
     }
 
     public static final Creator<Product> CREATOR = new Creator<Product>() {
@@ -69,5 +71,7 @@ public class Product implements Parcelable {
         dest.writeString(product_manufacturer_title);
         dest.writeParcelable(product_detail, flags);
         dest.writeParcelable(product_manufacturer, flags);
+        dest.writeParcelable(product, flags);
+
     }
 }

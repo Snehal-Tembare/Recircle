@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -39,6 +40,7 @@ import com.example.synerzip.recircle_android.utilities.NetworkUtility;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -130,6 +132,7 @@ public class EditProfileActivity extends AppCompatActivity {
     protected FrameLayout mFrameLayout;
 
     public static boolean mTextNotification;
+    private RootUserInfo rootUserInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,6 +151,22 @@ public class EditProfileActivity extends AppCompatActivity {
         mEditTxtLastName.addTextChangedListener(new EditProfileActivity.RCTextWatcher(mEditTxtLastName));
         mEditTxtMob.addTextChangedListener(new EditProfileActivity.RCTextWatcher(mEditTxtMob));
 
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            rootUserInfo = bundle.getParcelable(getString(R.string.rootUserInfo));
+
+            mEditTxtFirstName.setText(rootUserInfo.getFirst_name());
+            mEditTxtLastName.setText(rootUserInfo.getLast_name());
+            mEditTxtMob.setText(String.valueOf(rootUserInfo.getUser_mob_no()));
+            mSwitchNotification.setChecked(rootUserInfo.isNotification_flag());
+            if (rootUserInfo.getUserAddress() != null) {
+                mEditTxtCity.setText(rootUserInfo.getUserAddress().getCity());
+                mEditTxtState.setText(rootUserInfo.getUserAddress().getState());
+                mEditTxtStreetAddr.setText(rootUserInfo.getUserAddress().getStreet());
+                mEditTxtZipcode.setText(rootUserInfo.getUserAddress().getZip());
+            }
+            Picasso.with(this).load(rootUserInfo.getUser_image_url()).placeholder(R.drawable.ic_user).into(mImgUserProfile);
+        }
     }
 
     /**
@@ -157,14 +176,14 @@ public class EditProfileActivity extends AppCompatActivity {
      */
     @OnClick(R.id.btn_save_user_details)
     public void btnSubmitDetails(View view) {
+        mProgressBar.setVisibility(View.VISIBLE);
+        mFrameLayout.setAlpha((float) 0.6);
         submitForm();
         HideKeyboard.hideKeyBoard(this);
         if (NetworkUtility.isNetworkAvailable()) {
             if (getValues()) {
                 editUserDetails();
-                Intent intent = new Intent(EditProfileActivity.this, HomeActivity.class);
-                setResult(RESULT_OK, intent);
-                finish();
+
             } else {
                 RCLog.showToast(this, getString(R.string.mandatory_dates));
             }
@@ -196,14 +215,11 @@ public class EditProfileActivity extends AppCompatActivity {
         if (!mEditTxtMob.getText().toString().isEmpty()) {
             mMobNo = Long.parseLong(mEditTxtMob.getText().toString());
         }
-        if (!mEditTxtZipcode.getText().toString().isEmpty()
-                && !mEditTxtStreetAddr.getText().toString().isEmpty()
-                && !SettingsActivity.mUserAddreessId.isEmpty()) {
-            mAddress = new UserAddress(SettingsActivity.mUserAddreessId,
-                    mEditTxtStreetAddr.getText().toString(),
-                    mEditTxtCity.getText().toString(), mEditTxtState.getText().toString(),
-                    Integer.parseInt(mEditTxtZipcode.getText().toString()));
-        }
+
+        mAddress = new UserAddress(SettingsActivity.mUserAddreessId,
+                mEditTxtStreetAddr.getText().toString(),
+                mEditTxtCity.getText().toString(), mEditTxtState.getText().toString(),
+                Integer.parseInt(mEditTxtZipcode.getText().toString()));
         //TODO data is hardcoded as payments module is yet to be implement
         mAccDetails = new UserAccDetails("6689d008-6b6d-437b-81b5-0eb8b3710743",
                 646743343, "abhijit", 783723, "2017-03-25",
@@ -228,74 +244,17 @@ public class EditProfileActivity extends AppCompatActivity {
      */
     private void verifyMobNo() {
         mMobNo = Long.parseLong(mEditTxtMob.getText().toString());
-        if (ApiClient.getClient(this) != null) {
-            service = ApiClient.getClient(this).create(RCAPInterface.class);
-            Call<RootUserInfo> userCall = service.verifyUserMobNo("Bearer " + mAccessToken);
-            userCall.enqueue(new Callback<RootUserInfo>() {
-                @Override
-                public void onResponse(Call<RootUserInfo> call, Response<RootUserInfo> response) {
-                    mProgressBar.setVisibility(View.GONE);
-                    mFrameLayout.setAlpha((float) 1.0);
-                    if (response.isSuccessful()) {
-                        RCLog.showToast(EditProfileActivity.this, getString(R.string.toast_send_otp));
-                        mMobVerification = true;
-                    }
-                }
 
-                @Override
-                public void onFailure(Call<RootUserInfo> call, Throwable t) {
-                    mProgressBar.setVisibility(View.GONE);
-                    mFrameLayout.setAlpha((float) 1.0);
-                }
-            });
-        } else {
-            mProgressBar.setVisibility(View.GONE);
-        }
-    }
-
-    /**
-     * api call for editing user details
-     */
-    private void editUserDetails() {
-        getValues();
-        if (ApiClient.getClient(this)!=null){
         service = ApiClient.getClient(this).create(RCAPInterface.class);
-        RootUserInfo rootUserInfo = new RootUserInfo(mUserId, mFirstName, mLastName, mEmail, mUserImage, mNotificationFlag,
-                mMobNo, mMobVerification
-                , mAddress, mAccDetails);
-        Call<RootUserInfo> call = service.editUser("Bearer " + mAccessToken, rootUserInfo);
-        call.enqueue(new Callback<RootUserInfo>() {
+        Call<RootUserInfo> userCall = service.verifyUserMobNo("Bearer " + mAccessToken);
+        userCall.enqueue(new Callback<RootUserInfo>() {
             @Override
             public void onResponse(Call<RootUserInfo> call, Response<RootUserInfo> response) {
                 mProgressBar.setVisibility(View.GONE);
                 mFrameLayout.setAlpha((float) 1.0);
                 if (response.isSuccessful()) {
-                    RCLog.showToast(EditProfileActivity.this, "edit user success");
-
-                    mUserName = response.body().getFirst_name() + " " + response.body().getLast_name();
-                    mUserMobNo = response.body().getUser_mob_no();
-                    mAddress.setCity(response.body().getUserAddress().getCity());
-                    mAddress.setState(response.body().getUserAddress().getState());
-                    mAddress.setStreet(response.body().getUserAddress().getStreet());
-                    mAddress.setZip(response.body().getUserAddress().getZip());
-                    mTextNotification = response.body().isNotification_flag();
-
-                    sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
-                    editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USERNAME, mUserName);
-                    editor.putLong(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_MOB_NO, mUserMobNo);
-
-                    editor.apply();
-                    editor.commit();
-
-                } else {
-                    if (response.code() == RCWebConstants.RC_ERROR_CODE_BAD_REQUEST) {
-                        RCLog.showToast(EditProfileActivity.this, getString(R.string.product_creation_failed));
-                    } else {
-                        RCLog.showToast(EditProfileActivity.this, getString(R.string.user_not_authenticated));
-                        logInDialog();
-                    }
+                    RCLog.showToast(EditProfileActivity.this, getString(R.string.toast_send_otp));
+                    mMobVerification = true;
                 }
             }
 
@@ -305,8 +264,65 @@ public class EditProfileActivity extends AppCompatActivity {
                 mFrameLayout.setAlpha((float) 1.0);
             }
         });
-        }else {
-            mProgressBar.setVisibility(View.GONE);
+
+    }
+
+    /**
+     * api call for editing user details
+     */
+    private void editUserDetails() {
+        getValues();
+        if (ApiClient.getClient(this) != null) {
+            service = ApiClient.getClient(this).create(RCAPInterface.class);
+            RootUserInfo rootUserInfo = new RootUserInfo(mUserId, mFirstName, mLastName, mEmail, mUserImage,
+                    mNotificationFlag,
+                    mMobNo, mMobVerification
+                    , mAddress, mAccDetails);
+            Call<RootUserInfo> call = service.editUser("Bearer " + mAccessToken, rootUserInfo);
+            call.enqueue(new Callback<RootUserInfo>() {
+                @Override
+                public void onResponse(Call<RootUserInfo> call, Response<RootUserInfo> response) {
+                    mProgressBar.setVisibility(View.GONE);
+                    mFrameLayout.setAlpha((float) 1.0);
+                    if (response.isSuccessful()) {
+                        RCLog.showToast(EditProfileActivity.this, "Profile updated");
+
+                        mUserName = response.body().getFirst_name() + " " + response.body().getLast_name();
+                        mUserMobNo = response.body().getUser_mob_no();
+                        if (mAddress != null) {
+                            mAddress.setCity(response.body().getUserAddress().getCity());
+                            mAddress.setState(response.body().getUserAddress().getState());
+                            mAddress.setStreet(response.body().getUserAddress().getStreet());
+                            mAddress.setZip(response.body().getUserAddress().getZip());
+                        }
+                        mTextNotification = response.body().isNotification_flag();
+
+                        sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
+                        editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USERNAME, mUserName);
+                        editor.putLong(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_MOB_NO, mUserMobNo);
+
+                        editor.apply();
+                        editor.commit();
+                        finish();
+
+                    } else {
+                        if (response.code() == RCWebConstants.RC_ERROR_CODE_BAD_REQUEST) {
+                            RCLog.showToast(EditProfileActivity.this, getString(R.string.product_creation_failed));
+                        } else {
+                            RCLog.showToast(EditProfileActivity.this, getString(R.string.user_not_authenticated));
+                            logInDialog();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<RootUserInfo> call, Throwable t) {
+                    mProgressBar.setVisibility(View.GONE);
+                    mFrameLayout.setAlpha((float) 1.0);
+                }
+            });
         }
     }
 
@@ -330,38 +346,36 @@ public class EditProfileActivity extends AppCompatActivity {
                 final String mUserPwd = mEditTxtPwd.getText().toString();
                 LogInRequest logInRequest = new LogInRequest(mUserName, mUserPwd);
 
-                if (ApiClient.getClient(EditProfileActivity.this)!=null){
-                service = ApiClient.getClient(EditProfileActivity.this).create(RCAPInterface.class);
-                Call<User> userCall = service.userLogIn(logInRequest);
-                userCall.enqueue(new Callback<User>() {
-                    @Override
-                    public void onResponse(Call<User> call, Response<User> response) {
+                if (ApiClient.getClient(EditProfileActivity.this) != null) {
+                    service = ApiClient.getClient(EditProfileActivity.this).create(RCAPInterface.class);
+                    Call<User> userCall = service.userLogIn(logInRequest);
+                    userCall.enqueue(new Callback<User>() {
+                        @Override
+                        public void onResponse(Call<User> call, Response<User> response) {
 
-                        mProgressBar.setVisibility(View.GONE);
-                        mFrameLayout.setAlpha((float) 1.0);
+                            mProgressBar.setVisibility(View.GONE);
+                            mFrameLayout.setAlpha((float) 1.0);
 
-                        if (response.isSuccessful()) {
-                            mAccessToken = response.body().getToken();
-                            sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
-                            editor.apply();
-                            dialog.dismiss();
-                        } else {
-                            if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
-                                RCLog.showToast(EditProfileActivity.this, getString(R.string.err_credentials));
+                            if (response.isSuccessful()) {
+                                mAccessToken = response.body().getToken();
+                                sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
+                                editor.apply();
+                                dialog.dismiss();
+                            } else {
+                                if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
+                                    RCLog.showToast(EditProfileActivity.this, getString(R.string.err_credentials));
+                                }
                             }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<User> call, Throwable t) {
-                        mProgressBar.setVisibility(View.GONE);
-                        mFrameLayout.setAlpha((float) 1.0);
-                    }
-                });
-                }else {
-                    mProgressBar.setVisibility(View.GONE);
+                        @Override
+                        public void onFailure(Call<User> call, Throwable t) {
+                            mProgressBar.setVisibility(View.GONE);
+                            mFrameLayout.setAlpha((float) 1.0);
+                        }
+                    });
                 }
             }
         });
@@ -395,35 +409,35 @@ public class EditProfileActivity extends AppCompatActivity {
                 final String mUserPwd = mEditTxtNewPwd.getText().toString();
                 ChangePwdRequest changePwdRequest = new ChangePwdRequest(mUserName, mUserPwd);
 
-                if (ApiClient.getClient(EditProfileActivity.this)!=null){
-                service = ApiClient.getClient(EditProfileActivity.this).create(RCAPInterface.class);
-                Call<User> userCall = service.changePwd("Bearer " + mAccessToken, changePwdRequest);
-                userCall.enqueue(new Callback<User>() {
-                    @Override
-                    public void onResponse(Call<User> call, Response<User> response) {
-                        mProgressBar.setVisibility(View.GONE);
-                        mFrameLayout.setAlpha((float) 1.0);
-                        if (response.isSuccessful()) {
-                            mAccessToken = response.body().getToken();
-                            sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
-                            editor.apply();
-                            dialog.dismiss();
-                        } else {
-                            if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
-                                RCLog.showToast(EditProfileActivity.this, getString(R.string.err_credentials));
+                if (ApiClient.getClient(EditProfileActivity.this) != null) {
+                    service = ApiClient.getClient(EditProfileActivity.this).create(RCAPInterface.class);
+                    Call<User> userCall = service.changePwd("Bearer " + mAccessToken, changePwdRequest);
+                    userCall.enqueue(new Callback<User>() {
+                        @Override
+                        public void onResponse(Call<User> call, Response<User> response) {
+                            mProgressBar.setVisibility(View.GONE);
+                            mFrameLayout.setAlpha((float) 1.0);
+                            if (response.isSuccessful()) {
+                                mAccessToken = response.body().getToken();
+                                sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
+                                editor.apply();
+                                dialog.dismiss();
+                            } else {
+                                if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
+                                    RCLog.showToast(EditProfileActivity.this, getString(R.string.err_credentials));
+                                }
                             }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<User> call, Throwable t) {
-                        mProgressBar.setVisibility(View.GONE);
-                        mFrameLayout.setAlpha((float) 1.0);
-                    }
-                });
-                }else {
+                        @Override
+                        public void onFailure(Call<User> call, Throwable t) {
+                            mProgressBar.setVisibility(View.GONE);
+                            mFrameLayout.setAlpha((float) 1.0);
+                        }
+                    });
+                } else {
                     mProgressBar.setVisibility(View.GONE);
                 }
             }
@@ -651,7 +665,7 @@ public class EditProfileActivity extends AppCompatActivity {
             return false;
         } else {
             mInputLayoutMob.setErrorEnabled(false);
-            mTxtVerifyMob.setVisibility(View.VISIBLE);
+            mTxtVerifyMob.setVisibility(View.GONE);
         }
 
         return true;

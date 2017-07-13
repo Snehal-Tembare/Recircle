@@ -5,6 +5,8 @@
     android:gravity="center"
     android:orientation="vertical">
 
+    <!--TODO implementation is yet to be completed-->
+
     <AutoCompleteTextView
         android:id="@+id/autocomplete_search_msgs"
         android:layout_width="wrap_content"
@@ -13,8 +15,8 @@
         android:imeOptions="actionSearch"
         android:inputType="textAutoComplete|textAutoCorrect"
         android:textColor="@color/colorWhite">
+
         <requestFocus />
 
     </AutoCompleteTextView>
-
 </LinearLayout>
