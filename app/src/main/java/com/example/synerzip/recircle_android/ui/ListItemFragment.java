@@ -134,7 +134,11 @@ public class ListItemFragment extends Fragment {
 
         utility = new SearchUtility(getActivity());
         mProductAutoComplete.setSingleLine();
-        mProductAutoComplete.setEnabled(true);
+
+        if (MyProfileActivity.isItemEdit) {
+            mProductAutoComplete.dismissDropDown();
+            mProductAutoComplete.setEnabled(false);
+        }
 
         mProductAutoComplete.addTextChangedListener(new ListItemFragment.RCTextWatcher(mProductAutoComplete));
         mEditTxtEnterPrice.addTextChangedListener(new ListItemFragment.RCTextWatcher(mEditTxtEnterPrice));
@@ -142,7 +146,7 @@ public class ListItemFragment extends Fragment {
 
         listDiscounts = new ArrayList<>();
 
-        final ArrayList<Discounts> strings=new ArrayList<>();
+        final ArrayList<Discounts> strings = new ArrayList<>();
         //discounts checkbox listener
         mDiscountForFiveDay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -173,15 +177,18 @@ public class ListItemFragment extends Fragment {
             }
         });
         listDiscounts.addAll(strings);
-
-        if (MyProfileActivity.isItemEdit){
-            mProductAutoComplete.dismissDropDown();
-        }
-
-
         return view;
 
     }//end onCreateView()
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (MyProfileActivity.isItemEdit){
+            mProductAutoComplete.dismissDropDown();
+            mProductAutoComplete.setEnabled(false);
+        }
+    }
 
     @OnClick(R.id.btn_upload_img)
     public void btnUploadImg(View view) {

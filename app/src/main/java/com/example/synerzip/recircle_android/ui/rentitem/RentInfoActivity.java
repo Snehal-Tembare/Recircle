@@ -1,6 +1,9 @@
 package com.example.synerzip.recircle_android.ui.rentitem;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,24 +11,34 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
+import com.example.synerzip.recircle_android.models.LogInRequest;
 import com.example.synerzip.recircle_android.models.Products;
 import com.example.synerzip.recircle_android.models.RentItem;
+import com.example.synerzip.recircle_android.models.User;
 import com.example.synerzip.recircle_android.models.UserProductUnAvailability;
+import com.example.synerzip.recircle_android.network.ApiClient;
+import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.ui.CalendarActivity;
 import com.example.synerzip.recircle_android.ui.DetailsActivity;
+import com.example.synerzip.recircle_android.utilities.AESEncryptionDecryption;
+import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
+import com.example.synerzip.recircle_android.utilities.RCWebConstants;
 import com.pkmmte.view.CircularImageView;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,6 +48,9 @@ import java.util.Date;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Snehal Tembare on 26/4/17.
@@ -68,6 +84,17 @@ public class RentInfoActivity extends AppCompatActivity {
     private Date toDate;
     private ArrayList<UserProductUnAvailability> userProductUnAvailabilities;
     private int dayCount;
+    private String mUserId;
+    private SharedPreferences sharedPreferences;
+    private RCAPInterface service;
+    private String mUserName;
+    private String mPassword;
+    private String mUserImage, mUserCity, mUserFirstName, mUserLastName, mUserEmail;
+    private long mUserMobNo;
+    private String mAccessToken;
+
+    @BindView(R.id.progress_bar)
+    protected RelativeLayout mProgressBar;
 
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
@@ -149,6 +176,8 @@ public class RentInfoActivity extends AppCompatActivity {
         mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
 
         mBundle = getIntent().getExtras();
+        sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
+        mUserId = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_USERID, mUserId);
 
         if (mBundle != null) {
             dayCount = calculateDayCount(mBundle.getString(getString(R.string.from_date)),
@@ -182,7 +211,7 @@ public class RentInfoActivity extends AppCompatActivity {
         long diff = toDate.getTime() - fromDate.getTime();
         dayCount = (int) diff / (24 * 60 * 60 * 1000);
 
-        return  Math.abs(dayCount);
+        return Math.abs(dayCount);
     }
 
     @Override
@@ -260,7 +289,7 @@ public class RentInfoActivity extends AppCompatActivity {
                 mTxtFromDate.setText(formatedFromDate);
                 mTxtToDate.setText(formatedToDate);
 
-                subTotal =dayCount * Integer.parseInt(mProduct.getUser_product_info().getPrice_per_day());
+                subTotal = dayCount * Integer.parseInt(mProduct.getUser_product_info().getPrice_per_day());
                 serviceFee = (int) Math.round(subTotal * (0.08));
                 finalTotal = (int) (subTotal + serviceFee);
 
@@ -342,7 +371,7 @@ public class RentInfoActivity extends AppCompatActivity {
                 mTxtDays.setText(String.valueOf(dayCount) + " " + getString(R.string.days));
                 mTxtSubTotal.setText("$" + String.valueOf(subTotal));
                 mTxtServiceFee.setText("$" + String.valueOf(serviceFee));
-                mTxtProtectionFee.setText("$" + String.valueOf(protectionPlanFee));
+                mTxtProtectionFee.setText("$" + String.valueOf(new DecimalFormat("##.##").format(protectionPlanFee)));
                 mTxtPreAuthFee.setText("$" + String.valueOf(preAuthFee));
 
             }
@@ -386,9 +415,112 @@ public class RentInfoActivity extends AppCompatActivity {
             mRentItem.setPre_auth_fee(preAuthFee);
         }
 
-        startActivity(new Intent(this, RentItemSuccessActivity.class));
-        RCLog.showToast(this, getString(R.string.item_requested_successfully));
+        if (mProduct != null) {
+            if (mUserId != null) {
+                if (mUserId.equals(mProduct.getUser_info().getUser_id())) {
+                    RCLog.showToast(this, getString(R.string.rent_warning_msg));
+                } else {
+                    startActivity(new Intent(this, RentItemSuccessActivity.class));
+                    RCLog.showToast(this, getString(R.string.item_requested_successfully));
+                }
+            }else {
+                RCLog.showToast(this,getString(R.string.user_must_login));
+                loginDialog();
+            }
+        }
+    }
 
+    /**
+     * Login again dialog
+     */
+    private void loginDialog() {
 
+            final Dialog dialog = new Dialog(this);
+            dialog.setContentView(R.layout.log_in_again_dialog);
+            dialog.setTitle(getString(R.string.log_in_again));
+            final EditText mEditTxtUserName = (EditText) dialog.findViewById(R.id.edit_login_email_dialog);
+            final EditText mEditTxtPwd = (EditText) dialog.findViewById(R.id.edit_login_pwd_dialog);
+
+            Button btnLogin = (Button) dialog.findViewById(R.id.btn_user_log_in_dialog);
+
+            btnLogin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    final String mLogInUserName = mEditTxtUserName.getText().toString();
+                    final String mLogInPwd = mEditTxtPwd.getText().toString();
+                    LogInRequest logInRequest = new LogInRequest(mLogInUserName, mLogInPwd);
+
+                    if (ApiClient.getClient(RentInfoActivity.this) != null) {
+                        service = ApiClient.getClient(RentInfoActivity.this).create(RCAPInterface.class);
+
+                        Call<User> userCall = service.userLogIn(logInRequest);
+                        userCall.enqueue(new Callback<User>() {
+                            @Override
+                            public void onResponse(Call<User> call, Response<User> response) {
+
+                                mProgressBar.setVisibility(View.GONE);
+
+                                if (response.isSuccessful()) {
+                                    mAccessToken = response.body().getToken();
+                                    mUserId = response.body().getUser_id();
+                                    mUserName = response.body().getEmail();
+                                    mUserFirstName = response.body().getFirst_name();
+                                    mUserEmail = response.body().getEmail();
+                                    mUserLastName = response.body().getLast_name();
+                                    mAccessToken = response.body().getToken();
+                                    mUserImage = response.body().getUser_image_url();
+                                    mUserMobNo = response.body().getUser_mob_no();
+
+                                    if (null != mUserId && null != mLogInUserName &&
+                                            null != mUserFirstName && null != mUserLastName && null != mAccessToken) {
+                                        saveUserData();
+                                    }
+                                    dialog.dismiss();
+
+                                } else {
+                                    if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
+                                        RCLog.showToast(RentInfoActivity.this, getString(R.string.err_credentials));
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<User> call, Throwable t) {
+                                mProgressBar.setVisibility(View.GONE);
+                            }
+                        });
+                    } else {
+                        RCLog.showLongToast(RentInfoActivity.this, getString(R.string.check_nw_connectivity));
+                    }
+                }
+            });
+
+            dialog.show();
+        }
+
+    private void saveUserData() {
+        String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        try {
+            String encryptedPassword = AESEncryptionDecryption.encrypt(android_id, mPassword);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_USERID, mUserId);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_PASSWORD, encryptedPassword);
+            editor.putBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, true);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_EMAIL, mUserEmail);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_FIRSTNAME, mUserFirstName);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_LASTNAME, mUserLastName);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_IMAGE, mUserImage);
+            editor.putLong(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_MOB_NO, mUserMobNo);
+            editor.apply();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
+

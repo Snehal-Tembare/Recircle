@@ -10,6 +10,8 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -25,14 +27,17 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -115,6 +120,24 @@ public class HomeActivity extends AppCompatActivity implements
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+
+        //To display custom ActionBar title
+        TextView tv= new TextView(this);
+        LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams (LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        tv.setLayoutParams(layoutParams);
+        String re="<font color='#236894' size='30px;'>re</font>";
+        String circ="<font color='#D67C6E'>circ</font>";
+        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.N){
+        tv.setText(Html.fromHtml(re+circ,Html.FROM_HTML_MODE_LEGACY));}
+        else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                tv.setText(Html.fromHtml(re+circ,Build.VERSION.SDK_INT));
+            }
+        }
+        tv.setTextSize(30);
+        getSupportActionBar().setDisplayOptions(android.support.v7.app.ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(tv);
 
         mProgressBar.setVisibility(View.VISIBLE);
         mFrameLayout.setAlpha((float) 0.6);
@@ -217,6 +240,8 @@ public class HomeActivity extends AppCompatActivity implements
         } else {
             RCLog.showToast(this, getString(R.string.session_expired));
         }
+
+
     }
 
     /**
