@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -25,13 +26,12 @@ import com.example.synerzip.recircle_android.models.LogInRequest;
 import com.example.synerzip.recircle_android.models.User;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
-import com.example.synerzip.recircle_android.utilities.AESEncryptionDecryption;
+import com.example.synerzip.recircle_android.utilities.Base64Encryption;
 import com.example.synerzip.recircle_android.utilities.HideKeyboard;
 import com.example.synerzip.recircle_android.utilities.NetworkUtility;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
-import com.google.android.gms.common.api.Api;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -87,6 +87,10 @@ public class LogInActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.common_white));
 
+        /*haredPreferences sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
+
+        mPassword=sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_PASSWORD,mPassword);*/
+
         mEditLogInEmail.addTextChangedListener(new RCTextWatcher(mEditLogInEmail));
         mEditLogInPassword.addTextChangedListener(new RCTextWatcher(mEditLogInPassword));
     }
@@ -105,7 +109,8 @@ public class LogInActivity extends AppCompatActivity {
             mProgressBar.setVisibility(View.VISIBLE);
             mLinearLayout.setAlpha((float) 0.6);
             mUserName = mEditLogInEmail.getText().toString().trim();
-            mPassword = mEditLogInPassword.getText().toString().trim();
+            mPassword=Base64Encryption.encrypt(mEditLogInPassword.getText().toString().trim());
+
             getUserLogIn();
 
         } else {
@@ -358,10 +363,9 @@ public class LogInActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         try {
-            String encryptedPassword = AESEncryptionDecryption.encrypt(android_id, mPassword);
             editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
             editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_USERID, mUserId);
-            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_PASSWORD, encryptedPassword);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_PASSWORD, mPassword);
             editor.putBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, true);
             editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_EMAIL, mUserEmail);
             editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_FIRSTNAME, mUserFirstName);

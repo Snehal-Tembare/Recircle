@@ -30,7 +30,6 @@ import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.ui.CalendarActivity;
 import com.example.synerzip.recircle_android.ui.DetailsActivity;
-import com.example.synerzip.recircle_android.utilities.AESEncryptionDecryption;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
@@ -423,8 +422,8 @@ public class RentInfoActivity extends AppCompatActivity {
                     startActivity(new Intent(this, RentItemSuccessActivity.class));
                     RCLog.showToast(this, getString(R.string.item_requested_successfully));
                 }
-            }else {
-                RCLog.showToast(this,getString(R.string.user_must_login));
+            } else {
+                RCLog.showToast(this, getString(R.string.user_must_login));
                 loginDialog();
             }
         }
@@ -435,81 +434,76 @@ public class RentInfoActivity extends AppCompatActivity {
      */
     private void loginDialog() {
 
-            final Dialog dialog = new Dialog(this);
-            dialog.setContentView(R.layout.log_in_again_dialog);
-            dialog.setTitle(getString(R.string.log_in_again));
-            final EditText mEditTxtUserName = (EditText) dialog.findViewById(R.id.edit_login_email_dialog);
-            final EditText mEditTxtPwd = (EditText) dialog.findViewById(R.id.edit_login_pwd_dialog);
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.log_in_again_dialog);
+        dialog.setTitle(getString(R.string.log_in_again));
+        final EditText mEditTxtUserName = (EditText) dialog.findViewById(R.id.edit_login_email_dialog);
+        final EditText mEditTxtPwd = (EditText) dialog.findViewById(R.id.edit_login_pwd_dialog);
 
-            Button btnLogin = (Button) dialog.findViewById(R.id.btn_user_log_in_dialog);
+        Button btnLogin = (Button) dialog.findViewById(R.id.btn_user_log_in_dialog);
 
-            btnLogin.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-                    final String mLogInUserName = mEditTxtUserName.getText().toString();
-                    final String mLogInPwd = mEditTxtPwd.getText().toString();
-                    LogInRequest logInRequest = new LogInRequest(mLogInUserName, mLogInPwd);
+                final String mLogInUserName = mEditTxtUserName.getText().toString();
+                final String mLogInPwd = mEditTxtPwd.getText().toString();
+                LogInRequest logInRequest = new LogInRequest(mLogInUserName, mLogInPwd);
 
-                    if (ApiClient.getClient(RentInfoActivity.this) != null) {
-                        service = ApiClient.getClient(RentInfoActivity.this).create(RCAPInterface.class);
+                if (ApiClient.getClient(RentInfoActivity.this) != null) {
+                    service = ApiClient.getClient(RentInfoActivity.this).create(RCAPInterface.class);
 
-                        Call<User> userCall = service.userLogIn(logInRequest);
-                        userCall.enqueue(new Callback<User>() {
-                            @Override
-                            public void onResponse(Call<User> call, Response<User> response) {
+                    Call<User> userCall = service.userLogIn(logInRequest);
+                    userCall.enqueue(new Callback<User>() {
+                        @Override
+                        public void onResponse(Call<User> call, Response<User> response) {
 
-                                mProgressBar.setVisibility(View.GONE);
+                            mProgressBar.setVisibility(View.GONE);
 
-                                if (response.isSuccessful()) {
-                                    mAccessToken = response.body().getToken();
-                                    mUserId = response.body().getUser_id();
-                                    mUserName = response.body().getEmail();
-                                    mUserFirstName = response.body().getFirst_name();
-                                    mUserEmail = response.body().getEmail();
-                                    mUserLastName = response.body().getLast_name();
-                                    mAccessToken = response.body().getToken();
-                                    mUserImage = response.body().getUser_image_url();
-                                    mUserMobNo = response.body().getUser_mob_no();
+                            if (response.isSuccessful()) {
+                                mAccessToken = response.body().getToken();
+                                mUserId = response.body().getUser_id();
+                                mUserName = response.body().getEmail();
+                                mUserFirstName = response.body().getFirst_name();
+                                mUserEmail = response.body().getEmail();
+                                mUserLastName = response.body().getLast_name();
+                                mAccessToken = response.body().getToken();
+                                mUserImage = response.body().getUser_image_url();
+                                mUserMobNo = response.body().getUser_mob_no();
 
-                                    if (null != mUserId && null != mLogInUserName &&
-                                            null != mUserFirstName && null != mUserLastName && null != mAccessToken) {
-                                        saveUserData();
-                                    }
-                                    dialog.dismiss();
+                                if (null != mUserId && null != mLogInUserName &&
+                                        null != mUserFirstName && null != mUserLastName && null != mAccessToken) {
+                                    saveUserData();
+                                }
+                                dialog.dismiss();
 
-                                } else {
-                                    if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
-                                        RCLog.showToast(RentInfoActivity.this, getString(R.string.err_credentials));
-                                    }
+                            } else {
+                                if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
+                                    RCLog.showToast(RentInfoActivity.this, getString(R.string.err_credentials));
                                 }
                             }
+                        }
 
-                            @Override
-                            public void onFailure(Call<User> call, Throwable t) {
-                                mProgressBar.setVisibility(View.GONE);
-                            }
-                        });
-                    } else {
-                        RCLog.showLongToast(RentInfoActivity.this, getString(R.string.check_nw_connectivity));
-                    }
+                        @Override
+                        public void onFailure(Call<User> call, Throwable t) {
+                            mProgressBar.setVisibility(View.GONE);
+                        }
+                    });
+                } else {
+                    RCLog.showLongToast(RentInfoActivity.this, getString(R.string.check_nw_connectivity));
                 }
-            });
+            }
+        });
 
-            dialog.show();
-        }
+        dialog.show();
+    }
 
     private void saveUserData() {
-        String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
-                Settings.Secure.ANDROID_ID);
-
         SharedPreferences.Editor editor = sharedPreferences.edit();
-
         try {
-            String encryptedPassword = AESEncryptionDecryption.encrypt(android_id, mPassword);
             editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
             editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_USERID, mUserId);
-            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_PASSWORD, encryptedPassword);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_PASSWORD, mPassword);
             editor.putBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, true);
             editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_EMAIL, mUserEmail);
             editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_FIRSTNAME, mUserFirstName);

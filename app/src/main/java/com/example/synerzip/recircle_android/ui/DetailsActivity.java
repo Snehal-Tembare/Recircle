@@ -37,12 +37,10 @@ import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.ui.messages.UserQueAnsActivity;
 import com.example.synerzip.recircle_android.ui.rentitem.RentInfoActivity;
-import com.example.synerzip.recircle_android.utilities.AESEncryptionDecryption;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
 import com.pkmmte.view.CircularImageView;
-import com.example.synerzip.recircle_android.ui.rentitem.RentInfoActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -69,10 +67,9 @@ public class DetailsActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
 
     private String mAccessToken;
-
     private String mUserName;
     private String mPassword;
-    private String mUserImage,mUserFirstName, mUserLastName, mUserEmail, mUserId;
+    private String mUserImage, mUserFirstName, mUserLastName, mUserEmail, mUserId;
     private long mUserMobNo;
 
     @BindView(R.id.toolbar)
@@ -513,16 +510,11 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     private void saveUserData() {
-        String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
-                Settings.Secure.ANDROID_ID);
-
         SharedPreferences.Editor editor = sharedPreferences.edit();
-
         try {
-            String encryptedPassword = AESEncryptionDecryption.encrypt(android_id, mPassword);
             editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
             editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_USERID, mUserId);
-            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_PASSWORD, encryptedPassword);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_PASSWORD, mPassword);
             editor.putBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, true);
             editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_EMAIL, mUserEmail);
             editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_FIRSTNAME, mUserFirstName);
