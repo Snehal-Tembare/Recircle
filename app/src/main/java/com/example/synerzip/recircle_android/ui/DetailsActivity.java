@@ -37,12 +37,10 @@ import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.ui.messages.UserQueAnsActivity;
 import com.example.synerzip.recircle_android.ui.rentitem.RentInfoActivity;
-import com.example.synerzip.recircle_android.utilities.AESEncryptionDecryption;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
 import com.pkmmte.view.CircularImageView;
-import com.example.synerzip.recircle_android.ui.rentitem.RentInfoActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -69,14 +67,9 @@ public class DetailsActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
 
     private String mAccessToken;
-
     private String mUserName;
     private String mPassword;
-    private String mUserId;
-    private String mUserEmail;
-    private String mUserLastName;
-    private String mUserFirstName;
-    private String mUserImage;
+    private String mUserImage, mUserFirstName, mUserLastName, mUserEmail, mUserId;
     private long mUserMobNo;
 
     @BindView(R.id.toolbar)
@@ -234,10 +227,12 @@ public class DetailsActivity extends AppCompatActivity {
                             if (product != null) {
 
                                 //Disable ask question for self listed item
-                                if (mUserId.equalsIgnoreCase(product.getUser_info().getUser_id())) {
-                                    mTxtAskQuestion.setVisibility(View.GONE);
-                                } else {
-                                    mTxtAskQuestion.setVisibility(View.VISIBLE);
+                                if (mUserId != null) {
+                                    if (mUserId.equalsIgnoreCase(product.getUser_info().getUser_id())) {
+                                        mTxtAskQuestion.setVisibility(View.GONE);
+                                    } else {
+                                        mTxtAskQuestion.setVisibility(View.VISIBLE);
+                                    }
                                 }
 
                                 if (product.getUser_product_info().getUser_prod_reviews() != null
@@ -414,8 +409,7 @@ public class DetailsActivity extends AppCompatActivity {
             }
         });
 
-        mImgMain.setOnClickListener(new View.OnClickListener()
-        {
+        mImgMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DetailsActivity.this, ZoomActivity.class);
@@ -433,10 +427,12 @@ public class DetailsActivity extends AppCompatActivity {
         super.onResume();
         //Disable ask question for self listed item
         if (product != null) {
-            if (mUserId.equalsIgnoreCase(product.getUser_info().getUser_id())) {
-                mTxtAskQuestion.setVisibility(View.GONE);
-            } else {
-                mTxtAskQuestion.setVisibility(View.VISIBLE);
+            if (mUserId != null) {
+                if (mUserId.equals(product.getUser_info().getUser_id())) {
+                    mTxtAskQuestion.setVisibility(View.GONE);
+                } else {
+                    mTxtAskQuestion.setVisibility(View.VISIBLE);
+                }
             }
         }
     }
@@ -514,16 +510,11 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     private void saveUserData() {
-        String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
-                Settings.Secure.ANDROID_ID);
-
         SharedPreferences.Editor editor = sharedPreferences.edit();
-
         try {
-            String encryptedPassword = AESEncryptionDecryption.encrypt(android_id, mPassword);
             editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
             editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_USERID, mUserId);
-            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_PASSWORD, encryptedPassword);
+            editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_PASSWORD, mPassword);
             editor.putBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, true);
             editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_EMAIL, mUserEmail);
             editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_FIRSTNAME, mUserFirstName);
@@ -634,7 +625,7 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent=new Intent(DetailsActivity.this,HomeActivity.class);
+        Intent intent = new Intent(DetailsActivity.this, HomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }

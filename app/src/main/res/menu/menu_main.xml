@@ -4,16 +4,16 @@
     <item
         android:id="@+id/action_messages"
         android:title="Messages"
-        android:visible="false"
-        app:actionLayout="@layout/notification_badge"
-        app:showAsAction="always"/>
+        android:visible="true"
+        app:showAsAction="always"
+        android:icon="@mipmap/ic_message"/>
 
     <item
         android:id="@+id/action_rentals"
         android:icon="@drawable/ic_rental"
         android:title="Rentals"
-        android:visible="false"
-        app:showAsAction="ifRoom" />
+        android:visible="true"
+        app:showAsAction="always" />
 
     <item
         android:visible="false"

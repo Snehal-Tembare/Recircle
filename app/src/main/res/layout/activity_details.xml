@@ -183,7 +183,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/common_dimens_5"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         android:textColor="@color/colorTextBlue"
                         android:text="@string/ask_question"/>
                 </LinearLayout>

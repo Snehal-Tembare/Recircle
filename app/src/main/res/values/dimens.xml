@@ -79,4 +79,5 @@
     <dimen name="common_dimens_24">24dp</dimen>
     <dimen name="common_dimens_35">35dp</dimen>
     <dimen name="dimen_4dp">4dp</dimen>
+    <dimen name="dimen_110dp">110dp</dimen>
 </resources>
