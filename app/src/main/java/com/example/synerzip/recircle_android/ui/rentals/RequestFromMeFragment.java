@@ -26,7 +26,6 @@ public class RequestFromMeFragment extends Fragment {
     private String TAG = "RequestFromMeFragment";
     public ArrayList<UserRentings> userRentingsArrayList;
     private RentingsAdapter adapter;
-
     public TextView mTxtNoRentings;
     private RecyclerView mRecyclerRentings;
 
@@ -61,12 +60,12 @@ public class RequestFromMeFragment extends Fragment {
         this.userRentingsArrayList = userRequestsArrayList;
 
         if (userRentingsArrayList != null && userRentingsArrayList.size() != 0) {
-            ((AllRequestsActivity)getActivity()).mProgressBar.setVisibility(View.GONE);
+            ((AllRequestsActivity) getActivity()).mProgressBar.setVisibility(View.GONE);
             adapter = new RentingsAdapter(getActivity(), userRentingsArrayList);
             mRecyclerRentings.setLayoutManager(new LinearLayoutManager(getActivity()));
             mRecyclerRentings.setAdapter(adapter);
         } else {
-            ((AllRequestsActivity)getActivity()).mProgressBar.setVisibility(View.GONE);
+            ((AllRequestsActivity) getActivity()).mProgressBar.setVisibility(View.GONE);
             mTxtNoRentings.setVisibility(View.VISIBLE);
         }
 

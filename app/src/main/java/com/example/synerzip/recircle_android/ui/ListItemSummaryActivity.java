@@ -33,6 +33,7 @@ import com.example.synerzip.recircle_android.models.UserProdImages;
 import com.example.synerzip.recircle_android.models.UserProductUnAvailability;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
+import com.example.synerzip.recircle_android.utilities.Base64Encryption;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
@@ -140,7 +141,7 @@ public class ListItemSummaryActivity extends AppCompatActivity {
     private ListAnItemRequest listAnItemRequest;
 
     @BindView(R.id.viewDiscounts)
-    protected View viewDscounts;
+    protected View viewDiscounts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,7 +165,6 @@ public class ListItemSummaryActivity extends AppCompatActivity {
             product = bundle.getParcelable(getString(R.string.product));
             if (product != null) {
                 editProductId = product.getUser_product_info().getUser_product_id();
-                Log.v("editProductId", editProductId);
             }
         }
 
@@ -197,25 +197,33 @@ public class ListItemSummaryActivity extends AppCompatActivity {
         //TODO changes needed for ListAnItem api for discount ; the functionality should be dynamic
         if (listDiscounts.size() != 0) {
 
-            viewDscounts.setVisibility(View.VISIBLE);
+            viewDiscounts.setVisibility(View.VISIBLE);
             mTxtDisc.setVisibility(View.VISIBLE);
 
-            if (listDiscounts.get(0).getDiscount_for_days() == 5) {
+            if (listDiscounts.size() > 2) {
                 mTxtDiscFiveDays.setVisibility(View.VISIBLE);
                 mTxtDiscFiveDays.setText(getString(R.string.five_days));
-                mTxtDiscTenDays.setVisibility(View.GONE);
-            }
-            if (listDiscounts.get(0).getDiscount_for_days() == 10) {
                 mTxtDiscTenDays.setVisibility(View.VISIBLE);
                 mTxtDiscTenDays.setText(getString(R.string.ten_days));
-                mTxtDiscFiveDays.setVisibility(View.GONE);
+            } else {
+                if (listDiscounts.get(0).getDiscount_for_days() == 5) {
+                    mTxtDiscFiveDays.setVisibility(View.VISIBLE);
+                    mTxtDiscFiveDays.setText(getString(R.string.five_days));
+                    mTxtDiscTenDays.setVisibility(View.GONE);
+                } else {
+                    if (listDiscounts.get(0).getDiscount_for_days() == 10) {
+                        mTxtDiscTenDays.setVisibility(View.VISIBLE);
+                        mTxtDiscTenDays.setText(getString(R.string.ten_days));
+                        mTxtDiscFiveDays.setVisibility(View.GONE);
+                    }
+                }
             }
         }
+
         mItemAvailability = AdditionalDetailsActivity.mItemAvailability;
 
         mZipcode = AdditionalDetailsActivity.mZipcode;
         fromAustin = AdditionalDetailsActivity.fromAustin;
-
         mItemPrice = ListItemFragment.mItemPrice;
         mTxtItemPrice.setText("$ " + mItemPrice + "/day");
         mMinRental = ListItemFragment.mMinRental;
@@ -223,7 +231,6 @@ public class ListItemSummaryActivity extends AppCompatActivity {
 
         mItemDesc = AdditionalDetailsActivity.mItemDesc;
         mTxtItemDesc.setText(mItemDesc);
-
         mProductTitle = ListItemFragment.mProductName;
 
         if (productId.isEmpty()) {
@@ -273,6 +280,8 @@ public class ListItemSummaryActivity extends AppCompatActivity {
         mLinearLayout.setAlpha((float) 0.6);
         if (productId == null) {
             mProductTitle = "";
+            Log.v("---Disc_Sum_list_call", listDiscounts.size() + "");
+
             listAnItemRequest = new ListAnItemRequest(productId, mProductTitle, mItemPrice, mMinRental,
                     mItemDesc, listDiscounts, listUploadItemImage, mItemAvailability, mZipcode, fromAustin);
         } else {
@@ -355,6 +364,8 @@ public class ListItemSummaryActivity extends AppCompatActivity {
      * Login again dialog
      */
     private void logInDialog() {
+        mProgressBar.setVisibility(View.VISIBLE);
+        mLinearLayout.setAlpha((float) 0.6);
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.log_in_again_dialog);
         dialog.setTitle(getString(R.string.log_in_again));
@@ -368,7 +379,7 @@ public class ListItemSummaryActivity extends AppCompatActivity {
                 mProgressBar.setVisibility(View.VISIBLE);
                 mLinearLayout.setAlpha((float) 0.6);
                 final String mUserName = mEditTxtUserName.getText().toString();
-                final String mUserPwd = mEditTxtPwd.getText().toString();
+                final String mUserPwd = Base64Encryption.encrypt(mEditTxtPwd.getText().toString());
                 LogInRequest logInRequest = new LogInRequest(mUserName, mUserPwd);
 
                 if (ApiClient.getClient(ListItemSummaryActivity.this) != null) {
@@ -382,6 +393,7 @@ public class ListItemSummaryActivity extends AppCompatActivity {
                             mLinearLayout.setAlpha((float) 1.0);
 
                             if (response.isSuccessful()) {
+                                RCLog.showToast(ListItemSummaryActivity.this, getString(R.string.user_logged_in));
                                 mAccessToken = response.body().getToken();
                                 mUserId = response.body().getUser_id();
                                 mUserEmail = response.body().getEmail();
