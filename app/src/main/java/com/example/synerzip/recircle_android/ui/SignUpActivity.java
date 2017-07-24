@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -28,6 +29,7 @@ import com.example.synerzip.recircle_android.models.SignUpRequest;
 import com.example.synerzip.recircle_android.models.User;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
+import com.example.synerzip.recircle_android.utilities.Base64Encryption;
 import com.example.synerzip.recircle_android.utilities.HideKeyboard;
 import com.example.synerzip.recircle_android.utilities.NetworkUtility;
 import com.example.synerzip.recircle_android.utilities.RCLog;
@@ -109,6 +111,8 @@ public class SignUpActivity extends AppCompatActivity {
     @BindView(R.id.txt_resend_code)
     protected TextView mTxtResendOtp;
 
+    private SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -187,7 +191,9 @@ public class SignUpActivity extends AppCompatActivity {
      * api call for user sign up
      */
     private void getUserSignUp() {
-        SignUpRequest signUpRequest = new SignUpRequest(mFirstName, mLastName, mEmail, mPassword, mUserMobNo, mVerficationCode);
+
+        SignUpRequest signUpRequest = new SignUpRequest
+                (mFirstName, mLastName, mEmail, mPassword, mUserMobNo, mVerficationCode);
 
         if (ApiClient.getClient(this) != null) {
             service = ApiClient.getClient(this).create(RCAPInterface.class);
@@ -197,8 +203,8 @@ public class SignUpActivity extends AppCompatActivity {
                 public void onResponse(Call<User> call, Response<User> response) {
                     mProgressBar.setVisibility(View.GONE);
                     mScrollView.setAlpha((float) 1.0);
-
                     if (response.body() != null) {
+
                         startActivity(new Intent(SignUpActivity.this, HomeActivity.class));
                     }
                 }
@@ -230,7 +236,8 @@ public class SignUpActivity extends AppCompatActivity {
             mFirstName = mEditFirstName.getText().toString();
             mLastName = mEditLastName.getText().toString();
             mEmail = mEditEmail.getText().toString();
-            mPassword = mEditPassword.getText().toString();
+            mPassword=Base64Encryption.encrypt(mEditPassword.getText().toString());
+
             mUserMobNo = Long.parseLong(mEditMobNo.getText().toString());
             if (!mEditVerificationCode.getText().toString().isEmpty()) {
                 try {

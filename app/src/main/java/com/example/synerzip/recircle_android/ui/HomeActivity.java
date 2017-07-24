@@ -1,10 +1,14 @@
 package com.example.synerzip.recircle_android.ui;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.support.design.widget.AppBarLayout;
@@ -19,7 +23,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,11 +30,14 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -42,6 +48,7 @@ import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.ui.messages.AllMessagesActivity;
 import com.example.synerzip.recircle_android.ui.rentals.AllRequestsActivity;
+import com.example.synerzip.recircle_android.utilities.Base64Encryption;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.pkmmte.view.CircularImageView;
@@ -129,7 +136,7 @@ public class HomeActivity extends AppCompatActivity implements
             tv.setText(Html.fromHtml(re + circ));
         }
         tv.setTextSize(30);
-        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setDisplayOptions(android.support.v7.app.ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(tv);
 
         mProgressBar.setVisibility(View.VISIBLE);
@@ -291,7 +298,7 @@ public class HomeActivity extends AppCompatActivity implements
 
             case R.id.action_rentals:
                 startActivity(new Intent(HomeActivity.this, AllRequestsActivity.class));
-                break;
+                return true;
             default:
                 break;
         }
@@ -302,38 +309,45 @@ public class HomeActivity extends AppCompatActivity implements
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        invalidateOptionsMenu();
+
         return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        final MenuItem menuItemMsgs = menu.findItem(R.id.action_messages);
-        final MenuItem menuItemRentals = menu.findItem(R.id.action_rentals);
-        MenuItemCompat.setActionView(menuItemMsgs, R.layout.notification_badge);
-        View actionViewNotification = MenuItemCompat.getActionView(menuItemMsgs);
-        TextView mTxtMsgCount = (TextView) actionViewNotification.findViewById(R.id.txt_notification_count);
-        RelativeLayout notificationCount = (RelativeLayout) menuItemMsgs.getActionView();
-
-        if (isLoggedIn) {
-            if (mProdRelatedMsgs == 0) {
-                mTxtMsgCount.setVisibility(View.GONE);
-            }
-        }
-
-        menuItemMsgs.setVisible(true);
-        menuItemRentals.setVisible(true);
-        mTxtMsgCount.setText(String.valueOf(mProdRelatedMsgs));
-        ActivityCompat.invalidateOptionsMenu(HomeActivity.this);
-
-        notificationCount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(HomeActivity.this, AllMessagesActivity.class));
-            }
-        });
+        MenuItem menuItem = menu.findItem(R.id.action_messages);
+        menuItem.setIcon(buildDrawable(mProdRelatedMsgs, R.mipmap.ic_message));
         return true;
     }
+
+    private Drawable buildDrawable(int mProdRelatedMsgs, int ic_message) {
+
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        View view = layoutInflater.inflate(R.layout.notification_badge, null);
+        view.setBackgroundResource(ic_message);
+        if (mProdRelatedMsgs == 0) {
+            View counterTextPanel = view.findViewById(R.id.counterValuePanel);
+            counterTextPanel.setVisibility(View.GONE);
+        } else {
+            TextView textView = (TextView) view.findViewById(R.id.count);
+            textView.setText("" + mProdRelatedMsgs);
+        }
+
+        view.measure(
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+
+        view.setDrawingCacheEnabled(true);
+        view.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+        Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
+        view.setDrawingCacheEnabled(false);
+        return new BitmapDrawable(getResources(), bitmap);
+
+    }
+
 
     /**
      * PagerAdapter Class
@@ -397,7 +411,6 @@ public class HomeActivity extends AppCompatActivity implements
 
                         menu.setGroupVisible(R.id.grp_nav_logIn_signUp, true);
                         menu.setGroupVisible(R.id.grp_nav_faq, true);
-
                         mNavHeader.setVisibility(View.GONE);
                         menu.setGroupVisible(R.id.grp_ic_nav_settings, false);
                         menu.setGroupVisible(R.id.grp_ic_nav_msgs, false);

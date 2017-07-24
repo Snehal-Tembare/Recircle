@@ -41,6 +41,7 @@ public class MyProfileActivity extends AppCompatActivity {
     private static final long TIMER = 800;
     private static final String TAG = "MyProfileActivity";
     private ItemAdapter adapter;
+    public static boolean isMyProfile;
     private ArrayList<Products> productDetailsList;
     private RCAPInterface service;
     private String user_id;
@@ -134,6 +135,7 @@ public class MyProfileActivity extends AppCompatActivity {
                                         if (userProductDetails.getUser_product_id() != null) {
                                             intent.putExtra(getString(R.string.product_id), userProductDetails.getUser_product_id());
                                         }
+                                        isMyProfile=true;
                                         startActivity(intent);
                                     }
                                 });

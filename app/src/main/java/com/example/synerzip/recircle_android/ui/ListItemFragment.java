@@ -134,11 +134,10 @@ public class ListItemFragment extends Fragment {
 
         utility = new SearchUtility(getActivity());
         mProductAutoComplete.setSingleLine();
-        mProductAutoComplete.setEnabled(true);
 
         if (MyProfileActivity.isItemEdit) {
-            mProductAutoComplete.setEnabled(false);
             mProductAutoComplete.dismissDropDown();
+            mProductAutoComplete.setEnabled(false);
         }
 
         mProductAutoComplete.addTextChangedListener(new ListItemFragment.RCTextWatcher(mProductAutoComplete));
@@ -178,15 +177,18 @@ public class ListItemFragment extends Fragment {
             }
         });
         listDiscounts.addAll(strings);
-
-        if (MyProfileActivity.isItemEdit) {
-            mProductAutoComplete.dismissDropDown();
-        }
-
-
         return view;
 
     }//end onCreateView()
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (MyProfileActivity.isItemEdit){
+            mProductAutoComplete.dismissDropDown();
+            mProductAutoComplete.setEnabled(false);
+        }
+    }
 
     @OnClick(R.id.btn_upload_img)
     public void btnUploadImg(View view) {
@@ -375,12 +377,9 @@ public class ListItemFragment extends Fragment {
                         public void onResponse(Call<Products> call, Response<Products> response) {
                             if (response.isSuccessful()) {
                                 if (response.body() != null) {
-                                    Log.v("onSu Edit product data", response + "");
                                     product = response.body();
                                     if (product != null) {
                                         mProductAutoComplete.setText(product.getProduct_info().getProduct_title());
-                                        mProductAutoComplete.setEnabled(false);
-                                        mProductAutoComplete.dismissDropDown();
                                         mEditTxtEnterPrice.setText(product.getUser_product_info().getPrice_per_day());
                                         mEditMinRental.setText(product.getUser_product_info().getMin_rental_days());
 

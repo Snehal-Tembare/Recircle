@@ -35,6 +35,7 @@ import com.example.synerzip.recircle_android.models.UserAccDetails;
 import com.example.synerzip.recircle_android.models.UserAddress;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
+import com.example.synerzip.recircle_android.utilities.Base64Encryption;
 import com.example.synerzip.recircle_android.utilities.HideKeyboard;
 import com.example.synerzip.recircle_android.utilities.NetworkUtility;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
@@ -405,8 +406,8 @@ public class EditProfileActivity extends AppCompatActivity {
         btnChangePwd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String mUserName = mEditTxtOldPwd.getText().toString();
-                final String mUserPwd = mEditTxtNewPwd.getText().toString();
+                final String mUserName = Base64Encryption.encrypt(mEditTxtOldPwd.getText().toString());
+                final String mUserPwd = Base64Encryption.encrypt(mEditTxtNewPwd.getText().toString());
                 ChangePwdRequest changePwdRequest = new ChangePwdRequest(mUserName, mUserPwd);
 
                 if (ApiClient.getClient(EditProfileActivity.this) != null) {
@@ -424,6 +425,7 @@ public class EditProfileActivity extends AppCompatActivity {
                                 editor.putString(RCAppConstants.RC_SHARED_PREFERENCES_ACCESS_TOKEN, mAccessToken);
                                 editor.apply();
                                 dialog.dismiss();
+                                RCLog.showToast(EditProfileActivity.this, getString(R.string.changed_pwd));
                             } else {
                                 if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
                                     RCLog.showToast(EditProfileActivity.this, getString(R.string.err_credentials));

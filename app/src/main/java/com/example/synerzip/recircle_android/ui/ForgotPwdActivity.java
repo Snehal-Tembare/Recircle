@@ -22,6 +22,7 @@ import com.example.synerzip.recircle_android.models.ForgotPwdRequest;
 import com.example.synerzip.recircle_android.models.User;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
+import com.example.synerzip.recircle_android.utilities.Base64Encryption;
 import com.example.synerzip.recircle_android.utilities.HideKeyboard;
 import com.example.synerzip.recircle_android.utilities.NetworkUtility;
 import com.example.synerzip.recircle_android.utilities.RCLog;
@@ -104,7 +105,7 @@ public class ForgotPwdActivity extends AppCompatActivity {
             mLinearLayout.setAlpha((float) 0.6);
             mEmail = mEditEmail.getText().toString();
             mOtp = Integer.parseInt(mEditOtp.getText().toString());
-            mNewPwd = mEditNewPwd.getText().toString();
+            mNewPwd = Base64Encryption.encrypt(mEditNewPwd.getText().toString());
             getForgotPwd();
 
         } else {
@@ -119,25 +120,26 @@ public class ForgotPwdActivity extends AppCompatActivity {
      */
     public void getForgotPwd() {
         ForgotPwdRequest forgotPwdRequest = new ForgotPwdRequest(mOtp, mEmail, mNewPwd);
-        if (ApiClient.getClient(this)!=null){
-        service = ApiClient.getClient(this).create(RCAPInterface.class);
-        Call<User> call = service.forgotPassword(forgotPwdRequest);
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                mProgressBar.setVisibility(View.GONE);
-                mLinearLayout.setAlpha((float) 1.0);
-                if (response.isSuccessful()) {
-                    startActivity(new Intent(ForgotPwdActivity.this, LogInActivity.class));
+        if (ApiClient.getClient(this) != null) {
+            service = ApiClient.getClient(this).create(RCAPInterface.class);
+            Call<User> call = service.forgotPassword(forgotPwdRequest);
+            call.enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    mProgressBar.setVisibility(View.GONE);
+                    mLinearLayout.setAlpha((float) 1.0);
+                    if (response.isSuccessful()) {
+                        startActivity(new Intent(ForgotPwdActivity.this, LogInActivity.class));
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                mProgressBar.setVisibility(View.GONE);
-                mLinearLayout.setAlpha((float) 1.0);
-            }
-        });}else {
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    mProgressBar.setVisibility(View.GONE);
+                    mLinearLayout.setAlpha((float) 1.0);
+                }
+            });
+        } else {
             mProgressBar.setVisibility(View.GONE);
         }
     }
@@ -153,26 +155,26 @@ public class ForgotPwdActivity extends AppCompatActivity {
         mLinearLayout.setAlpha((float) 0.6);
         mEmail = mEditEmail.getText().toString();
 
-        if (ApiClient.getClient(this)!=null){
-        service = ApiClient.getClient(this).create(RCAPInterface.class);
-        Call<User> call = service.otpForgotPassword(mEmail);
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                mProgressBar.setVisibility(View.GONE);
-                mLinearLayout.setAlpha((float) 1.0);
-                if (response.isSuccessful()) {
-                    RCLog.showToast(getApplicationContext(), getString(R.string.toast_send_otp));
+        if (ApiClient.getClient(this) != null) {
+            service = ApiClient.getClient(this).create(RCAPInterface.class);
+            Call<User> call = service.otpForgotPassword(mEmail);
+            call.enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    mProgressBar.setVisibility(View.GONE);
+                    mLinearLayout.setAlpha((float) 1.0);
+                    if (response.isSuccessful()) {
+                        RCLog.showToast(getApplicationContext(), getString(R.string.toast_send_otp));
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                mProgressBar.setVisibility(View.GONE);
-                mLinearLayout.setAlpha((float) 1.0);
-            }
-        });
-        }else {
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    mProgressBar.setVisibility(View.GONE);
+                    mLinearLayout.setAlpha((float) 1.0);
+                }
+            });
+        } else {
             mProgressBar.setVisibility(View.GONE);
         }
     }

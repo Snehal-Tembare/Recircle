@@ -18,7 +18,7 @@
             android:id="@+id/linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dimen_40dp"
+            android:layout_margin="@dimen/dimen_20dp"
             android:orientation="vertical">
 
             <android.support.design.widget.TextInputLayout
@@ -79,24 +79,24 @@
                 android:textColor="@color/common_white" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/dimen_20dp"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/dont_have_an_acc"
                     android:textColor="@color/colorPrimary" />
 
                 <TextView
                     android:id="@+id/txt_create_acc"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dimen_10dp"
                     android:text="@string/create_acc"
+                    android:layout_marginLeft="@dimen/common_dimens_5"
                     android:textColor="@color/colorTextBlue" />
             </LinearLayout>
         </LinearLayout>

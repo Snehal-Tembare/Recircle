@@ -87,13 +87,7 @@ public class UploadImageAdapter extends RecyclerView.Adapter<UploadImageAdapter.
                         uploadImageObjectList.remove(getAdapterPosition());
                         notifyItemRemoved(getAdapterPosition());
                         notifyItemRangeChanged(getAdapterPosition(), uploadImageObjectList.size());
-                        if (ListItemSummaryActivity.isSummaryActivity){
-                            imgItemCancel.setVisibility(View.GONE);
-                        }else {
-                            imgItemCancel.setVisibility(View.VISIBLE);
-
-                        }
-                        Log.v("UploadImages Adapter","size"+UploadImgActivity.uploadImageObjectList.size());
+                       Log.v("UploadImages Adapter","size"+UploadImgActivity.uploadImageObjectList.size());
 
                     }
                 }
