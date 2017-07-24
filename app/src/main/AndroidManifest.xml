@@ -96,6 +96,8 @@
         </activity>
         <activity android:name=".ui.messages.ChatActivity" />
         <activity android:name=".ui.messages.NewItemReqActivity" />
+        <service android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService"
+            android:enabled="true"/>
     </application>
 
 </manifest>

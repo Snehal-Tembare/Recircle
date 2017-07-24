@@ -136,13 +136,18 @@ public class ListItemFragment extends Fragment {
         mProductAutoComplete.setSingleLine();
         mProductAutoComplete.setEnabled(true);
 
+        if (MyProfileActivity.isItemEdit) {
+            mProductAutoComplete.setEnabled(false);
+            mProductAutoComplete.dismissDropDown();
+        }
+
         mProductAutoComplete.addTextChangedListener(new ListItemFragment.RCTextWatcher(mProductAutoComplete));
         mEditTxtEnterPrice.addTextChangedListener(new ListItemFragment.RCTextWatcher(mEditTxtEnterPrice));
         mEditMinRental.addTextChangedListener(new ListItemFragment.RCTextWatcher(mEditMinRental));
 
         listDiscounts = new ArrayList<>();
 
-        final ArrayList<Discounts> strings=new ArrayList<>();
+        final ArrayList<Discounts> strings = new ArrayList<>();
         //discounts checkbox listener
         mDiscountForFiveDay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -174,7 +179,7 @@ public class ListItemFragment extends Fragment {
         });
         listDiscounts.addAll(strings);
 
-        if (MyProfileActivity.isItemEdit){
+        if (MyProfileActivity.isItemEdit) {
             mProductAutoComplete.dismissDropDown();
         }
 
@@ -199,6 +204,8 @@ public class ListItemFragment extends Fragment {
                     editProduct.setPrice_per_day(Integer.parseInt(mEditTxtEnterPrice.getText().toString().trim()));
                     editProduct.setMin_rental_days(Integer.parseInt(mEditMinRental.getText().toString().trim()));
                     editProduct.setUser_prod_discounts(listDiscounts);
+                    editProduct.setUser_prod_images(product.getUser_product_info().getUser_prod_images());
+                    editProduct.setFromAustin(1);
                 }
                 startActivity(intent);
             } else {
@@ -293,9 +300,11 @@ public class ListItemFragment extends Fragment {
                         && !product.getProduct_manufacturer_id().isEmpty()) {
                     manufacturerId = product.getProduct_manufacturer_id();
                 }
-                if (product.getProduct_detail().getProduct_price() != 0) {
-                    productPrice = product.getProduct_detail().getProduct_price();
-                    productTitle = product.getProduct_manufacturer_title();
+                if (product.getProduct_detail() != null) {
+                    if (product.getProduct_detail().getProduct_price() != 0) {
+                        productPrice = product.getProduct_detail().getProduct_price();
+                        productTitle = product.getProduct_manufacturer_title();
+                    }
                 }
                 if (product.getProduct_id() != null && !product.getProduct_id().isEmpty()) {
                     productId = product.getProduct_id();

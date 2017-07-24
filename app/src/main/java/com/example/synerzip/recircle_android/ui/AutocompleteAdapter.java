@@ -39,16 +39,19 @@ public class AutocompleteAdapter extends ArrayAdapter<Product> {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.autocomplete_row_layout, parent, false);
-        }
-        Product product = items.get(position);
+            if (context != null) {
+                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                view = inflater.inflate(R.layout.autocomplete_row_layout, parent, false);
 
-
-        if (product != null) {
-            TextView txtProductName = (TextView) view.findViewById(R.id.txtProductName);
-            if (txtProductName != null)
-                txtProductName.setText(product.getProduct_manufacturer_title());
+                if (items != null) {
+                    Product product = items.get(position);
+                    if (product != null) {
+                        TextView txtProductName = (TextView) view.findViewById(R.id.txtProductName);
+                        if (txtProductName != null)
+                            txtProductName.setText(product.getProduct_manufacturer_title());
+                    }
+                }
+            }
         }
         return view;
     }

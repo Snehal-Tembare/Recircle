@@ -234,10 +234,12 @@ public class DetailsActivity extends AppCompatActivity {
                             if (product != null) {
 
                                 //Disable ask question for self listed item
-                                if (mUserId.equalsIgnoreCase(product.getUser_info().getUser_id())) {
-                                    mTxtAskQuestion.setVisibility(View.GONE);
-                                } else {
-                                    mTxtAskQuestion.setVisibility(View.VISIBLE);
+                                if (mUserId != null) {
+                                    if (mUserId.equalsIgnoreCase(product.getUser_info().getUser_id())) {
+                                        mTxtAskQuestion.setVisibility(View.GONE);
+                                    } else {
+                                        mTxtAskQuestion.setVisibility(View.VISIBLE);
+                                    }
                                 }
 
                                 if (product.getUser_product_info().getUser_prod_reviews() != null
@@ -414,8 +416,7 @@ public class DetailsActivity extends AppCompatActivity {
             }
         });
 
-        mImgMain.setOnClickListener(new View.OnClickListener()
-        {
+        mImgMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DetailsActivity.this, ZoomActivity.class);
@@ -634,8 +635,12 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent=new Intent(DetailsActivity.this,HomeActivity.class);
+        if (MyProfileActivity.isItemEdit) {
+            finish();
+        }
+        Intent intent = new Intent(DetailsActivity.this, HomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+
     }
 }

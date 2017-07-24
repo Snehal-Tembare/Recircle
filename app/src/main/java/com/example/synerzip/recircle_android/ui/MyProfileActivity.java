@@ -125,6 +125,7 @@ public class MyProfileActivity extends AppCompatActivity {
                                     && user.getUserProductDetails().size() != 0) {
                                 userProductDetailsList = user.getUserProductDetails();
                                 Log.v(TAG, "***" + user.getFirst_name() + " " + user.getLast_name());
+                                Log.v(TAG, "***No. of products" + user.getUserProductDetails().size());
                                 adapter = new ItemAdapter(getApplicationContext(), userProductDetailsList, new OnItemClickListener() {
                                     @Override
                                     public void onProductClick(UserProductDetails userProductDetails) {

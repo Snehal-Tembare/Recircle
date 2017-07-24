@@ -3,7 +3,9 @@ package com.example.synerzip.recircle_android.ui;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +14,14 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
+import com.amazonaws.auth.CognitoCredentialsProvider;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.example.synerzip.recircle_android.R;
 
 import android.view.MenuItem;
@@ -21,6 +31,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.synerzip.recircle_android.models.AllProductInfo;
 import com.example.synerzip.recircle_android.models.Discounts;
@@ -38,8 +49,9 @@ import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 import butterknife.BindView;
@@ -56,6 +68,7 @@ import retrofit2.Response;
  */
 public class ListItemSummaryActivity extends AppCompatActivity {
 
+    private static final int READ_EXTERNAL_STORAGE = 1;
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
 
@@ -79,6 +92,7 @@ public class ListItemSummaryActivity extends AppCompatActivity {
     private String editProductId = "";
 
     private ArrayList<Discounts> listDiscounts;
+    private ArrayList<String> uploadedImageList;
 
     @BindView(R.id.txt_five_days_disc)
     protected TextView mTxtDiscFiveDays;
@@ -112,12 +126,12 @@ public class ListItemSummaryActivity extends AppCompatActivity {
     @BindView(R.id.txt_item_rental)
     protected TextView mTxtItemRental;
 
-    private ArrayList<String> uploadGalleryImages;
+    private ArrayList<String> uploadedImageUrlList;
 
     @BindView(R.id.recycler_view_images)
     protected RecyclerView mRecyclerView;
 
-    private int selectedImgPosition = 0;
+    public static boolean isSummaryActivity;
 
     private LinearLayoutManager mLayoutManager;
 
@@ -144,6 +158,12 @@ public class ListItemSummaryActivity extends AppCompatActivity {
     @BindView(R.id.viewDiscounts)
     protected View viewDscounts;
 
+    private TransferObserver transferObserver;
+    private TransferUtility transferUtility;
+    private AmazonS3Client s3Client;
+
+    private UserProdImages mUserProdImages;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -151,6 +171,10 @@ public class ListItemSummaryActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_list_item_summary);
         ButterKnife.bind(this);
+
+        credentialsProvider();
+
+        setTransferUtility();
 
         if (MyProfileActivity.isItemEdit) {
             mTxtConfirmItem.setText(getString(R.string.edit));
@@ -170,7 +194,8 @@ public class ListItemSummaryActivity extends AppCompatActivity {
             }
         }
 
-        uploadGalleryImages = new ArrayList<>();
+        uploadedImageUrlList = new ArrayList<>();
+        uploadedImageList = new ArrayList<>();
 
         //get data from shared preferences
         sharedPreferences = getSharedPreferences(RCAppConstants.RC_SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
@@ -235,36 +260,86 @@ public class ListItemSummaryActivity extends AppCompatActivity {
         }
         //TODO product images should be taken from amazon s3 bucket ; yet to be done
 
-        UserProdImages mUserProdImages;
+        if (ContextCompat.checkSelfPermission(ListItemSummaryActivity.this, android.Manifest.
+                permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 
-        mUserProdImages = new UserProdImages("https://s3.ap-south-1.amazonaws.com/recircleimages/1398934243000_1047081.jpg",
-                "2017-02-04T13:13:09.000Z");
-        listUploadItemImage.add(mUserProdImages);
-        uploadGalleryImages = UploadImgActivity.listUploadGalleryImage;
 
-        final ListItemImageAdapter mListItemImageAdapter = new ListItemImageAdapter
-                (ListItemSummaryActivity.this, selectedImgPosition, uploadGalleryImages,
-                        new ListItemImageAdapter.OnImageItemClickListener() {
-                            @Override
-                            public void onImageClick(int position, String userProdImages) {
-                                View view = mRecyclerView.getChildAt(position);
-                                view.setBackground(ContextCompat.getDrawable(ListItemSummaryActivity.this, R.drawable.selected_image_background));
-                                //TODO recycler view scroll issue is yet to be solved
-                                for (int i = 0; i < uploadGalleryImages.size(); i++) {
-                                    view = mRecyclerView.getChildAt(i);
+        } else {
+            ActivityCompat.requestPermissions(ListItemSummaryActivity.this,
+                    new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},
+                    READ_EXTERNAL_STORAGE);
+        }
 
-                                    if (i != position) {
-                                        view.setBackground(ContextCompat.getDrawable(ListItemSummaryActivity.this, R.drawable.custom_imageview));
-                                    }
-                                }
-                                selectedImgPosition = position;
-                                mLayoutManager.scrollToPosition(position);
-                            }
-                        });
-
+        final UploadImageAdapter uploadImageAdapter = new UploadImageAdapter(ListItemSummaryActivity.this,
+                UploadImgActivity.uploadImageObjectList);
+        isSummaryActivity = true;
         mLayoutManager = new LinearLayoutManager(ListItemSummaryActivity.this, LinearLayoutManager.HORIZONTAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mListItemImageAdapter);
+        mRecyclerView.setAdapter(uploadImageAdapter);
+    }
+
+    private void transferObserverListener(final TransferObserver transferObserver) {
+        transferObserver.setTransferListener(new TransferListener() {
+
+            @Override
+            public void onStateChanged(int id, TransferState state) {
+                Log.e("statechange", state + "");
+                if (transferObserver.getState().toString().equals("COMPLETED")) {
+                    Log.i("","Image uploaded successfully");
+                    mProgressBar.setVisibility(View.GONE);
+                    String uploadedImgUrl = s3Client.getResourceUrl("recircle-snehal", transferObserver.getKey());
+                    uploadedImageUrlList.add(uploadedImgUrl);
+                    Log.v("Link Name", uploadedImgUrl);
+                    uploadedImageList.add(uploadedImgUrl);
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(getString(R.string.ddd_mm));
+                    Log.v("Date", "Created at" + simpleDateFormat.format(new Date().getTime()));
+                    mUserProdImages = new UserProdImages(null, uploadedImgUrl, String.valueOf(simpleDateFormat.format(new Date().getTime())));
+                    listUploadItemImage.add(mUserProdImages);
+//                    if (UploadImgActivity.uploadImageObjectList.size() == uploadedImageList.size()) {
+                    getListAnItem();
+//                    }
+                }
+            }
+
+            @Override
+            public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+                int percentage = (int) ((bytesCurrent / bytesTotal) * 100);
+                Log.e("percentage", percentage + "");
+            }
+
+            @Override
+            public void onError(int id, Exception ex) {
+                Log.e("error", "");
+                Log.e("ERROR", ex.toString());
+            }
+
+        });
+    }
+
+    private void setTransferUtility() {
+        transferUtility = new TransferUtility(s3Client, getApplicationContext());
+    }
+
+    private void credentialsProvider() {
+
+        CognitoCredentialsProvider credentialsProvider = new CognitoCredentialsProvider(
+                "ap-south-1:0047cfa2-0aec-42c3-a012-16eeb25805e2",//Identity_pool_id
+                Regions.AP_SOUTH_1); //region
+
+        setAmazonS3Client(credentialsProvider);
+
+//TODO-Recircle credentilas yet to use
+     /*   CognitoCredentialsProvider credentialsProvider = new CognitoCredentialsProvider(
+                "us-west-2:0047cfa2-0aec-42c3-a012-16eeb25805e2",//Identity_pool_id
+//                rc-mvp.s3-ussouth-west-2.amazonaws.com
+//                MfVYnalgn9Q+o6vzTJHPBEXi+ZHc+PF0Whf3/ag - SID
+//                  AKIAJQUEUUC3SLXVHP5VQ - AID
+                Regions.US_WEST_2); //region    */
+    }
+
+    private void setAmazonS3Client(CognitoCredentialsProvider credentialsProvider) {
+        s3Client = new AmazonS3Client(credentialsProvider);
+        s3Client.setRegion(Region.getRegion(Regions.AP_SOUTH_1));
     }
 
     /**
@@ -287,26 +362,24 @@ public class ListItemSummaryActivity extends AppCompatActivity {
             service = ApiClient.getClient(ListItemSummaryActivity.this).create(RCAPInterface.class);
 
             if (MyProfileActivity.isItemEdit) {
-
-                Log.v("Edit product data", ListItemFragment.editProduct.toString());
+                ListItemFragment.editProduct.getUser_prod_images().clear();
+                ListItemFragment.editProduct.getUser_prod_images().addAll(listUploadItemImage);
 
                 Call<EditProduct> productsCall = service.editUserProductDetails("Bearer " + mAccessToken, ListItemFragment.editProduct);
                 productsCall.enqueue(new Callback<EditProduct>() {
                     @Override
                     public void onResponse(Call<EditProduct> call, Response<EditProduct> response) {
                         if (response.isSuccessful()) {
-                            RCLog.showToast(getApplicationContext(), getString(R.string.details_edited_successfully));
-                            mProgressBar.setVisibility(View.GONE);
-                            Intent intent = new Intent(ListItemSummaryActivity.this, MyProfileActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            MyProfileActivity.isItemEdit = false;
-                            ListItemCalendarActivity.selectedDates.clear();
-                            AdditionalDetailsActivity.selectedDates.clear();
-                            AdditionalDetailsActivity.mItemAvailability.clear();
-                            startActivity(intent);
+                                RCLog.showToast(getApplicationContext(), getString(R.string.details_edited_successfully));
+                                mProgressBar.setVisibility(View.GONE);
+                                Intent intent = new Intent(ListItemSummaryActivity.this, MyProfileActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                MyProfileActivity.isItemEdit = false;
+                                startActivity(intent);
+
                         } else if (response.code() == RCWebConstants.RC_ERROR_UNAUTHORISED) {
                             mProgressBar.setVisibility(View.GONE);
-                            RCLog.showToast(ListItemSummaryActivity.this, getString(R.string.user_not_authenticated));
+                            RCLog.showToast(ListItemSummaryActivity.this, getString(R.string.session_expired));
                         } else {
                             RCLog.showToast(getApplicationContext(), getString(R.string.something_went_wrong));
                             mProgressBar.setVisibility(View.GONE);
@@ -334,6 +407,7 @@ public class ListItemSummaryActivity extends AppCompatActivity {
                             String userProductId = response.body().getUser_product_id();
                             intent.putExtra(getString(R.string.product_id), userProductId);
                             startActivity(intent);
+
                         } else if (response.code() == RCWebConstants.RC_ERROR_CODE_BAD_REQUEST) {
 
                             RCLog.showToast(ListItemSummaryActivity.this, getString(R.string.product_creation_failed));
@@ -465,7 +539,20 @@ public class ListItemSummaryActivity extends AppCompatActivity {
      */
     @OnClick(R.id.btn_confirm_item)
     public void btnConfirmItem(View view) {
-        getListAnItem();
+        File file;
+        for (UserProdImages userProdImages : UploadImgActivity.uploadImageObjectList) {
+            file = new File(userProdImages.getUser_prod_image_url());
+            if (!userProdImages.getUser_prod_image_url().startsWith("http")) {
+                mProgressBar.setVisibility(View.VISIBLE);
+                transferObserver = transferUtility.upload("recircle-snehal", "IMG_" + new Date().getTime() + ".jpg", file);
+                Log.v("Key", "" + transferObserver.getKey());
+                transferObserverListener(transferObserver);
+            }else if (ListItemFragment.editProduct.getUser_prod_images().size()==
+                    UploadImgActivity.uploadImageObjectList.size()){
+                getListAnItem();
+            }
+
+        }
     }
 
     /**

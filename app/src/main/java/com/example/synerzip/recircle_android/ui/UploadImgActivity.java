@@ -1,13 +1,17 @@
 package com.example.synerzip.recircle_android.ui;
 
+import android.Manifest;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,6 +28,7 @@ import com.example.synerzip.recircle_android.utilities.RCLog;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,8 +39,12 @@ import butterknife.OnClick;
  * Copyright © 2017 Synerzip. All rights reserved
  */
 public class UploadImgActivity extends AppCompatActivity {
+    private static final String TAG = "UploadImgActivity";
+    private static final int READ_CAMERA = 1;
+    private static final int READ_EXTERNAL_STORAGE = 4;
     private Products product;
-    public static ArrayList<String> listUploadGalleryImage;
+    public static ArrayList<String> uploadImageStringList;
+    public static ArrayList<UserProdImages> uploadImageObjectList;
     private UploadImageAdapter mUploadImageAdapter;
 
     @BindView(R.id.recycler_view_upload_img)
@@ -47,8 +56,8 @@ public class UploadImgActivity extends AppCompatActivity {
         setContentView(R.layout.activity_upload_img);
         ButterKnife.bind(this);
 
-        listUploadGalleryImage = new ArrayList<>();
-
+        uploadImageStringList = new ArrayList<>();
+        uploadImageObjectList = new ArrayList<>();
         if (MyProfileActivity.isItemEdit) {
             Bundle bundle = getIntent().getExtras();
             if (bundle != null) {
@@ -56,27 +65,34 @@ public class UploadImgActivity extends AppCompatActivity {
                 if (product != null) {
                     if (product.getUser_product_info().getUser_prod_images() != null &&
                             product.getUser_product_info().getUser_prod_images().size() != 0) {
-                        for (UserProdImages imageUrl : product.getUser_product_info().getUser_prod_images()) {
-                            listUploadGalleryImage.add(imageUrl.getUser_prod_image_url());
+                        for (UserProdImages userProdImage : product.getUser_product_info().getUser_prod_images()) {
+                            uploadImageObjectList.add(userProdImage);
+//                            uploadImageStringList.add(userProdImage.getUser_prod_image_url());
+                            Log.v("Upload Img Id", userProdImage.getUser_prod_image_id());
                         }
                     }
-                        Log.v("UploadImgActivity", product.getProduct_info().getProduct_title());
-                        mUploadImageAdapter = new UploadImageAdapter(UploadImgActivity.this, listUploadGalleryImage);
-                        mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-                        mRecyclerView.setAdapter(mUploadImageAdapter);
-
-
                 }
             }
         }
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.v(TAG, "onResume");
+
+        if (uploadImageObjectList != null && uploadImageObjectList.size() != 0) {
+            mUploadImageAdapter = new UploadImageAdapter(UploadImgActivity.this, uploadImageObjectList);
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+            mRecyclerView.setAdapter(mUploadImageAdapter);
+        }
     }
 
     @OnClick(R.id.img_proceed)
     public void btnProceed(View view) {
-        if (listUploadGalleryImage.size() != 0) {
+        if (uploadImageObjectList.size() != 0) {
             Intent intent = new Intent(UploadImgActivity.this, AdditionalDetailsActivity.class);
-            intent.putExtra(getString(R.string.uplaod_image_gallery), listUploadGalleryImage);
+            intent.putExtra(getString(R.string.uplaod_image_gallery), uploadImageObjectList);
             if (MyProfileActivity.isItemEdit) {
                 intent.putExtra(getString(R.string.product), product);
             }
@@ -88,44 +104,52 @@ public class UploadImgActivity extends AppCompatActivity {
 
     @OnClick(R.id.img_gallery)
     public void imgGalleryImg(View view) {
+        if (ContextCompat.checkSelfPermission(UploadImgActivity.this, Manifest.
+                permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), 2);
+        }else {
+            ActivityCompat.requestPermissions(UploadImgActivity.this,
+                    new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},
+                    READ_EXTERNAL_STORAGE);
+        }
     }
 
     @OnClick(R.id.img_camera)
     public void imgCameraImg(View view) {
-        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(cameraIntent, 3);
+        if (ContextCompat.checkSelfPermission(UploadImgActivity.this, Manifest.
+                permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(cameraIntent, 3);
+        } else {
+            ActivityCompat.requestPermissions(UploadImgActivity.this,
+                    new String[]{Manifest.permission.CAMERA},
+                    READ_CAMERA);
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.v(TAG, "onActivityResult");
+        UserProdImages userProdImages;
 
         if (requestCode == 3 && resultCode == RESULT_OK) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             Uri tempUri = getImageUri(getApplicationContext(), photo);
             File cameraFilePath = new File(getRealPathFromURI(tempUri));
-            listUploadGalleryImage.add(cameraFilePath.toString());
+            userProdImages = new UserProdImages(null, cameraFilePath.toString(), null);
+            uploadImageObjectList.add(userProdImages);
 
-            mUploadImageAdapter = new UploadImageAdapter(UploadImgActivity.this, listUploadGalleryImage);
-//            mUploadImageAdapter.notifyDataSetChanged();
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-            mRecyclerView.setAdapter(mUploadImageAdapter);
-        }
-        if (requestCode == 2 && resultCode == RESULT_OK && null != data) {
-            UploadImageAdapter mUploadImageAdapter;
-            mUploadImageAdapter = new UploadImageAdapter(UploadImgActivity.this, listUploadGalleryImage);
+        } else if (requestCode == 2 && resultCode == RESULT_OK && null != data) {
             if (data.getData() != null) {
                 Uri uri = data.getData();
                 String filepath = getPath(UploadImgActivity.this, uri);
-                listUploadGalleryImage.add(filepath);
-//                mUploadImageAdapter.notifyDataSetChanged();
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-                mRecyclerView.setAdapter(mUploadImageAdapter);
+                userProdImages = new UserProdImages(null, filepath, null);
+                uploadImageObjectList.add(userProdImages);
             } else {
                 if (data.getClipData() != null) {
                     ClipData mClipData = data.getClipData();
@@ -133,20 +157,20 @@ public class UploadImgActivity extends AppCompatActivity {
                         ClipData.Item item = mClipData.getItemAt(i);
                         Uri uri = item.getUri();
                         String filepath = getPath(UploadImgActivity.this, uri);
-                        listUploadGalleryImage.add(filepath);
+                        userProdImages = new UserProdImages(null, filepath, null);
+                        uploadImageObjectList.add(userProdImages);
                     }
-//                    mUploadImageAdapter.notifyDataSetChanged();
-                    mRecyclerView.setAdapter(mUploadImageAdapter);
-                    mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
                 }
             }
         }
+
     }
 
     public Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "IMG_" + new Date().getTime() + ".jpg", null);
+        Log.v("Uri", "" + "IMG_" + new Date().getTime() + ".jpg");
         return Uri.parse(path);
     }
 
