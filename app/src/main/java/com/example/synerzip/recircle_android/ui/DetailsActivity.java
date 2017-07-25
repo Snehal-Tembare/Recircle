@@ -37,6 +37,7 @@ import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.ui.messages.UserQueAnsActivity;
 import com.example.synerzip.recircle_android.ui.rentitem.RentInfoActivity;
+import com.example.synerzip.recircle_android.utilities.Base64Encryption;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
@@ -455,7 +456,7 @@ public class DetailsActivity extends AppCompatActivity {
                 mProgressBar.setVisibility(View.VISIBLE);
                 mParentLayout.setAlpha((float) 0.6);
                 final String mLogInUserName = mEditTxtUserName.getText().toString();
-                final String mLogInPwd = mEditTxtPwd.getText().toString();
+                final String mLogInPwd = Base64Encryption.encrypt(mEditTxtPwd.getText().toString());
                 LogInRequest logInRequest = new LogInRequest(mLogInUserName, mLogInPwd);
 
                 if (ApiClient.getClient(DetailsActivity.this) != null) {

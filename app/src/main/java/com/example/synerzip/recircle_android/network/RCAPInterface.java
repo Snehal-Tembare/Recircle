@@ -141,7 +141,7 @@ public interface RCAPInterface {
      * @param userDetailsRequest
      */
     @PUT(RCWebConstants.RC_EDIT_USER)
-    Call<RootUserInfo> editUser(@Header("Authorization") String token,@Body RootUserInfo userDetailsRequest);
+    Call<RootUserInfo> editUser(@Header("Authorization") String token, @Body RootUserInfo userDetailsRequest);
 
     /**
      * Request for change password
@@ -161,6 +161,7 @@ public interface RCAPInterface {
     @GET(RCWebConstants.RC_GET_USER_DETAILS)
     Call<RootUserInfo> getUserDetails(@Header("Authorization") String token,
                                       @Path("userId") String userId);
+
     /**
      * Request for Rent and Item
      *
@@ -173,6 +174,7 @@ public interface RCAPInterface {
 
     /**
      * otp to verify user mobile number
+     *
      * @param token
      * @return
      */
@@ -181,6 +183,7 @@ public interface RCAPInterface {
 
     /**
      * get user message
+     *
      * @param token
      * @return
      */
@@ -189,25 +192,28 @@ public interface RCAPInterface {
 
     /**
      * get user question and answer
+     *
      * @param token
      * @return
      */
     @POST(RCWebConstants.RC_USER_QUE_ANS)
     Call<RootMessageInfo> getUserQueAns(@Header("Authorization") String token,
-                                            @Body UserAskQueRequest userAskQueRequest);
+                                        @Body UserAskQueRequest userAskQueRequest);
 
     /**
      * api call to reply to user
+     *
      * @param token
      * @param userAskQueResponse
      * @return
      */
     @POST(RCWebConstants.RC_USER_QUE_ANS)
     Call<RootMessageInfo> getMsgResponse(@Header("Authorization") String token,
-                                             @Body UserAskQueResponse userAskQueResponse);
+                                         @Body UserAskQueResponse userAskQueResponse);
 
     /**
-     *  Get order details
+     * Get order details
+     *
      * @param token
      * @return
      */
@@ -215,40 +221,45 @@ public interface RCAPInterface {
     Call<OrderDetails> getOrderDetails(@Header("Authorization") String token);
 
     /**
-     *  Action on user Request
+     * Action on user Request
+     *
      * @param token
      * @return
      */
     @PUT(RCWebConstants.RC_ACTION_ON_USER_REQUEST)
     Call<UserRequest> actionOnRequest(@Path("userProdMsgId") String userProdMsgId,
-                                         @Header("Authorization") String token,
-                                         @Body UserRequest userRequest);
+                                      @Header("Authorization") String token,
+                                      @Body UserRequest userRequest);
 
     /**
-     *  Get user product profile
+     * Get user product profile
+     *
      * @param userId
      */
     @GET(RCWebConstants.RC_GET_USER_PRODUCT_PROFILE)
     Call<User> getUserProfile(@Path("userId") String userId);
 
     /**
-     *  Cancel order
+     * Cancel order
+     *
      * @param cancelOrder
      */
     @PUT(RCWebConstants.RC_CANCEL_ORDER)
     Call<CancelOrder> cancelOrder(@Body CancelOrder cancelOrder);
 
     /**
-     *  Edit user product details
+     * Edit user product details
+     *
      * @param editProduct
      */
     @PUT(RCWebConstants.RC_EDIT_PRODUCT_DETAILS)
     Call<EditProduct> editUserProductDetails(@Header("Authorization") String token,
-                                          @Body EditProduct editProduct);
+                                             @Body EditProduct editProduct);
 
 
     /**
      * cancel user product request
+     *
      * @param token
      * @param cancelUserProdRequest
      * @return

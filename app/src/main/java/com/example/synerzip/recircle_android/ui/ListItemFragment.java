@@ -145,9 +145,8 @@ public class ListItemFragment extends Fragment {
         mEditMinRental.addTextChangedListener(new ListItemFragment.RCTextWatcher(mEditMinRental));
 
         listDiscounts = new ArrayList<>();
-
         final ArrayList<Discounts> strings = new ArrayList<>();
-        //discounts checkbox listener
+
         mDiscountForFiveDay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
@@ -159,7 +158,6 @@ public class ListItemFragment extends Fragment {
                     strings.remove(mDiscounts);
                 }
                 listDiscounts.addAll(strings);
-
             }
         });
 
@@ -168,15 +166,17 @@ public class ListItemFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     mDiscounts = new Discounts(40, 10, 1);
-
                     strings.add(mDiscounts);
                 } else {
                     strings.remove(mDiscounts);
+                    listDiscounts.remove(mDiscounts);
                 }
                 listDiscounts.addAll(strings);
             }
+
         });
-        listDiscounts.addAll(strings);
+
+
         return view;
 
     }//end onCreateView()
@@ -184,7 +184,7 @@ public class ListItemFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (MyProfileActivity.isItemEdit){
+        if (MyProfileActivity.isItemEdit) {
             mProductAutoComplete.dismissDropDown();
             mProductAutoComplete.setEnabled(false);
         }
