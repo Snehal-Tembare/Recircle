@@ -90,7 +90,7 @@ class RenterMessagesAdapter extends RecyclerView.Adapter<RenterMessagesAdapter.V
 
     @Override
     public int getItemCount() {
-        return mRootMessageInfo.getOwnerProdRelatedMsgs().size();
+        return mRootMessageInfo.getOwnerRequestMsgs().size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

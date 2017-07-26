@@ -161,7 +161,7 @@ public class AllMessagesActivity extends AppCompatActivity {
                         userProductMsgId = response.body().getOwnerProdRelatedMsgs().get(0).getUser_prod_msg_id();
                         ownerMsgFragment.getMessageDetails(rootMessageInfo);
                     }
-                    if (!response.body().getOwnerProdRelatedMsgs().isEmpty()) {
+                    if (!response.body().getOwnerRequestMsgs().isEmpty()) {
                         userProductMsgId = response.body().getOwnerRequestMsgs().get(0).getUser_prod_msg_id();
                         renterMsgFragment.getRenterMessageDetails(rootMessageInfo);
                     }

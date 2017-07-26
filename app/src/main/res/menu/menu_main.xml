@@ -10,7 +10,7 @@
 
     <item
         android:id="@+id/action_rentals"
-        android:icon="@drawable/ic_rental"
+        android:icon="@drawable/ic_rentals_list"
         android:title="Rentals"
         android:visible="true"
         app:showAsAction="always" />

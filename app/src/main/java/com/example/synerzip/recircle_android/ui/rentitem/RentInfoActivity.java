@@ -30,6 +30,7 @@ import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.ui.CalendarActivity;
 import com.example.synerzip.recircle_android.ui.DetailsActivity;
+import com.example.synerzip.recircle_android.utilities.Base64Encryption;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
@@ -447,7 +448,7 @@ public class RentInfoActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 final String mLogInUserName = mEditTxtUserName.getText().toString();
-                final String mLogInPwd = mEditTxtPwd.getText().toString();
+                final String mLogInPwd = Base64Encryption.encrypt(mEditTxtPwd.getText().toString());
                 LogInRequest logInRequest = new LogInRequest(mLogInUserName, mLogInPwd);
 
                 if (ApiClient.getClient(RentInfoActivity.this) != null) {

@@ -182,6 +182,8 @@ public class HomeActivity extends AppCompatActivity implements
             Bundle bundle = getIntent().getExtras();
             listItemFragment.setArguments(bundle);
             mViewPager.setCurrentItem(1);
+        } else if (MyProfileActivity.isMyProfile) {
+            mViewPager.setCurrentItem(1);
         }
 
     }//end onCreate()

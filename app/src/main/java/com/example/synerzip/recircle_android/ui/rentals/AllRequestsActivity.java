@@ -39,6 +39,7 @@ import com.example.synerzip.recircle_android.models.rentals.UserRequests;
 import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.ui.HomeActivity;
+import com.example.synerzip.recircle_android.utilities.Base64Encryption;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
 import com.example.synerzip.recircle_android.utilities.RCWebConstants;
@@ -168,13 +169,14 @@ public class AllRequestsActivity extends AppCompatActivity {
         final EditText mEditTxtPwd = (EditText) dialog.findViewById(R.id.edit_login_pwd_dialog);
 
         Button btnLogin = (Button) dialog.findViewById(R.id.btn_user_log_in_dialog);
+
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mProgressBar.setVisibility(View.VISIBLE);
                 mParentLayout.setAlpha((float) 0.6);
                 final String mUserName = mEditTxtUserName.getText().toString();
-                final String mUserPwd = mEditTxtPwd.getText().toString();
+                final String mUserPwd = Base64Encryption.encrypt(mEditTxtPwd.getText().toString());
                 LogInRequest logInRequest = new LogInRequest(mUserName, mUserPwd);
 
                 if (ApiClient.getClient(AllRequestsActivity.this) != null) {

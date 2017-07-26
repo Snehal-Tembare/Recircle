@@ -437,4 +437,8 @@
     <string name="user_logged_out">User Logged out</string>
     <string name="check_nw_connectivity">Check Network Connectivity</string>
     <string name="changed_pwd">Password changed successfully !</string>
+    <string name="no_msgs">No messages</string>
+    <string name="user_logged_in">User logged in !</string>
+    <string name="no_items">You haven\'t listed any Product</string>
+    <string name="lets_list_product">Let\'s add the Product</string>
 </resources>

@@ -47,6 +47,7 @@ public class ListItemSuccessActivity extends AppCompatActivity {
     public void btnViewItem(View view) {
         Intent intent = new Intent(ListItemSuccessActivity.this, DetailsActivity.class);
         intent.putExtra(getString(R.string.product_id), productId);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
     }
@@ -66,6 +67,7 @@ public class ListItemSuccessActivity extends AppCompatActivity {
         Intent intent=new Intent(ListItemSuccessActivity.this,HomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+        finish();
     }
     /**
      * action bar back button
