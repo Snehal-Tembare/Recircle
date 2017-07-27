@@ -26,11 +26,6 @@ public class UploadImageAdapter extends RecyclerView.Adapter<UploadImageAdapter.
     private ArrayList<String> mListUploadImagePath;
     private ArrayList<UserProdImages> uploadImageObjectList;
 
-/*    public UploadImageAdapter(Context mContext, ArrayList<String> mListUploadImagePath) {
-        this.mContext = mContext;
-        this.mListUploadImagePath = mListUploadImagePath;
-    }*/
-
     public UploadImageAdapter(Context mContext, ArrayList<UserProdImages> uploadImageObjectList) {
         this.mContext = mContext;
         this.uploadImageObjectList = uploadImageObjectList;
@@ -87,8 +82,6 @@ public class UploadImageAdapter extends RecyclerView.Adapter<UploadImageAdapter.
                         uploadImageObjectList.remove(getAdapterPosition());
                         notifyItemRemoved(getAdapterPosition());
                         notifyItemRangeChanged(getAdapterPosition(), uploadImageObjectList.size());
-                       Log.v("UploadImages Adapter","size"+UploadImgActivity.uploadImageObjectList.size());
-
                     }
                 }
             });

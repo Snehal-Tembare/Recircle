@@ -441,4 +441,6 @@
     <string name="user_logged_in">User logged in !</string>
     <string name="no_items">You haven\'t listed any Product</string>
     <string name="lets_list_product">Let\'s add the Product</string>
+    <string name="image_uploaded">Image uploaded successfully</string>
+    <string name="img">IMG_</string>
 </resources>

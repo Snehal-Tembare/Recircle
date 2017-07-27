@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -109,8 +108,7 @@ public class MyProfileActivity extends AppCompatActivity {
                             User user = response.body();
                             if (user != null) {
                                 Picasso.with(getApplicationContext())
-                                        .load(R.drawable.ic_user)
-                                        .placeholder(R.drawable.ic_user).into(mImg);
+                                        .load(R.drawable.ic_user).into(mImg);
 
                                 if (user.getUser_image_url() != null) {
                                     Picasso.with(getApplicationContext())
@@ -131,14 +129,10 @@ public class MyProfileActivity extends AppCompatActivity {
                                         && user.getUserProductDetails().size() != 0) {
                                     mLayoutNoItems.setVisibility(View.GONE);
                                     userProductDetailsList = user.getUserProductDetails();
-                                    Log.v(TAG, "***" + user.getFirst_name() + " " + user.getLast_name());
-                                    Log.v(TAG, "***No. of products" + user.getUserProductDetails().size());
-
 
                                     adapter = new ItemAdapter(getApplicationContext(), userProductDetailsList, new OnItemClickListener() {
                                         @Override
                                         public void onProductClick(UserProductDetails userProductDetails) {
-                                            Log.v(TAG, "onProductClick");
                                             Intent intent = new Intent(MyProfileActivity.this, DetailsActivity.class);
                                             if (userProductDetails.getUser_product_id() != null) {
                                                 intent.putExtra(getString(R.string.product_id), userProductDetails.getUser_product_id());
@@ -179,7 +173,7 @@ public class MyProfileActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick(R.id.lets_add_item)
+    @OnClick(R.id.add_item)
     public void listAnItem(){
         isMyProfile=true;
         startActivity(new Intent(this,HomeActivity.class));

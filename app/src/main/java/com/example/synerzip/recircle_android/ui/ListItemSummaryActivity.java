@@ -259,7 +259,6 @@ public class ListItemSummaryActivity extends AppCompatActivity {
         } else {
             mTxtProductTitle.setText(ListItemFragment.productTitle);
         }
-        //TODO product images should be taken from amazon s3 bucket ; yet to be done
 
         if (ContextCompat.checkSelfPermission(ListItemSummaryActivity.this, android.Manifest.
                 permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
@@ -283,16 +282,15 @@ public class ListItemSummaryActivity extends AppCompatActivity {
 
             @Override
             public void onStateChanged(int id, TransferState state) {
-                Log.e("statechange", state + "");
+                Log.i("statechange", state + "");
                 if (state.toString().equals("COMPLETED")) {
-                    Log.i("", "Image uploaded successfully");
+                    Log.i("", getString(R.string.image_uploaded));
                     mProgressBar.setVisibility(View.GONE);
                     String uploadedImgUrl = s3Client.getResourceUrl("recircle-snehal", transferObserver.getKey());
                     Log.v("Link Name", uploadedImgUrl);
                     uploadedImageList.add(uploadedImgUrl);
 
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(getString(R.string.ddd_mm));
-                    Log.v("Date", "Created at" + simpleDateFormat.format(new Date().getTime()));
                     mUserProdImages = new UserProdImages(null, uploadedImgUrl, String.valueOf(simpleDateFormat.format(new Date().getTime())));
                     listUploadItemImage.add(mUserProdImages);
 
@@ -549,7 +547,7 @@ public class ListItemSummaryActivity extends AppCompatActivity {
             file = new File(userProdImages.getUser_prod_image_url());
             if (!userProdImages.getUser_prod_image_url().startsWith("http")) {
                 mProgressBar.setVisibility(View.VISIBLE);
-                transferObserver = transferUtility.upload("recircle-snehal", "IMG_" + new Date().getTime() + ".jpg", file);
+                transferObserver = transferUtility.upload("recircle-snehal", getString(R.string.img) + new Date().getTime() + ".jpg", file);
                 Log.v("Key", "" + transferObserver.getKey());
                 transferObserverListener(transferObserver);
             } else if (userProdImages.getUser_prod_image_url().startsWith("http")) {
