@@ -108,7 +108,7 @@ public class MyProfileActivity extends AppCompatActivity {
                             User user = response.body();
                             if (user != null) {
                                 Picasso.with(getApplicationContext())
-                                        .load(R.drawable.ic_user).into(mImg);
+                                        .load(R.drawable.ic_user) .placeholder(R.drawable.ic_user).into(mImg);
 
                                 if (user.getUser_image_url() != null) {
                                     Picasso.with(getApplicationContext())

@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -189,6 +190,8 @@ public class DetailsActivity extends AppCompatActivity {
         isLoggedIn = sharedPreferences.getBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
         mUserId = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_USERID, mUserId);
 
+        Log.i("Paswword",sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_PASSWORD,""));
+        Log.i("Paswword",sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_EMAIL,""));
         mProgressBar.setVisibility(View.VISIBLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
@@ -257,7 +260,7 @@ public class DetailsActivity extends AppCompatActivity {
                                     mLayoutRentersReview.setVisibility(View.GONE);
                                 }
                                 if (product.getUser_product_info().getUser_prod_images() != null
-                                        && product.getUser_product_info().getUser_prod_images().size() > 1) {
+                                        && product.getUser_product_info().getUser_prod_images().size() !=0) {
                                     mLayoutImages.setVisibility(View.VISIBLE);
                                     userProdImagesArrayList = product.getUser_product_info().getUser_prod_images();
 
