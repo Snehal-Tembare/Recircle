@@ -48,7 +48,6 @@ import retrofit2.Response;
  * Copyright © 2017 Synerzip. All rights reserved
  */
 
-//TODO class implemetation is in progress
 
 public class AllMessagesActivity extends AppCompatActivity {
 

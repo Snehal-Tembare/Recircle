@@ -207,7 +207,6 @@ public class ListItemFragment extends Fragment {
                     editProduct.setMin_rental_days(Integer.parseInt(mEditMinRental.getText().toString().trim()));
                     editProduct.setUser_prod_discounts(listDiscounts);
                     editProduct.setUser_prod_images(product.getUser_product_info().getUser_prod_images());
-                    editProduct.setFromAustin(1);
                 }
                 startActivity(intent);
             } else {

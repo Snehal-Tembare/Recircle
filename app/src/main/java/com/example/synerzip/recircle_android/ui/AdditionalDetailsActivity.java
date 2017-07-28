@@ -253,6 +253,7 @@ public class AdditionalDetailsActivity extends AppCompatActivity {
                 ListItemFragment.editProduct.setUser_prod_desc(mEditTxtItemDesc.getText().toString());
                 ListItemFragment.editProduct.setUser_prod_unavailability(mItemAvailability);
                 ListItemFragment.editProduct.setUser_product_zipcode(mEditTxtZipcode.getText().toString());
+                ListItemFragment.editProduct.setFromAustin(fromAustin);
             }
 
         } else {
