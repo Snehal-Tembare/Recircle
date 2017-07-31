@@ -22,12 +22,12 @@ import com.example.synerzip.recircle_android.network.ApiClient;
 import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
+import com.pkmmte.view.CircularImageView;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -56,7 +56,7 @@ public class SettingsActivity extends AppCompatActivity {
     protected TextView mTxtUserEmail;
 
     @BindView(R.id.img_user_pro)
-    protected CircleImageView mImgUserProfile;
+    protected CircularImageView mImgUserProfile;
 
     public static String mFirstName, mLastName, mUserImg, mMobNo, mEmail, mUserCity, mUserState, mUserStreet, mUserZipcode;
 

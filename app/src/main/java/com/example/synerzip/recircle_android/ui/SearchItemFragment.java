@@ -483,9 +483,15 @@ public class SearchItemFragment extends Fragment {
             if (productId.equalsIgnoreCase("") && manufacturerId.equalsIgnoreCase("")) {
                 query = mProductAutoComplete.getText().toString();
             }
-            mProgressBar.setVisibility(View.VISIBLE);
-            mFrameLayout.setAlpha((float) 0.6);
-            utility.search(productId, manufacturerId, query, mFromDate, mToDate);
+
+            if (! mProductAutoComplete.getText().toString().isEmpty()) {
+                mProgressBar.setVisibility(View.VISIBLE);
+                mFrameLayout.setAlpha((float) 0.6);
+                utility.search(productId, manufacturerId, query, mFromDate, mToDate);
+            } else {
+//                mProgressBar.setVisibility(View.GONE);
+                RCLog.showToast(getActivity(), getString(R.string.enter_product_name));
+            }
         }
 
     }//end call(SearchApi()

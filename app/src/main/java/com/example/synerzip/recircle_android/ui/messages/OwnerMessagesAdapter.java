@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.user_messages.ProdRelatedMsg;
 import com.example.synerzip.recircle_android.models.user_messages.RootMessageInfo;
+import com.pkmmte.view.CircularImageView;
 import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
@@ -20,7 +21,6 @@ import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Prajakta Patil on 8/6/17.
@@ -100,13 +100,13 @@ public class OwnerMessagesAdapter extends RecyclerView.Adapter<OwnerMessagesAdap
     public class ViewHolder extends RecyclerView.ViewHolder {
         CardView mCardView;
         private TextView mTxtOwnerName, mTxtOwnerProdName, mTxtOwnerReqTime, mTxtOwnerMsg;
-        private CircleImageView mImgOwnerImage;
+        private CircularImageView mImgOwnerImage;
 
         public ViewHolder(View view) {
             super(view);
 
             mCardView = (CardView) view.findViewById(R.id.cardview_owner_msgs);
-            mImgOwnerImage = (CircleImageView) view.findViewById(R.id.img_owner_user_profile);
+            mImgOwnerImage = (CircularImageView) view.findViewById(R.id.img_owner_user_profile);
             mTxtOwnerName = (TextView) view.findViewById(R.id.txt_owner_user_name);
             mTxtOwnerProdName = (TextView) view.findViewById(R.id.txt_owner_product_name);
             mTxtOwnerReqTime = (TextView) view.findViewById(R.id.txt_owner_msg_date_time);

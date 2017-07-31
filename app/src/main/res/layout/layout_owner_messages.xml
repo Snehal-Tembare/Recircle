@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <de.hdodenhof.circleimageview.CircleImageView
+            <com.pkmmte.view.CircularImageView
                 android:id="@+id/img_owner_user_profile"
                 android:layout_width="@dimen/dimen_60dp"
                 android:layout_height="@dimen/dimen_60dp"
@@ -29,9 +29,10 @@
                 android:layout_marginRight="@dimen/dimen_10dp"
                 android:layout_marginStart="@dimen/dimen_10dp"
                 android:src="@drawable/ic_user"
-                app:civ_border_color="@color/colorLightGrey"
-                app:civ_border_width="@dimen/dimen_2dp"
-                app:civ_fill_color="@color/common_white" />
+                app:border="false"
+                app:border_color="@color/common_white"
+                app:border_width="@dimen/dimen_1dp"
+                app:shadow="true"  />
 
             <RelativeLayout
                 android:layout_width="wrap_content"

@@ -1,6 +1,8 @@
 package com.example.synerzip.recircle_android;
 
 import android.app.Application;
+import android.content.Context;
+import android.support.multidex.MultiDex;
 
 /**
  * Created by Snehal Tembare on 11/7/17.
@@ -17,5 +19,11 @@ public class MyApplication extends Application {
 
     public static MyApplication getInstance() {
         return instance;
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 }

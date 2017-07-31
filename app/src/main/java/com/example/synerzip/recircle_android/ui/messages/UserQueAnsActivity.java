@@ -19,13 +19,12 @@ import com.example.synerzip.recircle_android.network.RCAPInterface;
 import com.example.synerzip.recircle_android.ui.SettingsActivity;
 import com.example.synerzip.recircle_android.utilities.RCAppConstants;
 import com.example.synerzip.recircle_android.utilities.RCLog;
-import com.google.android.gms.common.api.Api;
+import com.pkmmte.view.CircularImageView;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -62,7 +61,7 @@ public class UserQueAnsActivity extends AppCompatActivity {
     protected TextView mTxtProdName;
 
     @BindView(R.id.img_user_profile)
-    protected CircleImageView mImgUserProfile;
+    protected CircularImageView mImgUserProfile;
 
     private String productId;
 

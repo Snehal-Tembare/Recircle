@@ -278,10 +278,11 @@ public class ListItemFragment extends Fragment {
                             productsCustomList.add(productsList.get(j));
                         }
                     }
-
-                    mAutocompleteAdapter = new AutocompleteAdapter
-                            (getActivity(), R.layout.fragment_search_item, R.id.txtProductName, productsCustomList);
-                    mProductAutoComplete.setAdapter(mAutocompleteAdapter);
+                    if (getActivity() != null) {
+                        mAutocompleteAdapter = new AutocompleteAdapter
+                                (getActivity(), R.layout.fragment_search_item, R.id.txtProductName, productsCustomList);
+                        mProductAutoComplete.setAdapter(mAutocompleteAdapter);
+                    }
 
                 } else {
                     RCLog.showToast(getActivity(), getString(R.string.product_details_not_found));

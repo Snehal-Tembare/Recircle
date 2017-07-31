@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/compliance_layout"
     android:layout_width="@dimen/dimen_100dp"
     android:layout_height="@dimen/dimen_100dp"
@@ -18,13 +19,17 @@
         android:visibility="visible" />
 
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <com.pkmmte.view.CircularImageView
         android:id="@+id/img_progress_bar"
         android:layout_width="@dimen/dimen_60dp"
         android:layout_height="@dimen/dimen_60dp"
         android:layout_centerInParent="true"
         android:src="@drawable/ic_camera"
-        android:visibility="visible" />
+        android:visibility="visible"
+        app:border="false"
+        app:border_color="@color/common_white"
+        app:border_width="@dimen/dimen_1dp"
+        app:shadow="true" />
 
 </RelativeLayout>
 

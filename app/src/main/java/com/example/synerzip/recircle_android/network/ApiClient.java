@@ -23,7 +23,6 @@ public class ApiClient {
     public static Retrofit getClient(Context context) {
         if (NetworkUtility.isNetworkAvailable()) {
 
-
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
