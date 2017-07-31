@@ -9,9 +9,9 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -32,6 +32,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,6 +42,7 @@ public class MyProfileActivity extends AppCompatActivity {
     private static final long TIMER = 800;
     private static final String TAG = "MyProfileActivity";
     private ItemAdapter adapter;
+    public static boolean isMyProfile;
     private ArrayList<Products> productDetailsList;
     private RCAPInterface service;
     private String user_id;
@@ -60,6 +62,9 @@ public class MyProfileActivity extends AppCompatActivity {
 
     @BindView(R.id.txt_name)
     protected TextView mTxtName;
+
+    @BindView(R.id.layout_no_items)
+    protected LinearLayout mLayoutNoItems;
 
     @BindView(R.id.rating_bar)
     protected RatingBar mRatingBar;
@@ -90,81 +95,88 @@ public class MyProfileActivity extends AppCompatActivity {
     }
 
     private void getMyProfileData() {
-        if (ApiClient.getClient(this)!=null){
-        service = ApiClient.getClient(this).create(RCAPInterface.class);
-        Call<User> call = service.getUserProfile(user_id);
-        mProgressBar.setVisibility(View.VISIBLE);
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                if (response.isSuccessful()) {
-                    mProgressBar.setVisibility(View.GONE);
-                    if (response.body() != null) {
-                        User user = response.body();
-                        if (user!=null){
-                            Picasso.with(getApplicationContext())
-                                    .load(R.drawable.ic_user)
-                                    .placeholder(R.drawable.ic_user).into(mImg);
-
-                            if (user.getUser_image_url() != null) {
+        if (ApiClient.getClient(this) != null) {
+            service = ApiClient.getClient(this).create(RCAPInterface.class);
+            Call<User> call = service.getUserProfile(user_id);
+            mProgressBar.setVisibility(View.VISIBLE);
+            call.enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    if (response.isSuccessful()) {
+                        mProgressBar.setVisibility(View.GONE);
+                        if (response.body() != null) {
+                            User user = response.body();
+                            if (user != null) {
                                 Picasso.with(getApplicationContext())
-                                        .load(user.getUser_image_url())
-                                        .placeholder(R.drawable.ic_user).into(mImg);
-                            }
+                                        .load(R.drawable.ic_user) .placeholder(R.drawable.ic_user).into(mImg);
 
-                            if (user.getFirst_name() != null || user.getLast_name() != null) {
-                                mTxtName.setText(user.getFirst_name() + " " + user.getLast_name());
-                            }
+                                if (user.getUser_image_url() != null) {
+                                    Picasso.with(getApplicationContext())
+                                            .load(user.getUser_image_url())
+                                            .placeholder(R.drawable.ic_user).into(mImg);
+                                }
 
-                            if (user.getUser_avg_rating() != null) {
-                                mRatingBar.setRating(Float.parseFloat(user.getUser_avg_rating()));
-                                mTxtReviewsCount.setText("(" + user.getUser_avg_rating() + ")");
-                            }
+                                if (user.getFirst_name() != null || user.getLast_name() != null) {
+                                    mTxtName.setText(user.getFirst_name() + " " + user.getLast_name());
+                                }
 
-                            if (user.getUserProductDetails() != null
-                                    && user.getUserProductDetails().size() != 0) {
-                                userProductDetailsList = user.getUserProductDetails();
-                                Log.v(TAG, "***" + user.getFirst_name() + " " + user.getLast_name());
-                                adapter = new ItemAdapter(getApplicationContext(), userProductDetailsList, new OnItemClickListener() {
-                                    @Override
-                                    public void onProductClick(UserProductDetails userProductDetails) {
-                                        Log.v(TAG, "onProductClick");
-                                        Intent intent = new Intent(MyProfileActivity.this, DetailsActivity.class);
-                                        if (userProductDetails.getUser_product_id() != null) {
-                                            intent.putExtra(getString(R.string.product_id), userProductDetails.getUser_product_id());
+                                if (user.getUser_avg_rating() != null) {
+                                    mRatingBar.setRating(Float.parseFloat(user.getUser_avg_rating()));
+                                    mTxtReviewsCount.setText("(" + user.getUser_avg_rating() + ")");
+                                }
+
+                                if (user.getUserProductDetails() != null
+                                        && user.getUserProductDetails().size() != 0) {
+                                    mLayoutNoItems.setVisibility(View.GONE);
+                                    userProductDetailsList = user.getUserProductDetails();
+
+                                    adapter = new ItemAdapter(getApplicationContext(), userProductDetailsList, new OnItemClickListener() {
+                                        @Override
+                                        public void onProductClick(UserProductDetails userProductDetails) {
+                                            Intent intent = new Intent(MyProfileActivity.this, DetailsActivity.class);
+                                            if (userProductDetails.getUser_product_id() != null) {
+                                                intent.putExtra(getString(R.string.product_id), userProductDetails.getUser_product_id());
+                                            }
+                                            isMyProfile = true;
+                                            startActivity(intent);
                                         }
-                                        startActivity(intent);
-                                    }
-                                });
+                                    });
 
-                                mRecyclerItems.setLayoutManager(new GridLayoutManager(MyProfileActivity.this, 2));
-                                mRecyclerItems.setAdapter(adapter);
+                                    mRecyclerItems.setLayoutManager(new GridLayoutManager(MyProfileActivity.this, 2));
+                                    mRecyclerItems.setAdapter(adapter);
+                                }else {
+                                      mLayoutNoItems.setVisibility(View.VISIBLE);
+                                }
                             }
-
                         }
+                    } else if (response.code() == RCWebConstants.RC_ERROR_CODE_BAD_REQUEST) {
+                        RCLog.showToast(getApplicationContext(), getString(R.string.user_not_authenticated));
+
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                finish();
+                            }
+                        }, TIMER);
+                        mProgressBar.setVisibility(View.GONE);
                     }
-                }else if (response.code()== RCWebConstants.RC_ERROR_CODE_BAD_REQUEST){
-                    RCLog.showToast(getApplicationContext(),getString(R.string.user_not_authenticated));
-
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            finish();
-                        }
-                    },TIMER);
-                    mProgressBar.setVisibility(View.GONE);
                 }
-            }
 
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                mProgressBar.setVisibility(View.GONE);
-                RCLog.showToast(getApplicationContext(),getString(R.string.something_went_wrong));
-            }
-        });
-    }else {
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    mProgressBar.setVisibility(View.GONE);
+                    RCLog.showToast(getApplicationContext(), getString(R.string.something_went_wrong));
+                }
+            });
+        } else {
             mProgressBar.setVisibility(View.GONE);
         }
+    }
+
+    @OnClick(R.id.add_item)
+    public void listAnItem(){
+        isMyProfile=true;
+        startActivity(new Intent(this,HomeActivity.class));
     }
 
     @Override
@@ -180,7 +192,7 @@ public class MyProfileActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            isItemEdit=false;
+            isItemEdit = false;
             finish();
         }
         return true;
@@ -193,6 +205,7 @@ public class MyProfileActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        isItemEdit=false;
+        isItemEdit = false;
+        isMyProfile=false;
     }
 }

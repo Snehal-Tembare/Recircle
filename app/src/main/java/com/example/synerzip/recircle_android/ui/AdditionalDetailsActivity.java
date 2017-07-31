@@ -76,7 +76,6 @@ public class AdditionalDetailsActivity extends AppCompatActivity {
     protected EditText mEditTxtZipcode;
 
     private Products product;
-    private ArrayList<UserProdImages> listUploadItemImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -250,18 +249,12 @@ public class AdditionalDetailsActivity extends AppCompatActivity {
         if (getValues()) {
             checkZipcodes();
 
-
-            UserProdImages mUserProdImages;
-
-            mUserProdImages = new UserProdImages("https://s3.ap-south-1.amazonaws.com/recircleimages/1398934243000_1047081.jpg",
-                    "2017-02-04T13:13:09.000Z");
-            listUploadItemImage = new ArrayList<>();
-            listUploadItemImage.add(mUserProdImages);
             if (MyProfileActivity.isItemEdit){
                 ListItemFragment.editProduct.setUser_prod_desc(mEditTxtItemDesc.getText().toString());
                 ListItemFragment.editProduct.setUser_prod_unavailability(mItemAvailability);
                 ListItemFragment.editProduct.setUser_product_zipcode(mEditTxtZipcode.getText().toString());
-            ListItemFragment.editProduct.setUser_prod_images(listUploadItemImage);}
+                ListItemFragment.editProduct.setFromAustin(fromAustin);
+            }
 
         } else {
             RCLog.showToast(AdditionalDetailsActivity.this, getString(R.string.mandatory_dates));

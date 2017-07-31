@@ -206,6 +206,7 @@ public class ListItemFragment extends Fragment {
                     editProduct.setPrice_per_day(Integer.parseInt(mEditTxtEnterPrice.getText().toString().trim()));
                     editProduct.setMin_rental_days(Integer.parseInt(mEditMinRental.getText().toString().trim()));
                     editProduct.setUser_prod_discounts(listDiscounts);
+                    editProduct.setUser_prod_images(product.getUser_product_info().getUser_prod_images());
                 }
                 startActivity(intent);
             } else {
@@ -277,10 +278,11 @@ public class ListItemFragment extends Fragment {
                             productsCustomList.add(productsList.get(j));
                         }
                     }
-
-                    mAutocompleteAdapter = new AutocompleteAdapter
-                            (getActivity(), R.layout.fragment_search_item, R.id.txtProductName, productsCustomList);
-                    mProductAutoComplete.setAdapter(mAutocompleteAdapter);
+                    if (getActivity() != null) {
+                        mAutocompleteAdapter = new AutocompleteAdapter
+                                (getActivity(), R.layout.fragment_search_item, R.id.txtProductName, productsCustomList);
+                        mProductAutoComplete.setAdapter(mAutocompleteAdapter);
+                    }
 
                 } else {
                     RCLog.showToast(getActivity(), getString(R.string.product_details_not_found));
@@ -300,9 +302,11 @@ public class ListItemFragment extends Fragment {
                         && !product.getProduct_manufacturer_id().isEmpty()) {
                     manufacturerId = product.getProduct_manufacturer_id();
                 }
-                if (product.getProduct_detail().getProduct_price() != 0) {
-                    productPrice = product.getProduct_detail().getProduct_price();
-                    productTitle = product.getProduct_manufacturer_title();
+                if (product.getProduct_detail() != null) {
+                    if (product.getProduct_detail().getProduct_price() != 0) {
+                        productPrice = product.getProduct_detail().getProduct_price();
+                        productTitle = product.getProduct_manufacturer_title();
+                    }
                 }
                 if (product.getProduct_id() != null && !product.getProduct_id().isEmpty()) {
                     productId = product.getProduct_id();

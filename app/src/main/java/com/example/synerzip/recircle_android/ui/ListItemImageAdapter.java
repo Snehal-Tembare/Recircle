@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.synerzip.recircle_android.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -48,6 +49,8 @@ class ListItemImageAdapter extends RecyclerView.Adapter<ListItemImageAdapter.Vie
         if (selectedImgPosition == position) {
             holder.layout.setBackground(ContextCompat.getDrawable(mContext, R.drawable.selected_image_background));
         }
+
+        Picasso.with(mContext).load(mListUserProdImages.get(position)).into( holder.imageView);
 
     }
 

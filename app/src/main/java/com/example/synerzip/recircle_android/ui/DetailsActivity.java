@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -70,7 +71,11 @@ public class DetailsActivity extends AppCompatActivity {
     private String mAccessToken;
     private String mUserName;
     private String mPassword;
-    private String mUserImage, mUserFirstName, mUserLastName, mUserEmail, mUserId;
+    private String mUserId;
+    private String mUserEmail;
+    private String mUserLastName;
+    private String mUserFirstName;
+    private String mUserImage;
     private long mUserMobNo;
 
     @BindView(R.id.toolbar)
@@ -185,6 +190,8 @@ public class DetailsActivity extends AppCompatActivity {
         isLoggedIn = sharedPreferences.getBoolean(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_STATUS, false);
         mUserId = sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_USERID, mUserId);
 
+        Log.i("Paswword",sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_PASSWORD,""));
+        Log.i("Paswword",sharedPreferences.getString(RCAppConstants.RC_SHARED_PREFERENCES_LOGIN_USER_EMAIL,""));
         mProgressBar.setVisibility(View.VISIBLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
@@ -253,7 +260,7 @@ public class DetailsActivity extends AppCompatActivity {
                                     mLayoutRentersReview.setVisibility(View.GONE);
                                 }
                                 if (product.getUser_product_info().getUser_prod_images() != null
-                                        && product.getUser_product_info().getUser_prod_images().size() > 1) {
+                                        && product.getUser_product_info().getUser_prod_images().size() !=0) {
                                     mLayoutImages.setVisibility(View.VISIBLE);
                                     userProdImagesArrayList = product.getUser_product_info().getUser_prod_images();
 
@@ -541,10 +548,14 @@ public class DetailsActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case android.R.id.home:
-                Intent intent = new Intent(DetailsActivity.this, HomeActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                finish();
+                if (MyProfileActivity.isMyProfile) {
+                    finish();
+                } else {
+                    Intent intent = new Intent(DetailsActivity.this, HomeActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    finish();
+                }
                 return true;
 
             default:
@@ -626,8 +637,13 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(DetailsActivity.this, HomeActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        if (MyProfileActivity.isMyProfile) {
+            finish();
+        } else {
+            Intent intent = new Intent(DetailsActivity.this, HomeActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+
     }
 }

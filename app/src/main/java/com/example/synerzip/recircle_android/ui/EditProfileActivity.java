@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.pkmmte.view.CircularImageView;
 
 import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.ChangePwdRequest;
@@ -52,7 +53,6 @@ import java.io.IOException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -64,7 +64,7 @@ import retrofit2.Response;
 public class EditProfileActivity extends AppCompatActivity {
 
     @BindView(R.id.img_user_profile)
-    protected CircleImageView mImgUserProfile;
+    protected CircularImageView mImgUserProfile;
 
     @BindView(R.id.input_layout_user_first_name)
     protected TextInputLayout mInputLayoutFirstName;

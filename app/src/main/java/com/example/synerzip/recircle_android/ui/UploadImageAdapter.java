@@ -1,14 +1,8 @@
 package com.example.synerzip.recircle_android.ui;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.synerzip.recircle_android.R;
+import com.example.synerzip.recircle_android.models.UserProdImages;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -28,11 +23,12 @@ import java.util.ArrayList;
 
 public class UploadImageAdapter extends RecyclerView.Adapter<UploadImageAdapter.ViewHolder> {
     private Context mContext;
-    private ArrayList<String> mListUserProdImages;
+    private ArrayList<String> mListUploadImagePath;
+    private ArrayList<UserProdImages> uploadImageObjectList;
 
-    public UploadImageAdapter(Context mContext, ArrayList<String> mListUserProdImages) {
+    public UploadImageAdapter(Context mContext, ArrayList<UserProdImages> uploadImageObjectList) {
         this.mContext = mContext;
-        this.mListUserProdImages = mListUserProdImages;
+        this.uploadImageObjectList = uploadImageObjectList;
     }
 
     @Override
@@ -43,18 +39,25 @@ public class UploadImageAdapter extends RecyclerView.Adapter<UploadImageAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        File file;
         if (position == 0) {
             holder.txtCoverImage.setVisibility(View.VISIBLE);
+            holder.imgItem.setAlpha(0.7f);
         }
 
-        File file = new File(mListUserProdImages.get(position));
+        file = new File(uploadImageObjectList.get(position).getUser_prod_image_url());
         Picasso.with(mContext).load(file).into(holder.imgItem);
-        holder.imgItem.setAlpha(0.7f);
+
+        if (uploadImageObjectList.get(position).getUser_prod_image_url().startsWith("http")) {
+            Picasso.with(mContext).load(uploadImageObjectList.get(position).getUser_prod_image_url()).into(holder.imgItem);
+        } else {
+            Picasso.with(mContext).load(file).into(holder.imgItem);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return mListUserProdImages.size();
+        return uploadImageObjectList.size();
     }
 
     /**
@@ -76,11 +79,9 @@ public class UploadImageAdapter extends RecyclerView.Adapter<UploadImageAdapter.
                 @Override
                 public void onClick(View v) {
                     if (v.getId() == imgItemCancel.getId()) {
-                        String itemLabel = mListUserProdImages.get(getAdapterPosition());
-                        mListUserProdImages.remove(itemLabel);
+                        uploadImageObjectList.remove(getAdapterPosition());
                         notifyItemRemoved(getAdapterPosition());
-                        notifyItemRangeChanged(getAdapterPosition(), mListUserProdImages.size());
-
+                        notifyItemRangeChanged(getAdapterPosition(), uploadImageObjectList.size());
                     }
                 }
             });

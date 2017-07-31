@@ -14,6 +14,7 @@ import com.example.synerzip.recircle_android.R;
 import com.example.synerzip.recircle_android.models.user_messages.ProdRelatedMsg;
 import com.example.synerzip.recircle_android.models.user_messages.RootMessageInfo;
 import com.example.synerzip.recircle_android.utilities.RCLog;
+import com.pkmmte.view.CircularImageView;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
@@ -21,7 +22,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Prajakta Patil on 11/7/17.
@@ -96,12 +96,12 @@ class RenterMessagesAdapter extends RecyclerView.Adapter<RenterMessagesAdapter.V
     public class ViewHolder extends RecyclerView.ViewHolder {
         CardView mCardView;
         private TextView mTxtRenterName, mTxtRenterProdName, mTxtRenterReqTime, mTxtRenterMsg;
-        private CircleImageView mImgRenterImage;
+        private CircularImageView mImgRenterImage;
 
         public ViewHolder(View view) {
             super(view);
             mCardView = (CardView) view.findViewById(R.id.cardview_renter_msgs);
-            mImgRenterImage = (CircleImageView) view.findViewById(R.id.img_renter_user_profile);
+            mImgRenterImage = (CircularImageView) view.findViewById(R.id.img_renter_user_profile);
             mTxtRenterName = (TextView) view.findViewById(R.id.txt_renter_user_name);
             mTxtRenterProdName = (TextView) view.findViewById(R.id.txt_renter_product_name);
             mTxtRenterReqTime = (TextView) view.findViewById(R.id.txt_renter_msg_date_time);

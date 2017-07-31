@@ -17,15 +17,18 @@ import lombok.Setter;
 public class UserProdImages implements Parcelable {
     private String user_prod_image_url;
     private String created_at;
+    private String user_prod_image_id;
 
-    public UserProdImages(String user_prod_image_url, String created_at) {
+    public UserProdImages(String user_prod_image_id,String user_prod_image_url, String created_at) {
         this.user_prod_image_url = user_prod_image_url;
         this.created_at = created_at;
+       this.user_prod_image_id = user_prod_image_id;
     }
 
-    protected UserProdImages(Parcel in) {
+    public UserProdImages(Parcel in) {
         user_prod_image_url = in.readString();
         created_at = in.readString();
+        user_prod_image_id = in.readString();
     }
 
     public static final Creator<UserProdImages> CREATOR = new Creator<UserProdImages>() {
@@ -40,6 +43,8 @@ public class UserProdImages implements Parcelable {
         }
     };
 
+
+
     @Override
     public int describeContents() {
         return 0;
@@ -49,5 +54,6 @@ public class UserProdImages implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(user_prod_image_url);
         dest.writeString(created_at);
+        dest.writeString(user_prod_image_id);
     }
 }

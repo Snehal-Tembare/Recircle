@@ -123,18 +123,17 @@ public class HomeActivity extends AppCompatActivity implements
         getSupportActionBar().setHomeButtonEnabled(true);
 
         //To display custom ActionBar title
-        TextView tv= new TextView(this);
-        LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams (LinearLayout.LayoutParams.MATCH_PARENT,
+        TextView tv = new TextView(this);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
         tv.setLayoutParams(layoutParams);
-        String re="<font color='#236894' size='30px;'>re</font>";
-        String circ="<font color='#D67C6E'>circ</font>";
-        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.N){
-        tv.setText(Html.fromHtml(re+circ,Html.FROM_HTML_MODE_LEGACY));}
-        else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                tv.setText(Html.fromHtml(re+circ,Build.VERSION.SDK_INT));
-            }
+        String re = "<font color='#236894' size='30px;'>re</font>";
+        String circ = "<font color='#D67C6E'>circ</font>";
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            tv.setText(Html.fromHtml(re + circ, Html.FROM_HTML_MODE_LEGACY));
+        } else {
+            tv.setText(Html.fromHtml(re + circ));
         }
         tv.setTextSize(30);
         getSupportActionBar().setDisplayOptions(android.support.v7.app.ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -182,6 +181,8 @@ public class HomeActivity extends AppCompatActivity implements
         if (MyProfileActivity.isItemEdit) {
             Bundle bundle = getIntent().getExtras();
             listItemFragment.setArguments(bundle);
+            mViewPager.setCurrentItem(1);
+        } else if (MyProfileActivity.isMyProfile) {
             mViewPager.setCurrentItem(1);
         }
 

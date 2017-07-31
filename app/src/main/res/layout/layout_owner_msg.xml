@@ -17,15 +17,16 @@
         android:padding="@dimen/dimen_16dp"
         android:textColor="@color/colorBlack" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <com.pkmmte.view.CircularImageView
         android:layout_width="@dimen/dimen_40dp"
         android:layout_height="@dimen/dimen_40dp"
         android:layout_gravity="center_vertical"
         android:layout_marginTop="@dimen/dimen_5dp"
         android:layout_weight="3"
         android:src="@drawable/ic_user"
-        app:civ_border_color="@color/colorLightGrey"
-        app:civ_border_width="@dimen/dimen_2dp"
-        app:civ_fill_color="@color/common_white" />
+        app:border="false"
+        app:border_color="@color/common_white"
+        app:border_width="@dimen/dimen_1dp"
+        app:shadow="true"  />
 
 </LinearLayout>

@@ -707,7 +707,14 @@ public class TouchImageView extends AppCompatImageView {
             // from the left/top side of the view as a fraction of the entire image's width/height. Use that percentage
             // to calculate the trans in the new view width/height.
             //
-            float percentage = (Math.abs(trans) + (0.5f * prevViewSize)) / prevImageSize;
+//            float percentage = (Math.abs(trans) + (0.5f * prevViewSize)) / prevImageSize;
+            float percentage;
+            if(prevImageSize != 0) {
+                percentage = (Math.abs(trans) + (0.5f * prevViewSize)) / prevImageSize;
+            } else {
+                percentage = 0;
+            }
+
             m[axis] = -((percentage * imageSize) - (viewSize * 0.5f));
         }
     }

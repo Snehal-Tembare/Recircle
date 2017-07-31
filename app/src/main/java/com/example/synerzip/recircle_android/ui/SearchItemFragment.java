@@ -291,41 +291,41 @@ public class SearchItemFragment extends Fragment {
         productDetailsList = new ArrayList<>();
         popularProducts = new ArrayList<>();
 
-        if (ApiClient.getClient(getActivity())!=null){
-        service = ApiClient.getClient(getActivity()).create(RCAPInterface.class);
+        if (ApiClient.getClient(getActivity()) != null) {
+            service = ApiClient.getClient(getActivity()).create(RCAPInterface.class);
 
-        Call<AllProductInfo> call = service.getProductDetails();
+            Call<AllProductInfo> call = service.getProductDetails();
 
-        call.enqueue(new Callback<AllProductInfo>() {
-            @Override
-            public void onResponse(Call<AllProductInfo> call, Response<AllProductInfo> response) {
+            call.enqueue(new Callback<AllProductInfo>() {
+                @Override
+                public void onResponse(Call<AllProductInfo> call, Response<AllProductInfo> response) {
 
-                if (response.isSuccessful()) {
+                    if (response.isSuccessful()) {
 
-                    mListsLayout.setVisibility(View.VISIBLE);
-                    if (null != response && null != response.body()) {
+                        mListsLayout.setVisibility(View.VISIBLE);
+                        if (null != response && null != response.body()) {
 
-                        if (response.body().getProductDetails() != null
-                                && response.body().getProductDetails().size() != 0
-                                && response.body().getPopularProducts() != null
-                                && response.body().getPopularProducts().size() != 0) {
+                            if (response.body().getProductDetails() != null
+                                    && response.body().getProductDetails().size() != 0
+                                    && response.body().getPopularProducts() != null
+                                    && response.body().getPopularProducts().size() != 0) {
 
-                            productDetailsList = response.body().getProductDetails();
-                            popularProducts = response.body().getPopularProducts();
-                            bindData();
+                                productDetailsList = response.body().getProductDetails();
+                                popularProducts = response.body().getPopularProducts();
+                                bindData();
+                            }
                         }
+                    } else {
+                        mListsLayout.setVisibility(View.GONE);
                     }
-                } else {
-                    mListsLayout.setVisibility(View.GONE);
                 }
-            }
 
-            @Override
-            public void onFailure(Call<AllProductInfo> call, Throwable t) {
-                Log.v(TAG, t.toString());
-            }
-        });
-    }else {
+                @Override
+                public void onFailure(Call<AllProductInfo> call, Throwable t) {
+                    Log.v(TAG, t.toString());
+                }
+            });
+        } else {
             mProgressBar.setVisibility(View.GONE);
         }
     }
@@ -432,9 +432,10 @@ public class SearchItemFragment extends Fragment {
                             productsCustomList.add(productsList.get(j));
                         }
                     }
-
-                    mAutocompleteAdapter = new AutocompleteAdapter
-                            (getActivity(), R.layout.fragment_search_item, R.id.txtProductName, productsCustomList);
+                    if (getActivity() != null) {
+                        mAutocompleteAdapter = new AutocompleteAdapter
+                                (getActivity(), R.layout.fragment_search_item, R.id.txtProductName, productsCustomList);
+                    }
                     mProductAutoComplete.setAdapter(mAutocompleteAdapter);
 
                 }
@@ -482,9 +483,15 @@ public class SearchItemFragment extends Fragment {
             if (productId.equalsIgnoreCase("") && manufacturerId.equalsIgnoreCase("")) {
                 query = mProductAutoComplete.getText().toString();
             }
-            mProgressBar.setVisibility(View.VISIBLE);
-            mFrameLayout.setAlpha((float) 0.6);
-            utility.search(productId, manufacturerId, query, mFromDate, mToDate);
+
+            if (! mProductAutoComplete.getText().toString().isEmpty()) {
+                mProgressBar.setVisibility(View.VISIBLE);
+                mFrameLayout.setAlpha((float) 0.6);
+                utility.search(productId, manufacturerId, query, mFromDate, mToDate);
+            } else {
+//                mProgressBar.setVisibility(View.GONE);
+                RCLog.showToast(getActivity(), getString(R.string.enter_product_name));
+            }
         }
 
     }//end call(SearchApi()

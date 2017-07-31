@@ -50,7 +50,7 @@ class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
 
         holder.bind(position, userProdImagesArrayList.get(position), onImageItemClickListener);
 
-        if (position == 0) {
+        if (selectedImgPosition==position) {
             holder.layout.setBackground(ContextCompat.getDrawable(mContext, R.drawable.selected_image_background));
         }
     }
